@@ -15,6 +15,15 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <jakartaee>10.0.0</jakartaee>
     </properties>
+<<<<<<< HEAD
+=======
+    <distributionManagement>
+        <repository>
+            <id>1</id>
+            <url>http://localhost:8080/manage-cinema</url>
+        </repository>
+    </distributionManagement>
+>>>>>>> 5c318f211fcfa5f07a8b5f80b89f036f4c343512
     
     <dependencies>
         <dependency>
@@ -44,6 +53,10 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
                 <configuration>
+<<<<<<< HEAD
+=======
+                    <warName>manage-cinema-1.0-SNAPSHOT</warName>
+>>>>>>> 5c318f211fcfa5f07a8b5f80b89f036f4c343512
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
