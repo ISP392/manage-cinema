@@ -15,11 +15,11 @@ public class DBcontext {
                     .directory("src/main/resources")
                     .load();
             // register the driver
-
+             
             //information connection
-            String url = dotenv.get("DB_URL");
-            String username = dotenv.get("DB_USERNAME");
-            String password = dotenv.get("DB_PASSWORD");
+            String url = dotenv.get("jdbc:mySQL://localhost:3306/project_cinema_update");
+            String username = dotenv.get("root");
+            String password = dotenv.get("12345");
 
             //create a connection
             c = DriverManager.getConnection(url, username, password);
