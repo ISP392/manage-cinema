@@ -6,6 +6,9 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import controller.Google.Constants;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -57,6 +60,20 @@ public class SignInServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //load .env file
+//        Dotenv dotenv = Dotenv.configure()
+//                .directory("src/main/resources")
+//                .load();
+//        String GOOGLE_CLIENT_ID = dotenv.get("GOOGLE_CLIENT_ID");
+//        request.setAttribute("GOOGLE_CLIENT_ID", GOOGLE_CLIENT_ID);
+        String googleLoginUrl = "https://accounts.google.com/o/oauth2/auth" +
+                "?client_id=" + Constants.GOOGLE_CLIENT_ID +
+                "&response_type=code" +
+                "&scope=email" +
+                "&redirect_uri=" + Constants.GOOGLE_REDIRECT_URI +
+                "&access_type=offline" +
+                "&approval_prompt=force";
+        request.setAttribute("googleLoginUrl", googleLoginUrl);
         request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
     }
 
