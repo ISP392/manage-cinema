@@ -128,7 +128,7 @@
                           <p>Rememmber me!</p>
                         </div>
                         <a
-                          href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=http://localhost:8080/manage-cinema/LoginGoogleHandler&response_type=code&client_id=289651568773-962elblss4e85nrbgrri0i3kcor4pfl8.apps.googleusercontent.com&approval_prompt=force"
+                          href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=${localhost}/manage-cinema/LoginGoogleHandler&response_type=code&client_id=289651568773-962elblss4e85nrbgrri0i3kcor4pfl8.apps.googleusercontent.com&approval_prompt=force"
                         >
                           Login with Google
                         </a>

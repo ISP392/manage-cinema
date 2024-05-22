@@ -33,6 +33,9 @@ public class DBcontext {
         Connection c = DBcontext.getConnection();
         if(c != null){
             System.out.println("Connect successfully");
+            String currentDirectory = System.getProperty("user.dir");
+            System.out.println("Current working directory: " + currentDirectory);
+            System.out.println("tét");
         }else{
             System.out.println("Connect failure");
         }
