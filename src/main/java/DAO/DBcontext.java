@@ -10,16 +10,16 @@ public class DBcontext {
     public static Connection getConnection() {
         Connection c = null;
         try{
-            //load .env file
+            //load .env fileshare lephuon
             Dotenv dotenv = Dotenv.configure()
                     .directory("src/main/resources")
                     .load();
             // register the driver
              
             //information connection
-            String url = dotenv.get("jdbc:mySQL://localhost:3306/project_cinema_update");
-            String username = dotenv.get("root");
-            String password = dotenv.get("12345");
+            String url = dotenv.get("DB_URL");
+            String username = dotenv.get("DB_USERNAME");
+            String password = dotenv.get("DB_PASSWORD");
 
             //create a connection
             c = DriverManager.getConnection(url, username, password);

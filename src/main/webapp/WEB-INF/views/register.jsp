@@ -33,7 +33,7 @@
                                 <div class="card-body p-5">
                                     <h2 class="text-uppercase text-center mb-5">Create an account</h2>
                                     <form>
-                                        <h6 id="error" style="color: red">${requestScope.error}</h6>
+                                        <h6 id="error" style="color: #ffffff">${requestScope.error}</h6>
                                         <div class="form-outline mb-4">
                                             <label class="form-label"  for="form3Example1cg">Your Name</label>
                                             <input type="text" name="name" required id="form3Example1cg" class="form-control form-control-lg" />
@@ -43,11 +43,11 @@
                                             <input type="text" name="username" required id="form3Example3cg" class="form-control form-control-lg" />
                                         </div>
                                         <div class="form-outline mb-4">
-                                            <label class="form-label"  for="password">Password</label>
+                                            <label class="form-label" >Password</label>
                                             <input type="password" required name="password" id="password" class="form-control form-control-lg" />
                                         </div>
                                         <div class="form-outline mb-4">
-                                            <label class="form-label"  for="confirmPass">Repeat your password</label>
+                                            <label class="form-label"  >Repeat your password</label>
                                             <input type="password" required name="confirmPass" id="confirm_password" class="form-control form-control-lg" />
                                         </div>
                                         <div class="d-flex justify-content-center">
