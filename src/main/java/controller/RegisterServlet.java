@@ -4,6 +4,7 @@
  */
 package controller;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import modal.Users;
+import util.Encrypt;
 
 /**
  *
@@ -36,7 +42,7 @@ public class RegisterServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RegisterServlet</title>");            
+            out.println("<title>Servlet RegisterServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet RegisterServlet at " + request.getContextPath() + "</h1>");
@@ -71,7 +77,32 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String displayName = request.getParameter("name");
+
+        DAO d = new DAO();
+        boolean userExists = d.checkUser(username);
+
+        if (userExists) {
+            request.setAttribute("error", "Username already exists");
+            request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
+
+        } else {
+            try {
+
+                String hashedPassword = Encrypt.toSHA1(password);
+                Users newUser = new Users(0, 3, 0, displayName, username, hashedPassword, null, null);
+                d.add(newUser);
+                response.sendRedirect("/WEB-INF/views/signIn.jsp");
+
+            } catch (NoSuchAlgorithmException ex) {
+
+                Logger.getLogger(RegisterServlet.class.getName()).log(Level.SEVERE, null, ex);
+                throw new ServletException("Password hashing error", ex);
+
+            }
+        }
     }
 
     /**
