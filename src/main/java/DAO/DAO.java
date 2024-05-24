@@ -21,9 +21,9 @@ public class DAO extends DBcontext {
 
 
     public void add(Users u) {
-        String sql = "INSERT INTO Users (displayName, username, password, roleID, email, point) VALUES (?, ?, ?, 1,?,0)";
+        String sql = "INSERT INTO Users (displayName, username, password, roleID, email, point) VALUES (?, ?, ?, 2,?,0)";
         try{
-            PreparedStatement ps = getConnection().prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, u.getDisplayName());
             ps.setString(2, u.getUserName());
             ps.setString(3, u.getPassword());
@@ -33,10 +33,40 @@ public class DAO extends DBcontext {
             e.printStackTrace();
         }
     }
+    public boolean checkUsername(String username){
+        String sql = "SELECT * FROM Users WHERE username = ?";
+        try{
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return true;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean checkEmail(String email){
+        String sql = "SELECT * FROM Users WHERE email = ?";
+        try{
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return true;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public List<Users> getUsers(){
         String sql = "SELECT * FROM Users";
         try{
-            PreparedStatement ps = getConnection().prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Users> list = new ArrayList<>();
             while(rs.next()){
@@ -58,11 +88,12 @@ public class DAO extends DBcontext {
 
     public static void main(String[] args) {
         DAO dao = new DAO();
-        dao.getUsers();
-        for(Users u : dao.getUsers()){
-            System.out.println(u.getUserName());
+        if(dao.checkUsername("abc")){
+            System.out.println("true");
+        }else{
+            System.out.println("false");
         }
-        System.out.println(getConnection());
+
     }
 
     

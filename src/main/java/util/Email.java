@@ -13,11 +13,11 @@ import java.util.Properties;
 import java.util.Random;
 
 public class Email {
-    static Dotenv dotenv = Dotenv.load();
-    static String from = dotenv.get("EMAIL");
-    static String password = dotenv.get("PASSWORD");
 
-    static boolean sendEmail(String to, String subject, String text){
+    public static boolean sendEmail(String to, String subject, String text) {
+        Dotenv dotenv = Dotenv.load();
+        String from = dotenv.get("EMAIL");
+        String password = dotenv.get("PASSWORD");
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -58,7 +58,7 @@ public class Email {
         Random random = new Random();
         // Generate random code with 6 digits
         int code = random.nextInt(900000) + 100000;
-        sendEmail("qtran6859@gmail.com", "Code", "Your code is: " + code);
+        sendEmail("bquoc3002@gmail.com", "Code", "Your code is: " + code);
 
     }
 }
