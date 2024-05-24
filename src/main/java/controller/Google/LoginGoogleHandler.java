@@ -22,7 +22,7 @@ public class LoginGoogleHandler extends HttpServlet {
         String accessToken = getToken(code);
         UserGoogleDto user = getUserInfo(accessToken);
         request.setAttribute("username", user.getName());
-        request.getRequestDispatcher("/WEB-INF/views/test.jsp").forward(request, response);
+        //request.getRequestDispatcher("/WEB-INF/views/test.jsp").forward(request, response);
     }
     public static String getToken(String code) throws ClientProtocolException, IOException {
         // call api to get token
