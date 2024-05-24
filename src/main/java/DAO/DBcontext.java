@@ -10,12 +10,12 @@ public class DBcontext {
     public static Connection getConnection() {
         Connection c = null;
         try{
-            //load .env file
+            //load .env fileshare lephuon
             Dotenv dotenv = Dotenv.configure()
                     .directory("src/main/resources")
                     .load();
             // register the driver
-
+             
             //information connection
             String url = dotenv.get("DB_URL");
             String username = dotenv.get("DB_USERNAME");
