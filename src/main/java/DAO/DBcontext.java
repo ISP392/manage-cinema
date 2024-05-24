@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBcontext {
+    protected Connection c;
     public static Connection getConnection() {
         Connection c = null;
         try{

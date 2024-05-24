@@ -3,29 +3,38 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package modal;
-
 /**
  *
+
  * @author MISS NGA
  */
 public class Users {
-
-    private int userID, roleID, point;
-    private String displayName, username, password, email;
-    private Provider providerID;
+    private int userID;
+    private String displayName;
+    private String userName;
+    private String password;
+    private Role roleID;
+    private String email;
+    private int point;
 
     public Users() {
     }
 
-    public Users(int userID, int roleID, int point, String displayName, String username, String password, String email, Provider providerID) {
+    public Users(int userID, String displayName, String userName, String password, String email, Role roleID, int point) {
         this.userID = userID;
-        this.roleID = roleID;
-        this.point = point;
         this.displayName = displayName;
-        this.username = username;
+        this.userName = userName;
         this.password = password;
         this.email = email;
-        this.providerID = providerID;
+        this.roleID = roleID;
+        this.point = point;
+    }
+
+    public Users(String displayName, String userName, String password, String email) {
+        this.displayName = displayName;
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
     }
 
     public int getUserID() {
@@ -36,22 +45,6 @@ public class Users {
         this.userID = userID;
     }
 
-    public int getRoleID() {
-        return roleID;
-    }
-
-    public void setRoleID(int roleID) {
-        this.roleID = roleID;
-    }
-
-    public int getPoint() {
-        return point;
-    }
-
-    public void setPoint(int point) {
-        this.point = point;
-    }
-
     public String getDisplayName() {
         return displayName;
     }
@@ -60,12 +53,12 @@ public class Users {
         this.displayName = displayName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -76,6 +69,14 @@ public class Users {
         this.password = password;
     }
 
+    public Role getRoleID() {
+        return roleID;
+    }
+
+    public void setRoleID(Role roleID) {
+        this.roleID = roleID;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -84,16 +85,11 @@ public class Users {
         this.email = email;
     }
 
-    public Provider getProviderID() {
-        return providerID;
+    public int getPoint() {
+        return point;
     }
 
-    public void setProviderID(Provider providerID) {
-        this.providerID = providerID;
-    }
-
-    public enum Provider {
-        GOOGLE,
-        FACEBOOK;
+    public void setPoint(int point) {
+        this.point = point;
     }
 }
