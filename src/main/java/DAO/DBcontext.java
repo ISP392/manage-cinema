@@ -11,9 +11,7 @@ public class DBcontext {
         Connection c = null;
         try{
             //load .env file
-            Dotenv dotenv = Dotenv.configure()
-                    .directory("src/main/resources")
-                    .load();
+            Dotenv dotenv = Dotenv.load();
             // register the driver
 
             //information connection
@@ -35,7 +33,7 @@ public class DBcontext {
             System.out.println("Connect successfully");
             String currentDirectory = System.getProperty("user.dir");
             System.out.println("Current working directory: " + currentDirectory);
-            System.out.println("tét");
+            System.out.println("test");
         }else{
             System.out.println("Connect failure");
         }
