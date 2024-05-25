@@ -7,10 +7,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBcontext {
-    public static Connection getConnection() {
-        Connection c = null;
-        try{
-            //load .env file
+    protected Connection connection;
+
+    public DBcontext() {
+        try {
+            //load .env fileshare lephuon
+
             Dotenv dotenv = Dotenv.load();
             // register the driver
 
@@ -18,24 +20,21 @@ public class DBcontext {
             String url = dotenv.get("DB_URL");
             String username = dotenv.get("DB_USERNAME");
             String password = dotenv.get("DB_PASSWORD");
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
             //create a connection
-            c = DriverManager.getConnection(url, username, password);
-        }catch (SQLException e) {
+            connection = DriverManager.getConnection(url, username, password);
+        } catch (ClassNotFoundException| SQLException e) {
             e.printStackTrace();
         }
-        return c;
     }
 
-    public static void main(String[] args){
-        Connection c = DBcontext.getConnection();
-        if(c != null){
-            System.out.println("Connect successfully");
-            String currentDirectory = System.getProperty("user.dir");
-            System.out.println("Current working directory: " + currentDirectory);
-            System.out.println("test");
+
+    public static void main(String[] args) {
+        if(new DBcontext().connection != null){
+            System.out.println("Connected");
         }else{
-            System.out.println("Connect failure");
+            System.out.println("Not connected");
         }
     }
 }

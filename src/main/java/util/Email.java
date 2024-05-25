@@ -13,11 +13,11 @@ import java.util.Properties;
 import java.util.Random;
 
 public class Email {
-    static Dotenv dotenv = Dotenv.load();
-    static String from = dotenv.get("EMAIL");
-    static String password = dotenv.get("PASSWORD");
 
-    static boolean sendEmail(String to, String subject, String text){
+    public static boolean sendEmail(String to, String subject, String text) {
+        Dotenv dotenv = Dotenv.load();
+        String from = dotenv.get("EMAIL");
+        String password = dotenv.get("PASSWORD");
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
