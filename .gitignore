@@ -48,4 +48,4 @@ nbdist/
 Thumbs.db
 
 # .env file
-.env
+src/main/resources/.env
