@@ -17,9 +17,9 @@ public class DBcontext {
             // register the driver
 
             //information connection
-            String url = dotenv.get("DB_URL");
-            String username = dotenv.get("DB_USERNAME");
-            String password = dotenv.get("DB_PASSWORD");
+            String url = "jdbc:mySQL://localhost:3306/project_cinema_update";
+            String username = "root";
+            String password = "sa123";
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             //create a connection

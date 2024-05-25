@@ -9,17 +9,45 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Connection;
+import modal.Movies;
 
 import modal.Users;
+
 
 /**
  *
  * @author MISS NGA
  */
-public class DAO extends DBcontext {
+public class Movie {
+    private DBcontext dbContext;
+    private Connection connection;
+    
+    public Movie() {
+        this.dbContext = new DBcontext();
+        this.connection = this.dbContext.connection;
+    }
+    
+    
 
-
-
+    public List<Movies> getAllMovieCommingSoon() {
+        String sql = "SELECT * FROM movies m WHERE m.releaseDate > CURDATE()";
+        List<Movies> list = new ArrayList<>();
+        try {
+            PreparedStatement ps = this.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
+                        rs.getInt("display"), rs.getString("trailerURL"));
+                list.add(m);
+            }
+            return list;
+        } catch (Exception e) {
+             System.err.print(e);
+        }
+        return null;
+    }
+    
     public void add(Users u) {
         String sql = "INSERT INTO Users (displayName, username, password, roleID, email, point) VALUES (?, ?, ?, 2,?,0)";
         try{
@@ -87,14 +115,11 @@ public class DAO extends DBcontext {
     }
 
     public static void main(String[] args) {
-        DAO dao = new DAO();
-        if(dao.checkUsername("abc")){
-            System.out.println("true");
-        }else{
-            System.out.println("false");
+        Movie dao = new Movie();
+        List<Movies> list = dao.getAllMovieCommingSoon();
+        for(Movies movie: list){
+            System.out.println(movie.getTitle());
         }
 
     }
-
-    
 }
