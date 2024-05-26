@@ -4,7 +4,7 @@
  */
 package controller;
 
-import DAO.Movie;
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -60,7 +60,7 @@ public class CommingSoonServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Movie dao = new Movie();
+        DAO dao = new DAO();
         List<Movies> moviesCommingSoon = dao.getAllMovieCommingSoon();
         request.setAttribute("moviesCommingSoon", moviesCommingSoon);
         request.getRequestDispatcher("/WEB-INF/views/commingSoon.jsp").forward(request, response);

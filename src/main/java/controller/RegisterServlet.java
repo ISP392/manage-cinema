@@ -1,6 +1,6 @@
 package controller;
 
-import DAO.Movie;
+import DAO.DAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -31,7 +31,7 @@ public class RegisterServlet extends HttpServlet {
         }catch(NoSuchAlgorithmException e){
             e.printStackTrace();
         }
-        Movie dao = new Movie();
+        DAO dao = new DAO();
         if(dao.checkUsername(username)){
             request.setAttribute("errorUsername", "Username is already existed");
             request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);

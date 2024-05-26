@@ -19,14 +19,8 @@ import modal.Users;
  *
  * @author MISS NGA
  */
-public class Movie {
-    private DBcontext dbContext;
-    private Connection connection;
-    
-    public Movie() {
-        this.dbContext = new DBcontext();
-        this.connection = this.dbContext.connection;
-    }
+public class DAO extends DBcontext{
+   
     
     
 
@@ -34,7 +28,7 @@ public class Movie {
         String sql = "SELECT * FROM movies m WHERE m.releaseDate > CURDATE()";
         List<Movies> list = new ArrayList<>();
         try {
-            PreparedStatement ps = this.connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
@@ -115,7 +109,7 @@ public class Movie {
     }
 
     public static void main(String[] args) {
-        Movie dao = new Movie();
+        DAO dao = new DAO();
         List<Movies> list = dao.getAllMovieCommingSoon();
         for(Movies movie: list){
             System.out.println(movie.getTitle());

@@ -1,6 +1,6 @@
 package controller;
 
-import DAO.Movie;
+import DAO.DAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -26,7 +26,7 @@ public class verifyServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Movie dao = new Movie();
+        DAO dao = new DAO();
         if(Integer.parseInt(request.getParameter("otp-code")) == code){
             Users u = (Users)request.getSession().getAttribute("user");
             request.getSession().removeAttribute("user");

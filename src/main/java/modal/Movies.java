@@ -12,14 +12,14 @@ import java.sql.Date;
  */
 public class Movies {
 
-    int movieID;
-    String title;
-    String description;
-    Date releaseDate;
-    String posterImage;
-    int duration;
-    int display;
-    String trailerURL;
+    private int movieID;
+    private String title;
+    private String description;
+    private Date releaseDate;
+    private String posterImage;
+    private int duration;
+    private int display;
+    private String trailerURL;
 
     public Movies() {
     }
@@ -35,7 +35,6 @@ public class Movies {
         this.trailerURL = trailerURL;
     }
 
-    
     public int getMovieID() {
         return movieID;
     }
@@ -99,6 +98,5 @@ public class Movies {
     public void setTrailerURL(String trailerURL) {
         this.trailerURL = trailerURL;
     }
-    
-    
+
 }
