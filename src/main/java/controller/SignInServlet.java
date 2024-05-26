@@ -4,6 +4,7 @@
  */
 package controller;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -11,9 +12,12 @@ import controller.Google.Constants;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import modal.Users;
 
 /**
  *
@@ -39,7 +43,7 @@ public class SignInServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SignIn</title>");            
+            out.println("<title>Servlet SignIn</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet SignIn at " + request.getContextPath() + "</h1>");
@@ -63,7 +67,7 @@ public class SignInServlet extends HttpServlet {
         //load .env file
         Dotenv dotenv = Dotenv.load();
         String localhost = dotenv.get("LOCALHOST");
-
+        
         request.setAttribute("localhost", localhost);
         request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
     }
@@ -79,7 +83,19 @@ public class SignInServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        
+        DAO d = new DAO();
+        Users u = d.checkLogin(username, password);
+        if(u == null){
+            request.setAttribute("error", "Username or password was inccorect!!");
+            request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
+        }else{
+            HttpSession session = request.getSession();
+            session.setAttribute("account", u);       
+            response.sendRedirect("home");
+        }
     }
 
     /**

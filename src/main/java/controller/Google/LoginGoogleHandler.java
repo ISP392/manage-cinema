@@ -1,5 +1,6 @@
 package controller.Google;
 
+import DAO.DAO;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -12,18 +13,29 @@ import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 
 import java.io.IOException;
+import modal.Users;
 
 @WebServlet(name = "LoginGoogleHandler", value = "/LoginGoogleHandler")
 public class LoginGoogleHandler extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String code = request.getParameter("code");
-
         String accessToken = getToken(code);
         UserGoogleDto user = getUserInfo(accessToken);
-        request.setAttribute("username", user.getName());
-        //request.getRequestDispatcher("/WEB-INF/views/test.jsp").forward(request, response);
+
+        HttpSession session = request.getSession();
+        DAO d = new DAO();
+        Users u1 = d.checkLoginGoogle(user.getEmail());
+        if (u1 == null) {
+            d.AddLoginGoogle(u1);
+            session.setAttribute("user", u1);
+        } else {
+            session.setAttribute("user", u1);
+        }
+        session.setAttribute("account", u1);
+        response.sendRedirect("home");
     }
+
     public static String getToken(String code) throws ClientProtocolException, IOException {
         // call api to get token
 
@@ -47,8 +59,6 @@ public class LoginGoogleHandler extends HttpServlet {
 
         return googlePojo;
     }
-
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
