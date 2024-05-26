@@ -14,15 +14,11 @@ import modal.Movies;
 
 import modal.Users;
 
-
 /**
  *
  * @author MISS NGA
  */
-public class DAO extends DBcontext{
-   
-    
-    
+public class DAO extends DBcontext {
 
     public List<Movies> getAllMovieCommingSoon() {
         String sql = "SELECT * FROM movies m WHERE m.releaseDate > CURDATE()";
@@ -37,61 +33,62 @@ public class DAO extends DBcontext{
             }
             return list;
         } catch (Exception e) {
-             System.err.print(e);
+            System.err.print(e);
         }
         return null;
     }
-    
+
     public void add(Users u) {
         String sql = "INSERT INTO Users (displayName, username, password, roleID, email, point) VALUES (?, ?, ?, 2,?,0)";
-        try{
+        try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, u.getDisplayName());
             ps.setString(2, u.getUserName());
             ps.setString(3, u.getPassword());
             ps.setString(4, u.getEmail());
             ps.executeUpdate();
-        }catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    public boolean checkUsername(String username){
+
+    public boolean checkUsername(String username) {
         String sql = "SELECT * FROM Users WHERE username = ?";
-        try{
+        try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return true;
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    public boolean checkEmail(String email){
+    public boolean checkEmail(String email) {
         String sql = "SELECT * FROM Users WHERE email = ?";
-        try{
+        try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return true;
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    public List<Users> getUsers(){
+    public List<Users> getUsers() {
         String sql = "SELECT * FROM Users";
-        try{
+        try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             List<Users> list = new ArrayList<>();
-            while(rs.next()){
+            while (rs.next()) {
                 Users u = new Users();
                 u.setUserID(rs.getInt("userID"));
                 u.setDisplayName(rs.getString("displayName"));
@@ -102,7 +99,7 @@ public class DAO extends DBcontext{
                 list.add(u);
             }
             return list;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -111,7 +108,7 @@ public class DAO extends DBcontext{
     public static void main(String[] args) {
         DAO dao = new DAO();
         List<Movies> list = dao.getAllMovieCommingSoon();
-        for(Movies movie: list){
+        for (Movies movie : list) {
             System.out.println(movie.getTitle());
         }
 
