@@ -61,10 +61,9 @@ public class CommingSoonServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Movie dao = new Movie();
-        List<Movies> movies = dao.getAllMovieCommingSoon();
-        for(Movies movie: movies){
-            System.out.println(movie.getTitle());
-        }
+        List<Movies> moviesCommingSoon = dao.getAllMovieCommingSoon();
+        request.setAttribute("moviesCommingSoon", moviesCommingSoon);
+        request.getRequestDispatcher("/WEB-INF/views/commingSoon.jsp").forward(request, response);
     }
 
     /**
