@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DBContext {
+public class DBContext{
     public Connection connection;
 
     public DBContext() {
