@@ -4,6 +4,7 @@
  */
 package controller;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -14,6 +15,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import modal.Users;
 
 /**
  *
@@ -39,7 +42,7 @@ public class SignInServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SignIn</title>");            
+            out.println("<title>Servlet SignIn</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet SignIn at " + request.getContextPath() + "</h1>");
@@ -79,7 +82,23 @@ public class SignInServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        System.out.print("TEN: " + username);
+        System.out.print("TEN: " + password);
+        DAO d = new DAO();
+        Users user = d.checkLogin(username, password);
+        System.out.println(" u "+ user);
+        if (user == null) {
+            request.setAttribute("error", "Username or password was inccorect!!");
+            request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
+        } else {
+            HttpSession session = request.getSession();
+            session.setAttribute("account", user);
+            System.out.println(user.getDisplayName());
+            response.sendRedirect("home");
+
+        }
     }
 
     /**

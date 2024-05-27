@@ -20,6 +20,19 @@ public class Users {
     public Users() {
     }
 
+    public Users(int userID, String email) {
+        this.userID = userID;
+        this.email = email;
+    }
+
+    public Users( String email,String displayName) {
+        this.displayName = displayName;
+        this.email = email;
+    }
+
+    
+
+    
     public Users(int userID, String displayName, String userName, String password, String email, Role roleID, int point) {
         this.userID = userID;
         this.displayName = displayName;
