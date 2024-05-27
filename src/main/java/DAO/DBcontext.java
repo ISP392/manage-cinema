@@ -12,6 +12,7 @@ public class DBcontext {
     public DBcontext() {
         try {
             //load .env fileshare lephuon
+
             Dotenv dotenv = Dotenv.load();
             // register the driver
 
@@ -27,6 +28,7 @@ public class DBcontext {
             e.printStackTrace();
         }
     }
+
 
     public static void main(String[] args) {
         if(new DBcontext().connection != null){

@@ -35,9 +35,11 @@ public class RegisterServlet extends HttpServlet {
         if(dao.checkUsername(username)){
             request.setAttribute("errorUsername", "Username is already existed");
             request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
+            return;
         }else if(dao.checkEmail(email)){
             request.setAttribute("errorEmail", "Email is already existed");
             request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
+            return;
         }
 
         Users u = new Users(displayName, username, password, email);
