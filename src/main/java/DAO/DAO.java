@@ -111,50 +111,10 @@ public class DAO extends DBContext {
         }
         return null;
     }
-public Users checkLogin(String username, String password) {
-    String sql = "SELECT * FROM Users WHERE username = ? AND password = ?";
-    try {
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1, username);
-        ps.setString(2, password);
-        ResultSet rs = ps.executeQuery();
-        Users u = null; // Khởi tạo đối tượng người dùng
-
-        if (rs.next()) {
-            // Nếu có người dùng tương ứng, tạo đối tượng Users và đặt các thuộc tính
-            u = new Users();
-            u.setUserID(rs.getInt("userID"));
-            u.setDisplayName(rs.getString("displayName"));
-            u.setUserName(rs.getString("username"));
-            u.setPassword(rs.getString("password"));
-            u.setEmail(rs.getString("email"));
-            u.setPoint(rs.getInt("point"));
-        }
-        return u; // Trả về đối tượng người dùng, hoặc null nếu không tìm thấy
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return null; // Trả về null nếu có lỗi xảy ra
-}
 
 
-    public Users checkLoginGoogle(String email) {
-        Users user = null;
-        String sql = "SELECT userID From users Where email = ?";
-        try {
-            PreparedStatement pre = connection.prepareStatement(sql);
-            pre.setString(1, email);
-            ResultSet rs = pre.executeQuery();
-            if (rs.next()) {
-                int userID = rs.getInt("userID");
-                user = new Users(userID, email);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return user;
-    }
 
+    
     public int AddLoginGoogle(Users user) {
         int number = 0;
         String sql = "INSERT INTO Users (displayName, password, roleID, email, point) VALUES (?, ?, 2,?,0)";
@@ -226,20 +186,7 @@ public Users checkLogin(String username, String password) {
     }
 
     public static void main(String[] args) {
-        DAO dao = new DAO();
-<<<<<<< HEAD
-        String testEmail = "qtran6859@gmail.com";
-        Users user = dao.checkLoginGoogle(testEmail);
-        if (user != null) {
-            System.out.println("User found: " + user.getUserID() + ", " + user.getEmail());
-        } else {
-            System.out.println("User not found with email: " + testEmail);
-        }
-=======
-        Users u = new Users("abc", "abc@gamil.com");
-        dao.addLoginGoogle(u);
->>>>>>> 63e49da9196991abadf4ee0ef9bb1363530d964c
-
+  
     }
 
 }
