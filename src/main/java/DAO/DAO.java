@@ -11,26 +11,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modal.Role;
 
+import modal.Movies;
 import modal.Users;
 
 /**
  *
  * @author MISS NGA
  */
-public class DAO extends DBcontext {
-    
-    
+public class DAO extends DBContext {
+
+    public List<Movies> getAllMovieCommingSoon() {
+        String sql = "SELECT * FROM movies m WHERE m.releaseDate > CURDATE()";
+        List<Movies> list = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
+                        rs.getInt("display"), rs.getString("trailerURL"));
+                list.add(m);
+            }
+            return list;
+        } catch (Exception e) {
+            System.err.print(e);
+        }
+        return null;
+    }
+
     public void add(Users u) {
-        String sql = "INSERT INTO Users (displayName, username, password, roleID, email, point) VALUES (?, ?, ?, ?,?,0)";
+        String sql = "INSERT INTO Users (displayName, username, password, roleID, email, point) VALUES (?, ?, ?, 2,?,0)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, u.getDisplayName());
             ps.setString(2, u.getUserName());
             ps.setString(3, u.getPassword());
-            ps.setInt(4, 2);
-            ps.setString(5, u.getEmail());
+            ps.setString(4, u.getEmail());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,30 +105,32 @@ public class DAO extends DBcontext {
         }
         return null;
     }
+public Users checkLogin(String username, String password) {
+    String sql = "SELECT * FROM Users WHERE username = ? AND password = ?";
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, username);
+        ps.setString(2, password);
+        ResultSet rs = ps.executeQuery();
+        Users u = null; // Khởi tạo đối tượng người dùng
 
-    public Users checkLogin(String username, String password) {
-        String sql = "select * from Users join [Role] on Users.roleID = Role.roleID where username = ? and password = ?";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, username);
-            st.setString(2, password);
-            ResultSet rs = st.executeQuery();
-            Role r;
-            if (rs.next()) {
-                String role = "";
-                if (rs.getString("name").equals("admin")) {
-                    role = "admin";
-                } else {
-                    role = "user";
-                }
-                r = new Role(rs.getInt("roleID"), role);
-                return new Users(rs.getInt("userID"), rs.getString("displayName"), username, 
-                        password,rs.getString("email"), r, rs.getInt("point"));
-            }
-        } catch (SQLException e) {
+        if (rs.next()) {
+            // Nếu có người dùng tương ứng, tạo đối tượng Users và đặt các thuộc tính
+            u = new Users();
+            u.setUserID(rs.getInt("userID"));
+            u.setDisplayName(rs.getString("displayName"));
+            u.setUserName(rs.getString("username"));
+            u.setPassword(rs.getString("password"));
+            u.setEmail(rs.getString("email"));
+            u.setPoint(rs.getInt("point"));
         }
-        return null;
+        return u; // Trả về đối tượng người dùng, hoặc null nếu không tìm thấy
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return null; // Trả về null nếu có lỗi xảy ra
+}
+
 
     public Users checkLoginGoogle(String email) {
         Users user = null;

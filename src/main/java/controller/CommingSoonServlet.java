@@ -7,24 +7,20 @@ package controller;
 import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-
-import controller.Google.Constants;
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import modal.Users;
+import java.util.List;
+import modal.Movies;
 
 /**
  *
- * @author baoquoc
+ * @author LÊ PHƯƠNG MAI
  */
-@WebServlet(name = "SignIn", urlPatterns = {"/signin"})
-public class SignInServlet extends HttpServlet {
+@WebServlet(name = "CommingSoonServlet", urlPatterns = {"/commingSoon"})
+public class CommingSoonServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +39,10 @@ public class SignInServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SignIn</title>");
+            out.println("<title>Servlet CommingSoonServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SignIn at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CommingSoonServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,12 +60,10 @@ public class SignInServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //load .env file
-        Dotenv dotenv = Dotenv.load();
-        String localhost = dotenv.get("LOCALHOST");
-
-        request.setAttribute("localhost", localhost);
-        request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
+        DAO dao = new DAO();
+        List<Movies> moviesCommingSoon = dao.getAllMovieCommingSoon();
+        request.setAttribute("moviesCommingSoon", moviesCommingSoon);
+        request.getRequestDispatcher("/WEB-INF/views/commingSoon.jsp").forward(request, response);
     }
 
     /**
@@ -83,22 +77,7 @@ public class SignInServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
-        DAO d = new DAO();
-        Users u = d.checkLogin(username, password);
-
-        if (u == null) {
-            request.setAttribute("error", "Username or password was inccorect!!");
-            request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
-        } else {
-            HttpSession session = request.getSession();
-            session.setAttribute("account", u);
-            request.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
-        }
-
+        processRequest(request, response);
     }
 
     /**
