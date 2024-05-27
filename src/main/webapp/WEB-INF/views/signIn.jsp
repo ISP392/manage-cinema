@@ -50,6 +50,7 @@
                       Log In
                     </h2>
                     <h6 style="color: red">${requestScope.error}</h6>
+                   <h6 style="color: red">${requestScope.error_1}</h6>
                     <!-- Email input -->
                     <div class="form-outline mb-4">
                       <label class="form-label" for="form3Example3"

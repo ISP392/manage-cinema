@@ -17,23 +17,33 @@ import modal.Users;
 
 @WebServlet(name = "LoginGoogleHandler", value = "/LoginGoogleHandler")
 public class LoginGoogleHandler extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+       try{
         String code = request.getParameter("code");
         String accessToken = getToken(code);
         UserGoogleDto user = getUserInfo(accessToken);
-
+        Users u = new Users(user.getEmail(), user.getName());
         HttpSession session = request.getSession();
         DAO d = new DAO();
-        Users u1 = d.checkLoginGoogle(user.getEmail());
-        if (u1 == null) {
-            d.AddLoginGoogle(u1);
-            session.setAttribute("user", u1);
+        if (!d.checkEmail(user.getEmail())) {
+            if (!d.checkLoginGoogle(user.getEmail())) {
+                d.addLoginGoogle(u);
+                session.setAttribute("account", u);
+            } else {
+                session.setAttribute("account", u);
+            }
+            session.setAttribute("account", u);
+            response.sendRedirect("home");
         } else {
-            session.setAttribute("user", u1);
+            System.out.println("alo");
+            request.setAttribute("error_1", "Your email is already used");
+            request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
         }
-        session.setAttribute("account", u1);
-        response.sendRedirect("home");
+       }catch(Exception e){
+           response.sendRedirect("signin");
+       }
     }
 
     public static String getToken(String code) throws ClientProtocolException, IOException {
