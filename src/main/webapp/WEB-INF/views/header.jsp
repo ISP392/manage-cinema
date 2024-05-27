@@ -35,8 +35,8 @@
                             <c:if test="${sessionScope.account == null}">
                                 <a href="signin">ĐĂNG NHẬP/ ĐĂNG KÝ</a>
                             </c:if>
-                            <c:if test="${sessionScope.account != null}">
-                                <a href="account" style="font-weight: 700;overflow: hidden;text-overflow: ellipsis">${sessionScope.account.displayName.toUpperCase()}</a>
+                            <c:if test="${sessionScope.account != null}"> 
+                                <a href="account" style="font-weight: 700;overflow: hidden;text-overflow: ellipsis">${sessionScope.account.getDisplayName().toUpperCase()}</a>
                                 <a href="logout" style="font-weight:700; color: red">| ĐĂNG XUẤT</a>
                             </c:if>
                         </p>

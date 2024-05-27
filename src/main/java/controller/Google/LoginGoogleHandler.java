@@ -1,5 +1,6 @@
 package controller.Google;
 
+import DAO.DAO;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -12,18 +13,39 @@ import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 
 import java.io.IOException;
+import modal.Users;
 
 @WebServlet(name = "LoginGoogleHandler", value = "/LoginGoogleHandler")
 public class LoginGoogleHandler extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+       try{
         String code = request.getParameter("code");
-
         String accessToken = getToken(code);
         UserGoogleDto user = getUserInfo(accessToken);
-        request.setAttribute("username", user.getName());
-        //request.getRequestDispatcher("/WEB-INF/views/test.jsp").forward(request, response);
+        Users u = new Users(user.getEmail(), user.getName());
+        HttpSession session = request.getSession();
+        DAO d = new DAO();
+        if (!d.checkEmail(user.getEmail())) {
+            if (!d.checkLoginGoogle(user.getEmail())) {
+                d.addLoginGoogle(u);
+                session.setAttribute("account", u);
+            } else {
+                session.setAttribute("account", u);
+            }
+            session.setAttribute("account", u);
+            response.sendRedirect("home");
+        } else {
+            System.out.println("alo");
+            request.setAttribute("error_1", "Your email is already used");
+            request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
+        }
+       }catch(Exception e){
+           response.sendRedirect("signin");
+       }
     }
+
     public static String getToken(String code) throws ClientProtocolException, IOException {
         // call api to get token
 
@@ -47,8 +69,6 @@ public class LoginGoogleHandler extends HttpServlet {
 
         return googlePojo;
     }
-
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
