@@ -39,7 +39,7 @@
             <div class="col-lg-6 mb-5 mb-lg-0">
               <div class="card" style="border-radius: 2.25rem">
                 <div class="card-body py-5 px-md-5" style="height: 450px">
-                  <form>
+                    <form action="./signin" method="post">
                     <h2
                       style="
                         display: flex;
@@ -59,7 +59,6 @@
                         type="text"
                         required
                         name="username"
-                        value="${username}"
                         id="form3Example3"
                         class="form-control"
                       />
@@ -73,7 +72,6 @@
                       <input
                         type="password"
                         required
-                        value="${password}"
                         name="password"
                         id="form3Example4"
                         class="form-control"

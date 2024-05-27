@@ -103,4 +103,9 @@ public class Users {
     public void setPoint(int point) {
         this.point = point;
     }
+
+    @Override
+    public String toString() {
+        return "Users{" + "userID=" + userID + ", displayName=" + displayName + ", userName=" + userName + ", password=" + password + ", roleID=" + roleID + ", email=" + email + ", point=" + point + '}';
+    }
 }
