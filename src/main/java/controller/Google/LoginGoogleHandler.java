@@ -20,7 +20,6 @@ public class LoginGoogleHandler extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       try{
         String code = request.getParameter("code");
         String accessToken = getToken(code);
         UserGoogleDto user = getUserInfo(accessToken);
@@ -37,13 +36,10 @@ public class LoginGoogleHandler extends HttpServlet {
             session.setAttribute("account", u);
             response.sendRedirect("home");
         } else {
-            System.out.println("alo");
-            request.setAttribute("error_1", "Your email is already used");
-            request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
+            session.setAttribute("error_1", "Your email is already used");
+            response.sendRedirect("signin");
         }
-       }catch(Exception e){
-           response.sendRedirect("signin");
-       }
+       
     }
 
     public static String getToken(String code) throws ClientProtocolException, IOException {

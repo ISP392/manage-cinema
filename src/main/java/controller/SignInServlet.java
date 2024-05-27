@@ -84,18 +84,14 @@ public class SignInServlet extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        System.out.print("TEN: " + username);
-        System.out.print("TEN: " + password);
         DAO d = new DAO();
         Users user = d.checkLogin(username, password);
-        System.out.println(" u "+ user);
         if (user == null) {
             request.setAttribute("error", "Username or password was inccorect!!");
             request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
         } else {
             HttpSession session = request.getSession();
             session.setAttribute("account", user);
-            System.out.println(user.getDisplayName());
             response.sendRedirect("home");
 
         }

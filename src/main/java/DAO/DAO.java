@@ -151,7 +151,7 @@ public class DAO extends DBcontext {
     }
 
     public void addLoginGoogle(Users u) {
-        String sql = "INSERT INTO users (displayName, roleID, email, point) VALUES ( ?, 2, ?, 0)";
+        String sql = "INSERT INTO users (displayName, roleID, email,providerID, point) VALUES ( ?, 2, ?,'google', 0)";
         try {
             PreparedStatement pr = connection.prepareStatement(sql);
             pr.setString(1, u.getDisplayName());
