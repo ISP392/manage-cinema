@@ -97,8 +97,8 @@ p {
 .logo {
     display: block;
     width: 100px;
-    height: 135px;
-    min-width: 100px;
+    height: 500px;
+    min-width: 500px;
     text-align: center;
 }
 .logo :hover {
