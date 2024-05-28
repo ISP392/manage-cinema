@@ -14,6 +14,8 @@ import java.sql.Connection;
 import modal.Movies;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import modal.Genres;
+import modal.MovieGenres;
 import modal.Role;
 import modal.UserGoogleDto;
 
@@ -182,12 +184,31 @@ public class DAO extends DBcontext {
         return null;
     }
 
+    
+
+    public List<Movies> getMovieByGenreID(int genreID){
+        List<Movies> list = new ArrayList<>();
+        String sql = "select * from Movies m join MovieGenres mg on m.movieID = mg.movieID join Genres g on mg.genreID = g.genreID where mg.genreID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, genreID);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"));
+                list.add(m);
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
     public static void main(String[] args) {
         DAO dao = new DAO();
-        List<Movies> movie = dao.getMovie();
-        for(Movies m: movie){
+        List<Movies> list = dao.getMovieByGenreID(1);
+        for(Movies m : list){
             System.out.println(m.getTitle());
         }
     }
-
 }
