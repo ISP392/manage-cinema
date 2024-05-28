@@ -92,7 +92,7 @@ public class SignInServlet extends HttpServlet {
         } else {
             HttpSession session = request.getSession();
             session.setAttribute("account", user);
-            response.sendRedirect("home");
+            response.sendRedirect("nowShowing");
 
         }
     }

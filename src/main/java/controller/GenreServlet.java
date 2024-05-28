@@ -62,7 +62,7 @@ public class GenreServlet extends HttpServlet {
         String genres = "";
         String genreID = request.getParameter("genreID");
         if (genreID == null || genreID.isEmpty()) {
-            response.sendRedirect("home");
+            response.sendRedirect("nowShowing");
         }else{
             List<Movies> movies = dao.getMovieByGenreID(Integer.parseInt(genreID));
             if(genreID.equals("1")){
