@@ -164,6 +164,25 @@ public class DAO extends DBcontext {
             e.printStackTrace();
         }
     }
+    
+    
+    public List<Movies> getMovie() {
+        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate";
+        List<Movies> list = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
+                        rs.getInt("display"), rs.getString("trailerURL"));
+                list.add(m);
+            }
+            return list;
+        } catch (Exception e) {
+            System.err.print(e);
+        }
+        return null;
+    }
 
     
 
