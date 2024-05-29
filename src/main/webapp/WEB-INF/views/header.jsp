@@ -19,20 +19,20 @@
                 <div class="header-option">
                     <div class="header-information">
                         <p>
-                            <i class="fa-solid fa-circle-info fa-xl"></i>
+                            <img src="https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/icon_promotion25.png" alt=" "/>
                             <a href="#">TIN MỚI & ƯU ĐÃI</a>
                         </p>
                     </div>
                     <div class="header-my-ticket">
                         <p>
-                            <i class="fa-solid fa-ticket fa-xl"></i>
+                            <img src="https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/icon_ticket25.png" alt=" "/>
                             <a href="historyPayment?userID=${sessionScope.account.getUserID()}">VÉ CỦA TÔI</a>
                         </p>
                     </div>
                     <div class="header-account" style="display: contents">
                         <p>
-                            <i class="fa-solid fa-user fa-xl" style="padding-right: 10px"></i>
                             <c:if test="${sessionScope.account == null}">
+                                <img src="https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/icon_login25.png" alt=" "/>
                                 <a href="signin">ĐĂNG NHẬP/ ĐĂNG KÝ</a>
                             </c:if>
                             <c:if test="${sessionScope.account != null}"> 
@@ -56,7 +56,7 @@
                             <a class="level0-has-children" href="#">PHIM</a>
                             <ul class="level0">
                                 <li class="level1-nav1-1">
-                                    <a href="home" class="level1">Phim Đang Chiếu</a>
+                                    <a href="nowShowing" class="level1">Phim Đang Chiếu</a>
                                 </li>
                                 <li class="level1-nav1-2">
                                     <a href="commingSoon" class="level1">Phim Sắp Chiếu</a>

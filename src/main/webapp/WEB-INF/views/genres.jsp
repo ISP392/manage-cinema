@@ -1,11 +1,10 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%> <%@taglib prefix="c"
-uri="http://java.sun.com/jsp/jstl/core" %>
+<%-- Document : genre Created on : May 28, 2024, 6:24:52 PM Author : caoha --%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>JSP Page</title>
   </head>
   <%@include file="header.jsp" %>
   <body>
@@ -15,21 +14,21 @@ uri="http://java.sun.com/jsp/jstl/core" %>
           <div class="home-movie-selection">
             <div>
               <h1 style="padding-bottom: 10px; border-bottom: 2px solid black">
-                Phim Sắp Chiếu
+                Phim ${genres}
               </h1>
             </div>
           </div>
           <div class="tab-content">
             <ul class="curr-list">
               <% int movieNumber = 1; %>
-              <c:forEach items="${moviesCommingSoon}" var="commingSoon">
+              <c:forEach items="${movies}" var="movie">
                 <li>
                   <div class="curr-box">
                     <span class="num"><%= movieNumber++ %></span>
                     <span class="img">
-                      <a href="detail-movie?movieID=${commingSoon.movieID}">
+                      <a href="detail-movie?movieID=${movie.movieID}">
                         <img
-                          src="./assets/images/posterImages/${commingSoon.posterImage}"
+                          src="./assets/images/posterImages/${movie.posterImage}"
                         />
                       </a>
                     </span>
@@ -37,13 +36,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                   <dl class="list-text">
                     <dt>
                       <a href="detail-movie?movieID=">
-                        <span>${commingSoon.title.toUpperCase()}</span>
+                        <span>${movie.title.toUpperCase()}</span>
                       </a>
                     </dt>
                     <dd>
-                      <span class="rate">${commingSoon.duration} phút</span>
+                      <span class="rate">${movie.duration} phút</span>
                       <span class="grade">
-                        <em>${commingSoon.releaseDate}</em>
+                        <em>${movie.releaseDate}</em>
                       </span>
                     </dd>
                   </dl>

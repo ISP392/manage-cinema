@@ -14,6 +14,8 @@ import java.sql.Connection;
 import modal.Movies;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import modal.Genres;
+import modal.MovieGenres;
 import modal.Role;
 import modal.UserGoogleDto;
 
@@ -147,7 +149,7 @@ public class DAO extends DBContext {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                Role r = new Role(rs.getInt("roleID"), "name");
+                Role r = new Role(rs.getInt("roleID"), rs.getString("name"));
                 return new Users(rs.getInt("userID"), rs.getString("userName"), rs.getString("displayName"),
                          rs.getString("password"), rs.getString("email"), r, rs.getInt("point"));
             }
@@ -173,7 +175,7 @@ public class DAO extends DBContext {
     }
 
     public void addLoginGoogle(Users u) {
-        String sql = "INSERT INTO users (displayName, roleID, email, point) VALUES ( ?, 2, ?, 0)";
+        String sql = "INSERT INTO users (displayName, roleID, email,providerID, point) VALUES ( ?, 2, ?,'google', 0)";
         try {
             PreparedStatement pr = connection.prepareStatement(sql);
             pr.setString(1, u.getDisplayName());
@@ -184,9 +186,51 @@ public class DAO extends DBContext {
             e.printStackTrace();
         }
     }
-
-    public static void main(String[] args) {
-  
+    
+    
+    public List<Movies> getMovie() {
+        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate";
+        List<Movies> list = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
+                        rs.getInt("display"), rs.getString("trailerURL"));
+                list.add(m);
+            }
+            return list;
+        } catch (Exception e) {
+            System.err.print(e);
+        }
+        return null;
     }
 
+    
+
+    public List<Movies> getMovieByGenreID(int genreID){
+        List<Movies> list = new ArrayList<>();
+        String sql = "select * from Movies m join MovieGenres mg on m.movieID = mg.movieID join Genres g on mg.genreID = g.genreID where mg.genreID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, genreID);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"));
+                list.add(m);
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
+    public static void main(String[] args) {
+        DAO dao = new DAO();
+        List<Movies> list = dao.getMovieByGenreID(1);
+        for(Movies m : list){
+            System.out.println(m.getTitle());
+        }
+    }
 }
