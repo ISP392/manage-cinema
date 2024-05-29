@@ -232,11 +232,51 @@ public class DAO extends DBcontext {
         }
     }
     
-    public static void main(String[] args) {
-        DAO dao = new DAO();
-        List<Movies> list = dao.getMovieByGenreID(1);
-        for(Movies m : list){
-            System.out.println(m.getTitle());
+ 
+
+    //void get movie by movieID
+    public Movies getMovieByID(int movieID) {
+        String sql = "SELECT * FROM Movies AS m WHERE m.movieID = ? AND m.releaseDate BETWEEN DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND CURDATE() ORDER BY m.releaseDate;";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, movieID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"));
+                return m;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
+        return null;
+    }
+
+    //void get list<movieGenres> by movieID
+    public List<MovieGenres> getMovieGenres(int movieID) {
+        List<MovieGenres> list = new ArrayList<>();
+        String sql = "select * from MovieGenres mg "
+                + "join Movies m on mg.movieID = m.movieID "
+                + "join Genres g on mg.genreID = g.genreID "
+                + "where m.movieID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, movieID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Genres g = new Genres(rs.getInt("genreID"), rs.getString("name"));
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"));
+                MovieGenres mg = new MovieGenres(rs.getInt("movieGenresID"), g, m);
+                list.add(mg);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+       public static void main(String[] args) {
+        DAO dao = new DAO();
+        Movies list = dao.getMovieByID(1);
+           System.out.println(list.getPosterImage());
     }
 }
+
