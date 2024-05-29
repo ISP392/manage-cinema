@@ -21,7 +21,6 @@ public class verifyServlet extends HttpServlet {
 
         Users u = (Users)request.getSession().getAttribute("user");
         if(request.getSession().getAttribute("information").equals("information")){
-            System.out.println(u.getEmail());
             Email.sendEmail(u.getEmail(), "Code", "You just updated new information, Your code is: "+code);
         }else{
             Email.sendEmail(u.getEmail(), "Code", "Your code is: "+code);

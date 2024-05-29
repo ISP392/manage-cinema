@@ -38,7 +38,6 @@ public class UpdateAccountServlet extends HttpServlet {
         DAO d = new DAO();
         boolean b = d.checkPass(oldPassword, username);
         if(oldPassword.equals("") && newPassword.equals("") && confirmPassword.equals("")){
-            System.out.println(email);
             Users user = new Users(username, displayName, email);
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
