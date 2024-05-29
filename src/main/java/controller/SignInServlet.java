@@ -66,6 +66,8 @@ public class SignInServlet extends HttpServlet {
         //load .env file
         Dotenv dotenv = Dotenv.load();
         String localhost = dotenv.get("LOCALHOST");
+        HttpSession session = request.getSession();
+        session.invalidate();
 
         request.setAttribute("localhost", localhost);
         request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
