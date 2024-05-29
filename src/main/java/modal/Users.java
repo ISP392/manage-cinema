@@ -30,9 +30,12 @@ public class Users {
         this.email = email;
     }
 
-    
+    public Users(String userName, String displayName, String email) {
+        this.userName = userName;
+        this.displayName = displayName;
+        this.email = email;
+    }
 
-    
     public Users(int userID, String displayName, String userName, String password, String email, Role roleID, int point) {
         this.userID = userID;
         this.displayName = displayName;

@@ -128,7 +128,7 @@ public class DAO extends DBcontext {
 
             if (rs.next()) {
                 Role r = new Role(rs.getInt("roleID"), rs.getString("name"));
-                return new Users(rs.getInt("userID"), rs.getString("userName"), rs.getString("displayName"),
+                return new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("userName"),
                          rs.getString("password"), rs.getString("email"), r, rs.getInt("point"));
             }
         } catch (SQLException e) {
@@ -202,6 +202,34 @@ public class DAO extends DBcontext {
             System.out.println(e);
         }
         return null;
+    }
+    public boolean checkPass(String password, String username){
+        String sql = "select password from Users where username = ?";
+        try{
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                String acctualPass = rs.getString("password");
+                return Encrypt.toSHA1(password).equals(acctualPass);
+            }
+        }catch(SQLException | NoSuchAlgorithmException e){
+            System.out.println(e);
+        }
+        return false;
+    }
+
+    public void updateDisplayNameAndEmail(String displayName, String email, String username){
+        String sql = "update Users set displayName = ?, email = ? where username = ?";
+        try{
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, displayName);
+            ps.setString(2, email);
+            ps.setString(3, username);
+            ps.executeUpdate();
+        }catch(SQLException e){
+            System.out.println(e);
+        }
     }
     
  
