@@ -20,7 +20,7 @@
     <body>
         <div class="page" >
             <div class="main-container">
-                <div class="main">
+                <div class="main" style="position: relative; top: 90px">
                     <!-- banner -->
                     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-indicators">
@@ -66,8 +66,6 @@
                             <h2>MOVIE SELECTION</h2>
                         </div>
                     </div>
-
-
                     <div class="tab-content">
                         <ul class="curr-list">
                             <% int movieNumber = 1; %>

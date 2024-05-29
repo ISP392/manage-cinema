@@ -127,7 +127,7 @@ public class DAO extends DBcontext {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                Role r = new Role(rs.getInt("roleID"), "name");
+                Role r = new Role(rs.getInt("roleID"), rs.getString("name"));
                 return new Users(rs.getInt("userID"), rs.getString("userName"), rs.getString("displayName"),
                          rs.getString("password"), rs.getString("email"), r, rs.getInt("point"));
             }
