@@ -1,514 +1,514 @@
 /* HEADER OPTIONS */
 html,
 body {
-    margin: 0;
-    padding: 0;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #222;
-    font-size: 14px;
-    line-height: 18px;
-    background-color: #fdfcf0 !important;
+  margin: 0;
+  padding: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #222;
+  font-size: 14px;
+  line-height: 18px;
+  background-color: #fdfcf0 !important;
 }
 
-a:hover{
-    text-decoration: none!important;
+a:hover {
+  text-decoration: none !important;
 }
 p {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .header-container {
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    max-width: 100%;
-    width: 980px;
-    margin: 0 auto;
-    padding: 0 20px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  max-width: 100%;
+  width: 980px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 .header-option {
-    display: flex;
-    justify-content: end;
+  display: flex;
+  justify-content: end;
 }
 .header-option > div {
-    position: relative;
-    width: 200px;
-    display: flex;
-    justify-content: center;
-    border-radius: 5px;
-    /* margin: 10px 0px -5px; */
+  position: relative;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+  /* margin: 10px 0px -5px; */
 }
 .header-option > div:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 .header-option a {
-    color: #666666;
+  color: #666666;
 }
 .header-language-background a {
-    text-decoration: none;
+  text-decoration: none;
 }
-
 
 .header-information p,
 .header-my-ticket p,
 .header-account p {
-    margin: 10px 0; /* Thiết lập margin theo ý muốn của bạn */
+  margin: 10px 0; /* Thiết lập margin theo ý muốn của bạn */
 }
 
 .header-information,
 .header-my-ticket,
 .header-account {
-    transition: background-color 0.3s ease; /* Thêm transition để tạo hiệu ứng mượt khi hover */
+  transition: background-color 0.3s ease; /* Thêm transition để tạo hiệu ứng mượt khi hover */
 }
 
 .header-information:hover,
 .header-my-ticket:hover,
 .header-account:hover {
-    background-color: #e1e4e8; /* Thay đổi màu nền khi hover */
+  background-color: #e1e4e8; /* Thay đổi màu nền khi hover */
 }
-
 
 .fa-solid.fa-user,
 .fa-solid.fa-ticket,
 .fa-solid.fa-circle-info {
-    position: relative;
-    top: -4px;
-    margin-right: 3px;
+  position: relative;
+  top: -4px;
+  margin-right: 3px;
 }
 
 /* HEADER CONTAINER */
 
 .page-header {
-    width: 100%;
-    height: 135px;
-    margin: 0 auto;
-    background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg-top.png)
+  width: 100%;
+  height: 135px;
+  margin: 0 auto;
+  background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg-top.png)
     repeat-x scroll left bottom transparent;
-    background-size: 10px 135px;
+  background-size: 10px 135px;
 }
 .page-header-container {
-    position: relative;
-    z-index: 2000;
-    width: 980px;
-    margin: 0 auto;
+  position: relative;
+  z-index: 2000;
+  width: 980px;
+  margin: 0 auto;
 }
 
 .logo {
-    display: block;
-    width: 100px;
-    height: 135px;
-    min-width: 100px;
-    text-align: center;
+  display: block;
+  width: 100px;
+  height: 135px;
+  min-width: 100px;
+  text-align: center;
 }
 .logo :hover {
-    opacity: 0.8;
+  opacity: 0.8;
 }
 .logo img {
-    width: 200px;
-    height: 80px;
-    margin-top: 28px;
+  width: 200px;
+  height: 80px;
+  margin-top: 28px;
 }
 .header-nav-bar {
-    display: block;
-    position: absolute;
-    left: 210px;
-    top: 75px;
+  display: block;
+  position: absolute;
+  left: 210px;
+  top: 75px;
 }
 ol,
 li {
-    list-style: none;
-    float: left;
+  list-style: none;
+  float: left;
 }
 
 .level0-nav-1-parent {
-    display: inline-block;
+  display: inline-block;
 }
 .header-nav-bar .nav-primary li a.level0-has-children {
-    padding: 0 18px;
+  padding: 0 18px;
 }
 .header-nav-bar .nav-primary li a {
-    color: rgb(34, 34, 34);
-    font-weight: bold;
-    position: relative;
-    text-decoration: none;
-    white-space: nowrap;
-    line-height: 30px;
+  color: rgb(34, 34, 34);
+  font-weight: bold;
+  position: relative;
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 30px;
 }
 .nav-primary ul li {
-    width: 98%;
+  width: 98%;
 }
 
 .nav-primary li.level0-nav-1-parent {
-    position: relative;
+  position: relative;
 }
 
 .nav-primary li.level0-nav-1-parent ul {
-    background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg_menu_hover.png)
+  background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg_menu_hover.png)
     repeat scroll center center rgba(0, 0, 0, 0);
-    left: 0; /* Đặt left về 0 */
-    padding: 3px;
-    position: absolute;
-    min-width: 190px;
-    max-width: min-content;
-    z-index: 10;
-    display: none;
+  left: 0; /* Đặt left về 0 */
+  padding: 3px;
+  position: absolute;
+  min-width: 190px;
+  max-width: min-content;
+  z-index: 10;
+  display: none;
 }
 
 /* Hiển thị dropdown khi hover và thiết lập left tương ứng với mục cha */
 .nav-primary li.level0-nav-1-parent:hover ul {
-    display: block;
-    left: 0; /* Đặt left về 0 để dropdown nằm sát mục cha */
+  display: block;
+  left: 0; /* Đặt left về 0 để dropdown nằm sát mục cha */
 }
 
 .nav-primary ul.level0 li:first-child {
-    border-top: 2px solid #828282;
-    padding-top: 10px;
+  border-top: 2px solid #828282;
+  padding-top: 10px;
 }
 .nav-primary ul.level0 li:last-child {
-    border-bottom: 2px solid #828282;
-    padding-bottom: 10px;
+  border-bottom: 2px solid #828282;
+  padding-bottom: 10px;
 }
 .nav-primary ul.level0 li {
-    border-left: 2px solid #828282;
-    border-right: 2px solid #828282;
+  border-left: 2px solid #828282;
+  border-right: 2px solid #828282;
 }
 .nav-primary ul.level0 a {
-    border-bottom: none;
-    padding: 0 35px 0 10px;
-    color: #fff;
+  border-bottom: none;
+  padding: 0 35px 0 10px;
+  color: #fff;
 }
 .nav-primary ul.level0 a:hover {
-    color: #e71a0f;
+  color: #e71a0f;
 }
 
 /* Header right */
 
 .header-buy-ticket {
-    display: block;
-    position: absolute;
-    top: 20px;
-    right: 160px;
-    text-align: right;
+  display: block;
+  position: absolute;
+  top: 20px;
+  right: 160px;
+  text-align: right;
 }
 .header-buy-ticket a.ticket img {
-    transition: opacity 0.3s ease-in-out; /* Thêm hiệu ứng chuyển động */
+  transition: opacity 0.3s ease-in-out; /* Thêm hiệu ứng chuyển động */
 }
 
 .header-buy-ticket a.ticket:hover img {
-    opacity: 0.85; /* Đặt độ mờ khi hover vào */
+  opacity: 0.85; /* Đặt độ mờ khi hover vào */
 }
 .header-buy-ticket img {
-    width: 90px;
-    height: 90px;
+  width: 90px;
+  height: 90px;
 }
 
 .main-container {
-    position: relative;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 !important;
-    background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg_c_bricks.png)
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  margin: 30px auto;
+  padding: 0 !important;
+  background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg_c_bricks.png)
     repeat-x scroll 0 124px rgba(0, 0, 0, 0);
 }
 
 .main {
-    width: 980px;
-    margin: 0 auto;
-    margin-top: 30px;
+  width: 980px;
+  margin: 0 auto;
+  margin-top: -60px;
 }
 
 /* BANNER */
 .carousel-item {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 .carousel-item img {
-    height: 551px;
-    width: 979px;
-    border-radius: 10px; /* Thêm border radius là 10px cho ảnh trong carousel */
+  width: 100%;
+  border-radius: 10px; /* Thêm border radius là 10px cho ảnh trong carousel */
 }
 
 .home-movie-selection {
-    margin: 28px 0;
-    width: 100%;
+  position: relative;
+  top: -45px;
+  margin: 28px 0;
+  width: 100%;
 }
 
 .home-title {
-    background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg_h3_line.jpg)
+  margin-top: 70px;
+  background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg_h3_line.jpg)
     repeat-x scroll left center rgba(0, 0, 0, 0);
-    height: 60px;
-    text-align: center;
-    width: 100%;
+  height: 60px;
+  text-align: center;
+  width: 100%;
 }
 
 .home-movie-selection .home-title h2 {
-    background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/h3_movie_selection.gif)
+  background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/h3_movie_selection.gif)
     no-repeat scroll center center / 406px 41px #fdfcf0;
-    display: inline-block;
-    width: 425px;
+  display: inline-block;
+  width: 425px;
 }
 
 .home-title h2 {
-    height: 60px;
-    text-indent: -999999px;
-    margin: 0;
+  height: 60px;
+  text-indent: -999999px;
+  margin: 0;
 }
 
 /* Main content */
 .tab-content {
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .curr-list {
-    margin-left: -20px;
-    min-height: 441px;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
+  margin-left: -20px;
+  min-height: 441px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .curr-list .num {
-    position: absolute;
-    left: -1px;
-    bottom:0;
-    z-index: 11;
-    display: block;
-    width: 100%;
-    height: 49px;
-    background: url(https://www.lottecinemavn.com/LCHS/Image/Bg/bg_w_mk.png)
+  position: absolute;
+  left: -1px;
+  bottom: 0;
+  z-index: 11;
+  display: block;
+  width: 100%;
+  height: 49px;
+  background: url(https://www.lottecinemavn.com/LCHS/Image/Bg/bg_w_mk.png)
     repeat-y left bottom;
-    font-size: 28px;
-    color: #fff;
-    font-family: "linlivertine";
-    font-weight: bold;
-    padding: 5px 0 0 20px;
-    font-style: italic;
-    line-height: 45px;
-    text-align: left;
+  font-size: 28px;
+  color: #fff;
+  font-family: "linlivertine";
+  font-weight: bold;
+  padding: 5px 0 0 20px;
+  font-style: italic;
+  line-height: 45px;
+  text-align: left;
 }
 
 .curr-list a {
-    display: block;
+  display: block;
 }
 a {
-    text-decoration: none;
-    color: #555;
+  text-decoration: none;
+  color: #555;
 }
 .curr-list .curr-box {
-    position: relative;
-    height: 334px;
+  position: relative;
+  height: 334px;
 }
 
 .curr-list > li {
-    position: relative;
-    width: 230px;
-    height: 411px;
-    margin: 0 0 40px 20px;
+  position: relative;
+  width: 230px;
+  height: 411px;
+  margin: 0 0 40px 20px;
 }
 .curr-list .img img {
-    width: 228px;
-    height: 334px;
+  width: 228px;
+  height: 334px;
 }
 
 .curr-list .list-text {
-    margin: 0;
-    border-top: 1px solid #e5e5e5;
-    box-sizing: border-box;
-    background-color: #fdf7dc;
+  margin: 0;
+  border-top: 1px solid #e5e5e5;
+  box-sizing: border-box;
+  background-color: #fdf7dc;
 }
 
 .curr-list .list-text dt {
-    padding: 12px 15px 11px 15px;
-    border-bottom: 1px solid #dedede;
+  padding: 12px 15px 11px 15px;
+  border-bottom: 1px solid #dedede;
 }
 
 .curr-list .list-text dt a {
-    font-size: 14px;
-    line-height: 20px;
-    overflow: hidden;
-    width: 100%;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    color: #231f20;
-    font-weight: bold;
+  font-size: 14px;
+  line-height: 20px;
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #231f20;
+  font-weight: bold;
 }
 
 .curr-list .list-text dd {
-    display: flex;
-    padding: 0 30px;
-    font-size: 13px;
-    color: #777;
-    line-height: 30px;
-    margin: 0;
+  display: flex;
+  padding: 0 30px;
+  font-size: 13px;
+  color: #777;
+  line-height: 30px;
+  margin: 0;
 }
 
 .curr-list .list-text dd .rate {
-    display: inline-block;
-    /*text-wrap: nowrap;*/
+  display: inline-block;
+  /*text-wrap: nowrap;*/
 }
 
 .curr-list .list-text dd .grade {
-    position: relative;
-    display: inline-block;
-    margin-left: 6px;
-    padding-left: 8px;
+  position: relative;
+  display: inline-block;
+  margin-left: 6px;
+  padding-left: 8px;
 }
 
 .curr-list .list-text dd .grade::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 10px;
-    width: 1px;
-    height: 11px;
-    background: #dfdfdf;
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 1px;
+  height: 11px;
+  background: #dfdfdf;
 }
 
 /* footer */
 
 .footer-container {
-    position: relative;
-    width: 100%;
-    border-top: 1px solid #ededed;
+  position: relative;
+  width: 100%;
+  border-top: 1px solid #ededed;
 }
 .footer-inner {
-    width: 980px;
-    margin: 0 auto;
-    padding: 30px 0 20px;
+  width: 980px;
+  margin: 0 auto;
+  padding: 30px 0 20px;
 }
 .footer-logo {
-    float: left;
+  float: left;
 }
 
 img {
-    border: 0;
-    vertical-align: middle;
+  border: 0;
+  vertical-align: middle;
 }
 
 .footer-tit::after {
-    content: "";
-    display: block;
-    clear: both;
+  content: "";
+  display: block;
+  clear: both;
 }
 
 .company-info {
-    margin: 3px 0;
-    overflow: hidden;
-    color: #666;
-    font-size: 12px;
-    line-height: 18px;
+  margin: 3px 0;
+  overflow: hidden;
+  color: #666;
+  font-size: 12px;
+  line-height: 18px;
 }
 
 .company-info p {
-    margin: 0;
+  margin: 0;
 }
-
 
 /*account*/
 
-.container{
-    margin-top:30px;
+.container {
+  margin-top: 30px;
 }
-.my-account{
-    font-size: 20px;
-    display: flex;
-    flex-direction: row;
+.my-account {
+  font-size: 20px;
+  display: flex;
+  flex-direction: row;
 }
-.left-content{
-    width:25%;
-    padding-right: 10px;
+.left-content {
+  width: 25%;
+  padding-right: 10px;
 }
-.block-cotent li{
-    align-items: center;
-    background-color: #bfd2d9;
-    color: #fff;
-    height: 40px;
-    padding-left: 18px;
-    float: left;
-    width: 100%;
-    margin: 5px 0;
-    border-radius: 5px;
+.block-cotent li {
+  align-items: center;
+  background-color: #bfd2d9;
+  color: #fff;
+  height: 40px;
+  padding-left: 18px;
+  float: left;
+  width: 100%;
+  margin: 5px 0;
+  border-radius: 5px;
 }
-.block-cotent li a{
-    color: #666 ;
-    margin-left: 5px !important;
-    line-height: 34px !important;
-    font-weight: bold;
+.block-cotent li a {
+  color: #666;
+  margin-left: 5px !important;
+  line-height: 34px !important;
+  font-weight: bold;
 }
-.dashboard{
-    flex: 1;
-    padding-left: 20px;
+.dashboard {
+  flex: 1;
+  padding-left: 20px;
 }
-.dashboard .page-title h1{
-    color: #fff;
-}
-
-.page-title{
-    width: 100%;
-    text-align: center;
-    margin-top: 0;
-    background: #222;
-    height: 46px;
-    margin-bottom: 25px;
-}
-.welcome-msg{
-    color:#7f7f7f;
-}
-.welcome-msg .hello{
-    color:#000;
-    font-size: 30px;
-    margin-bottom: 0;
+.dashboard .page-title h1 {
+  color: #fff;
 }
 
-.box-head{
-    margin-top: 30px;
-    border-bottom: 1px solid #cccccc;
-    padding-bottom: 10px;
+.page-title {
+  width: 100%;
+  text-align: center;
+  margin-top: 0;
+  background: #222;
+  height: 46px;
+  margin-bottom: 25px;
+}
+.welcome-msg {
+  color: #7f7f7f;
+}
+.welcome-msg .hello {
+  color: #000;
+  font-size: 30px;
+  margin-bottom: 0;
 }
 
-.box-account .box-title{
-    margin-top: 15px;
+.box-head {
+  margin-top: 30px;
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 10px;
 }
 
-.title-my-account{
-    display: inline-block;
-    font-size: 20px;
-    color: #333;
-    margin-bottom: 15px;
-    padding-right: 1%;
+.box-account .box-title {
+  margin-top: 15px;
 }
 
-.box a{
-    background: #07b5f5;
-    color: #fff;
-    display: inline-block;
-    min-width: 85px;
-    padding: 3px 8px;
-    font-size: 20px;
-    text-align: center;
-    border-radius: 5px;
+.title-my-account {
+  display: inline-block;
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 15px;
+  padding-right: 1%;
 }
 
-.box-content{
-    font-size: 20px;
-    float:left;
-    width: 100%;
-    margin-bottom: 10px;
-    color:#7f7f7f;
+.box a {
+  background: #07b5f5;
+  color: #fff;
+  display: inline-block;
+  min-width: 85px;
+  padding: 3px 8px;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 5px;
 }
 
-.box-content span{
-    float:left;
-    width: 100%;
-    display: inline;
-    margin-bottom: 7px;
+.box-content {
+  font-size: 20px;
+  float: left;
+  width: 100%;
+  margin-bottom: 10px;
+  color: #7f7f7f;
 }
 
-.col-7 .product-name{
-    border-bottom: 2px solid #d9d6c8;
-    margin-bottom: 10px;
-    width: 100%;
-    padding-bottom: 15px;
+.box-content span {
+  float: left;
+  width: 100%;
+  display: inline;
+  margin-bottom: 7px;
+}
+
+.col-7 .product-name {
+  border-bottom: 2px solid #d9d6c8;
+  margin-bottom: 10px;
+  width: 100%;
+  padding-bottom: 15px;
 }
 
 
@@ -519,485 +519,483 @@ img {
     font-weight: bold; /* Adjust font weight as needed */
 }
 
-.col-7 button{
-    margin-top:20px;
-    padding-left: 25px;
-    background-color: #5aa16d;
-    border-radius: 5px;
-    display: inline-block;
-    padding: 11px 24px;
-    border: 0;
-    color: #FFFFFF;
-    font-size: 13px;
-    font-weight: bold;
-    font-family: Verdana, Arial, sans-serif;
-    line-height: 19px;
-    text-align: center;
-    text-transform: uppercase;
-    vertical-align: middle;
-    white-space: nowrap;
+.col-7 button {
+  margin-top: 20px;
+  padding-left: 25px;
+  background-color: #5aa16d;
+  border-radius: 5px;
+  display: inline-block;
+  padding: 11px 24px;
+  border: 0;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: bold;
+  font-family: Verdana, Arial, sans-serif;
+  line-height: 19px;
+  text-align: center;
+  text-transform: uppercase;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
-.col-7 button:hover{
-    background-color: #c93439;
+.col-7 button:hover {
+  background-color: #c93439;
 }
 
-.product-detail .detail-movie{
-    font-weight: normal;
-    font-size: 20px;
+.product-detail .detail-movie {
+  font-weight: normal;
+  font-size: 20px;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
 }
 
 .date-movie {
-    border-bottom: 2px solid #2b2b2b;
-    padding-bottom: 20px;
+  border-bottom: 2px solid #2b2b2b;
+  padding-bottom: 20px;
 }
 
 .calendar {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
-.calendar a{
-    text-decoration: none;
-    color:black;
-    font-size: 20px;
-    font-weight: normal;
+.calendar a {
+  text-decoration: none;
+  color: black;
+  font-size: 20px;
+  font-weight: normal;
 }
 
 .day {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .day:hover {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 
 .date {
-    font-size: 20px;
-    margin-right: 10px;
+  font-size: 20px;
+  margin-right: 10px;
 }
 
 .address {
-    display: flex;
-    flex-direction: column;
-    width: inherit;
-    gap: 5px;
-    padding: 20px 0;
-    border: none;
-    text-align: center;
-    border-bottom: 2px solid #2b2b2b;
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+  gap: 5px;
+  padding: 20px 0;
+  border: none;
+  text-align: center;
+  border-bottom: 2px solid #2b2b2b;
 }
 
 .address li {
-    background: transparent;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 20px;
-    padding: 15px;
-    color: black;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  background: transparent;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 15px;
+  color: black;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
-
 
 .address li:hover {
-    background-color: #cdd2d4;
+  background-color: #cdd2d4;
 }
 
-.address ul li a{
-    color:black;
+.address ul li a {
+  color: black;
 }
 
-.container .showtimes{
-    width: inherit;
-    padding:15px;
+.container .showtimes {
+  width: inherit;
+  padding: 15px;
 }
 
-.site{
-    display: inline-block;
-    width: 100%;
-    border-bottom: 1px solid #222;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+.site {
+  display: inline-block;
+  width: 100%;
+  border-bottom: 1px solid #222;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-.site .title h3{
-    font-weight: 400;
-    color: #636363;
-    font-size: 20px;
+.site .title h3 {
+  font-weight: 400;
+  color: #636363;
+  font-size: 20px;
 }
 
-.site .products-grid-movie{
-    margin-bottom:15px;
-    padding-left: 0;
-    overflow: auto;
+.site .products-grid-movie {
+  margin-bottom: 15px;
+  padding-left: 0;
+  overflow: auto;
 }
 
-.products-grid-movie li{
-    width: 125px;
-    border: 2px solid #cbcabe;
-    padding: 5px 10px;
-    display: inline-block;
-    margin-right: 15px;
-    text-align: center;
-    margin-top: 3px;
+.products-grid-movie li {
+  width: 125px;
+  border: 2px solid #cbcabe;
+  padding: 5px 10px;
+  display: inline-block;
+  margin-right: 15px;
+  text-align: center;
+  margin-top: 3px;
 }
-
 
 /* seat number page */
 
-.main-container-seat-booking{
-    position: relative;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 !important;
+.main-container-seat-booking {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 !important;
 }
 
-.booking-progress{
-    width:100%;
-    border: 2px solid #d4d3c9;
-    display: block;
+.booking-progress {
+  width: 100%;
+  border: 2px solid #d4d3c9;
+  display: block;
 }
 
-.booking-progress .page-title{
-    width: 100%;
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 0;
-    background: #222;
-    height: 46px;
-    color:white;
-    font-size: 15px;
-    font-weight: bold;
+.booking-progress .page-title {
+  width: 100%;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  background: #222;
+  height: 46px;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
 }
 
-.booking-progress .page-title h3{
-    text-transform: uppercase;
-    color: #fff;
-    line-height: 32px;
-    padding: 5px;
-    margin: 0;
+.booking-progress .page-title h3 {
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 32px;
+  padding: 5px;
+  margin: 0;
 }
 
-.top-content{
-    width: 100%;
-    padding: 10px;
-    border-bottom: 2px solid #d4d3c9;
-    background: #fff1ce;
-    margin-bottom: 20px;
-    overflow: hidden;
+.top-content {
+  width: 100%;
+  padding: 10px;
+  border-bottom: 2px solid #d4d3c9;
+  background: #fff1ce;
+  margin-bottom: 20px;
+  overflow: hidden;
 }
 
 .products-list p {
-    margin: 0;
-    font-weight: bold;
+  margin: 0;
+  font-weight: bold;
 }
 
-.screen{
-    width: 100%;
-    height: 45px;
-    margin: 40px auto 40px;
-    text-align: center;
-    background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg-screen.png) no-repeat top center transparent;
-    background-size: 100% auto;
+.screen {
+  width: 100%;
+  height: 45px;
+  margin: 40px auto 40px;
+  text-align: center;
+  background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg-screen.png)
+    no-repeat top center transparent;
+  background-size: 100% auto;
 }
 
 .seats-container {
-    width: auto;
-    margin: 40px auto;
-    text-align: center;
+  width: auto;
+  margin: 40px auto;
+  text-align: center;
 }
 
-.ticketbox .row{
-    display: flex;
-    justify-content: center ;
+.ticketbox .row {
+  display: flex;
+  justify-content: center;
 }
 
 .seat-standard {
-    border: 1px solid #01c73c;
-    cursor: pointer;
+  border: 1px solid #01c73c;
+  cursor: pointer;
 }
 .seat-selected {
-    font-weight: bold;
-    background: #b11500 !important;
-    border-color: #b11500 !important;
-    color:white;
+  font-weight: bold;
+  background: #b11500 !important;
+  border-color: #b11500 !important;
+  color: white;
 }
 
-.seat-occupied{
-    background-color: #bbb;
+.seat-occupied {
+  background-color: #bbb;
 }
 
 .seat {
-    display: inline-block;
-    width: 22px;
-    height: 22px;
-    vertical-align: middle;
-    margin: 2px 1px;
-    font-size: 7pt;
-    padding: 1px 0;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  vertical-align: middle;
+  margin: 2px 1px;
+  font-size: 7pt;
+  padding: 1px 0;
 }
 
-.ticketbox-notice{
-    display: flex;
-    justify-content: center;
+.ticketbox-notice {
+  display: flex;
+  justify-content: center;
 }
 .iconlist {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .icon {
-    margin: 0 10px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 14px;
-    position: relative; /* Thêm thuộc tính này để sử dụng pseudo-element */
+  margin: 0 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  position: relative; /* Thêm thuộc tính này để sử dụng pseudo-element */
 }
 
 .icon:before {
-    content: "";
-    display: inline-block;
-    vertical-align: middle;
-    width: 18px;
-    height: 18px;
-    margin-right: 5px; /* Chuyển margin từ quy tắc chung sang quy tắc này */
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 18px;
+  height: 18px;
+  margin-right: 5px; /* Chuyển margin từ quy tắc chung sang quy tắc này */
 }
 
 .icon.checked:before {
-    background-color: #b11500;
+  background-color: #b11500;
 }
 
 .icon.occupied:before {
-    background-color: #bbb;
+  background-color: #bbb;
 }
 
 .bottom-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
 
 .minicart-wrapper {
-    width: 100%;
-    font-weight: bold;
-    font-size: 15px;
-    background-color: black;
-    color:white;
-    border-radius: 5px;
-    padding: 10px;
+  width: 100%;
+  font-weight: bold;
+  font-size: 15px;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  padding: 10px;
 }
 
 .minicart-wrapper ul {
-    list-style-type: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
 }
 
 .minicart-wrapper ul li {
-    margin-right: 45px;
-    margin-bottom: 10px;
+  margin-right: 45px;
+  margin-bottom: 10px;
 }
 
 .product-detail {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .product-detail img {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .item {
-    padding: 5px;
-    border-radius: 5px;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .item p {
-    margin: 5px 0;
+  margin: 5px 0;
 }
 
 .item-first {
-    display: flex;
+  display: flex;
 }
 
 .item-first .product-detail {
-    flex: 1;
+  flex: 1;
 }
 
 .item-first img {
-    margin: 10px;
-    width: 74px;
-    height: 108px;
+  margin: 10px;
+  width: 74px;
+  height: 108px;
 }
 
 input[type="submit"] {
-    background-color: #4CAF50; /* Màu nền */
-    border: none;
-    color: white; /* Màu chữ */
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px; /* Kích thước chữ */
-    padding: 25px 60px; /* Kích thước nút */
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 8px; /* Bo tròn viền */
+  background-color: #4caf50; /* Màu nền */
+  border: none;
+  color: white; /* Màu chữ */
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px; /* Kích thước chữ */
+  padding: 25px 60px; /* Kích thước nút */
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px; /* Bo tròn viền */
 }
 
 input[type="submit"]:hover {
-    background-color: #45a049; /* Màu nền hover */
+  background-color: #45a049; /* Màu nền hover */
 }
-
 
 /* Sign In page*/
 
 .gsi-material-button {
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    -webkit-appearance: none;
-    background-color: #f2f2f2;
-    background-image: none;
-    border: none;
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    color: #1f1f1f;
-    cursor: pointer;
-    font-family: 'Roboto', arial, sans-serif;
-    font-size: 14px;
-    height: 40px;
-    letter-spacing: 0.25px;
-    outline: none;
-    overflow: hidden;
-    padding: 0 12px;
-    position: relative;
-    text-align: center;
-    -webkit-transition: background-color .218s, border-color .218s, box-shadow .218s;
-    transition: background-color .218s, border-color .218s, box-shadow .218s;
-    vertical-align: middle;
-    white-space: nowrap;
-    width: 100%;
-    min-width: min-content;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-appearance: none;
+  background-color: #f2f2f2;
+  background-image: none;
+  border: none;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #1f1f1f;
+  cursor: pointer;
+  font-family: "Roboto", arial, sans-serif;
+  font-size: 14px;
+  height: 40px;
+  letter-spacing: 0.25px;
+  outline: none;
+  overflow: hidden;
+  padding: 0 12px;
+  position: relative;
+  text-align: center;
+  -webkit-transition: background-color 0.218s, border-color 0.218s,
+    box-shadow 0.218s;
+  transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 100%;
+  min-width: min-content;
 }
 
 .gsi-material-button .gsi-material-button-icon {
-    height: 20px;
-    margin-right: 12px;
-    min-width: 20px;
-    width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  min-width: 20px;
+  width: 20px;
 }
 
 .gsi-material-button .gsi-material-button-content-wrapper {
-    -webkit-align-items: center;
-    align-items: center;
-    display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -webkit-flex-wrap: nowrap;
-    flex-wrap: nowrap;
-    height: 100%;
-    justify-content: center;
-    position: relative;
-    width: 100%;
+  -webkit-align-items: center;
+  align-items: center;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  height: 100%;
+  justify-content: center;
+  position: relative;
+  width: 100%;
 }
 
 .gsi-material-button .gsi-material-button-contents {
-    -webkit-flex-grow: 0;
-    flex-grow: 0;
-    font-family: 'Roboto', arial, sans-serif;
-    font-weight: 500;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: top;
+  -webkit-flex-grow: 0;
+  flex-grow: 0;
+  font-family: "Roboto", arial, sans-serif;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
 }
 
 .gsi-material-button .gsi-material-button-state {
-    -webkit-transition: opacity .218s;
-    transition: opacity .218s;
-    bottom: 0;
-    left: 0;
-    opacity: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
+  -webkit-transition: opacity 0.218s;
+  transition: opacity 0.218s;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .gsi-material-button:disabled {
-    cursor: default;
-    background-color: #ffffff61;
+  cursor: default;
+  background-color: #ffffff61;
 }
 
 .gsi-material-button:disabled .gsi-material-button-state {
-    background-color: #1f1f1f1f;
+  background-color: #1f1f1f1f;
 }
 
 .gsi-material-button:disabled .gsi-material-button-contents {
-    opacity: 38%;
+  opacity: 38%;
 }
 
 .gsi-material-button:disabled .gsi-material-button-icon {
-    opacity: 38%;
+  opacity: 38%;
 }
 
 .gsi-material-button:not(:disabled):active .gsi-material-button-state,
 .gsi-material-button:not(:disabled):focus .gsi-material-button-state {
-    background-color: #001d35;
-    opacity: 12%;
+  background-color: #001d35;
+  opacity: 12%;
 }
 
 .gsi-material-button:not(:disabled):hover {
-    -webkit-box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
-    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
+  -webkit-box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 1px 3px 1px rgba(60, 64, 67, 0.15);
 }
 
 .gsi-material-button:not(:disabled):hover .gsi-material-button-state {
-    background-color: #001d35;
-    opacity: 8%;
+  background-color: #001d35;
+  opacity: 8%;
 }
 
 label {
-    font-size: medium;
-    font-weight: bold;
-    float: left;
+  font-size: medium;
+  font-weight: bold;
+  float: left;
 }
 
 .form-control {
-    border: 2px solid #ced4da !important;
+  border: 2px solid #ced4da !important;
 }
 
 @media (min-width: 992px) {
-    .col-lg-6 img {
-        display: block; /* Hiển thị ảnh */
-    }
+  .col-lg-6 img {
+    display: block; /* Hiển thị ảnh */
+  }
 }
 
 /* CSS cho màn hình nhỏ (bé hơn 992px) */
 @media (max-width: 992px) {
-    .col-lg-6 img {
-        display: none; /* Ẩn ảnh */
-    }
+  .col-lg-6 img {
+    display: none; /* Ẩn ảnh */
+  }
 }
-
-
-

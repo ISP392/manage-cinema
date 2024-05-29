@@ -42,7 +42,7 @@ public class LogoutServlet extends HttpServlet {
         // Xóa session
         session.invalidate();
         // Chuyển hướng người dùng đến trang đăng nhập hoặc trang chính
-        request.getRequestDispatcher("/WEB-INF/views/nowShowing.jsp").forward(request, response);
+        response.sendRedirect("home");
     }
 }
 

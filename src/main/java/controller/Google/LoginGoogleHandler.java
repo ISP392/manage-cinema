@@ -36,8 +36,8 @@ public class LoginGoogleHandler extends HttpServlet {
             session.setAttribute("account", u);
             response.sendRedirect("nowShowing");
         } else {
-            session.setAttribute("error_1", "Your email is already used");
-            response.sendRedirect("signin");
+            session.setAttribute("account", u);
+            response.sendRedirect("home");
         }
        
     }
