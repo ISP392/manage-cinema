@@ -20,7 +20,12 @@ public class verifyServlet extends HttpServlet {
         code = random.nextInt(900000) + 100000;
 
         Users u = (Users)request.getSession().getAttribute("user");
-        Email.sendEmail(u.getEmail(), "Code", "Your code is: "+code);
+        if(request.getSession().getAttribute("information").equals("information")){
+            System.out.println(u.getEmail());
+            Email.sendEmail(u.getEmail(), "Code", "You just updated new information, Your code is: "+code);
+        }else{
+            Email.sendEmail(u.getEmail(), "Code", "Your code is: "+code);
+        }
         request.getRequestDispatcher("/WEB-INF/views/verify.jsp").forward(request, response);
     }
 
@@ -29,9 +34,14 @@ public class verifyServlet extends HttpServlet {
         DAO dao = new DAO();
         if(Integer.parseInt(request.getParameter("otp-code")) == code){
             Users u = (Users)request.getSession().getAttribute("user");
-            request.getSession().removeAttribute("user");
-            dao.add(u);
-            request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
+            if(request.getSession().getAttribute("information").equals("information")){
+                dao.updateDisplayNameAndEmail(u.getDisplayName(), u.getEmail(), u.getUserName());
+                response.sendRedirect("home");
+            }else {
+                request.getSession().removeAttribute("user");
+                dao.add(u);
+                request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
+            }
         }else{
             request.setAttribute("error", "Invalid code");
             request.getRequestDispatcher("/WEB-INF/views/verify.jsp").forward(request, response);
