@@ -58,9 +58,9 @@ public class Email {
         Random random = new Random();
         // Generate random code with 6 digits
         int code = random.nextInt(900000) + 100000;
-        if(sendEmail("lephuongmai862003@gmail.com", "Code", "Your code is: " + code)){
+        if (sendEmail("lephuongmai862003@gmail.com", "Code", "Your code is: " + code)) {
             System.out.println("success");
-        }else{
+        } else {
             System.out.println("false");
         }
 
