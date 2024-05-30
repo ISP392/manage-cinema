@@ -4,6 +4,7 @@ import DAO.DAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import modal.UpdateInformation;
 import modal.Users;
 
 import java.io.IOException;
@@ -13,9 +14,9 @@ public class UpdateAccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Users user = (Users) request.getSession().getAttribute("account");
-        if(user ==null) {
+        if (user == null) {
             response.sendRedirect("signin");
-        }else{
+        } else {
             request.setAttribute("colorMain", "white");
             request.setAttribute("backgroundColorMain", "red");
 
@@ -37,14 +38,48 @@ public class UpdateAccountServlet extends HttpServlet {
 
         DAO d = new DAO();
         boolean b = d.checkPass(oldPassword, username);
-        if(oldPassword.equals("") && newPassword.equals("") && confirmPassword.equals("")){
-            Users user = new Users(username, displayName, email);
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            session.setAttribute("information", "information");
-            response.sendRedirect("verify");
-        }else{
-
+        Users oldUser = d.getUserByUsername(username);
+        if (oldPassword.equals("") && newPassword.equals("") && confirmPassword.equals("")) {
+            UpdateInformation UI = new UpdateInformation("information", oldUser.getEmail(), oldUser.getDisplayName(), oldUser.getPassword());
+            if (d.getUserByUsername(username).getEmail().equals(email)) {
+                Users user = new Users(username, displayName, email);
+                HttpSession session = request.getSession();
+                session.setAttribute("user", user);
+                session.setAttribute("information", UI);
+                response.sendRedirect("verify");
+            } else if (d.checkEmail(email)) {
+                request.setAttribute("errorEmail", "Email is already existed");
+                request.getRequestDispatcher("/WEB-INF/views/updateAccount.jsp").forward(request, response);
+            } else {
+                Users user = new Users(username, displayName, email);
+                HttpSession session = request.getSession();
+                session.setAttribute("user", user);
+                session.setAttribute("information", UI);
+                response.sendRedirect("verify");
+            }
+        } else {
+            UpdateInformation UI = new UpdateInformation("password", oldUser.getEmail(), oldUser.getDisplayName(), oldUser.getPassword());
+            if (b) {
+                if (d.getUserByUsername(username).getEmail().equals(email)) {
+                    Users user = new Users(displayName, username, newPassword, email);
+                    HttpSession session = request.getSession();
+                    session.setAttribute("user", user);
+                    session.setAttribute("information", UI);
+                    response.sendRedirect("verify");
+                } else if (d.checkEmail(email)) {
+                    request.setAttribute("errorEmail", "Email is already existed");
+                    request.getRequestDispatcher("/WEB-INF/views/updateAccount.jsp").forward(request, response);
+                } else {
+                    Users user = new Users(displayName, username, newPassword, email);
+                    HttpSession session = request.getSession();
+                    session.setAttribute("user", user);
+                    session.setAttribute("information", UI);
+                    response.sendRedirect("verify");
+                }
+            } else {
+                request.setAttribute("error", "Old password is incorrect");
+                request.getRequestDispatcher("/WEB-INF/views/updateAccount.jsp").forward(request, response);
+            }
         }
     }
 }
