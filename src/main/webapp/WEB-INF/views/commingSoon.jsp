@@ -13,12 +13,18 @@ uri="http://java.sun.com/jsp/jstl/core" %>
       <div class="main-container">
         <div class="main" style="position: relative; top: 90px">
           <div class="home-movie-selection">
-            <div>
-              <h1 style="padding-bottom: 10px; border-bottom: 2px solid black">
-                Phim Sắp Chiếu
-              </h1>
-            </div>
-          </div>
+                        <div class="nowShowing" style="border-bottom: 3px solid #000; margin-bottom: 35px; position: relative; display: flex; align-items: center; justify-content: space-between;">
+                            <h1>Phim Sắp Chiếu</h1>
+                            <div class="sub-commingSoon" style="padding-left: 15px; font-size: 20px; white-space: nowrap; text-transform: uppercase;">
+                                <ul style="margin: 0; padding: 0; list-style: none;">
+                                    <li>
+                                        <a href="http://localhost:8081/manage-cinema/nowShowing" style="color: gray">Phim Đang Chiếu</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
           <div class="tab-content">
             <ul class="curr-list">
               <% int movieNumber = 1; %>
