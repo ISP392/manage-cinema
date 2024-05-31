@@ -46,6 +46,8 @@ public class verifyServlet extends HttpServlet {
                 else if (!UI.getOldPassword().equals(u.getPassword()) && !UI.getOldEmail().equals(u.getEmail()) && !UI.getOldDisplayName().equals(u.getDisplayName())) {
                     Email.sendEmail(u.getEmail(), "Code", "You just updated your display name from " + UI.getOldDisplayName() + " to " + u.getDisplayName() + ", your email from " + UI.getOldEmail() + " to " + u.getEmail() + " and your password. Your code is: " + code);
                 }
+            }else if(UI.getInformation().equals("email")){
+                Email.sendEmail(u.getEmail(), "Code", "You just updated your display name from " + UI.getOldDisplayName() + " to " + u.getDisplayName()+", Your code is: " + code);
             }
         } else {
             Email.sendEmail(u.getEmail(), "Code", "You have just registered a new account, Your code is: " + code);
@@ -68,7 +70,12 @@ public class verifyServlet extends HttpServlet {
                     dao.updateUser(u);
                     request.getSession().removeAttribute("information");
                     response.sendRedirect("signin");
+                }else if(UI.getInformation().equals("email")){
+                    dao.updateDisplayNameByEmail(u.getEmail(), u.getDisplayName());
+                    request.getSession().removeAttribute("information");
+                    response.sendRedirect("signin");
                 }
+
             } else {
                 request.getSession().removeAttribute("user");
                 dao.add(u);
