@@ -9,30 +9,31 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Banny Cinema</title>
     </head>
     <body>
         <div class="footer-container">
                 <div class="footer-inner">
                     <div class="footer-tit">
                         <span class="footer-logo">
-                            <img
-                                src="https://www.lottecinemavn.com/LCHS/Image/logo_footer.gif?v=17111301"
-                                />
+                            
+                                
+                                
+                                <img src="./assets/images/logomini.png" alt="logo"/>
+                                
                         </span>
                     </div>
                     <div class="company-info">
-                        <p>CÔNG TY TNHH LOTTE CINEMA VIỆT NAM</p>
+                        <p>CÔNG TY TNHH BANNY CINEMA VIỆT NAM</p>
                         <p>
-                            Giấy CNĐKDN: 0302575928, đăng ký lần đầu ngày 02/05/2008, đăng ký
-                            thay đổi lần thứ 10 ngày 30/03/2018, cấp bởi Sở KHĐT Thành phố Hồ
-                            Chí Minh
+                            Giấy CNĐKDN: 0302575928, đăng ký lần đầu ngày 10/05/2024, đăng ký
+                            thay đổi lần thứ 2 ngày 30/05/2024, cấp bởi Sở KHĐT Thành phố Hà Nội
                         </p>
                         <p>
-                            Địa chỉ: Tầng 3, TTTM Lotte, số 469 đường Nguyễn Hữu Thọ, Phường
-                            Tân Hưng, Quận 7, TPHCM, Việt Nam
+                            Địa chỉ: Tầng 3, Toà Beta, Đại học FPT, Khu Công nghệ cao Hòa Lạc, 
+                            Km29 Đại lộ Thăng Long, huyện Thạch Thất, Hà Nội, Việt Nam
                         </p>
-                        <p>Hotline: (028) 3775 2524</p>
+                        <p>Hotline: (028) 3377 4444</p>
                     </div>
                 </div>
             </div>

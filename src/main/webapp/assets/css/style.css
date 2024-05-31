@@ -410,6 +410,7 @@ img {
   margin-top: 30px;
 }
 .my-account {
+  width: 100%;
   font-size: 20px;
   display: flex;
   flex-direction: row;
@@ -419,11 +420,11 @@ img {
   padding-right: 10px;
 }
 .block-cotent li {
+  display: flex;
+  justify-content: center;
   align-items: center;
-  background-color: #bfd2d9;
   color: #fff;
   height: 40px;
-  padding-left: 18px;
   float: left;
   width: 100%;
   margin: 5px 0;
@@ -431,7 +432,6 @@ img {
 }
 .block-cotent li a {
   color: #666;
-  margin-left: 5px !important;
   line-height: 34px !important;
   font-weight: bold;
 }
@@ -511,10 +511,12 @@ img {
   padding-bottom: 15px;
 }
 
+
+.product-detail .detail-movie,
 .col-7 .product-detail {
-  font-size: 17px;
-  font-weight: bold;
-  padding: 5px 0;
+    font-family: Arial, sans-serif; /* Example font-family */
+    font-size: 20px; /* Adjust font size as needed */
+    font-weight: bold; /* Adjust font weight as needed */
 }
 
 .col-7 button {
