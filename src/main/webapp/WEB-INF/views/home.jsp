@@ -30,7 +30,7 @@
     <body>
         <div class="page">
             <div class="main-container">
-                <div class="main" style="position: relative; top: 90px">
+                <div class="main">
                     <!-- banner -->
                     <div
                         id="carouselExampleIndicators"
@@ -215,6 +215,12 @@
                                 </c:if>
                             </c:forEach>
                         </ul>
+                    </div>
+
+                    <div class="home-movie-selection">
+                        <div class="event">
+                            <h2><img src="https://www.cgv.vn/skin/frontend/cgv/default/images/h3_event.gif" alt=" "/></h2>
+                        </div>
                     </div>
                 </div>
             </div>

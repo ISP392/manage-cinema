@@ -203,18 +203,18 @@ li {
 
 .main-container {
   position: relative;
-  min-height: 100vh;
   width: 100%;
   margin: 30px auto;
   padding: 0 !important;
   background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg_c_bricks.png)
     repeat-x scroll 0 124px rgba(0, 0, 0, 0);
+  display: inline-block;
 }
 
 .main {
   width: 980px;
   margin: 0 auto;
-  margin-top: -60px;
+  margin-top: 55px;
 }
 
 /* BANNER */
@@ -234,7 +234,7 @@ li {
 }
 
 .home-title {
-  margin-top: 70px;
+  margin-top: 125px;
   background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg_h3_line.jpg)
     repeat-x scroll left center rgba(0, 0, 0, 0);
   height: 60px;
