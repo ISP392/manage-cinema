@@ -174,7 +174,8 @@ public class DAO extends DBcontext {
 
     public List<Movies> getMovieByGenreID(int genreID) {
         List<Movies> list = new ArrayList<>();
-        String sql = "select * from Movies m join MovieGenres mg on m.movieID = mg.movieID join Genres g on mg.genreID = g.genreID where mg.genreID = ?";
+        String sql = "SELECT * FROM Movies m JOIN MovieGenres mg ON m.movieID = mg.movieID JOIN Genres g ON mg.genreID = g.genreID WHERE mg.genreID = ? AND m.releaseDate >= DATE_ADD(CURDATE(), INTERVAL -30 DAY);";
+
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, genreID);
@@ -287,7 +288,7 @@ public class DAO extends DBcontext {
 
     //void get movie by movieID
     public Movies getMovieByID(int movieID) {
-        String sql = "SELECT * FROM Movies AS m WHERE m.movieID = ? AND m.releaseDate BETWEEN DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND CURDATE() ORDER BY m.releaseDate;";
+        String sql = "SELECT * FROM Movies AS m WHERE m.movieID = ? ;";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, movieID);
@@ -327,8 +328,10 @@ public class DAO extends DBcontext {
 
     public static void main(String[] args) {
         DAO dao = new DAO();
-        Users u = dao.getUserByEmail("bquoc3002@gmail.com");
-        System.out.println(u.toString());
+        List<Movies> list = dao.getMovieByGenreID(8);
+        for(Movies m : list){
+            System.out.println(m.getTitle());
+        }
     }
 }
 

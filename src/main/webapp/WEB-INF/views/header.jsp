@@ -72,7 +72,7 @@
                             <a href="genres?genreID=1" class="level1">Hành Động</a>
                         </li>
                         <li class="level1-nav1-2">
-                            <a href="genres?genreID=2" class="level1">Phưu Lưu</a>
+                            <a href="genres?genreID=2" class="level1">Phiêu Lưu</a>
                         </li>
                         <li class="level1-nav1-2">
                             <a href="genres?genreID=3" class="level1">Tâm Lý</a>
