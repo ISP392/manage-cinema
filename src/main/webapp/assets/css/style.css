@@ -93,19 +93,21 @@ p {
 }
 
 .logo {
-  display: block;
-  width: 100px;
-  height: 135px;
-  min-width: 100px;
-  text-align: center;
+    display: block;
+    width: 100px;
+    height: 100px; /* Adjusted height to be more typical for a logo */
+    min-width: 50px;
+    text-align: center;
 }
+
+
 .logo :hover {
   opacity: 0.8;
 }
 .logo img {
-  width: 200px;
-  height: 80px;
-  margin-top: 28px;
+    width: 220px;
+    height: 170px;
+    margin-top: -15px;
 }
 .header-nav-bar {
   display: block;

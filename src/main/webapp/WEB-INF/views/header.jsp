@@ -49,7 +49,7 @@
     <div class="page-header-container">
         <!-- LOGO chuyen toi trang chu -->
         <a class="logo" href="home">
-            <img src="./assets/images/LogoFPT.png" alt="logo"/>
+            <img src="./assets/images/logo_home.png" alt="logo"/>
         </a>
         <div class="header-nav-bar">
             <ol class="nav-primary">

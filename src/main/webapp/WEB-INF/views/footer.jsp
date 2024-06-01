@@ -16,11 +16,8 @@
                 <div class="footer-inner">
                     <div class="footer-tit">
                         <span class="footer-logo">
-                            
-                                
-                                
-                                <img src="./assets/images/logomini.png" alt="logo"/>
-                                
+                            <img style = "height: 80px; width: 200px"
+                                src="./assets/images/logo_mini.png" alt=""/>      
                         </span>
                     </div>
                     <div class="company-info">
