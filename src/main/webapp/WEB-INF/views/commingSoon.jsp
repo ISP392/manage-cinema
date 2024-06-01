@@ -12,7 +12,7 @@
 <body>
 <div class="page">
     <div class="main-container">
-        <div class="main" style="position: relative; top: 90px">
+        <div class="main" >
             <div class="home-movie-selection">
                 <div class="nowShowing"
                      style="border-bottom: 3px solid #000; margin-bottom: 35px; position: relative; display: flex; align-items: center; justify-content: space-between;">

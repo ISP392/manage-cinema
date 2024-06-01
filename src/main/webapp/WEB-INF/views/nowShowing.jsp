@@ -28,7 +28,7 @@
     <body>
         <div class="page">
             <div class="main-container">
-                <div class="main" style="position: relative; top: 90px">
+                <div class="main">
                     <!-- banner -->
 
                     <!-- comment <div class="home-movie-selection">
