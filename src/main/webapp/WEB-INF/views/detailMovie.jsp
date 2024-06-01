@@ -8,8 +8,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="shortcut icon" type="image/x-icon" href="./assets/images/logo_home.png" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Deatil Movie</title>
+        <title>Xem phim</title>
     </head>
     <body>
         <%
@@ -64,7 +65,7 @@
                 <div class="col-7">
                     <div class="product-name">
                         <h4 style="font-weight: bold">${movie.title.toUpperCase()}</h4>
-                        <h5 style="color: red;">${movie.getDisplay() == 0 ? 'ĐANG BỊ ẨN' :''}</h>
+                        <h5 style="color: red;">${movie.getDisplay() == 0 ? 'ĐANG BỊ ẨN' :''}</h5>
                     </div>
                     <div>
                         <div class="product-detail">Thể loại: 

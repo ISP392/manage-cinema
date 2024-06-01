@@ -6,10 +6,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="shortcut icon" type="image/x-icon" href="./assets/images/logo_home.png" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css"/>
-    <title>JSP Page</title>
+    <title>Cá nhân</title>
 </head>
 <body>
 <%@include file="header.jsp" %>

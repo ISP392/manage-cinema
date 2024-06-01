@@ -68,7 +68,7 @@ public class GenreServlet extends HttpServlet {
             if(genreID.equals("1")){
                 genres = "Hành Động";
             }else if(genreID.equals("2")){
-                genres = "Phưu Lưu";
+                genres = "Phiêu Lưu";
             }else if(genreID.equals("3")){
                 genres = "Tâm Lý";
             }else if(genreID.equals("4")){
