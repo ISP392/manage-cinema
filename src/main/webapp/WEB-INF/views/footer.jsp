@@ -17,7 +17,7 @@
                 <div class="footer-inner">
                     <div class="footer-tit">
                         <span class="footer-logo">
-                            <img style = "height: 80px; width: 200px"
+                            <img style = "height: 80px; width: 200px; margin-left: -15px"
                                 src="./assets/images/logo_mini.png" alt=""/>      
                         </span>
                     </div>

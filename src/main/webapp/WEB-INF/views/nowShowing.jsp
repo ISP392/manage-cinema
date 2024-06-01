@@ -43,7 +43,7 @@
                             <div class="sub-commingSoon" style="padding-left: 15px; font-size: 20px; white-space: nowrap; text-transform: uppercase;">
                                 <ul style="margin: 0; padding: 0; list-style: none;">
                                     <li>
-                                        <a href="http://localhost:8081/manage-cinema/commingSoon" style="color: gray">Phim Sắp Chiếu</a>
+                                        <a href="commingSoon" style="color: gray">Phim Sắp Chiếu</a>
                                     </li>
                                 </ul>
                             </div>
