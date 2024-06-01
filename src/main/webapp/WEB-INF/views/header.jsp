@@ -115,7 +115,7 @@
         <div class="header-buy-ticket">
             <p>
                 <a class="ticket" href="#">
-                    <img alt="ticket" src="./assets/images/hd-tickets-49018.png"/>
+                    <img alt="ticket" src="./assets/images/ticket1.png"/>
                 </a>
             </p>
         </div>
