@@ -105,9 +105,9 @@ p {
   opacity: 0.8;
 }
 .logo img {
-    width: 220px;
-    height: 170px;
-    margin-top: -15px;
+    width: 191px;
+    height: 162px;
+    margin-top: -5px;
 }
 .header-nav-bar {
   display: block;
@@ -309,6 +309,7 @@ a {
   margin: 0 0 40px 20px;
 }
 .curr-list .img img {
+  border-radius: 10px 10px 0 0;
   width: 228px;
   height: 334px;
 }
@@ -318,6 +319,7 @@ a {
   border-top: 1px solid #e5e5e5;
   box-sizing: border-box;
   background-color: #fdf7dc;
+  border-radius: 0 0 10px 10px;
 }
 
 .curr-list .list-text dt {

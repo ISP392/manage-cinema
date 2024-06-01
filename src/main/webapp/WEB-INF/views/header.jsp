@@ -53,7 +53,7 @@
             <img src="./assets/images/logo_home.png" alt="logo"/>
         </a>
         <div class="header-nav-bar">
-            <ol class="nav-primary">
+            <ol class="nav-primary" style="padding-left: 0">
                 <li class="level0-nav-1-parent">
                     <a class="level0-has-children" href="#">PHIM</a>
                     <ul class="level0">
