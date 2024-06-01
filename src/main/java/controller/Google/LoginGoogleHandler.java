@@ -13,6 +13,7 @@ import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 
 import java.io.IOException;
+
 import modal.Users;
 
 @WebServlet(name = "LoginGoogleHandler", value = "/LoginGoogleHandler")
@@ -24,23 +25,19 @@ public class LoginGoogleHandler extends HttpServlet {
         String accessToken = getToken(code);
         UserGoogleDto user = getUserInfo(accessToken);
         Users u = new Users(user.getEmail(), user.getName());
+        u.setProviderID("google");
         HttpSession session = request.getSession();
         DAO d = new DAO();
         if (!d.checkEmail(user.getEmail())) {
-            if (!d.checkLoginGoogle(user.getEmail())) {
-                d.addLoginGoogle(u);
-                session.setAttribute("account", u);
-            } else {
-                session.setAttribute("account", u);
-            }
+            d.addLoginGoogle(u);
             session.setAttribute("account", u);
-            response.sendRedirect("nowShowing");
         } else {
+            u = d.getUserByEmail(user.getEmail());
             session.setAttribute("account", u);
-            response.sendRedirect("home");
         }
-       
+        response.sendRedirect("home");
     }
+
 
     public static String getToken(String code) throws ClientProtocolException, IOException {
         // call api to get token

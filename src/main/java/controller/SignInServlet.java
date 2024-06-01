@@ -89,7 +89,7 @@ public class SignInServlet extends HttpServlet {
         DAO d = new DAO();
         Users user = d.checkLogin(username, password);
         if (user == null) {
-            request.setAttribute("error", "Username or password was inccorect!!");
+            request.setAttribute("error", "Username or password was incorrect!!");
             request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
         } else {
             HttpSession session = request.getSession();
