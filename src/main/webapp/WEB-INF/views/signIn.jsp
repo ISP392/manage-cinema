@@ -8,16 +8,6 @@
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
-  <style>
-      .home-logo {
-    width: 100px; /* Adjust width */
-    height: 200px; /* Maintains aspect ratio */
-}
-  </style>
-  
-  <header>
-      <img src="./assets/images/logo_home.png" alt="Home Logo" class="home-logo">
-  </header> 
   <%@include file="header.jsp" %>
   <!-- Section: Design Block -->
   <section class="">
