@@ -3,8 +3,9 @@
 <!DOCTYPE html>
 <html>
   <head>
+      <link rel="shortcut icon" type="image/x-icon" href="./assets/images/logo_home.png" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>JSP Page</title>
+    <title>Thể loại</title>
   </head>
   <%@include file="header.jsp" %>
   <body>
