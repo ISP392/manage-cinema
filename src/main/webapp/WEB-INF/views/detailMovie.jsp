@@ -65,7 +65,7 @@
                 <div class="col-7">
                     <div class="product-name">
                         <h4 style="font-weight: bold">${movie.title.toUpperCase()}</h4>
-                        <h5 style="color: red;">${movie.getDisplay() == 0 ? 'ĐANG BỊ ẨN' :''}</h>
+                        <h5 style="color: red;">${movie.getDisplay() == 0 ? 'ĐANG BỊ ẨN' :''}</h5>
                     </div>
                     <div>
                         <div class="product-detail">Thể loại: 
