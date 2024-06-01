@@ -14,7 +14,6 @@ public class UpdateAccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Users user = (Users) request.getSession().getAttribute("account");
-        System.out.println(user.getProviderID());
         if (user == null) {
             response.sendRedirect("signin");
         } else {
