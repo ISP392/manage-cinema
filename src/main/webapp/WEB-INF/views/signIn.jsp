@@ -3,10 +3,21 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="shortcut icon" type="image/x-icon" href="./assets/images/logo_home.png" />
     <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">-->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
+  <style>
+      .home-logo {
+    width: 100px; /* Adjust width */
+    height: 200px; /* Maintains aspect ratio */
+}
+  </style>
+  
+  <header>
+      <img src="./assets/images/logo_home.png" alt="Home Logo" class="home-logo">
+  </header> 
   <%@include file="header.jsp" %>
   <!-- Section: Design Block -->
   <section class="">
