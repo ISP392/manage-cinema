@@ -10,7 +10,7 @@
   <body>
     <div class="page">
       <div class="main-container">
-        <div class="main" style="position: relative; top: 90px">
+        <div class="main" >
           <div class="home-movie-selection">
             <div>
               <h1 style="padding-bottom: 10px; border-bottom: 2px solid black">
