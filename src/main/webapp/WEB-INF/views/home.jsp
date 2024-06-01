@@ -9,9 +9,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="shortcut icon" type="image/x-icon" href="./assets/images/logo_home.png" />
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>Banny Cinema</title>
         <!-- load local css in assets folder -->
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -30,7 +31,7 @@
     <body>
         <div class="page">
             <div class="main-container">
-                <div class="main" style="position: relative; top: 90px">
+                <div class="main">
                     <!-- banner -->
                     <div
                         id="carouselExampleIndicators"
@@ -215,6 +216,12 @@
                                 </c:if>
                             </c:forEach>
                         </ul>
+                    </div>
+
+                    <div class="home-movie-selection">
+                        <div class="event">
+                            <h2><img src="https://www.cgv.vn/skin/frontend/cgv/default/images/h3_event.gif" alt=" "/></h2>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -15,6 +15,7 @@ public class Users {
     private String password;
     private Role roleID;
     private String email;
+    private String providerID;
     private int point;
 
     public Users() {
@@ -36,7 +37,8 @@ public class Users {
         this.email = email;
     }
 
-    public Users(int userID, String displayName, String userName, String password, String email, Role roleID, int point) {
+
+    public Users(int userID, String displayName, String userName, String password, String email, Role roleID, int point, String providerID) {
         this.userID = userID;
         this.displayName = displayName;
         this.userName = userName;
@@ -44,6 +46,7 @@ public class Users {
         this.email = email;
         this.roleID = roleID;
         this.point = point;
+        this.providerID = providerID;
     }
 
     public Users(String displayName, String userName, String password, String email) {
@@ -109,8 +112,16 @@ public class Users {
         this.point = point;
     }
 
+    public String getProviderID() {
+        return providerID;
+    }
+
+    public void setProviderID(String providerID) {
+        this.providerID = providerID;
+    }
+
     @Override
     public String toString() {
-        return "Users{" + "userID=" + userID + ", displayName=" + displayName + ", userName=" + userName + ", password=" + password + ", roleID=" + roleID + ", email=" + email + ", point=" + point + '}';
+        return "Users{" + "userID=" + userID + ", displayName=" + displayName + ", userName=" + userName + ", password=" + password + ", roleID=" + roleID + ", email=" + email + ", providerID=" + providerID + ", point=" + point + '}';
     }
 }

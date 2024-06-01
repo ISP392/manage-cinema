@@ -3,9 +3,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="shortcut icon" type="image/x-icon" href="./assets/images/logo_home.png" />
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>Phim đang chiếu</title>
         <!-- load local css in assets folder -->
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -28,7 +29,7 @@
     <body>
         <div class="page">
             <div class="main-container">
-                <div class="main" style="position: relative; top: 90px">
+                <div class="main">
                     <!-- banner -->
 
                     <!-- comment <div class="home-movie-selection">
@@ -42,7 +43,7 @@
                             <div class="sub-commingSoon" style="padding-left: 15px; font-size: 20px; white-space: nowrap; text-transform: uppercase;">
                                 <ul style="margin: 0; padding: 0; list-style: none;">
                                     <li>
-                                        <a href="http://localhost:8081/manage-cinema/commingSoon" style="color: gray">Phim Sắp Chiếu</a>
+                                        <a href="commingSoon" style="color: gray">Phim Sắp Chiếu</a>
                                     </li>
                                 </ul>
                             </div>

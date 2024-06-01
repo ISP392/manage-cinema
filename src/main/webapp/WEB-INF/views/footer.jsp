@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Banny Cinema</title>
     </head>
@@ -16,11 +17,8 @@
                 <div class="footer-inner">
                     <div class="footer-tit">
                         <span class="footer-logo">
-                            
-                                
-                                
-                                <img src="./assets/images/logomini.png" alt="logo"/>
-                                
+                            <img style = "height: 80px; width: 200px; margin-left: -15px"
+                                src="./assets/images/logo_mini.png" alt=""/>      
                         </span>
                     </div>
                     <div class="company-info">

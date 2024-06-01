@@ -13,6 +13,7 @@ import java.util.Random;
 
 @WebServlet(name = "verifyServlet", value = "/verify")
 public class verifyServlet extends HttpServlet {
+
     int code = 0;
 
     @Override
@@ -22,30 +23,31 @@ public class verifyServlet extends HttpServlet {
 
         Users u = (Users) request.getSession().getAttribute("user");
         UpdateInformation UI = (UpdateInformation) request.getSession().getAttribute("information");
-        if (UI.getInformation().equals("information")) {
-            if (UI.getOldEmail().equals(u.getEmail()) && !UI.getOldDisplayName().equals(u.getDisplayName())) {
-                Email.sendEmail(u.getEmail(), "Code", "You just updated your display name from " + UI.getOldDisplayName() + " to " + u.getDisplayName() + ", Your code is: " + code);
-            } else if (!UI.getOldEmail().equals(u.getEmail()) && UI.getOldDisplayName().equals(u.getDisplayName())) {
-                Email.sendEmail(u.getEmail(), "Code", "You just updated your email from " + UI.getOldEmail() + " to " + u.getEmail() + ", Your code is: " + code);
-            } else if (!UI.getOldEmail().equals(u.getEmail()) && !UI.getOldDisplayName().equals(u.getDisplayName())) {
-                Email.sendEmail(u.getEmail(), "Code", "You just updated your display name from " + UI.getOldDisplayName() + " to " + u.getDisplayName() + " and your email from " + UI.getOldEmail() + " to " + u.getEmail() + ", Your code is: " + code);
-            }
-        } else if (UI.getInformation().equals("password")) {
-            // Thay đổi chỉ mật khẩu
-            if (!UI.getOldPassword().equals(u.getPassword()) && UI.getOldEmail().equals(u.getEmail()) && UI.getOldDisplayName().equals(u.getDisplayName())) {
-                Email.sendEmail(u.getEmail(), "Code", "You just updated your password. Your code is: " + code);
-            }
-            // Thay đổi mật khẩu và display name
-            else if (!UI.getOldPassword().equals(u.getPassword()) && !UI.getOldDisplayName().equals(u.getDisplayName()) && UI.getOldEmail().equals(u.getEmail())) {
-                Email.sendEmail(u.getEmail(), "Code", "You just updated your display name from " + UI.getOldDisplayName() + " to " + u.getDisplayName() + " and your password. Your code is: " + code);
-            }
-            // Thay đổi mật khẩu và email
-            else if (!UI.getOldPassword().equals(u.getPassword()) && !UI.getOldEmail().equals(u.getEmail()) && UI.getOldDisplayName().equals(u.getDisplayName())) {
-                Email.sendEmail(u.getEmail(), "Code", "You just updated your email from " + UI.getOldEmail() + " to " + u.getEmail() + " and your password. Your code is: " + code);
-            }
-            // Thay đổi mật khẩu, display name và email
-            else if (!UI.getOldPassword().equals(u.getPassword()) && !UI.getOldEmail().equals(u.getEmail()) && !UI.getOldDisplayName().equals(u.getDisplayName())) {
-                Email.sendEmail(u.getEmail(), "Code", "You just updated your display name from " + UI.getOldDisplayName() + " to " + u.getDisplayName() + ", your email from " + UI.getOldEmail() + " to " + u.getEmail() + " and your password. Your code is: " + code);
+        if (UI != null) {
+            if (UI.getInformation().equals("information")) {
+                if (UI.getOldEmail().equals(u.getEmail()) && !UI.getOldDisplayName().equals(u.getDisplayName())) {
+                    Email.sendEmail(u.getEmail(), "Code", "You just updated your display name from " + UI.getOldDisplayName() + " to " + u.getDisplayName() + ", Your code is: " + code);
+                } else if (!UI.getOldEmail().equals(u.getEmail()) && UI.getOldDisplayName().equals(u.getDisplayName())) {
+                    Email.sendEmail(u.getEmail(), "Code", "You just updated your email from " + UI.getOldEmail() + " to " + u.getEmail() + ", Your code is: " + code);
+                } else if (!UI.getOldEmail().equals(u.getEmail()) && !UI.getOldDisplayName().equals(u.getDisplayName())) {
+                    Email.sendEmail(u.getEmail(), "Code", "You just updated your display name from " + UI.getOldDisplayName() + " to " + u.getDisplayName() + " and your email from " + UI.getOldEmail() + " to " + u.getEmail() + ", Your code is: " + code);
+                }
+            } else if (UI.getInformation().equals("password")) {
+                // Thay đổi chỉ mật khẩu
+                if (!UI.getOldPassword().equals(u.getPassword()) && UI.getOldEmail().equals(u.getEmail()) && UI.getOldDisplayName().equals(u.getDisplayName())) {
+                    Email.sendEmail(u.getEmail(), "Code", "You just updated your password. Your code is: " + code);
+                } // Thay đổi mật khẩu và display name
+                else if (!UI.getOldPassword().equals(u.getPassword()) && !UI.getOldDisplayName().equals(u.getDisplayName()) && UI.getOldEmail().equals(u.getEmail())) {
+                    Email.sendEmail(u.getEmail(), "Code", "You just updated your display name from " + UI.getOldDisplayName() + " to " + u.getDisplayName() + " and your password. Your code is: " + code);
+                } // Thay đổi mật khẩu và email
+                else if (!UI.getOldPassword().equals(u.getPassword()) && !UI.getOldEmail().equals(u.getEmail()) && UI.getOldDisplayName().equals(u.getDisplayName())) {
+                    Email.sendEmail(u.getEmail(), "Code", "You just updated your email from " + UI.getOldEmail() + " to " + u.getEmail() + " and your password. Your code is: " + code);
+                } // Thay đổi mật khẩu, display name và email
+                else if (!UI.getOldPassword().equals(u.getPassword()) && !UI.getOldEmail().equals(u.getEmail()) && !UI.getOldDisplayName().equals(u.getDisplayName())) {
+                    Email.sendEmail(u.getEmail(), "Code", "You just updated your display name from " + UI.getOldDisplayName() + " to " + u.getDisplayName() + ", your email from " + UI.getOldEmail() + " to " + u.getEmail() + " and your password. Your code is: " + code);
+                }
+            }else if(UI.getInformation().equals("email")){
+                Email.sendEmail(u.getEmail(), "Code", "You just updated your display name from " + UI.getOldDisplayName() + " to " + u.getDisplayName()+", Your code is: " + code);
             }
         } else {
             Email.sendEmail(u.getEmail(), "Code", "You have just registered a new account, Your code is: " + code);
@@ -59,14 +61,21 @@ public class verifyServlet extends HttpServlet {
         if (Integer.parseInt(request.getParameter("otp-code")) == code) {
             Users u = (Users) request.getSession().getAttribute("user");
             UpdateInformation UI = (UpdateInformation) request.getSession().getAttribute("information");
-            if (UI.getInformation().equals("information")) {
-                dao.updateDisplayNameAndEmail(u.getDisplayName(), u.getEmail(), u.getUserName());
-                request.getSession().removeAttribute("information");
-                response.sendRedirect("signin");
-            } else if (UI.getInformation().equals("password")) {
-                dao.updateUser(u);
-                request.getSession().removeAttribute("information");
-                response.sendRedirect("signin");
+            if (UI != null) {
+                if (UI.getInformation().equals("information")) {
+                    dao.updateDisplayNameAndEmail(u.getDisplayName(), u.getEmail(), u.getUserName());
+                    request.getSession().removeAttribute("information");
+                    response.sendRedirect("signin");
+                } else if (UI.getInformation().equals("password")) {
+                    dao.updateUser(u);
+                    request.getSession().removeAttribute("information");
+                    response.sendRedirect("signin");
+                }else if(UI.getInformation().equals("email")){
+                    dao.updateDisplayNameByEmail(u.getEmail(), u.getDisplayName());
+                    request.getSession().removeAttribute("information");
+                    response.sendRedirect("signin");
+                }
+
             } else {
                 request.getSession().removeAttribute("user");
                 dao.add(u);

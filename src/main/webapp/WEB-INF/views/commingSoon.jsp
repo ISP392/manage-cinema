@@ -4,15 +4,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="shortcut icon" type="image/x-icon" href="./assets/images/logo_home.png" />
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Document</title>
+    <title>Phim sắp chiếu</title>
 </head>
 <%@include file="header.jsp" %>
 <body>
 <div class="page">
     <div class="main-container">
-        <div class="main" style="position: relative; top: 90px">
+        <div class="main" >
             <div class="home-movie-selection">
                 <div class="nowShowing"
                      style="border-bottom: 3px solid #000; margin-bottom: 35px; position: relative; display: flex; align-items: center; justify-content: space-between;">
@@ -21,7 +22,7 @@
                          style="padding-left: 15px; font-size: 20px; white-space: nowrap; text-transform: uppercase;">
                         <ul style="margin: 0; padding: 0; list-style: none;">
                             <li>
-                                <a href="http://localhost:8081/manage-cinema/nowShowing" style="color: gray">Phim Đang
+                                <a href="nowShowing" style="color: gray">Phim Đang
                                     Chiếu</a>
                             </li>
                         </ul>
@@ -38,8 +39,7 @@
                                 <span class="num"><%= movieNumber++ %></span>
                                 <span class="img">
                       <a href="detail-movie?movieID=${commingSoon.movieID}">
-                        <img
-                                src="./assets/images/posterImages/${commingSoon.posterImage}"
+                        <img src="./assets/images/posterImages/${commingSoon.posterImage}"
                         />
                       </a>
                     </span>
