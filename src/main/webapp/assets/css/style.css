@@ -199,8 +199,8 @@ li {
   opacity: 0.85; /* Đặt độ mờ khi hover vào */
 }
 .header-buy-ticket img {
-  width: 90px;
-  height: 90px;
+    width: 135px;
+    height: 120px;
 }
 
 .main-container {
