@@ -20,7 +20,6 @@ public class Movies {
     private int duration;
     private int display;
     private String trailerURL;
-
     public Movies() {
     }
 
@@ -34,6 +33,8 @@ public class Movies {
         this.display = display;
         this.trailerURL = trailerURL;
     }
+
+
 
     public int getMovieID() {
         return movieID;
@@ -98,5 +99,6 @@ public class Movies {
     public void setTrailerURL(String trailerURL) {
         this.trailerURL = trailerURL;
     }
+
 
 }
