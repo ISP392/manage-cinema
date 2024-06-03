@@ -25,7 +25,7 @@ import util.Encrypt;
 public class DAO extends DBcontext {
 
     public List<Movies> getAllMovieCommingSoon() {
-        String sql = "SELECT * FROM movies m WHERE m.releaseDate > CURDATE()";
+        String sql = "SELECT * FROM Movies m WHERE m.releaseDate > CURDATE()";
         List<Movies> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -116,7 +116,7 @@ public class DAO extends DBcontext {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        String sql = "SELECT * FROM users join roles on users.roleID = roles.roleID where username= " + "'" + username + "'" + "and password = " + "'" + pass + "'";
+        String sql = "SELECT * FROM Users join Roles on Users.roleID = Roles.roleID where username= " + "'" + username + "'" + "and password = " + "'" + pass + "'";
         try {
 
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -134,7 +134,7 @@ public class DAO extends DBcontext {
     }
 
     public void addLoginGoogle(Users u) {
-        String sql = "INSERT INTO users (displayName, roleID, email,providerID, point) VALUES ( ?, 2, ?,'google', 0)";
+        String sql = "INSERT INTO Users (displayName, roleID, email,providerID, point) VALUES ( ?, 2, ?,'google', 0)";
         try {
             PreparedStatement pr = connection.prepareStatement(sql);
             pr.setString(1, u.getDisplayName());
