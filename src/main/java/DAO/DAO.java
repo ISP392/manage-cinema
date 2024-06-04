@@ -153,27 +153,12 @@ public class DAO extends DBContext {
             if (rs.next()) {
                 Role r = new Role(rs.getInt("roleID"), rs.getString("name"));
                 return new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("userName"),
-                        rs.getString("password"), rs.getString("email"), r, rs.getInt("point"));
+                        rs.getString("password"), rs.getString("email"), r, rs.getInt("point"), rs.getString("providerID"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public boolean checkLoginGoogle(String email) {
-        String sql = "SELECT * From users Where email = ?";
-        try {
-            PreparedStatement pre = connection.prepareStatement(sql);
-            pre.setString(1, email);
-            ResultSet rs = pre.executeQuery();
-            if (rs.next()) {
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     public void addLoginGoogle(Users u) {
@@ -211,7 +196,8 @@ public class DAO extends DBContext {
 
     public List<Movies> getMovieByGenreID(int genreID) {
         List<Movies> list = new ArrayList<>();
-        String sql = "select * from Movies m join MovieGenres mg on m.movieID = mg.movieID join Genres g on mg.genreID = g.genreID where mg.genreID = ?";
+        String sql = "SELECT * FROM Movies m JOIN MovieGenres mg ON m.movieID = mg.movieID JOIN Genres g ON mg.genreID = g.genreID WHERE mg.genreID = ? AND m.releaseDate >= DATE_ADD(CURDATE(), INTERVAL -30 DAY);";
+
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, genreID);
@@ -256,6 +242,19 @@ public class DAO extends DBContext {
         }
     }
 
+    //update displayname by email
+    public void updateDisplayNameByEmail(String email, String displayName) {
+        String sql = "update Users set displayName = ? where email = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, displayName);
+            ps.setString(2, email);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
     //update user
     public void updateUser(Users u) {
         String sql = "update Users set displayName = ?, email = ?, password = ? where username = ?";
@@ -280,7 +279,7 @@ public class DAO extends DBContext {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Role r = new Role(rs.getInt("roleID"));
-                Users u = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("username"), rs.getString("password"), rs.getString("email"), r, rs.getInt("point"));
+                Users u = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("username"), rs.getString("password"), rs.getString("email"), r, rs.getInt("point"), rs.getString("providerID"));
                 return u;
             }
         } catch (SQLException e) {
@@ -289,10 +288,29 @@ public class DAO extends DBContext {
         return null;
     }
 
+    //get user by email
+    public Users getUserByEmail (String email){
+        String sql = "select * from Users where email = ?";
+        try{
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                Role r = new Role(rs.getInt("roleID"));
+                Users u = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("username"), rs.getString("password"), rs.getString("email"), r, rs.getInt("point"), rs.getString("providerID"));
+                return u;
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+        return null;
+    }
+
+
 
     //void get movie by movieID
     public Movies getMovieByID(int movieID) {
-        String sql = "SELECT * FROM Movies AS m WHERE m.movieID = ? AND m.releaseDate BETWEEN DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND CURDATE() ORDER BY m.releaseDate;";
+        String sql = "SELECT * FROM Movies AS m WHERE m.movieID = ? ;";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, movieID);
@@ -332,8 +350,10 @@ public class DAO extends DBContext {
 
     public static void main(String[] args) {
         DAO dao = new DAO();
-        Users u = dao.getUserByUsername("bao");
-        System.out.println(u.getDisplayName());
+        List<Movies> list = dao.getMovieByGenreID(8);
+        for(Movies m : list){
+            System.out.println(m.getTitle());
+        }
     }
 }
 

@@ -9,6 +9,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css"/>
     <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap.min.css.map"/>
@@ -49,10 +50,10 @@
     <div class="page-header-container">
         <!-- LOGO chuyen toi trang chu -->
         <a class="logo" href="home">
-            <img src="./assets/images/LogoFPT.png" alt="logo"/>
+            <img src="./assets/images/logo_home.png" alt="logo"/>
         </a>
         <div class="header-nav-bar">
-            <ol class="nav-primary">
+            <ol class="nav-primary" style="padding-left: 0">
                 <li class="level0-nav-1-parent">
                     <a class="level0-has-children" href="#">PHIM</a>
                     <ul class="level0">
@@ -72,7 +73,7 @@
                             <a href="genres?genreID=1" class="level1">Hành Động</a>
                         </li>
                         <li class="level1-nav1-2">
-                            <a href="genres?genreID=2" class="level1">Phưu Lưu</a>
+                            <a href="genres?genreID=2" class="level1">Phiêu Lưu</a>
                         </li>
                         <li class="level1-nav1-2">
                             <a href="genres?genreID=3" class="level1">Tâm Lý</a>
@@ -115,7 +116,7 @@
         <div class="header-buy-ticket">
             <p>
                 <a class="ticket" href="#">
-                    <img alt="ticket" src="./assets/images/hd-tickets-49018.png"/>
+                    <img alt="ticket" src="./assets/images/ticket1.png"/>
                 </a>
             </p>
         </div>

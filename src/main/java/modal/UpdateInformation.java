@@ -17,6 +17,12 @@ public class UpdateInformation {
         this.oldPassword = oldPassword;
     }
 
+    public UpdateInformation (String information, String oldEmail, String oldDisplayName) {
+        this.information = information;
+        this.oldEmail = oldEmail;
+        this.oldDisplayName = oldDisplayName;
+    }
+
     public UpdateInformation() {
     }
 

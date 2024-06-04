@@ -93,19 +93,21 @@ p {
 }
 
 .logo {
-  display: block;
-  width: 100px;
-  height: 135px;
-  min-width: 100px;
-  text-align: center;
+    display: block;
+    width: 100px;
+    height: 100px; /* Adjusted height to be more typical for a logo */
+    min-width: 50px;
+    text-align: center;
 }
+
+
 .logo :hover {
   opacity: 0.8;
 }
 .logo img {
-  width: 200px;
-  height: 80px;
-  margin-top: 28px;
+    width: 191px;
+    height: 162px;
+    margin-top: -5px;
 }
 .header-nav-bar {
   display: block;
@@ -197,24 +199,24 @@ li {
   opacity: 0.85; /* Đặt độ mờ khi hover vào */
 }
 .header-buy-ticket img {
-  width: 90px;
-  height: 90px;
+    width: 135px;
+    height: 120px;
 }
 
 .main-container {
   position: relative;
-  min-height: 100vh;
   width: 100%;
   margin: 30px auto;
   padding: 0 !important;
   background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg_c_bricks.png)
     repeat-x scroll 0 124px rgba(0, 0, 0, 0);
+  display: inline-block;
 }
 
 .main {
   width: 980px;
   margin: 0 auto;
-  margin-top: -60px;
+  margin-top: 55px;
 }
 
 /* BANNER */
@@ -234,7 +236,7 @@ li {
 }
 
 .home-title {
-  margin-top: 70px;
+  margin-top: 125px;
   background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg_h3_line.jpg)
     repeat-x scroll left center rgba(0, 0, 0, 0);
   height: 60px;
@@ -307,6 +309,7 @@ a {
   margin: 0 0 40px 20px;
 }
 .curr-list .img img {
+  border-radius: 10px 10px 0 0;
   width: 228px;
   height: 334px;
 }
@@ -316,6 +319,7 @@ a {
   border-top: 1px solid #e5e5e5;
   box-sizing: border-box;
   background-color: #fdf7dc;
+  border-radius: 0 0 10px 10px;
 }
 
 .curr-list .list-text dt {

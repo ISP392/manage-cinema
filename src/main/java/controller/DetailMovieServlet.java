@@ -70,9 +70,9 @@ public class DetailMovieServlet extends HttpServlet {
         Date today = new Date(); // Lấy ngày hiện tại
 
         // Kiểm tra xem bộ phim có phải là "đang sắp ra mắt" không
-//        if (m.getReleaseDate().after(today)) {
-//            isCommingSoon = true;
-//        }
+        if (m.getReleaseDate().after(today)) {
+            isCommingSoon = true;
+        }
 
         //response.getWriter().println(isCommingSoon);
         request.setAttribute("isCommingSoon", isCommingSoon);

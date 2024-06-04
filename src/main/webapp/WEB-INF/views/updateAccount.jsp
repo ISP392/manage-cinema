@@ -9,7 +9,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>JSP Page</title>
+    <title>Thông tin</title>
 </head>
 <script>
     var initialEmail;
@@ -109,28 +109,29 @@
                     </div>
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example3cg">Your Username</label>
-                        <input type="text" value="${sessionScope.account.userName}" readonly name="username" required
+                        <input type="text"  ${sessionScope.account.providerID eq 'google' ? 'readonly': ''} value="${sessionScope.account.userName}" readonly name="username" required
                                id="form3Example3cg" class="form-control form-control-lg"/>
                     </div>
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example3cg">Your Email</label>
-                        <input type="text" value="${sessionScope.account.email}" id="email" name="email" required
+                        <input type="text"  ${sessionScope.account.providerID eq 'google' ? 'readonly': ''} value="${sessionScope.account.email}" id="email" name="email" required
                                class="form-control form-control-lg"/>
                     </div>
                     <div class="form-outline mb-4">
                         <label class="form-label" for="password">Old Password</label>
-                        <input type="password" name="oldPassword" id="password" class="form-control form-control-lg"/>
+                        <input type="password"  ${sessionScope.account.providerID eq 'google' ? 'readonly': ''} name="oldPassword" id="password" class="form-control form-control-lg"/>
                     </div>
                     <div class="form-outline mb-4">
                         <label class="form-label" for="new-password">New Password</label>
-                        <input type="password" name="newPassword" id="new-password"
+                        <input type="password"  ${sessionScope.account.providerID eq 'google' ? 'readonly': ''} name="newPassword" id="new-password"
                                class="form-control form-control-lg"/>
                     </div>
                     <div class="form-outline mb-4">
                         <label class="form-label" for="confirm-password">Repeat your password</label>
-                        <input type="password" name="confirmPassword" id="confirm-password"
+                        <input type="password"  ${sessionScope.account.providerID eq 'google' ? 'readonly': ''} name="confirmPassword" id="confirm-password"
                                class="form-control form-control-lg"/>
                     </div>
+
                     <div class="d-flex justify-content-center" style="width: 300px;">
                         <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
                             Update
