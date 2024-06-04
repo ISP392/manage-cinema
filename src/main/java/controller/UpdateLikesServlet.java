@@ -28,7 +28,7 @@ public class UpdateLikesServlet extends HttpServlet {
         // Cập nhật số lượt thích trong cơ sở dữ liệu
         // Giả sử bạn có một lớp MovieService để thực hiện các thao tác với cơ sở dữ liệu
         DAO movieService = new DAO();
-        if (userHasLiked) {
+        if (!userHasLiked) {
             movieService.incrementLikes(movieId, userID);
         } else {
             movieService.decrementLikes(movieId, userID);
