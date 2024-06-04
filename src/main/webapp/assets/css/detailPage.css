@@ -62,3 +62,10 @@
     transform: scale(1.15);
     transform-origin: top;
 }
+
+/* Trong tệp CSS của bạn */
+.disabled-button {
+    /* Thêm các thuộc tính CSS bạn muốn ở đây */
+    opacity: 0.5;
+    cursor: not-allowed;
+}
