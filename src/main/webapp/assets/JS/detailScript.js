@@ -6,11 +6,11 @@ document.addEventListener("DOMContentLoaded", function () {
     userID = document.getElementById("user-id").value;
     document.querySelector(".Btn").addEventListener("click", function () {
 
+        var btn = this;
+        btn.disabled = true;
+        btn.classList.add('disabled-button');
         var movieId = this.getAttribute("data-id");
 
-        // Đảo ngược trạng thái "thích" của người dùng
-        console.log(userHasLiked);
-        console.log(userID);
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "updateLikesServlet", true);
@@ -30,11 +30,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 var likeCountElement = document.querySelector(".likeCount");
                 likeCountElement.textContent = xhr.responseText;
 
+                // Đảo ngược trạng thái "thích" của người dùng
+                userHasLiked = !userHasLiked;
+
                 // Cập nhật nút "Thích"
                 var likeElement = document.querySelector(".like");
-                likeElement.textContent = userHasLiked ? "Thích" : "Đã Thích";
+                likeElement.textContent = userHasLiked ? "Đã Thích" : "Thích";
+
+                btn.disabled = false;
+                btn.classList.remove('disabled-button');
+
             }
         };
-        userHasLiked = !userHasLiked;
+
     });
 });

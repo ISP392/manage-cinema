@@ -28,33 +28,33 @@
     for (int i = 0; i < 10; i++) {
         int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
         daysOfMonth.add(day);
-        int dayOfWeek = cal.get(java.util.Calendar.DAY_OF_WEEK);
-        String dayOfWeekName = "";
-        switch (dayOfWeek) {
-            case java.util.Calendar.SUNDAY:
-                dayOfWeekName = "Chủ nhật";
-                break;
-            case java.util.Calendar.MONDAY:
-                dayOfWeekName = "Thứ hai";
-                break;
-            case java.util.Calendar.TUESDAY:
-                dayOfWeekName = "Thứ ba";
-                break;
-            case java.util.Calendar.WEDNESDAY:
-                dayOfWeekName = "Thứ tư";
-                break;
-            case java.util.Calendar.THURSDAY:
-                dayOfWeekName = "Thứ năm";
-                break;
-            case java.util.Calendar.FRIDAY:
-                dayOfWeekName = "Thứ sáu";
-                break;
-            case java.util.Calendar.SATURDAY:
-                dayOfWeekName = "Thứ bảy";
-                break;
-        }
-        dayOfWeeks.add(dayOfWeekName);
-        cal.add(java.util.Calendar.DAY_OF_MONTH, 1);
+//        int dayOfWeek = cal.get(java.util.Calendar.DAY_OF_WEEK);
+//        String dayOfWeekName = "";
+//        switch (dayOfWeek) {
+//            case java.util.Calendar.SUNDAY:
+//                dayOfWeekName = "Chủ nhật";
+//                break;
+//            case java.util.Calendar.MONDAY:
+//                dayOfWeekName = "Thứ hai";
+//                break;
+//            case java.util.Calendar.TUESDAY:
+//                dayOfWeekName = "Thứ ba";
+//                break;
+//            case java.util.Calendar.WEDNESDAY:
+//                dayOfWeekName = "Thứ tư";
+//                break;
+//            case java.util.Calendar.THURSDAY:
+//                dayOfWeekName = "Thứ năm";
+//                break;
+//            case java.util.Calendar.FRIDAY:
+//                dayOfWeekName = "Thứ sáu";
+//                break;
+//            case java.util.Calendar.SATURDAY:
+//                dayOfWeekName = "Thứ bảy";
+//                break;
+//        }
+//        dayOfWeeks.add(dayOfWeekName);
+//        cal.add(java.util.Calendar.DAY_OF_MONTH, 1);
     }
 %>
 <%@include file="header.jsp" %>
@@ -75,7 +75,7 @@
                     </span>
                     <span class="likeCount">
                             ${userLikeMovie}
-                        <input id="user-like-movie" type="hidden" value="${userLikeMovie}">
+                        <input id="user-like-movie" type="hidden" value="${isLiked}">
                         <input id="user-id" type="hidden" value="${sessionScope.account.userID}">
                     </span>
                 </button>
