@@ -116,27 +116,6 @@ public class DAO extends DBContext {
         return null;
     }
 
-
-
-    
-    public int AddLoginGoogle(Users user) {
-        int number = 0;
-        String sql = "INSERT INTO Users (displayName, password, roleID, email, point) VALUES (?, ?, 2,?,0)";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, user.getEmail());
-            ps.setString(2, user.getDisplayName());
-            ps.setString(3, user.getPassword());
-
-            number = ps.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }
-        return number;
-    }
-
     public Users checkLogin(String username, String password) {
         String pass = "";
         try {
