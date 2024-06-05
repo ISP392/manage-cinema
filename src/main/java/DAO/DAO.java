@@ -153,9 +153,32 @@ public class DAO extends DBContext {
         }
     }
 
+//    public List<Movies> getMovie (boolean isLimit){
+//        String sql = "SELECT * FROM .Movies order by releaseDate desc";
+//        if(isLimit)
+//            sql += "limit 4";
+//        List<Movies> list = new ArrayList<>();
+//        try {
+//            PreparedStatement ps = connection.prepareStatement(sql);
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
+//                        rs.getInt("display"), rs.getString("trailerURL"));
+//                list.add(m);
+//            }
+//            return list;
+//        } catch (Exception e) {
+//            System.err.print(e);
+//        }
+//        return null;
+//                
+//        
+//    }
 
-    public List<Movies> getMovie() {
-        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate";
+    public List<Movies> getMovie(boolean isLimit) {
+        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate desc;";
+        if(isLimit)
+            sql = sql.substring(0, sql.length() -1) + " limit 4;";
         List<Movies> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -172,6 +195,7 @@ public class DAO extends DBContext {
         return null;
     }
 
+    
 
     public List<Movies> getMovieByGenreID(int genreID) {
         List<Movies> list = new ArrayList<>();

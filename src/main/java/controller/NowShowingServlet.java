@@ -13,7 +13,7 @@ public class NowShowingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         DAO d = new DAO();
-        List<Movies> movies = d.getMovie();
+        List<Movies> movies = d.getMovie(false);
         request.setAttribute("movies", movies);
         request.getRequestDispatcher("/WEB-INF/views/nowShowing.jsp").forward(request, response);
     }
