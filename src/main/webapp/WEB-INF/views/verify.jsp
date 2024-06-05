@@ -61,7 +61,7 @@
     <h1>OTP Code Verification</h1>
     <h5 style="color: red; font-weight: bold">${error}</h5>
     <p>Enter the OTP code sent to your Email: </p>
-    <input type="text" name="otp-code" class="otp-input" maxlength="6" placeholder="------">
+    <input required type="text" name="otp-code" class="otp-input" maxlength="6" placeholder="------">
     <button class="submit-button">Verify OTP Code</button>
     <p>Didn't receive the OTP code? <a href="verify">Resend OTP Code</a></p>
 </div>
