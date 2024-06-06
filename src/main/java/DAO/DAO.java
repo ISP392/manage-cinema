@@ -17,12 +17,19 @@ import modal.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import modal.Genres;
+import modal.MovieGenres;
+import modal.Role;
+import modal.UserGoogleDto;
+
+import modal.Movies;
+import modal.Users;
 import util.Encrypt;
 
 /**
  * @author MISS NGA
  */
-public class DAO extends DBcontext {
+public class DAO extends DBContext {
 
     public List<Movies> getAllMovieCommingSoon() {
         String sql = "SELECT * FROM Movies m WHERE m.releaseDate > CURDATE()";
