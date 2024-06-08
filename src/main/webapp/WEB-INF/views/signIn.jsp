@@ -152,8 +152,7 @@
                                                 <div style="display: flex; flex: 1; margin: 0 15px">
                                                     <div class="gsi-material-button">
                                                         <a
-                                                                href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=${localhost}/manage-cinema/LoginGoogleHandler&response_type=code&client_id=289651568773-962elblss4e85nrbgrri0i3kcor4pfl8.apps.googleusercontent.com&approval_prompt=forcgit
-                                                            >
+                                                                href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=${localhost}/manage-cinema/LoginGoogleHandler&response_type=code&client_id=289651568773-962elblss4e85nrbgrri0i3kcor4pfl8.apps.googleusercontent.com&approval_prompt=force">
                                                             <div class="gsi-material-button-state"></div>
                                                             <div class="gsi-material-button-content-wrapper">
                                                                 <div class="gsi-material-button-icon">
