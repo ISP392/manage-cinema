@@ -70,6 +70,7 @@
     text-align: center;
     padding-top: 6px;
     color: #ccffff;
+    margin-bottom: 20px;
 }
 
         </style>
@@ -153,12 +154,9 @@
                         <div class="box-account box-info">
                             <div
                                 style="
-                                padding-top: 10px;
                                 border-bottom: 2px solid #cccccc;
                                 margin-bottom: 12px;
-                                position: relative;
                                 display: flex;
-                                align-items: center;
                                 justify-content: space-between;
                                 "
                                 >
