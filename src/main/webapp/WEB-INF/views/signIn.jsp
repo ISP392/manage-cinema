@@ -152,7 +152,7 @@
                                                 <div style="display: flex; flex: 1; margin: 0 15px">
                                                     <div class="gsi-material-button">
                                                         <a
-                                                            href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=${localhost}/manage-cinema/LoginGoogleHandler&response...pt=force"
+                                                        p
                                                             >
                                                             <div class="gsi-material-button-state"></div>
                                                             <div class="gsi-material-button-content-wrapper">
