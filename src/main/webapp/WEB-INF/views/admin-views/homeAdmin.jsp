@@ -166,7 +166,7 @@
             <li>
               <a
                 class="has-arrow ai-icon"
-                href="javascript:void()"
+                href="javascript:void(0)"
                 aria-expanded="false"
               >
                 <i class="fa-solid fa-gear fw-bold"></i>
@@ -178,6 +178,7 @@
                 <li><a href="email-template.html">Staff</a></li>
               </ul>
             </li>
+          </ul>
         </div>
       </div>
       <!--**********************************
