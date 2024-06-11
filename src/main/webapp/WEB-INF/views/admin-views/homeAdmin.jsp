@@ -12,7 +12,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Admin Dashboard</title>
-
     <link href="./assets/css/dashboard-admin.css" rel="stylesheet" />
 
   </head>
@@ -103,8 +102,8 @@
                     class="nav-link bell dz-theme-mode p-0"
                     href="javascript:void(0);"
                   >
-                    <i id="icon-light" class="fas fa-sun"></i>
-                    <i id="icon-dark" class="fas fa-moon"></i>
+                    <i id="icon-light" class="fa fa-sun"></i>
+                    <i id="icon-dark" class="fa fa-moon"></i>
                   </a>
                 </li>
               </ul>
@@ -169,7 +168,7 @@
                 href="javascript:void(0)"
                 aria-expanded="false"
               >
-                <i class="fa-solid fa-gear fw-bold"></i>
+                <i class="fa fa-gear fw-bold"></i>
                 <span class="nav-text">CMS</span>
               </a>
               <ul aria-expanded="false">
