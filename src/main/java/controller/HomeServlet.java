@@ -65,7 +65,7 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         DAO d = new DAO();
-        List<Movies> movies = d.getMovie();
+        List<Movies> movies = d.getMovie(true);
         request.setAttribute("movies", movies);
 //        request.getRequestDispatcher("/WEB-INF/views/nowShowing.jsp").forward(request, response);
         request.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);

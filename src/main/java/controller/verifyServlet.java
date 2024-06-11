@@ -58,32 +58,38 @@ public class verifyServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         DAO dao = new DAO();
-        if (Integer.parseInt(request.getParameter("otp-code")) == code) {
-            Users u = (Users) request.getSession().getAttribute("user");
-            UpdateInformation UI = (UpdateInformation) request.getSession().getAttribute("information");
-            if (UI != null) {
-                if (UI.getInformation().equals("information")) {
-                    dao.updateDisplayNameAndEmail(u.getDisplayName(), u.getEmail(), u.getUserName());
-                    request.getSession().removeAttribute("information");
-                    response.sendRedirect("signin");
-                } else if (UI.getInformation().equals("password")) {
-                    dao.updateUser(u);
-                    request.getSession().removeAttribute("information");
-                    response.sendRedirect("signin");
-                }else if(UI.getInformation().equals("email")){
-                    dao.updateDisplayNameByEmail(u.getEmail(), u.getDisplayName());
-                    request.getSession().removeAttribute("information");
-                    response.sendRedirect("signin");
-                }
+        try {
+            if (Integer.parseInt(request.getParameter("otp-code")) == code) {
+                Users u = (Users) request.getSession().getAttribute("user");
+                UpdateInformation UI = (UpdateInformation) request.getSession().getAttribute("information");
+                if (UI != null) {
+                    if (UI.getInformation().equals("information")) {
+                        dao.updateDisplayNameAndEmail(u.getDisplayName(), u.getEmail(), u.getUserName());
+                        request.getSession().removeAttribute("information");
+                        response.sendRedirect("signin");
+                    } else if (UI.getInformation().equals("password")) {
+                        dao.updateUser(u);
+                        request.getSession().removeAttribute("information");
+                        response.sendRedirect("signin");
+                    } else if (UI.getInformation().equals("email")) {
+                        dao.updateDisplayNameByEmail(u.getEmail(), u.getDisplayName());
+                        request.getSession().removeAttribute("information");
+                        response.sendRedirect("signin");
+                    }
 
+                } else {
+                    request.getSession().removeAttribute("user");
+                    dao.add(u);
+                    request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
+                }
             } else {
-                request.getSession().removeAttribute("user");
-                dao.add(u);
-                request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
+                request.setAttribute("error", "Invalid code");
+                request.getRequestDispatcher("/WEB-INF/views/verify.jsp").forward(request, response);
             }
-        } else {
+        }catch (NumberFormatException e){
             request.setAttribute("error", "Invalid code");
             request.getRequestDispatcher("/WEB-INF/views/verify.jsp").forward(request, response);
         }
+
     }
 }

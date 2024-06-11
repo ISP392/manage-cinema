@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
 
-import modal.Movies;
+import modal.*;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +32,7 @@ import util.Encrypt;
 public class DAO extends DBContext {
 
     public List<Movies> getAllMovieCommingSoon() {
-        String sql = "SELECT * FROM movies m WHERE m.releaseDate > CURDATE()";
+        String sql = "SELECT * FROM Movies m WHERE m.releaseDate > CURDATE()";
         List<Movies> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -116,27 +116,6 @@ public class DAO extends DBContext {
         return null;
     }
 
-
-
-    
-    public int AddLoginGoogle(Users user) {
-        int number = 0;
-        String sql = "INSERT INTO Users (displayName, password, roleID, email, point) VALUES (?, ?, 2,?,0)";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, user.getEmail());
-            ps.setString(2, user.getDisplayName());
-            ps.setString(3, user.getPassword());
-
-            number = ps.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }
-        return number;
-    }
-
     public Users checkLogin(String username, String password) {
         String pass = "";
         try {
@@ -144,7 +123,7 @@ public class DAO extends DBContext {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        String sql = "SELECT * FROM users join roles on users.roleID = roles.roleID where username= " + "'" + username + "'" + "and password = " + "'" + pass + "'";
+        String sql = "SELECT * FROM Users join Roles on Users.roleID = Roles.roleID where username= " + "'" + username + "'" + "and password = " + "'" + pass + "'";
         try {
 
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -162,7 +141,7 @@ public class DAO extends DBContext {
     }
 
     public void addLoginGoogle(Users u) {
-        String sql = "INSERT INTO users (displayName, roleID, email,providerID, point) VALUES ( ?, 2, ?,'google', 0)";
+        String sql = "INSERT INTO Users (displayName, roleID, email,providerID, point) VALUES ( ?, 2, ?,'google', 0)";
         try {
             PreparedStatement pr = connection.prepareStatement(sql);
             pr.setString(1, u.getDisplayName());
@@ -174,9 +153,32 @@ public class DAO extends DBContext {
         }
     }
 
+//    public List<Movies> getMovie (boolean isLimit){
+//        String sql = "SELECT * FROM .Movies order by releaseDate desc";
+//        if(isLimit)
+//            sql += "limit 4";
+//        List<Movies> list = new ArrayList<>();
+//        try {
+//            PreparedStatement ps = connection.prepareStatement(sql);
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
+//                        rs.getInt("display"), rs.getString("trailerURL"));
+//                list.add(m);
+//            }
+//            return list;
+//        } catch (Exception e) {
+//            System.err.print(e);
+//        }
+//        return null;
+//                
+//        
+//    }
 
-    public List<Movies> getMovie() {
-        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate";
+    public List<Movies> getMovie(boolean isLimit) {
+        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate desc;";
+        if(isLimit)
+            sql = sql.substring(0, sql.length() -1) + " limit 4;";
         List<Movies> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -193,6 +195,7 @@ public class DAO extends DBContext {
         return null;
     }
 
+    
 
     public List<Movies> getMovieByGenreID(int genreID) {
         List<Movies> list = new ArrayList<>();
@@ -348,12 +351,54 @@ public class DAO extends DBContext {
         return list;
     }
 
-    public static void main(String[] args) {
-        DAO dao = new DAO();
-        List<Movies> list = dao.getMovieByGenreID(8);
-        for(Movies m : list){
-            System.out.println(m.getTitle());
+    //get count of like by movieID
+    public UserLikeMovie getLikeCount(int movieID) {
+        String sql = "SELECT movieID, COUNT(userID) AS likeCount, GROUP_CONCAT(userID) AS userID FROM UserLikes WHERE movieID = ? GROUP BY movieID;";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, movieID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new UserLikeMovie(rs.getString("userID"), rs.getInt("movieID"), rs.getInt("likeCount"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public void incrementLikes(String movieId, String userID) {
+        String sql = "INSERT INTO UserLikes (movieID, userID) VALUES (?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, Integer.parseInt(movieId));
+            ps.setInt(2, Integer.parseInt(userID));
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
         }
     }
+
+    public void decrementLikes(String movieId, String userID) {
+        String sql = "DELETE FROM UserLikes WHERE movieID = ? AND userID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, Integer.parseInt(movieId));
+            ps.setInt(2, Integer.parseInt(userID));
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void main(String[] args) {
+        DAO dao = new DAO();
+        UserLikeMovie m = dao.getLikeCount(18);
+        System.out.println(m.getUserID());
+
+    }
+
+
 }
 

@@ -1,15 +1,14 @@
-<%-- 
-    Document   : home
-    Created on : May 29, 2024, 1:17:53 AM
-    Author     : ACER
---%>
-
+<%-- Document : home Created on : May 29, 2024, 1:17:53 AM Author : ACER --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%> 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <link rel="shortcut icon" type="image/x-icon" href="./assets/images/logo_home.png" />
+        <link
+            rel="shortcut icon"
+            type="image/x-icon"
+            href="./assets/images/logo_home.png"
+            />
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Banny Cinema</title>
@@ -20,11 +19,18 @@
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
             crossorigin="anonymous"
             />
-
     </head>
     <style>
         .carousel-inner .carousel-item {
             transition: transform 0.5s ease;
+        }
+        .event{
+            margin-top: 125px;
+            background: url(https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg_h3_line.jpg)
+                repeat-x scroll left center rgba(0, 0, 0, 0);
+            height: 60px;
+            text-align: center;
+            width: 100%;
         }
     </style>
     <%@include file="header.jsp" %>
@@ -173,7 +179,7 @@
                                             </div>
                                             <dl class="list-text">
                                                 <dt>
-                                                    <a href="detail-movie?movieID=">
+                                                    <a href="#">
                                                         <span>${poster.title.toUpperCase()}</span>
                                                     </a>
                                                 </dt>
@@ -201,7 +207,7 @@
                                         </div>
                                         <dl class="list-text">
                                             <dt>
-                                                <a href="detail-movie?movieID=">
+                                                <a href="detail-movie?movieID=${commingSoon.movieID}">
                                                     <span>${poster.title.toUpperCase()}</span>
                                                 </a>
                                             </dt>
@@ -220,7 +226,12 @@
 
                     <div class="home-movie-selection">
                         <div class="event">
-                            <h2><img src="https://www.cgv.vn/skin/frontend/cgv/default/images/h3_event.gif" alt=" "/></h2>
+                            <h2>
+                                <img
+                                    src="https://www.cgv.vn/skin/frontend/cgv/default/images/h3_event.gif"
+                                    alt=" "
+                                    />
+                            </h2>
                         </div>
                     </div>
                 </div>
