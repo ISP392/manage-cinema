@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import modal.Genres;
 import modal.Movies;
 
 /**
@@ -60,36 +61,19 @@ public class GenreServlet extends HttpServlet {
     throws ServletException, IOException {
         DAO dao = new DAO();
         String genres = "";
+        String selectedGenre = request.getParameter("genre");
         String genreID = request.getParameter("genreID");
         if (genreID == null || genreID.isEmpty()) {
             response.sendRedirect("nowShowing");
         }else{
             List<Movies> movies = dao.getMovieByGenreID(Integer.parseInt(genreID));
-            if(genreID.equals("1")){
-                genres = "Hành Động";
-            }else if(genreID.equals("2")){
-                genres = "Phiêu Lưu";
-            }else if(genreID.equals("3")){
-                genres = "Tâm Lý";
-            }else if(genreID.equals("4")){
-                genres = "Tình Cảm";
-            }else if(genreID.equals("5")){
-                genres = "Kinh Dị";
-            }else if(genreID.equals("6")){
-                genres = "Gia Đình";
-            }else if(genreID.equals("7")){
-                genres = "Hài";
-            }else if(genreID.equals("8")){
-                genres = "Hoạt Hình";
-            }else if(genreID.equals("9")){
-                genres = "Hồi Hộp";
-            }
-            request.setAttribute("genres", genres);
-            request.setAttribute("movies", movies);
-            request.getRequestDispatcher("/WEB-INF/views/genres.jsp").forward(request, response);
-        }
-    } 
+          selectedGenre = dao.getGenreNameByID(Integer.parseInt(genreID)); // Get the genre name by ID
 
+        request.setAttribute("movies", movies);
+        request.setAttribute("nameGenre", selectedGenre); // Set the genre name as 'nameGenre'
+        request.getRequestDispatcher("/WEB-INF/views/genres.jsp").forward(request, response);
+    }
+    } 
     /** 
      * Handles the HTTP <code>POST</code> method.
      * @param request servlet request

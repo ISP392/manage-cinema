@@ -19,7 +19,7 @@
           <div class="home-movie-selection">
             <div>
               <h1 style="padding-bottom: 10px; border-bottom: 2px solid black">
-                Phim ${genres}
+                Phim ${nameGenre}
               </h1>
             </div>
           </div>

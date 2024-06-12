@@ -195,8 +195,6 @@ public class DAO extends DBContext {
         return null;
     }
 
-    
-
     public List<Movies> getMovieByGenreID(int genreID) {
         List<Movies> list = new ArrayList<>();
         String sql = "SELECT * FROM Movies m JOIN MovieGenres mg ON m.movieID = mg.movieID JOIN Genres g ON mg.genreID = g.genreID WHERE mg.genreID = ? AND m.releaseDate >= DATE_ADD(CURDATE(), INTERVAL -30 DAY);";
@@ -206,7 +204,7 @@ public class DAO extends DBContext {
             ps.setInt(1, genreID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"));
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"), rs.getString("name"));
                 list.add(m);
             }
             return list;
@@ -399,6 +397,21 @@ public class DAO extends DBContext {
 
     }
 
+    public String getGenreNameByID(int genreID) {
+        String sql = "SELECT name FROM Genres WHERE genreID = ?";
+        String genreName = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, genreID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                genreName = rs.getString("name");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return genreName;
+    }
 
 }
 
