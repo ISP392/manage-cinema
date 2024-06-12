@@ -12,56 +12,56 @@
         <link rel="stylesheet" type="text/css" href="./assets/css/style.css"/>
         <title>Cá nhân</title>
         <style>
-        .box-account {
-    float: left;
-    width: 100%;
-    border: 1px solid silver;
-    border-radius: 10px;
-    padding: 10px;
-    margin-top: 20px;
-}
+            .box-account {
+                float: left;
+                width: 100%;
+                border: 1px solid silver;
+                border-radius: 10px;
+                padding: 10px;
+                margin-top: 20px;
+            }
 
-.status-member {
-    margin-right: 600px;
-    display: grid;
-    flex-direction: column;
-    gap: 2px; /* Reduced gap to make items closer */
-}
+            .status-member {
+                margin-right: 600px;
+                display: grid;
+                flex-direction: column;
+                gap: 2px; /* Reduced gap to make items closer */
+            }
 
-.tier {
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
+            .tier {
+                display: flex;
+                align-items: center;
+                width: 100%;
+            }
 
-.member-icon {
-    background: url(../images/bg-cgv/level-cgv-member.png) no-repeat;
-    width: 36px;
-    height: 32px;
-    background-position: -102px 3px;
-    margin-left: 10px;
-}
+            .member-icon {
+                background: url(../images/bg-cgv/level-cgv-member.png) no-repeat;
+                width: 36px;
+                height: 32px;
+                background-position: -102px 3px;
+                margin-left: 10px;
+            }
 
-.total-spending,
-.point {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin-top: 2px; /* Reduced margin to make items closer */
-}
+            .total-spending,
+            .point {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                margin-top: 2px; /* Reduced margin to make items closer */
+            }
 
-.acc-spend,
-.acc-point {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-}
+            .acc-spend,
+            .acc-point {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+            }
 
-.show-point {
-    font-weight: 600;
-    color: #595959;
-}
+            .show-point {
+                font-weight: 600;
+                color: #595959;
+            }
 
 .inf {
     border-radius: 15px;
