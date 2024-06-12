@@ -157,7 +157,7 @@
               </div>
             </li>
             <li>
-              <a class="" href="index.html">
+              <a class="" href="home_admin">
                 <i class="flaticon-025-dashboard"></i>
                 <span class="">Dashboard</span>
               </a>
@@ -172,7 +172,7 @@
                 <span class="nav-text">CMS</span>
               </a>
               <ul aria-expanded="false">
-                <li><a href="content.html">Movie</a></li>
+                <li><a href="list_movie">Movie</a></li>
                 <li><a href="menu.html">Slot</a></li>
                 <li><a href="email-template.html">Staff</a></li>
               </ul>
