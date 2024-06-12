@@ -412,18 +412,6 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
-
-    public static void main(String[] args) {
-        DAO dao = new DAO();
-        Users admin = dao.checkLoginAdmin("bao", "123");
-        if (admin == null) {
-            System.out.println("failed");
-        } else {
-            System.out.println("success");
-        }
-
-    }
-
     public String getGenreNameByID(int genreID) {
         String sql = "SELECT name FROM Genres WHERE genreID = ?";
         String genreName = null;
@@ -439,5 +427,18 @@ public class DAO extends DBContext {
         }
         return genreName;
     }
+
+    public static void main(String[] args) {
+        DAO dao = new DAO();
+        Users admin = dao.checkLoginAdmin("bao", "123");
+        if (admin == null) {
+            System.out.println("failed");
+        } else {
+            System.out.println("success");
+        }
+
+    }
+
+    
 
 }
