@@ -125,7 +125,7 @@
                 </button>
                 <br/>
                 <button>
-                    <a style="text-decoration: none; color:#fff" href="addNewSlot?movieID=${movie.movieID}">
+                    <a style="text-decoration: none; color:#fff" href="addslotmovies?movieID=${movie.movieID}">
                         Thêm Suất Chiếu
                     </a>
                 </button>
