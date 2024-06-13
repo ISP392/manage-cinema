@@ -34,13 +34,6 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <div class="page">
       <div class="main-container">
         <div class="main">
-          <!-- banner -->
-
-          <!-- comment <div class="home-movie-selection">
-                      <div class="home-title">
-                        <h2>MOVIE SELECTION</h2>
-                      </div>
-                    </div> -->
           <div class="home-movie-selection">
             <div
               class="nowShowing"

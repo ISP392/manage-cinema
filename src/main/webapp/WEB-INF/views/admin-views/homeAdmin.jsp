@@ -157,7 +157,7 @@
               </div>
             </li>
             <li>
-              <a class="" href="index.html">
+              <a class="" href="home_admin">
                 <i class="flaticon-025-dashboard"></i>
                 <span class="">Dashboard</span>
               </a>
@@ -172,7 +172,7 @@
                 <span class="nav-text">CMS</span>
               </a>
               <ul aria-expanded="false">
-                <li><a href="content.html">Movie</a></li>
+                <li><a href="list_movie">Movie</a></li>
                 <li><a href="menu.html">Slot</a></li>
                 <li><a href="email-template.html">Staff</a></li>
               </ul>
@@ -1375,7 +1375,7 @@
                         <div class="d-flex align-items-center">
                           <h2 class="fs-38 mb-0">98k</h2>
                           <div class="text-success transaction-caret">
-                            <i class="fas fa-sort-up"></i>
+                            <i class="fa fa-sort-up"></i>
                             <p class="mb-0">+0.5%</p>
                           </div>
                         </div>
