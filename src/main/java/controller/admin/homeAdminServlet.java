@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import modal.Users;
 
 /**
  *
@@ -57,7 +58,12 @@ public class homeAdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Users u = (Users) request.getSession().getAttribute("admin");
+        if( u == null || u.getRoleID().getRoleID() != 1 ){
+            response.sendRedirect("admin");
+        }else{
         request.getRequestDispatcher("/WEB-INF/views/admin-views/homeAdmin.jsp").forward(request, response);
+            }
     }
 
     /**

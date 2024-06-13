@@ -129,8 +129,8 @@
                 data-bs-toggle="dropdown"
               >
                 <div class="header-info ms-3">
-                  <span class="font-w600">Hi, <b>baothiquoc</b></span>
-                  <small class="text-end font-w400">baothiquoc@gmail.com</small>
+                  <span class="font-w600">Hi, <b>${admin.displayName}</b></span>
+                  <small class="text-end font-w400">${admin.email}</small>
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-end">
