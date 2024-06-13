@@ -32,12 +32,12 @@
                           class="login100-form validate-form p-b-33 p-t-5"
                           style="padding-bottom: 32px"
                           >
-                        <h6 style="color: red">${requestScope.error}</h6>
+                        <h6 style="color: red;">${requestScope.error}</h6>
                         <% String error = (String) session.getAttribute("error");
                            session.removeAttribute("error");
                         %>
                         <% if (error != null) { %>
-                        <h6 style="color: red"><%= error %></h6>
+                        <h6 style="color: red; text-align: center"><%= error %></h6>
                         <% } %>
                         <div
                             class="wrap-input100 validate-input"
