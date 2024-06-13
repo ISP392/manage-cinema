@@ -103,7 +103,7 @@
                                                 />
                                         </div>
                                         <a
-                                            href="#"
+                                            href="forgot"
                                             style="
                                             display: block;
                                             margin-bottom: 20px;
@@ -112,8 +112,8 @@
                                             text-decoration: none;
                                             "
                                             >
-                                            Forgot Password?</a
-                                        >
+                                            Forgot Password?
+                                        </a>
 
                                         <!-- Submit button -->
                                         <div>

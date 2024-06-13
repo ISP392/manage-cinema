@@ -63,9 +63,7 @@ public class DetailMovieServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         Users user = (Users) request.getSession().getAttribute("account");
-
         String movieID = request.getParameter("movieID");
-
         DAO d = new DAO();
         UserLikeMovie userLikeMovie = d.getLikeCount(Integer.parseInt(movieID));
         Movies m = d.getMovieByID(Integer.parseInt(movieID));
@@ -99,7 +97,6 @@ public class DetailMovieServlet extends HttpServlet {
                 }
             }
         }
-
         request.setAttribute("userLikeMovie", userLikeMovie == null ? 0 : userLikeMovie.getLikeCount());
         request.setAttribute("isCommingSoon", isCommingSoon);
         List<MovieGenres> list = d.getMovieGenres(Integer.parseInt(movieID));
