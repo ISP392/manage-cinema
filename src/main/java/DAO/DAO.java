@@ -200,10 +200,9 @@ public class DAO extends DBContext {
 //        
 //    }
     public List<Movies> getMovie(boolean isLimit) {
-        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate desc;";
-        if (isLimit) {
-            sql = sql.substring(0, sql.length() - 1) + " limit 4;";
-        }
+        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate asc;";
+        if(isLimit)
+            sql = sql.substring(0, sql.length() -1) + " limit 4;";
         List<Movies> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
