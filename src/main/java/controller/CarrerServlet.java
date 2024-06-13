@@ -5,7 +5,6 @@
 
 package controller;
 
-import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,16 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import modal.Genres;
-import modal.Movies;
 
 /**
  *
- * @author caoha
+ * @author ACER
  */
-@WebServlet(name = "GenreServlet", urlPatterns = {"/genres"})
-public class GenreServlet extends HttpServlet {
+@WebServlet(name="CarrerServlet", urlPatterns={"/carrer"})
+public class CarrerServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -39,10 +35,10 @@ public class GenreServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet GenreServlet</title>");  
+            out.println("<title>Servlet CarrerServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet GenreServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CarrerServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,21 +55,9 @@ public class GenreServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        DAO dao = new DAO();
-        String genres = "";
-        String selectedGenre = request.getParameter("genre");
-        String genreID = request.getParameter("genreID");
-        if (genreID == null || genreID.isEmpty()) {
-            response.sendRedirect("nowShowing");
-        }else{
-            List<Movies> movies = dao.getMovieByGenreID(Integer.parseInt(genreID));
-          selectedGenre = dao.getGenreNameByID(Integer.parseInt(genreID)); // Get the genre name by ID
-
-        request.setAttribute("movies", movies);
-        request.setAttribute("nameGenre", selectedGenre); // Set the genre name as 'nameGenre'
-        request.getRequestDispatcher("/WEB-INF/views/genres.jsp").forward(request, response);
-    }
+        request.getRequestDispatcher("/WEB-INF/views/Carrer.jsp").forward(request, response);
     } 
+
     /** 
      * Handles the HTTP <code>POST</code> method.
      * @param request servlet request

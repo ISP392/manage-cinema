@@ -202,10 +202,9 @@ public class DAO extends DBContext {
 //        
 //    }
     public List<Movies> getMovie(boolean isLimit) {
-        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate desc;";
-        if (isLimit) {
-            sql = sql.substring(0, sql.length() - 1) + " limit 4;";
-        }
+        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate asc;";
+        if(isLimit)
+            sql = sql.substring(0, sql.length() -1) + " limit 4;";
         List<Movies> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -231,7 +230,7 @@ public class DAO extends DBContext {
             ps.setInt(1, genreID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"));
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"), rs.getString("name"));
                 list.add(m);
             }
             return list;
@@ -414,6 +413,21 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
+    public String getGenreNameByID(int genreID) {
+        String sql = "SELECT name FROM Genres WHERE genreID = ?";
+        String genreName = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, genreID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                genreName = rs.getString("name");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return genreName;
+    }
 
     //insert new movie
     public void insertNewMovie(String title, String description,Date releaseDate,String uniqueFileName, int duration, String trailerUrl){
@@ -470,5 +484,7 @@ public class DAO extends DBContext {
         }
 
     }
+
+    
 
 }

@@ -21,6 +21,7 @@ public class Movies {
     private int display;
     private String trailerURL;
     private int likeCount;
+    private String name;
     public Movies() {
     }
 
@@ -33,6 +34,19 @@ public class Movies {
         this.duration = duration;
         this.display = display;
         this.trailerURL = trailerURL;
+    }
+    
+
+    public Movies(int movieID, String title, String description, Date releaseDate, String posterImage, int duration, int display, String trailerURL, String name) {
+        this.movieID = movieID;
+        this.title = title;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.posterImage = posterImage;
+        this.duration = duration;
+        this.display = display;
+        this.trailerURL = trailerURL;
+        this.name = name;
     }
 
     public Movies(int movieID, String title, String description, Date releaseDate, String posterImage, int duration, int display, String trailerURL, int likeCount) {
@@ -110,6 +124,14 @@ public class Movies {
 
     public void setTrailerURL(String trailerURL) {
         this.trailerURL = trailerURL;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 

@@ -1375,7 +1375,7 @@
                         <div class="d-flex align-items-center">
                           <h2 class="fs-38 mb-0">98k</h2>
                           <div class="text-success transaction-caret">
-                            <i class="fas fa-sort-up"></i>
+                            <i class="fa fa-sort-up"></i>
                             <p class="mb-0">+0.5%</p>
                           </div>
                         </div>
