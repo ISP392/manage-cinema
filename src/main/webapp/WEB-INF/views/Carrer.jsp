@@ -66,12 +66,69 @@
                         <p style="text-align: center">
                             <img src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/web/member-star.png" alt=" "/>
                         </p>
-                        <p style="text-align: center">KÊNH TUYỂN DỤNG</p>
-                        
-                        <p style="text-align: center">
+                        <p style="text-align: center; font-size: 25px; font-weight: bolder">KÊNH TUYỂN DỤNG</p>
+                        <table border="0"; style="width: 100%">
+                            <tbody>
+                                <tr style="font-size: 20px; font-weight: bolder">
+                                    <td style="width: 50%; text-align: center">
+                                        <P>KHỐI VĂN PHÒNG</P>
+                                    </td>
+                                    <td style="width: 50%; text-align: center; border-left:solid 1px;">
+                                        <p>KHỐI CỤM RẠP</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; text-align: center">
+                                        <a href="#" style="padding-right: 1rem">
+                                            <img src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/web/icon_web.png" alt="alt"/>
+                                        </a>
+                                        <a>
+                                            <img src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/web/icon_linkedin.png" alt="alt"/>
+                                        </a>
+                                    </td> 
+                                    <td style="width: 50%; text-align: center; border-left: solid 1px">
+                                        <a href="#" style="padding-right: 1rem">
+                                            <img src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/web/icon_web.png" alt="alt"/>
+                                        </a>
+                                        <a href="#">
+                                            <img src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/web/icon_fb.png" alt="alt"/>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="text-align: center; padding-block-start:15px ">
                             <img src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/web/member-star.png" alt=" "/>
                         </p>
-                        
+                        <div>
+                            <p style="text-align: center; font-size: 25px; font-weight: bolder">CÁCH THỨC ỨNG TUYỂN</p>
+                            <table style="width: 100%">
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 50%; text-align: center" >
+                                            <p style="color: red; font-size: 20px;font-weight: bolder">VỊ TRÍ TOÀN THỜI GIAN</p>
+                                        </td>
+                                        <td style="width: 50%; text-align: center">
+                                            <p style="color: red; font-size: 20px;font-weight: bolder">VỊ TRÍ BÁN THỜI GIAN</p>
+                                        </td>
+                                    </tr>
+                                    <tr style="border-radius: 20px">
+                                        <td style=" border: 2px ; border-radius: 20px #bcb890;height: 225px;background: #f0eedc; ">
+                                            <P>Khối Văn Phòng/ Cụm Rạp</P>
+                                            <p style="padding-block-start: 10px">
+                                            <strong >Cách 1</strong>
+                                            ": Gửi CV đến email"
+                                            <strong>cgvtalent@cj.net</strong> với tiêu đề "[HỌ TÊN] - Ứng tuyển [VỊ TRÍ]”.
+                                            </p>
+                                            <p>
+                                                <strong>Cách 2</strong>
+                                                : Nộp hồ sơ trực tiếp trên các trang tuyển dụng uy tín mà CGV có đăng tuyển như Linkedin, Vietnamwork, Careerbuilder, Hoteljob, Vieclam24, TopCV ….
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
