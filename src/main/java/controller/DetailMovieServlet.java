@@ -13,6 +13,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import modal.MovieGenres;
@@ -70,6 +72,11 @@ public class DetailMovieServlet extends HttpServlet {
         UserLikeMovie userLikeMovie = d.getLikeCount(Integer.parseInt(movieID));
         Movies m = d.getMovieByID(Integer.parseInt(movieID));
         request.setAttribute("movie", m);
+            if (isValidURL(m.getTrailerURL())) {
+                request.setAttribute("isTrailer", true);
+            } else {
+                request.setAttribute("isTrailer", false);
+            }
         //create a boolean if m.getReleaseDate() is after now then it is false
         boolean isCommingSoon = false; // Mặc định là false
         Date today = new Date(); // Lấy ngày hiện tại
@@ -106,6 +113,19 @@ public class DetailMovieServlet extends HttpServlet {
         request.setAttribute("listGenres", list);
         request.getRequestDispatcher("/WEB-INF/views/detailMovie.jsp").forward(request, response);
     } 
+
+    public boolean isValidURL(String urlString) {
+    try {
+        URL url = new URL(urlString);
+        HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+        huc.setRequestMethod("HEAD");
+        huc.connect();
+        int responseCode = huc.getResponseCode();
+        return (responseCode == HttpURLConnection.HTTP_OK);
+    } catch (Exception e) {
+        return false;
+    }
+}
 
     /** 
      * Handles the HTTP <code>POST</code> method.

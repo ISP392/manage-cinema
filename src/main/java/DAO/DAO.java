@@ -25,6 +25,8 @@ import modal.UserGoogleDto;
 import modal.Movies;
 import modal.Users;
 import util.Encrypt;
+import java.sql.Date;
+
 
 /**
  * @author MISS NGA
@@ -407,6 +409,51 @@ public class DAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, Integer.parseInt(movieId));
             ps.setInt(2, Integer.parseInt(userID));
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    //insert new movie
+    public void insertNewMovie(String title, String description,Date releaseDate,String uniqueFileName, int duration, String trailerUrl){
+        String sql = "INSERT INTO Movies (title, description, releaseDate, posterImage, duration, trailerUrl, likeCount, display) VALUES (?, ?, ?, ?, ?, ?, 0, 1)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, title);
+            ps.setString(2, description);
+            ps.setDate(3, releaseDate);
+            ps.setString(4, uniqueFileName);
+            ps.setInt(5, duration);
+            ps.setString(6, trailerUrl);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    //get movie recently added
+    public Movies getMovieRecentlyAdded(){
+        String sql = "SELECT * FROM Movies ORDER BY movieID DESC LIMIT 1";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"), rs.getInt("likeCount"));
+                return m;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    //insert movie genre
+    public void insertMovieGenre(int genreID, int movieID){
+        String sql = "INSERT INTO MovieGenres (genreID, movieID) VALUES (?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, genreID);
+            ps.setInt(2, movieID);
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);

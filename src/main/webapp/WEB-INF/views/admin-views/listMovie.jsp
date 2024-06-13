@@ -130,8 +130,8 @@
                             data-bs-toggle="dropdown"
                     >
                         <div class="header-info ms-3">
-                            <span class="font-w600">Hi, <b>baothiquoc</b></span>
-                            <small class="text-end font-w400">baothiquoc@gmail.com</small>
+                            <span class="font-w600">Hi, <b>${admin.displayName}</b></span>
+                            <small class="text-end font-w400">${admin.email}</small>
                         </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
@@ -196,7 +196,8 @@
                 <div class="col-xl-12">
 
                     <div class="mb-4">
-                        <a href="content-add.html" class="btn btn-primary">Add Movie</a>
+                        <a href="add_movie" class="btn btn-primary">Add Movie</a>
+                        <a href="content-add.html" class="btn btn-primary">Add Slot of Movie</a>
                     </div>
                     <div class="filter cm-content-box box-primary">
                         <div class="content-title">
