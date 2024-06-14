@@ -17,8 +17,8 @@ import modal.Users;
  *
  * @author baoquoc
  */
-@WebServlet(name = "homeAdminServlet", urlPatterns = {"/home_admin"})
-public class homeAdminServlet extends HttpServlet {
+@WebServlet(name = "updateMovieServlet", urlPatterns = {"/update_movie"})
+public class updateMovieServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,16 +37,15 @@ public class homeAdminServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet homeAdminServlet</title>");            
+            out.println("<title>Servlet updateMovieServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet homeAdminServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet updateMovieServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -62,8 +61,8 @@ public class homeAdminServlet extends HttpServlet {
         if( u == null || u.getRoleID().getRoleID() != 1 ){
             response.sendRedirect("admin");
         }else{
-        request.getRequestDispatcher("/WEB-INF/views/admin-views/homeAdmin.jsp").forward(request, response);
-            }
+        request.getRequestDispatcher("/WEB-INF/views/admin-views/updateMovie.jsp").forward(request, response);
+        }
     }
 
     /**

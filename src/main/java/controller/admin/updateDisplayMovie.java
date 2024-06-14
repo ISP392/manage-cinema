@@ -4,21 +4,20 @@
  */
 package controller.admin;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import modal.Users;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  *
- * @author baoquoc
+ * @author LÊ PHƯƠNG MAI
  */
-@WebServlet(name = "homeAdminServlet", urlPatterns = {"/home_admin"})
-public class homeAdminServlet extends HttpServlet {
+@WebServlet(name = "updateDisplayMovie", urlPatterns = {"/updateDisplayMovie"})
+public class updateDisplayMovie extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +36,10 @@ public class homeAdminServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet homeAdminServlet</title>");            
+            out.println("<title>Servlet updateDisplayMovie</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet homeAdminServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet updateDisplayMovie at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,12 +57,7 @@ public class homeAdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Users u = (Users) request.getSession().getAttribute("admin");
-        if( u == null || u.getRoleID().getRoleID() != 1 ){
-            response.sendRedirect("admin");
-        }else{
-        request.getRequestDispatcher("/WEB-INF/views/admin-views/homeAdmin.jsp").forward(request, response);
-            }
+        processRequest(request, response);
     }
 
     /**

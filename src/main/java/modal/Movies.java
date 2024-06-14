@@ -5,6 +5,7 @@
 package modal;
 
 import java.sql.Date;
+import java.util.Objects;
 
 /**
  *
@@ -20,6 +21,9 @@ public class Movies {
     private int duration;
     private int display;
     private String trailerURL;
+    private String status;
+
+    private int likeCount;
     private String name;
     public Movies() {
     }
@@ -33,6 +37,8 @@ public class Movies {
         this.duration = duration;
         this.display = display;
         this.trailerURL = trailerURL;
+        this.status = (display == 1) ? "Đang chiếu" : "Hidden";
+
     }
     
 
@@ -48,7 +54,18 @@ public class Movies {
         this.name = name;
     }
 
-
+    public Movies(int movieID, String title, String description, Date releaseDate, String posterImage, int duration, int display, String trailerURL, int likeCount) {
+        this.movieID = movieID;
+        this.title = title;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.posterImage = posterImage;
+        this.duration = duration;
+        this.display = display;
+        this.trailerURL = trailerURL;
+        this.likeCount = likeCount;
+    }
+    
 
     public int getMovieID() {
         return movieID;
@@ -114,6 +131,13 @@ public class Movies {
         this.trailerURL = trailerURL;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
     public String getName() {
         return name;
     }

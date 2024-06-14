@@ -24,7 +24,6 @@ public class ForgotPasswordServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
-
         // Thực hiện logic gửi email reset mật khẩu ở đây
         // Giả sử chúng ta đã gửi email thành công
         boolean isEmailSent = true;
@@ -49,7 +48,6 @@ public class ForgotPasswordServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
- 
         request.getRequestDispatcher("/WEB-INF/views/forgotPass.jsp").forward(request, response);
     
     } 

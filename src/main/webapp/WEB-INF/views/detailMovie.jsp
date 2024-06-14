@@ -94,7 +94,7 @@
     <div class="description" style="width: 900px; margin-top: 40px; font-size: 20px">
         <p>${movie.description}</p>
     </div>
-    <c:if test="${movie.trailerURL != null}">
+    <c:if test="${movie.trailerURL != null && isTrailer}">
         <div class="trailer" style="margin-top: 20px; color: cadetblue">
             <h1 style="font-weight: bold; font-size: 35px">Trailer</h1>
             <iframe style="margin-top: 20px; border-radius: 12px" width="980" height="551" src="${movie.trailerURL}"
@@ -104,7 +104,7 @@
             </iframe>
         </div>
     </c:if>
-    <c:if test="${movie.trailerURL == null}">
+    <c:if test="${movie.trailerURL == null || !isTrailer}">
         <div class="trailer" style="margin-top: 20px">
             <h1 style="font-weight: bold; font-size: 35px">Trailer</h1>
             <h3 style="font-size: 20px;color: red">Không có trailer</h3>

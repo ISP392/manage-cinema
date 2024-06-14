@@ -5,6 +5,7 @@
 package DAO;
 
 import java.security.NoSuchAlgorithmException;
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,12 +26,80 @@ import modal.UserGoogleDto;
 import modal.Movies;
 import modal.Users;
 import util.Encrypt;
+import java.sql.Date;
+
 
 /**
  * @author MISS NGA
  */
 public class DAO extends DBContext {
 
+    public void updateDisplayMovieByMoieID(int movieID, int Display) {
+        
+        
+
+    }
+
+    public List<Movies> getMoviesByPage(int page, int pageSize) {
+        List<Movies> list = new ArrayList<>();
+        String sql = "SELECT * FROM Movies ORDER BY releaseDate DESC LIMIT ? OFFSET ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, pageSize);
+            ps.setInt(2, (page - 1) * pageSize);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Movies m = new Movies(
+                        rs.getInt("movieID"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getDate("releaseDate"),
+                        rs.getString("posterImage"),
+                        rs.getInt("duration"),
+                        rs.getInt("display"),
+                        rs.getString("trailerURL")
+                );
+                list.add(m);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public int getMovieCount() {
+        String sql = "SELECT COUNT(*) FROM Movies";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+//    public List<Movies> getAllMovie() {
+//        String sql = "SELECT * FROM Movies ";
+//        List<Movies> list = new ArrayList<>();
+//
+//        try {
+//            PreparedStatement ps = connection.prepareCall(sql);
+//            ResultSet rs = ps.executeQuery();
+//
+//            while (rs.next()) {
+//                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
+//                        rs.getInt("display"), rs.getString("trailerURL"));
+//                list.add(m);
+//            }
+//            return list;
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//        return null;
+//    }
     public List<Movies> getAllMovieCommingSoon() {
         String sql = "SELECT * FROM Movies m WHERE m.releaseDate > CURDATE()";
         List<Movies> list = new ArrayList<>();
@@ -200,10 +269,9 @@ public class DAO extends DBContext {
 //        
 //    }
     public List<Movies> getMovie(boolean isLimit) {
-        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate desc;";
-        if (isLimit) {
-            sql = sql.substring(0, sql.length() - 1) + " limit 4;";
-        }
+        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate asc;";
+        if(isLimit)
+            sql = sql.substring(0, sql.length() -1) + " limit 4;";
         List<Movies> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -428,6 +496,51 @@ public class DAO extends DBContext {
         return genreName;
     }
 
+    //insert new movie
+    public void insertNewMovie(String title, String description,Date releaseDate,String uniqueFileName, int duration, String trailerUrl){
+        String sql = "INSERT INTO Movies (title, description, releaseDate, posterImage, duration, trailerUrl, likeCount, display) VALUES (?, ?, ?, ?, ?, ?, 0, 1)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, title);
+            ps.setString(2, description);
+            ps.setDate(3, releaseDate);
+            ps.setString(4, uniqueFileName);
+            ps.setInt(5, duration);
+            ps.setString(6, trailerUrl);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    //get movie recently added
+    public Movies getMovieRecentlyAdded(){
+        String sql = "SELECT * FROM Movies ORDER BY movieID DESC LIMIT 1";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"), rs.getInt("likeCount"));
+                return m;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    //insert movie genre
+    public void insertMovieGenre(int genreID, int movieID){
+        String sql = "INSERT INTO MovieGenres (genreID, movieID) VALUES (?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, genreID);
+            ps.setInt(2, movieID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
     public static void main(String[] args) {
         DAO dao = new DAO();
         Users admin = dao.checkLoginAdmin("bao", "123");
@@ -438,7 +551,5 @@ public class DAO extends DBContext {
         }
 
     }
-
-    
 
 }
