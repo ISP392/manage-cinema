@@ -33,6 +33,8 @@ import util.Encrypt;
 public class DAO extends DBContext {
 
     public void updateDisplayMovieByMoieID(int movieID, int Display) {
+        
+        
 
     }
 
