@@ -5,6 +5,7 @@
 package DAO;
 
 import java.security.NoSuchAlgorithmException;
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,6 +32,70 @@ import util.Encrypt;
  */
 public class DAO extends DBContext {
 
+    public void updateDisplayMovieByMoieID(int movieID, int Display) {
+
+    }
+
+    public List<Movies> getMoviesByPage(int page, int pageSize) {
+        List<Movies> list = new ArrayList<>();
+        String sql = "SELECT * FROM Movies ORDER BY releaseDate DESC LIMIT ? OFFSET ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, pageSize);
+            ps.setInt(2, (page - 1) * pageSize);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Movies m = new Movies(
+                        rs.getInt("movieID"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getDate("releaseDate"),
+                        rs.getString("posterImage"),
+                        rs.getInt("duration"),
+                        rs.getInt("display"),
+                        rs.getString("trailerURL")
+                );
+                list.add(m);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public int getMovieCount() {
+        String sql = "SELECT COUNT(*) FROM Movies";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+//    public List<Movies> getAllMovie() {
+//        String sql = "SELECT * FROM Movies ";
+//        List<Movies> list = new ArrayList<>();
+//
+//        try {
+//            PreparedStatement ps = connection.prepareCall(sql);
+//            ResultSet rs = ps.executeQuery();
+//
+//            while (rs.next()) {
+//                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
+//                        rs.getInt("display"), rs.getString("trailerURL"));
+//                list.add(m);
+//            }
+//            return list;
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//        return null;
+//    }
     public List<Movies> getAllMovieCommingSoon() {
         String sql = "SELECT * FROM Movies m WHERE m.releaseDate > CURDATE()";
         List<Movies> list = new ArrayList<>();
@@ -174,11 +239,11 @@ public class DAO extends DBContext {
 //                
 //        
 //    }
-
     public List<Movies> getMovie(boolean isLimit) {
         String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate desc;";
-        if(isLimit)
-            sql = sql.substring(0, sql.length() -1) + " limit 4;";
+        if (isLimit) {
+            sql = sql.substring(0, sql.length() - 1) + " limit 4;";
+        }
         List<Movies> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -194,8 +259,6 @@ public class DAO extends DBContext {
         }
         return null;
     }
-
-    
 
     public List<Movies> getMovieByGenreID(int genreID) {
         List<Movies> list = new ArrayList<>();
@@ -292,24 +355,22 @@ public class DAO extends DBContext {
     }
 
     //get user by email
-    public Users getUserByEmail (String email){
+    public Users getUserByEmail(String email) {
         String sql = "select * from Users where email = ?";
-        try{
+        try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 Role r = new Role(rs.getInt("roleID"));
                 Users u = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("username"), rs.getString("password"), rs.getString("email"), r, rs.getInt("point"), rs.getString("providerID"));
                 return u;
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e);
         }
         return null;
     }
-
-
 
     //void get movie by movieID
     public Movies getMovieByID(int movieID) {
@@ -399,6 +460,4 @@ public class DAO extends DBContext {
 
     }
 
-
 }
-
