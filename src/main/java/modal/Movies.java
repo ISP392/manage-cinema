@@ -23,6 +23,8 @@ public class Movies {
     private String trailerURL;
     private String status;
 
+    private int likeCount;
+    private String name;
     public Movies() {
     }
 
@@ -38,6 +40,32 @@ public class Movies {
         this.status = (display == 1) ? "Đang chiếu" : "Hidden";
 
     }
+    
+
+    public Movies(int movieID, String title, String description, Date releaseDate, String posterImage, int duration, int display, String trailerURL, String name) {
+        this.movieID = movieID;
+        this.title = title;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.posterImage = posterImage;
+        this.duration = duration;
+        this.display = display;
+        this.trailerURL = trailerURL;
+        this.name = name;
+    }
+
+    public Movies(int movieID, String title, String description, Date releaseDate, String posterImage, int duration, int display, String trailerURL, int likeCount) {
+        this.movieID = movieID;
+        this.title = title;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.posterImage = posterImage;
+        this.duration = duration;
+        this.display = display;
+        this.trailerURL = trailerURL;
+        this.likeCount = likeCount;
+    }
+    
 
     public int getMovieID() {
         return movieID;
@@ -110,5 +138,13 @@ public class Movies {
     public void setStatus(String status) {
         this.status = status;
     }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 
 }

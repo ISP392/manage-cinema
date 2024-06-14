@@ -28,33 +28,6 @@
     for (int i = 0; i < 10; i++) {
         int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
         daysOfMonth.add(day);
-//        int dayOfWeek = cal.get(java.util.Calendar.DAY_OF_WEEK);
-//        String dayOfWeekName = "";
-//        switch (dayOfWeek) {
-//            case java.util.Calendar.SUNDAY:
-//                dayOfWeekName = "Chủ nhật";
-//                break;
-//            case java.util.Calendar.MONDAY:
-//                dayOfWeekName = "Thứ hai";
-//                break;
-//            case java.util.Calendar.TUESDAY:
-//                dayOfWeekName = "Thứ ba";
-//                break;
-//            case java.util.Calendar.WEDNESDAY:
-//                dayOfWeekName = "Thứ tư";
-//                break;
-//            case java.util.Calendar.THURSDAY:
-//                dayOfWeekName = "Thứ năm";
-//                break;
-//            case java.util.Calendar.FRIDAY:
-//                dayOfWeekName = "Thứ sáu";
-//                break;
-//            case java.util.Calendar.SATURDAY:
-//                dayOfWeekName = "Thứ bảy";
-//                break;
-//        }
-//        dayOfWeeks.add(dayOfWeekName);
-//        cal.add(java.util.Calendar.DAY_OF_MONTH, 1);
     }
 %>
 <%@include file="header.jsp" %>
@@ -84,7 +57,6 @@
         <div class="col-7">
             <div class="product-name">
                 <h4 style="font-weight: bold">${movie.title.toUpperCase()}</h4>
-                <h5 style="color: red;">${movie.getDisplay() == 0 ? 'ĐANG BỊ ẨN' :''}</h5>
             </div>
             <div>
                 <c:set var="genresString" value="" scope="page"/>
@@ -117,41 +89,12 @@
                     Mua Vé
                 </a>
             </button>
-            <c:if test="${sessionScope.account.roleID.name.equals('admin')}">
-                <button>
-                    <a style="text-decoration: none; color:#fff;" href="updateMovie?movieID=${movie.movieID}">
-                        Sửa Phim
-                    </a>
-                </button>
-                <br/>
-                <button>
-                    <a style="text-decoration: none; color:#fff" href="addslotmovies?movieID=${movie.movieID}">
-                        Thêm Suất Chiếu
-                    </a>
-                </button>
-                <c:if test="${movie.getDisplay() == 1}">
-                    <button>
-                        <a style="text-decoration: none; color:#fff"
-                           href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=0">Ẩn Phim
-                        </a>
-                    </button>
-                </c:if>
-                <c:if test="${movie.getDisplay() == 0}">
-                    <button style="background-color: #57635a; color: #fff;">
-                        <a style="text-decoration: none; color:#fff"
-                           href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=1">
-                            Hiện Phim
-                        </a>
-                    </button>
-                </c:if>
-            </c:if>
-
         </div>
     </div>
     <div class="description" style="width: 900px; margin-top: 40px; font-size: 20px">
         <p>${movie.description}</p>
     </div>
-    <c:if test="${movie.trailerURL != null}">
+    <c:if test="${movie.trailerURL != null && isTrailer}">
         <div class="trailer" style="margin-top: 20px; color: cadetblue">
             <h1 style="font-weight: bold; font-size: 35px">Trailer</h1>
             <iframe style="margin-top: 20px; border-radius: 12px" width="980" height="551" src="${movie.trailerURL}"
@@ -161,7 +104,7 @@
             </iframe>
         </div>
     </c:if>
-    <c:if test="${movie.trailerURL == null}">
+    <c:if test="${movie.trailerURL == null || !isTrailer}">
         <div class="trailer" style="margin-top: 20px">
             <h1 style="font-weight: bold; font-size: 35px">Trailer</h1>
             <h3 style="font-size: 20px;color: red">Không có trailer</h3>

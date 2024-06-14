@@ -129,8 +129,8 @@
                 data-bs-toggle="dropdown"
               >
                 <div class="header-info ms-3">
-                  <span class="font-w600">Hi, <b>baothiquoc</b></span>
-                  <small class="text-end font-w400">baothiquoc@gmail.com</small>
+                  <span class="font-w600">Hi, <b>${admin.displayName}</b></span>
+                  <small class="text-end font-w400">${admin.email}</small>
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-end">
@@ -1375,7 +1375,7 @@
                         <div class="d-flex align-items-center">
                           <h2 class="fs-38 mb-0">98k</h2>
                           <div class="text-success transaction-caret">
-                            <i class="fas fa-sort-up"></i>
+                            <i class="fa fa-sort-up"></i>
                             <p class="mb-0">+0.5%</p>
                           </div>
                         </div>

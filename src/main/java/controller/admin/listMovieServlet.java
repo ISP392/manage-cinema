@@ -11,13 +11,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import modal.Movies;
+import modal.Users;
 
 @WebServlet(name = "listMovieServlet", value = "/list_movie")
 public class listMovieServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DAO dao = new DAO();
+     
+        Users u = (Users) request.getSession().getAttribute("admin");
+        if( u == null || u.getRoleID().getRoleID() != 1 ){
+            response.sendRedirect("admin");
+        }else{
+               DAO dao = new DAO();
 
         String indexPage = request.getParameter("index");
         if (indexPage == null) {
@@ -57,7 +63,10 @@ public class listMovieServlet extends HttpServlet {
         request.setAttribute("endPage", endPage);
         request.setAttribute("tag", index);
         request.setAttribute("listMovies", listMovies);
+
+
         request.getRequestDispatcher("/WEB-INF/views/admin-views/listMovie.jsp").forward(request, response);
+        }
     }
 
     @Override

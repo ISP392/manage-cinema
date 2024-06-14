@@ -26,6 +26,8 @@ import modal.UserGoogleDto;
 import modal.Movies;
 import modal.Users;
 import util.Encrypt;
+import java.sql.Date;
+
 
 /**
  * @author MISS NGA
@@ -182,7 +184,7 @@ public class DAO extends DBContext {
         }
         return null;
     }
-
+    // check login of user
     public Users checkLogin(String username, String password) {
         String pass = "";
         try {
@@ -191,6 +193,31 @@ public class DAO extends DBContext {
             e.printStackTrace();
         }
         String sql = "SELECT * FROM Users join Roles on Users.roleID = Roles.roleID where username= " + "'" + username + "'" + "and password = " + "'" + pass + "'";
+        try {
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Role r = new Role(rs.getInt("roleID"), rs.getString("name"));
+                return new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("userName"),
+                        rs.getString("password"), rs.getString("email"), r, rs.getInt("point"), rs.getString("providerID"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // check login of admin
+    public Users checkLoginAdmin(String username, String password) {
+        String pass = "";
+        try {
+            pass = Encrypt.toSHA1(password);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        String sql = "SELECT * FROM Users join Roles on Users.roleID = Roles.roleID where username= " + "'" + username + "'" + "and password = " + "'" + pass + "'" + "AND Roles.roleID = 1";
         try {
 
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -242,10 +269,9 @@ public class DAO extends DBContext {
 //        
 //    }
     public List<Movies> getMovie(boolean isLimit) {
-        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate desc;";
-        if (isLimit) {
-            sql = sql.substring(0, sql.length() - 1) + " limit 4;";
-        }
+        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate asc;";
+        if(isLimit)
+            sql = sql.substring(0, sql.length() -1) + " limit 4;";
         List<Movies> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -271,7 +297,7 @@ public class DAO extends DBContext {
             ps.setInt(1, genreID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"));
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"), rs.getString("name"));
                 list.add(m);
             }
             return list;
@@ -454,11 +480,75 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
+    public String getGenreNameByID(int genreID) {
+        String sql = "SELECT name FROM Genres WHERE genreID = ?";
+        String genreName = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, genreID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                genreName = rs.getString("name");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return genreName;
+    }
+
+    //insert new movie
+    public void insertNewMovie(String title, String description,Date releaseDate,String uniqueFileName, int duration, String trailerUrl){
+        String sql = "INSERT INTO Movies (title, description, releaseDate, posterImage, duration, trailerUrl, likeCount, display) VALUES (?, ?, ?, ?, ?, ?, 0, 1)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, title);
+            ps.setString(2, description);
+            ps.setDate(3, releaseDate);
+            ps.setString(4, uniqueFileName);
+            ps.setInt(5, duration);
+            ps.setString(6, trailerUrl);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    //get movie recently added
+    public Movies getMovieRecentlyAdded(){
+        String sql = "SELECT * FROM Movies ORDER BY movieID DESC LIMIT 1";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"), rs.getInt("likeCount"));
+                return m;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    //insert movie genre
+    public void insertMovieGenre(int genreID, int movieID){
+        String sql = "INSERT INTO MovieGenres (genreID, movieID) VALUES (?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, genreID);
+            ps.setInt(2, movieID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
 
     public static void main(String[] args) {
         DAO dao = new DAO();
-        UserLikeMovie m = dao.getLikeCount(18);
-        System.out.println(m.getUserID());
+        Users admin = dao.checkLoginAdmin("bao", "123");
+        if (admin == null) {
+            System.out.println("failed");
+        } else {
+            System.out.println("success");
+        }
 
     }
 
