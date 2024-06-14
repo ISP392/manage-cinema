@@ -6,7 +6,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <title>Add New Movie</title>
+        <title>Update Movie</title>
         <link href="./assets/css/dashboard-admin.css" rel="stylesheet" />
     </head>
     <style>
@@ -115,7 +115,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                     <nav class="navbar navbar-expand">
                         <div class="collapse navbar-collapse">
                             <div class="header-left">
-                                <div class="dashboard_bar">Add Movie</div>
+                                <div class="dashboard_bar">Update Movie</div>
                             </div>
                             <ul class="navbar-nav header-right" style="margin-left: 15px">
                                 <li class="nav-item dropdown notification_dropdown">
@@ -219,7 +219,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                                 <div class="row">
                                     <div class="col-xl-12">
                                         <div class="mb-3">
-                                            <label class="form-label">Title</label>
+                                            <label class="form-label">New Title</label>
                                             <input
                                                 type="text"
                                                 class="form-control"
@@ -229,7 +229,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                                                 />
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Trailer URL</label>
+                                            <label class="form-label">New Trailer URL</label>
                                             <input
                                                 type="text"
                                                 class="form-control"
@@ -238,7 +238,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                                                 required
                                                 />
                                         </div>
-                                        <label class="form-label">Description</label>
+                                        <label class="form-label">New Description</label>
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">
                                                 <textarea
@@ -252,7 +252,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
                                         <div class="filter cm-content-box box-primary">
                                             <div class="content-title">
-                                                <div class="cpa">Release Date</div>
+                                                <div class="cpa">New Release Date</div>
                                                 <div class="tools">
                                                     <a
                                                         href="javascript:void(0);"
@@ -282,7 +282,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                                         </div>
                                         <div class="filter cm-content-box box-primary">
                                             <div class="content-title">
-                                                <div class="cpa">Duration</div>
+                                                <div class="cpa">New Duration</div>
                                                 <div class="tools">
                                                     <a
                                                         href="javascript:void(0);"
@@ -305,7 +305,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
                                         <div class="filter cm-content-box box-primary">
                                             <div class="content-title">
-                                                <div class="cpa">Genres</div>
+                                                <div class="cpa">New Genres</div>
                                                 <div class="tools">
                                                     <a
                                                         href="javascript:void(0);"
@@ -386,7 +386,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                                         </div>
                                         <div class="filter cm-content-box box-primary">
                                             <div class="content-title">
-                                                <div class="cpa">Poster Image</div>
+                                                <div class="cpa">New Poster Image</div>
                                                 <div class="tools">
                                                     <a
                                                         href="javascript:void(0);"
@@ -440,7 +440,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary mb-3 open">
-                            Add Movie
+                            Update Movie
                         </button>
                     </form>
                 </div>

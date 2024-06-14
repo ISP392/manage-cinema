@@ -197,12 +197,12 @@
                         <div class="col-xl-12">
 
                             <div class="mb-4">
-                                <a href="content-add.html" class="btn btn-primary">Add Movie</a>
+                                <a href="add_movie" class="btn btn-primary">Add Movie</a>
                             </div>
                             <div class="filter cm-content-box box-primary">
                                 <div class="content-title">
                                     <div class="cpa">
-                                        <i class="fa-solid fa-file-lines me-1"></i>List Movies
+                                        <i style="margin-right:5px;" class="fa fa-file-lines"></i>List Movies
                                     </div>
                                     <div class="tools">
                                         <a href="javascript:void(0);" class="expand SlideToolHeader"><i class="fal fa-angle-down"></i></a>
