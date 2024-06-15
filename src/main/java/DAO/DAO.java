@@ -80,25 +80,6 @@ public class DAO extends DBContext {
         return 0;
     }
 
-//    public List<Movies> getAllMovie() {
-//        String sql = "SELECT * FROM Movies ";
-//        List<Movies> list = new ArrayList<>();
-//
-//        try {
-//            PreparedStatement ps = connection.prepareCall(sql);
-//            ResultSet rs = ps.executeQuery();
-//
-//            while (rs.next()) {
-//                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
-//                        rs.getInt("display"), rs.getString("trailerURL"));
-//                list.add(m);
-//            }
-//            return list;
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
-//        return null;
-//    }
     public List<Movies> getAllMovieCommingSoon() {
         String sql = "SELECT * FROM Movies m WHERE m.releaseDate > CURDATE()";
         List<Movies> list = new ArrayList<>();
@@ -247,27 +228,6 @@ public class DAO extends DBContext {
         }
     }
 
-//    public List<Movies> getMovie (boolean isLimit){
-//        String sql = "SELECT * FROM .Movies order by releaseDate desc";
-//        if(isLimit)
-//            sql += "limit 4";
-//        List<Movies> list = new ArrayList<>();
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
-//                        rs.getInt("display"), rs.getString("trailerURL"));
-//                list.add(m);
-//            }
-//            return list;
-//        } catch (Exception e) {
-//            System.err.print(e);
-//        }
-//        return null;
-//                
-//        
-//    }
     public List<Movies> getMovie(boolean isLimit) {
         String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate asc;";
         if (isLimit) {
@@ -544,6 +504,36 @@ public class DAO extends DBContext {
         }
     }
 
+    //update movie by movieID
+    public void updateMovieByID(String title, String description, Date releaseDate, String posterImage, int duration, String trailerUrl, int movieID){
+        String sql = "UPDATE Movies SET title = ?, description = ?, releaseDate = ?, posterImage = ?, duration = ?, trailerUrl = ? WHERE movieID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, title);
+            ps.setString(2, description);
+            ps.setDate(3, releaseDate);
+            ps.setString(4, posterImage);
+            ps.setInt(5, duration);
+            ps.setString(6, trailerUrl);
+            ps.setInt(7, movieID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    //delete movie genre by movieID
+    public void deleteMovieGenreByMovieID(int movieID){
+        String sql = "DELETE FROM MovieGenres WHERE movieID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, movieID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
     //paging list tickets by userID
     public List<Tickets> pagingTickets(int userID, int index) {
         List<Tickets> list = new ArrayList<>();
@@ -591,7 +581,6 @@ public class DAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
         return list;
     }
 
@@ -618,18 +607,6 @@ public class DAO extends DBContext {
         int userID = 13;
         int ticketCount = dao.countPagingTickets(userID);
         System.out.println("Number òf ticket by ID" + userID + ":" + ticketCount);
-        
-//        int pageIndex = 1; 
-//        List<Tickets> ticketsList = dao.pagingTickets(userID, pageIndex);
-//
-//        if (ticketsList.isEmpty()) {
-//            System.out.println("No tickets found for userID " + userID);
-//        } else {
-//            System.out.println("Tickets for userID " + userID + ":");
-//            for (Tickets ticket : ticketsList) {
-//                System.out.println(ticket); 
-//            }
-//        }
     }
 
 }

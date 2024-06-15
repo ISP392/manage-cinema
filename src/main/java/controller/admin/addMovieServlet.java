@@ -146,7 +146,7 @@ public class addMovieServlet extends HttpServlet {
                 for (String genre : genreList) {
                     dao.insertMovieGenre(Integer.parseInt(genre), movie.getMovieID());
                 }
-                response.sendRedirect("home");
+                response.sendRedirect("list_movie");
              }
 
         } catch (IOException | ServletException e) {

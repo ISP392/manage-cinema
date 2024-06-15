@@ -38,8 +38,8 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
     </style>
     <body>
         <!--*******************
-                Preloader start
-            ********************-->
+                        Preloader start
+                    ********************-->
         <div id="preloader">
             <div class="waviy">
                 <span style="--i: 1">L</span>
@@ -55,16 +55,16 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
             </div>
         </div>
         <!--*******************
-                Preloader end
-            ********************-->
+                        Preloader end
+                    ********************-->
 
         <!--**********************************
-                Main wrapper start
-            ***********************************-->
+                        Main wrapper start
+                    ***********************************-->
         <div id="main-wrapper">
             <!--**********************************
-                        Nav header start
-                    ***********************************-->
+                                    Nav header start
+                                ***********************************-->
             <div class="nav-header">
                 <a href="home_admin" class="brand-logo">
                     <svg class="logo-abbr" width="53" height="53" viewBox="0 0 53 53">
@@ -105,11 +105,11 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                 </div>
             </div>
             <!--**********************************
-                        Nav header end
-                    ***********************************-->
+                                    Nav header end
+                                ***********************************-->
             <!--**********************************
-                        Header start
-                    ***********************************-->
+                                    Header start
+                                ***********************************-->
             <div class="header">
                 <div class="header-content">
                     <nav class="navbar navbar-expand">
@@ -131,15 +131,17 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                         </div>
                     </nav>
                 </div>
-                <h2 style="color:red;margin-top:-25px; padding-left: 45px">${message}</h2>
+                <h2 style="color: red; margin-top: -25px; padding-left: 45px">
+                    ${message}
+                </h2>
             </div>
             <!--**********************************
-                        Header end ti-comment-alt
-                    ***********************************-->
+                                    Header end ti-comment-alt
+                                ***********************************-->
 
             <!--**********************************
-                        Sidebar start
-                    ***********************************-->
+                                    Sidebar start
+                                ***********************************-->
             <div class="dlabnav">
                 <div class="dlabnav-scroll">
                     <ul class="metismenu" id="menu">
@@ -203,17 +205,21 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                 </div>
             </div>
             <!--**********************************
-                        Sidebar end
-                    ***********************************-->
+                                    Sidebar end
+                                ***********************************-->
 
             <!--**********************************
-                        Content body start
-                    ***********************************-->
+                                    Content body start
+                                ***********************************-->
             <div class="content-body">
                 <!-- row -->
                 <div class="container-fluid">
                     <!-- Row -->
-                    <form action="add_movie" method="post" enctype="multipart/form-data">
+                    <form
+                        action="update_movie"
+                        method="post"
+                        enctype="multipart/form-data"
+                        >
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="row">
@@ -225,6 +231,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                                                 class="form-control"
                                                 placeholder="Title"
                                                 name="movieTitle"
+                                                value="${movie.title}"
                                                 required
                                                 />
                                         </div>
@@ -235,6 +242,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                                                 class="form-control"
                                                 placeholder="Trailer URL"
                                                 name="trailerUrl"
+                                                value="${movie.trailerURL}"
                                                 required
                                                 />
                                         </div>
@@ -246,7 +254,10 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                                                     style="margin-top: 10px"
                                                     class="form-control"
                                                     name="description"
-                                                    ></textarea>
+                                                    required
+                                                    >
+                                                    ${movie.description.trim()}</textarea
+                                                >
                                             </div>
                                         </div>
 
@@ -272,6 +283,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                                                                     id="releaseDate"
                                                                     name="releaseDate"
                                                                     class="form-control"
+                                                                    value="${movie.releaseDate}"
                                                                     required
                                                                     />
                                                             </div>
@@ -297,6 +309,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                                                         type="number"
                                                         class="form-control"
                                                         name="duration"
+                                                        value="${movie.duration}"
                                                         required
                                                         />
                                                 </div>
@@ -403,7 +416,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                                                                 <div
                                                                     id="imagePreview"
                                                                     style="
-                                                                    background-image: url(./assets/images/no-img-avatar.png);
+                                                                    background-image: url(./assets/images/posterImages/${movie.posterImage});
                                                                     "
                                                                     ></div>
                                                             </div>
@@ -417,7 +430,11 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                                                                     accept=".png, .jpg, .jpeg"
                                                                     name="posterImage"
                                                                     id="posterImage"
-                                                                    required
+                                                                    />
+                                                                <input
+                                                                    type="hidden"
+                                                                    name="oldPosterImage"
+                                                                    value="${movie.posterImage}"
                                                                     />
                                                                 <label
                                                                     for="imageUpload"
@@ -432,30 +449,51 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                                         </div>
                                         <input
                                             type="hidden"
+                                            id="selectedGenresBefore"
+                                            value="${genresID}"
+                                            />
+                                        <input
+                                            type="hidden"
                                             id="selectedGenres"
                                             name="selectedGenres"
+                                            />
+                                        <input
+                                            type="hidden"
+                                            name="movieID"
+                                            value="${movie.movieID}"
                                             />
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary mb-3 open">
+                        <button
+                            id="submitButton"
+                            type="submit"
+                            class="btn btn-primary mb-3 open"
+                            >
                             Update Movie
+                        </button>
+                        <button
+                            class="btn btn-primary mb-3 open"
+                            style="background-color: #ee2279; border: #ee2279"
+                            onclick="window.location.href = 'list_movie'"
+                            >
+                            Cancel
                         </button>
                     </form>
                 </div>
             </div>
             <!--**********************************
-                        Content body end
-                    ***********************************-->
+                                    Content body end
+                                ***********************************-->
         </div>
         <!--**********************************
-                Main wrapper end
-            ***********************************-->
+                        Main wrapper end
+                    ***********************************-->
 
         <!--**********************************
-                Scripts
-            ***********************************-->
+                        Scripts
+                    ***********************************-->
         <!-- Required vendors -->
         <script src="./assets/JS/vendor/global/global.min.js"></script>
         <script src="./assets/JS/vendor/ckeditor/ckeditor.js"></script>
@@ -468,46 +506,67 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
         <script src="./assets/JS/js/custom.min.js"></script>
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                var buttons = document.querySelectorAll(".genre-button");
-                var selectedGenresInput = document.getElementById("selectedGenres");
+    document.addEventListener("DOMContentLoaded", function () {
+        var buttons = document.querySelectorAll(".genre-button");
+        var selectedGenresInput = document.getElementById("selectedGenres");
+        var selectedGenresBefore = document.getElementById(
+                "selectedGenresBefore"
+                ).value;
 
-                buttons.forEach(function (button) {
-                    button.addEventListener("click", function () {
-                        button.classList.toggle("active");
+        // Chuyển đổi giá trị của selectedGenresBefore thành mảng
+        var selectedGenresBeforeArray = selectedGenresBefore
+                .split(", ")
+                .map(Number);
 
-                        // Lấy ra tất cả các nút đã được chọn và đưa vào một mảng
-                        var selectedGenres = Array.from(
-                                document.querySelectorAll(".genre-button.active")
-                                ).map((button) => button.value);
-
-                        // Gán giá trị của mảng vào input để hiển thị
-                        selectedGenresInput.value = selectedGenres.join(", ");
-                    });
-                });
-            });
-            function readURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        $("#imagePreview").css(
-                                "background-image",
-                                "url(" + e.target.result + ")"
-                                );
-                        $("#imagePreview").hide();
-                        $("#imagePreview").fadeIn(650);
-                    };
-                    reader.readAsDataURL(input.files[0]);
-                }
+        // Active các nút ban đầu dựa trên giá trị của selectedGenresBefore
+        buttons.forEach(function (button) {
+            if (selectedGenresBeforeArray.includes(Number(button.value))) {
+                button.classList.add("active");
             }
-            $("#imageUpload").on("change", function () {
-                readURL(this);
+        });
+
+        // Thiết lập giá trị ban đầu cho selectedGenres
+        selectedGenresInput.value = selectedGenresBefore;
+
+        // Thêm sự kiện click cho các nút
+        buttons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                button.classList.toggle("active");
+
+                // Lấy ra tất cả các nút đã được chọn và đưa vào một mảng
+                var selectedGenres = Array.from(
+                        document.querySelectorAll(".genre-button.active")
+                        ).map((button) => button.value);
+
+                // Gán giá trị của mảng vào input để hiển thị
+                selectedGenresInput.value = selectedGenres.join(", ");
             });
-            $(".remove-img").on("click", function () {
-                var imageUrl = "images/no-img-avatar.png";
-                $(".avatar-preview, #imagePreview").removeAttr("style");
-                $("#imagePreview").css("background-image", "url(" + imageUrl + ")");
-            });
+        });
+    });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#imagePreview").css(
+                        "background-image",
+                        "url(" + e.target.result + ")"
+                        );
+                $("#imagePreview").hide();
+                $("#imagePreview").fadeIn(650);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#imageUpload").on("change", function () {
+        readURL(this);
+    });
+    $(".remove-img").on("click", function () {
+        var imageUrl = "images/no-img-avatar.png";
+        $(".avatar-preview, #imagePreview").removeAttr("style");
+        $("#imagePreview").css("background-image", "url(" + imageUrl + ")");
+    });
+
         </script>
     </body>
 </html>

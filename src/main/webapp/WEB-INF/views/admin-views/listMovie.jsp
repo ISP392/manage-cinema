@@ -243,8 +243,8 @@
                                                             <td>${movie.status}</td>
 
                                                             <td>
-                                                                <a href="javascript:void(0);" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
-                                                                <a href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=0" class="btn btn-danger shadow btn-xs sharp rounded-circle"><i class="fa fa-trash"></i></a>
+                                                                <a href="update_movie?movieID=${movie.movieID}" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
+                                                                <a href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=0" class="btn btn-danger shadow btn-xs sharp rounded-circle"><i class="${movie.display == 1 ?'fa fa-eye':'fa fa-eye-slash'}"></i></a>
                                                             </td>
                                                         </tr>
                                                     </c:forEach>
