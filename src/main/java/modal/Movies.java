@@ -23,7 +23,7 @@ public class Movies {
     private String trailerURL;
     private String status;
 
-    private int likeCount
+    private int likeCount;
     private String name;
     public Movies() {
     }
