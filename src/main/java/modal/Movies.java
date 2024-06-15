@@ -22,10 +22,8 @@ public class Movies {
     private int display;
     private String trailerURL;
     private String status;
-    private int likeCount;
-    
-    
-    
+
+    private int likeCount
     private String name;
     public Movies() {
     }

@@ -35,6 +35,7 @@ import java.sql.Date;
 public class DAO extends DBContext {
 
     public void updateDisplayMovieByMoieID(int movieID, int Display) {
+      
 
     }
 
@@ -593,6 +594,7 @@ public class DAO extends DBContext {
 
         return list;
     }
+
 
     //count paging tickets by userID
     public int countPagingTickets(int userID) {
