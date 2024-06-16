@@ -32,7 +32,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         String password = request.getParameter("password"); 
         DAO dao = new DAO();
         if(dao.checkEmail(email) == false){
-            request.setAttribute("error", "Mail của bạn chưa đăng ký tài khoản. Vui lòng đăng ký!!!");
+            request.setAttribute("error", "Email account not registered. Please try again!!!");
             request.getRequestDispatcher("/WEB-INF/views/forgotPass.jsp").forward(request, response);
             return;
         }

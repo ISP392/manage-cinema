@@ -1,6 +1,6 @@
 <%-- 
-    Document   : forgotPass
-    Created on : Jun 14, 2024, 12:46:31 AM
+    Document   : successPass
+    Created on : Jun 17, 2024, 1:14:40 AM
     Author     : caoha
 --%>
 
@@ -12,7 +12,12 @@
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
     <style>
-
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
         .header, .footer {
             width: 100%;
         }
@@ -37,28 +42,17 @@
             margin-bottom: 20px;
         }
         .con h1 {
-            font-size: 40px;
-            margin-bottom: 20px;
-        }
-        .con h6 {
-            font-size: 15px;
-            margin-bottom: 20px;
+            font-size: 24px;
+            margin-bottom: 10px;
         }
         .con p {
             color: #777;
-            margin-bottom: 30px;
-        }
-        .con input[type="email"] {
-            width: 100%;
-            padding: 10px;
             margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
         }
         .con button {
             width: 100%;
             padding: 10px;
-            background-color: #990000;
+            background-color: #6c63ff;
             color: white;
             border: none;
             border-radius: 4px;
@@ -68,29 +62,23 @@
         .con a {
             display: block;
             margin-top: 20px;
-            color: #990000;
+            color: #6c63ff;
             text-decoration: none;
-            text-align: left;
-            
+            text-align: center;
         }
     </style>
 </head>
-
 <body>
     <div class="header">
         <%@include file="header.jsp" %>
     </div>
     <div class="middle">
         <div class="con">
-            <img src="./assets/images/logo_forgot.png" alt="">
-            <h1>Forgot your password?</h1>
-            <p>Don't worry, we'll send you reset instructions.</p>
-            <form action="forgot" method="post">
-                <input type="email" name="email" placeholder="Enter your email" required>
-                <h6 style="color: red">${error}</h6>
-                <button type="submit">Reset Password</button>
-            </form>
-            <a href="signin">← Back to login</a>
+            <img src="./assets/images/PasswordSuccess.png" alt="Checkmark Icon">
+            <h1>Password reset</h1>
+            <p>Your password has been successfully reset. Click below to log in magically.</p>
+            <button onclick="location.href='login.jsp'">Continue</button>
+            <a href="signin">← Back to log in</a>
         </div>
     </div>
     <div class="footer">

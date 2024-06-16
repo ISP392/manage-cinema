@@ -1,6 +1,6 @@
 <%-- 
-    Document   : forgotPass
-    Created on : Jun 14, 2024, 12:46:31 AM
+    Document   : newPass
+    Created on : Jun 17, 2024, 12:55:55 AM
     Author     : caoha
 --%>
 
@@ -12,7 +12,12 @@
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
     <style>
-
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
         .header, .footer {
             width: 100%;
         }
@@ -37,28 +42,24 @@
             margin-bottom: 20px;
         }
         .con h1 {
-            font-size: 40px;
-            margin-bottom: 20px;
-        }
-        .con h6 {
-            font-size: 15px;
-            margin-bottom: 20px;
+            font-size: 24px;
+            margin-bottom: 10px;
         }
         .con p {
             color: #777;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
-        .con input[type="email"] {
+        .con input[type="email"], .con input[type="password"] {
             width: 100%;
             padding: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
         }
         .con button {
             width: 100%;
             padding: 10px;
-            background-color: #990000;
+            background-color: #6c63ff;
             color: white;
             border: none;
             border-radius: 4px;
@@ -68,10 +69,9 @@
         .con a {
             display: block;
             margin-top: 20px;
-            color: #990000;
+            color: #6c63ff;
             text-decoration: none;
-            text-align: left;
-            
+            text-align: center;
         }
     </style>
 </head>
@@ -82,15 +82,15 @@
     </div>
     <div class="middle">
         <div class="con">
-            <img src="./assets/images/logo_forgot.png" alt="">
-            <h1>Forgot your password?</h1>
-            <p>Don't worry, we'll send you reset instructions.</p>
+            <img src="./assets/images/password.png" alt="Lock Icon">
+            <h1>Set new password</h1>
+            <p>Your new password must be different to previously used passwords.</p>
             <form action="forgot" method="post">
-                <input type="email" name="email" placeholder="Enter your email" required>
-                <h6 style="color: red">${error}</h6>
-                <button type="submit">Reset Password</button>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="confirm_password" placeholder="Confirm password" required>
+                <button type="submit">Reset password</button>
             </form>
-            <a href="signin">← Back to login</a>
+            <a href="signin">← Back to log in</a>
         </div>
     </div>
     <div class="footer">
