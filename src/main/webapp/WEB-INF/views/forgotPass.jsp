@@ -12,15 +12,7 @@
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100vh;
-            background-color: #f5f5f5;
-            font-family: Arial, sans-serif;
-            margin: 0;
-        }
+
         .header, .footer {
             width: 100%;
         }
@@ -31,66 +23,74 @@
             align-items: center;
             padding: 20px;
         }
-        .container {
+        .con {
             text-align: center;
             background: #ffffff;
             padding: 40px;
-            border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px; /* Adjust the width to center the content */
+            border-radius: 40px;
+            max-width: 500px; /* Adjust the width to center the content */
             width: 100%;
         }
-        .container img {
-            width: 50px;
+        .con img {
+            width: 300px;
             margin-bottom: 20px;
         }
-        .container h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
+        .con h1 {
+            font-size: 40px;
+            margin-bottom: 20px;
         }
-        .container p {
+        .con h6 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .con p {
             color: #777;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
-        .container input[type="email"] {
+        .con input[type="email"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        .container button {
+        .con button {
             width: 100%;
             padding: 10px;
-            background-color: #6c63ff;
+            background-color: #990000;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
         }
-        .container a {
+        .con a {
             display: block;
             margin-top: 20px;
-            color: #6c63ff;
+            color: #990000;
             text-decoration: none;
+            text-align: left;
+            
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <%@include file="header.jsp" %>
     </div>
     <div class="middle">
-        <div class="container">
-            <img src="lock-icon.png" alt="Lock Icon"> <!-- Placeholder for the lock icon -->
+        <div class="con">
+            <img src="./assets/images/logo_forgot.png" alt="">
             <h1>Forgot password?</h1>
             <p>No worries, we’ll send you reset instructions.</p>
-            <form action="ForgotPasswordServlet" method="post">
+            <form action="forgot" onsubmit="return validateForm()" method="post">
                 <input type="email" name="email" placeholder="Enter your email" required>
+                <h6 style="color: red">${error}</h6>
                 <button type="submit">Reset password</button>
             </form>
-            <a href="login.jsp">← Back to log in</a>
+            <a href="signIn.jsp">← Back to log in</a>
         </div>
     </div>
     <div class="footer">

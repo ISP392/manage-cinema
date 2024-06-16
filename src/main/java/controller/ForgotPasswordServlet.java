@@ -5,6 +5,7 @@
 
 package controller;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import modal.Users;
 
 /**
  *
@@ -20,21 +23,26 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name="ForgotPasswordServlet", urlPatterns={"/forgot"})
 public class ForgotPasswordServlet extends HttpServlet {
    
-    private static final long serialVersionUID = 1L;
+    //private static final long serialVersionUID = 1L;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String displayName = request.getParameter("name");
+        String username = request.getParameter("username");
         String email = request.getParameter("email");
-        // Thực hiện logic gửi email reset mật khẩu ở đây
-        // Giả sử chúng ta đã gửi email thành công
-        boolean isEmailSent = true;
-
-        if (isEmailSent) {
-            request.setAttribute("message", "A reset link has been sent to your email address.");
-        } else {
-            request.setAttribute("error", "There was an error sending the reset link. Please try again.");
+        String password = request.getParameter("password"); 
+        DAO dao = new DAO();
+        if(dao.checkEmail(email) == false){
+            request.setAttribute("error", "Mail của bạn chưa đăng ký tài khoản. Vui lòng đăng ký!!!");
+            request.getRequestDispatcher("/WEB-INF/views/forgotPass.jsp").forward(request, response);
+            return;
         }
+        Users u = new Users(displayName, username, password, email);
+        HttpSession session = request.getSession();
+        session.setAttribute("user", u);
+        response.sendRedirect("verify");
+       
 
-        request.getRequestDispatcher("forgotPass.jsp").forward(request, response);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
