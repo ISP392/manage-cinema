@@ -20,7 +20,7 @@ public class verifyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Users user = (Users) request.getSession().getAttribute("account");
         Users userAccount = (Users) request.getSession().getAttribute("user");
-        if (user == null && userAccount == null){
+        if (user == null && userAccount == null) {
             response.sendRedirect("signin");
         } else {
             Random random = new Random();
@@ -53,7 +53,7 @@ public class verifyServlet extends HttpServlet {
                     }
                 } else if (UI.getInformation().equals("email")) {
                     Email.sendEmail(u.getEmail(), "Code", "You just updated your display name from " + UI.getOldDisplayName() + " to " + u.getDisplayName() + ", Your code is: " + code);
-                }else if(UI.getInformation().equals("forgot")){
+                } else if (UI.getInformation().equals("forgot")) {
                     Email.sendEmail(userAccount.getEmail(), "Code", "You have just requested to change your password, Your code is: " + code);
                 }
             } else {
@@ -83,10 +83,9 @@ public class verifyServlet extends HttpServlet {
                         dao.updateDisplayNameByEmail(u.getEmail(), u.getDisplayName());
                         request.getSession().removeAttribute("information");
                         response.sendRedirect("signin");
-                    }else if(UI.getInformation().equals("forgot")){
-                        dao.updatePasswordByEmail(u.getEmail(), u.getPassword());
+                    } else if (UI.getInformation().equals("forgot")) {
                         request.getSession().removeAttribute("information");
-                        request.getRequestDispatcher("/WEB-INF/views/successPass.jsp").forward(request, response);
+                        response.sendRedirect("new_password");
                     }
 
                 } else {
