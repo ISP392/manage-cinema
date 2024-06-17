@@ -28,6 +28,7 @@ import modal.Movies;
 import modal.Users;
 import util.Encrypt;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * @author MISS NGA
@@ -631,11 +632,74 @@ public class DAO extends DBContext {
         return count;
     }
 
+    //get list screening time
+    public List<ScreeningTimes> getAllFlimList(int movieID, int cinemaID, Date movieDate, Timestamp startTime) {
+        List<ScreeningTimes> list = new ArrayList<>();
+        String sql = "select m.display, l.locationID, l.name as location, c.cinemaID, c.name as cinemasName, c.movieDate, t.theaterID, t.theaterNumber, st.screeningID, st.startTime, st.endTime, m.movieID,m.title, m.description, m.releaseDate, m.posterImage, m.duration from [Location] l join Cinemas c on l.locationID = c.locationID join Theaters t on c.cinemaID = t.cinemaID join ScreeningTimes st on t.theaterID = st.theaterID join Movies m on st.movieID = m.movieID where m.movieID = ? and c.cinemaID = ? and c.movieDate = ? and st.startTime > DATEADD(hour, 1, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, movieID);
+            ps.setInt(2, cinemaID);
+            ps.setDate(3, movieDate);
+            ps.setTimestamp(4, startTime);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Location l = new Location(rs.getInt("locationID"), rs.getString("location"));
+                Cinemas c = new Cinemas(rs.getInt("cinemaID"), rs.getString("cinemasName"), rs.getDate("movieDate"), l);
+                Theaters t = new Theaters(rs.getInt("theaterID"), c, rs.getInt("theaterNumber"));
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"));
+                ScreeningTimes st = new ScreeningTimes(rs.getInt("screeningID"), t, m, rs.getTimestamp("startTime").toLocalDateTime(), rs.getTimestamp("endTime").toLocalDateTime());
+                list.add(st);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    //get all cinemas with movieID, date, direction
+    public List<Cinemas> getAllCinemas(int movieID, Date movieDate, int direction) {
+        List<Cinemas> list = new ArrayList<>();
+        String sql = "select distinct c.cinemaID, c.name as cinemas, c.movieDate, l.locationID, l.name as location from [Location] l join Cinemas c on l.locationID = c.locationID join Theaters t on c.cinemaID = t.cinemaID join ScreeningTimes st on t.theaterID = st.theaterID join Movies m on st.movieID = m.movieID where m.movieID = ? and c.movieDate = ? and l.locationID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, movieID);
+            ps.setDate(2, movieDate);
+            ps.setInt(3, direction);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Cinemas c = new Cinemas(rs.getInt("cinemaID"), rs.getString("cinemas"), rs.getDate("movieDate"), new Location(rs.getInt("locationID"), rs.getString("location")));
+                list.add(c);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    //get all direction
+    public List<Location> getAllDirection() {
+        List<Location> list = new ArrayList<>();
+        String sql = "select * from Location";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Location l = new Location(rs.getInt("locationID"), rs.getString("name"));
+                list.add(l);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         DAO dao = new DAO();
-        int userID = 13;
-        int ticketCount = dao.countPagingTickets(userID);
-        System.out.println("Number òf ticket by ID" + userID + ":" + ticketCount);
+        List<Location> list = dao.getAllDirection();
+        for (Location l : list) {
+            System.out.println(l.getName());
+        }
     }
 
 }
