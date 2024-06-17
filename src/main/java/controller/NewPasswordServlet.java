@@ -7,17 +7,21 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import modal.Users;
+import util.Encrypt;
 
 /**
  *
  * @author caoha
  */
-@WebServlet(name="NewPasswordServlet", urlPatterns={"/newpassword"})
+@WebServlet(name="NewPasswordServlet", urlPatterns={"/new_password"})
 public class NewPasswordServlet extends HttpServlet {
    
     /** 
@@ -68,7 +72,17 @@ public class NewPasswordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/successPass.jsp").forward(request, response);
+        Users u = (Users) request.getSession().getAttribute("user");
+        String pass = request.getParameter("password");
+        //encrypt pass
+        try {
+            pass = Encrypt.toSHA1(pass);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        Users user = new Users(u.getEmail(), pass, 0);
+        request.getSession().setAttribute("user", user);
+        response.sendRedirect("verify");
     }
 
     /** 

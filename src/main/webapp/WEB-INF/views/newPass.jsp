@@ -84,10 +84,10 @@
         <div class="con">
             <img src="./assets/images/password.png" alt="Lock Icon">
             <h1>Set new password</h1>
-            <p>Your new password must be different to previously used passwords.</p>
-            <form action="forgot" method="post">
-                <input type="password" name="password" placeholder="Password" required>
-                <input type="password" name="confirm_password" placeholder="Confirm password" required>
+            <p style="color: red" id="error"></p>
+            <form id="resetPasswordForm" action="new_password" method="post">
+                <input id="password" type="password" name="password" placeholder="Password" required>
+                <input id="confirm_password" type="password" name="confirm_password" placeholder="Confirm password" required>
                 <button type="submit">Reset password</button>
             </form>
             <a href="signin">← Back to log in</a>
@@ -97,4 +97,18 @@
         <%@include file="footer.jsp" %>
     </div>
 </body>
+<script>
+    document.getElementById('resetPasswordForm').addEventListener('submit', function(event) {
+        var password = document.getElementById('password').value;
+        var confirmPassword = document.getElementById('confirm_password').value;
+        var errorElement = document.getElementById('error');
+
+        if (password !== confirmPassword) {
+            errorElement.textContent = 'Passwords do not match.';
+            event.preventDefault(); // Prevent form submission
+        } else {
+            errorElement.textContent = ''; // Clear the error message when passwords match
+        }
+    });
+</script>
 </html>
