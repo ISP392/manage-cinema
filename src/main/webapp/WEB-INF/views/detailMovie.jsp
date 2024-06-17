@@ -85,7 +85,7 @@
             </div>
             <button style="${isCommingSoon ? 'display: none;' : ''}">
                 <a style="text-decoration: none; color:#fff"
-                   href="booking?movieid=${movie.movieID}&date=<%=(daysOfMonth.get(0))%>&direction=2">
+                   href="booking?movieid=${movie.movieID}&date=<%=(daysOfMonth.get(0))%>&direction=1">
                     Mua Vé
                 </a>
             </button>
