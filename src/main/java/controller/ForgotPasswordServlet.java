@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import modal.UpdateInformation;
 import modal.Users;
 
 /**
@@ -26,13 +27,10 @@ public class ForgotPasswordServlet extends HttpServlet {
     //private static final long serialVersionUID = 1L;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String displayName = request.getParameter("name");
-        String username = request.getParameter("username");
         String email = request.getParameter("email");
-        String password = request.getParameter("password"); 
         DAO dao = new DAO();
-        if(dao.checkEmail(email) == false){
-            request.setAttribute("error", "Email account not registered. Please try again!!!");
+        if(dao.checkEmailAndPasswordNull(email)){
+            request.setAttribute("error", "Email account not valid. Please try again!!!");
             request.getRequestDispatcher("/WEB-INF/views/forgotPass.jsp").forward(request, response);
             return;
         }else if(!dao.checkEmail(email)){
@@ -40,16 +38,14 @@ public class ForgotPasswordServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/views/forgotPass.jsp").forward(request, response);
             return;
         }
-        Users u = new Users(displayName, username, password, email);
+        Users u = new Users(email);
+        UpdateInformation UI = new UpdateInformation("forgot", u.getEmail());
         HttpSession session = request.getSession();
         session.setAttribute("user", u);
+        session.setAttribute("information", UI);
         response.sendRedirect("verify");
-       
-
-        
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
      * Handles the HTTP <code>GET</code> method.
      * @param request servlet request
@@ -64,14 +60,7 @@ public class ForgotPasswordServlet extends HttpServlet {
     
     } 
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    
+
     @Override
     public String getServletInfo() {
         return "Short description";

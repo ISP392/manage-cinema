@@ -7,22 +7,22 @@ package controller;
 import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.NoSuchAlgorithmException;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import modal.ScreeningTimes;
+import modal.SeatWithScreeningTime;
 import modal.Users;
-import util.Encrypt;
 
 /**
  *
- * @author caoha
+ * @author baoquoc
  */
-@WebServlet(name = "NewPasswordServlet", urlPatterns = {"/new_password"})
-public class NewPasswordServlet extends HttpServlet {
+@WebServlet(name = "pickTicketsServlet", urlPatterns = {"/pick_tickets"})
+public class pickTicketsServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +41,10 @@ public class NewPasswordServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet NewPasswordServlet</title>");
+            out.println("<title>Servlet pickTicketsServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet NewPasswordServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet pickTicketsServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,7 +61,30 @@ public class NewPasswordServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/newPass.jsp").forward(request, response);
+        Users user = (Users) request.getSession().getAttribute("account");
+        if (user == null) {
+            response.sendRedirect("signin");
+        } else {
+            try {
+                String screeningID = request.getParameter("screeningID");
+                if (screeningID == null) {
+                    response.sendRedirect("home");
+                    return;
+                }
+                DAO d = new DAO();
+                List<SeatWithScreeningTime> SWS = d.getSWSByID(Integer.parseInt(screeningID));
+                ScreeningTimes screeningTimes = d.getScreeningTimesByID(Integer.parseInt(screeningID));
+                
+                request.setAttribute("screeningTimes", screeningTimes);
+                request.setAttribute("SWS", SWS);
+
+                request.getRequestDispatcher("/WEB-INF/views/pickTickets.jsp").forward(request, response);
+
+            } catch (NumberFormatException e) {
+
+            }
+        }
+
     }
 
     /**
@@ -75,18 +98,7 @@ public class NewPasswordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Users u = (Users) request.getSession().getAttribute("user");
-        String pass = request.getParameter("password");
-        DAO dao = new DAO();
-        //encrypt pass
-        try {
-            pass = Encrypt.toSHA1(pass);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        dao.updatePasswordByEmail(u.getEmail(), pass);
-        request.getSession().removeAttribute("user");
-        request.getRequestDispatcher("/WEB-INF/views/successPass.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**

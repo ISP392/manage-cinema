@@ -5,6 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -46,6 +49,8 @@
             border-radius: 5px;
             overflow: hidden;
         }
+
+
     </style>
     <body>
         <%@include file="header.jsp" %>
@@ -71,7 +76,7 @@
                                     LỊCH SỬ GIAO DỊCH
                                 </a>
                             </li>
-                            <c:if test="${sessionScope.account.role.name.equals('admin')}">
+                            <c:if test="${sessionScope.account.roleID.name.equals('admin')}">
                                 <li style="background-color:${backgroundColorSecond}">
                                     <a style="color: ${colorSecond}"  href="addNewMovie">
                                         THÊM PHIM MỚI
@@ -116,8 +121,8 @@
                                                                                     <p><span>Mã vé:</span> ${ticket.getTicketID()}</p>
                                                                                     <p><span>Rạp:</span> ${ticket.getCinemaID().getName()}</p>
                                                                                     <p><span>Suất chiếu:</span> <fmt:formatDate value="${ticket.getSeatID().getScreeningID().getStartTime()}" pattern="HH:mm"/>, <fmt:formatDate value="${ticket.getSeatID().getScreeningID().getStartTime()}" pattern="yyyy-MM-dd" /></p>
-                                                                                <p><span>Phòng Cinema: </span>Cinemas ${ticket.getSeatID().getScreeningID().getTheaterID().getTheaterNumber()}</p>
-                                                                                <p><span>Ghế:</span> <span id="selectedSeats">${ticket.getSeatID().getSeatNumber()}</span></p>
+                                                                                    <p><span>Phòng Cinema: </span>Cinemas ${ticket.getSeatID().getScreeningID().getTheaterID().getTheaterNumber()}</p>
+                                                                                    <p><span>Ghế:</span> <span id="selectedSeats">${ticket.getSeatID().getSeatNumber()}</span></p>
                                                                                 </li>
                                                                             </ul>
                                                                         </div>
@@ -154,6 +159,8 @@
                 </div>
             </div>
         </div>
+
         <%@include file="footer.jsp" %>
+
     </body>
 </html>

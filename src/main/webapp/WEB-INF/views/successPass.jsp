@@ -77,8 +77,7 @@
             <img src="./assets/images/PasswordSuccess.png" alt="Checkmark Icon">
             <h1>Password reset</h1>
             <p>Your password has been successfully reset. Click below to log in magically.</p>
-            <button onclick="location.href='login.jsp'">Continue</button>
-            <a href="signin">← Back to log in</a>
+            <button onclick="location.href='signin'">← Back to log in</button>
         </div>
     </div>
     <div class="footer">

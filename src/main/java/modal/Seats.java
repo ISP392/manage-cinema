@@ -24,6 +24,12 @@ public class Seats {
         this.seatStatus = seatStatus;
     }
 
+    public Seats(int seatID, String seatNumber, ScreeningTimes screeningID){
+        this.seatID = seatID;
+        this.seatNumber = seatNumber;
+        this.screeningID = screeningID;
+    }
+
     public int getSeatID() {
         return seatID;
     }
