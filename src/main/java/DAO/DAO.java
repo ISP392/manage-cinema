@@ -145,7 +145,7 @@ public class DAO extends DBContext {
 
     //check email and password == null
     public boolean checkEmailAndPasswordNull(String email){
-        String sql = "SELECT * FROM Users WHERE email = ? AND password = ''";
+        String sql = "SELECT * FROM Users WHERE email = ? AND (password = '' or password is null)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, email);

@@ -33,6 +33,10 @@ public class ForgotPasswordServlet extends HttpServlet {
             request.setAttribute("error", "Email account not valid. Please try again!!!");
             request.getRequestDispatcher("/WEB-INF/views/forgotPass.jsp").forward(request, response);
             return;
+        }else if(!dao.checkEmail(email)){
+            request.setAttribute("error", "Email account not valid. Please try again!!!");
+            request.getRequestDispatcher("/WEB-INF/views/forgotPass.jsp").forward(request, response);
+            return;
         }
         Users u = new Users(email);
         UpdateInformation UI = new UpdateInformation("forgot", u.getEmail());
