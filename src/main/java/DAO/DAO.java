@@ -142,6 +142,22 @@ public class DAO extends DBContext {
         return false;
     }
 
+    //check email and password == null
+    public boolean checkEmailAndPasswordNull(String email){
+        String sql = "SELECT * FROM Users WHERE email = ? AND password = ''";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public List<Users> getUsers() {
         String sql = "SELECT * FROM Users";
         try {
@@ -498,6 +514,19 @@ public class DAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, genreID);
             ps.setInt(2, movieID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    //update password by email
+    public void updatePasswordByEmail(String email, String password){
+        String sql = "UPDATE Users SET password = ? WHERE email = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, password);
+            ps.setString(2, email);
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
