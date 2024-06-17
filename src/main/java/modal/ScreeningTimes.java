@@ -4,6 +4,7 @@
  */
 package modal;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 
@@ -15,13 +16,13 @@ public class ScreeningTimes {
     private int screeningID;
     private Theaters theaterID;
     private Movies movieID;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private Timestamp startTime;
+    private Timestamp endTime;
 
     public ScreeningTimes() {
     }
 
-    public ScreeningTimes(int screeningID, Theaters theaterID, Movies movieID, LocalDateTime startTime, LocalDateTime endTime) {
+    public ScreeningTimes(int screeningID, Theaters theaterID, Movies movieID, Timestamp startTime, Timestamp endTime) {
         this.screeningID = screeningID;
         this.theaterID = theaterID;
         this.movieID = movieID;
@@ -53,19 +54,19 @@ public class ScreeningTimes {
         this.movieID = movieID;
     }
 
-    public LocalDateTime getStartTime() {
+    public Timestamp getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(Timestamp startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public Timestamp getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
     }
   

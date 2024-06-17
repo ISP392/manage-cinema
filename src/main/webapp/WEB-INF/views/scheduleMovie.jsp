@@ -132,8 +132,8 @@
                                     <c:forEach items="${cinemaEntry.value}" var="screeningTimesList">
                                         <c:forEach items="${screeningTimesList}" var="screeningTime">
                                             <li class="item">
-                                                <a href="seatNumber?screeningID=${screeningTime.getScreeningID()}">
-                                                    <span><fmt:formatDate value="${screeningTime.getStartTime()}" pattern="HH:mm" /></span>
+                                                <a href="pick_tickets?screeningID=${screeningTime.screeningID}">
+                                                    <span><fmt:formatDate value="${screeningTime.startTime}" pattern="HH:mm" /></span>
                                                 </a>
                                             </li>
                                         </c:forEach>
