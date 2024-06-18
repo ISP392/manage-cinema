@@ -227,14 +227,14 @@
                                             <label for="cinemaSelect"> Rạp chiếu phim: </label> <br>
 
                                             <select id="cinemaSelect" name="cinemaSelect" class="form-control">
-                                                <option value="CGV Hùng Vương Plaza">CGV Hùng Vương Plaza</option>
-                                                <option value="CGV Menas Mall">CGV Menas Mall</option>
-                                                <option value="CGV Crescent Mall">CGV Crescent Mall</option>
-                                                <option value="CGV Vincom Center Bà Triệu">CGV Vincom Center Bà Triệu</option>
-                                                <option value="CGV Hồ Gươm Plaza">CGV Hồ Gươm Plaza</option>
-                                                <option value="CGV Aeon Long Biên">CGV Aeon Long Biên</option>
-                                                <option value="CGV Vĩnh Trung Plaza">CGV Vĩnh Trung Plaza</option>
-                                                <option value="CGV Vincom Đà Nẵng">CGV Vincom Đà Nẵng</option>
+                                                <option value="BANNY Hùng Vương Plaza">BANNY Hùng Vương Plaza</option>
+                                                <option value="BANNY Menas Mall">BANNY Menas Mall</option>
+                                                <option value="BANNY Crescent Mall">BANNY Crescent Mall</option>
+                                                <option value="BANNY Vincom Center Bà Triệu">BANNY Vincom Center Bà Triệu</option>
+                                                <option value="BANNY Hồ Gươm Plaza">BANNY Hồ Gươm Plaza</option>
+                                                <option value="BANNY Aeon Long Biên">BANNY Aeon Long Biên</option>
+                                                <option value="BANNY Vĩnh Trung Plaza">BANNY Vĩnh Trung Plaza</option>
+                                                <option value="BANNY Vincom Đà Nẵng">BANNY Vincom Đà Nẵng</option>
                                             </select>
                                         </div>
                                         <div class="mb-3">
