@@ -199,6 +199,7 @@
                             <div class="mb-4">
                                 <a href="add_movie" class="btn btn-primary">Add Movie</a>
                             </div>
+
                             <div class="filter cm-content-box box-primary">
                                 <div class="content-title">
                                     <div class="cpa">
@@ -213,6 +214,7 @@
                                         <div class="table-responsive">
 
                                             <table class="table table-responsive-sm mb-0">
+
                                                 <thead>
                                                     <tr>
                                                         <th style="">
@@ -222,32 +224,57 @@
                                                             </div>
                                                         </th>
                                                         <th><strong>Title</strong></th>
+                                                        <!--  <th>Duration</th>  -->
                                                         <th><strong>Modified</strong></th>
                                                         <th><strong>Status</strong></th>
                                                         <th style="width:85px;"><strong>Actions</strong></th>
                                                     </tr>
                                                 </thead>
+
                                                 <tbody>
+                                                    <c:if test="${not empty errorMessage}">
+                                                    <p style="color:red">${errorMessage}</p>
+                                                </c:if>
 
-                                                    <c:set var="itemsPerPage" value="10" />
-                                                    <c:set var="currentPage" value="${tag}" />
+                                                <c:set var="itemsPerPage" value="10" />
+                                                <c:set var="currentPage" value="${tag}" />
 
 
-                                                    <c:forEach  var="movie" items="${listMovies}" varStatus="status">
-                                                        <c:set var="movieNumber" value="${(currentPage - 1) * itemsPerPage + status.index + 1}" />
-                                                        <tr>
+                                                <c:forEach  var="movie" items="${listMovies}" varStatus="status">
+                                                    <c:set var="movieNumber" value="${(currentPage - 1) * itemsPerPage + status.index + 1}" />
+                                                    <tr>
 
-                                                            <td>${movieNumber}</td>
-                                                            <td>${movie.title.toUpperCase()}</td>
-                                                            <td>${movie.releaseDate}</td>
-                                                            <td>${movie.status}</td>
+                                                        <td>${movieNumber}</td>
+                                                        <td>${movie.title.toUpperCase()}</td>
+                                                  <!--      <td>${movie.duration}</td> -->
+                                                        <td>${movie.releaseDate}</td>
+                                                        <td>${movie.status}</td>
 
-                                                            <td>
-                                                                <a href="update_movie?movieID=${movie.movieID}" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
-                                                                <a href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=0" class="btn btn-danger shadow btn-xs sharp rounded-circle"><i class="${movie.display == 1 ?'fa fa-eye':'fa fa-eye-slash'}"></i></a>
-                                                            </td>
-                                                        </tr>
-                                                    </c:forEach>
+                                                        <td>
+                                                            <a href="javascript:void(0);" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
+                                                                <c:if test="${movie.getDisplay()==1}">
+                                                                <a href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=0" class="btn btn-danger shadow btn-xs sharp rounded-circle" onclick="return confirm('Are you sure you want to hide this movie?');">
+                                                                    <i class="fa fa-eye"></i>
+                                                                </a>
+
+                                                                <a href="addNewSlot?movieID=${movie.getMovieID()}&display=1" class="btn btn-primary shadow btn-xs sharp rounded-circle " onclick="return confirm('Are you sure you want to add this slot?');">
+                                                                    <i class="fa fa-plus"></i>
+                                                                </a>
+                                                            </c:if>
+
+                                                            <c:if test="${movie.getDisplay()==0}">
+
+                                                                <a  href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=1">
+                                                                    <i class="fa fa-eye-slash"></i>
+                                                                </a>
+
+                                                            </c:if>
+
+
+
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
 
                                                 </tbody>
                                             </table>

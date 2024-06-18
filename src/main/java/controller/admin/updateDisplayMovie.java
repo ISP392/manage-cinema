@@ -4,6 +4,7 @@
  */
 package controller.admin;
 
+import DAO.DAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import modal.Users;
 
 /**
  *
@@ -57,7 +59,21 @@ public class updateDisplayMovie extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        Users u = (Users) request.getSession().getAttribute("admin");
+        if (u == null || u.getRoleID().getRoleID() != 1) {
+            response.sendRedirect("admin");
+        } else {
+
+            String movieID = request.getParameter("movieID");
+            String display = request.getParameter("display");
+
+            DAO dao = new DAO();
+            int movie = Integer.parseInt(movieID);
+            int dis = Integer.parseInt(display);
+            dao.updateDisplayMovieByMovieID(movie, dis);
+            response.sendRedirect("list_movie?movieID=" + movieID);
+
+        }
     }
 
     /**

@@ -8,34 +8,36 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
         <title>Add New Movie</title>
         <link href="./assets/css/dashboard-admin.css" rel="stylesheet" />
+
+        <style>
+            .genre-buttons {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .genre-button {
+                background-color: #ccc;
+                border-radius: 1rem;
+                border: none;
+                color: black;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            /* Hiệu ứng khi nút được nhấn */
+            .genre-button.active {
+                background-color: #4caf50;
+                color: white;
+            }
+        </style>
     </head>
-    <style>
-        .genre-buttons {
-            display: flex;
-            flex-wrap: wrap;
-        }
 
-        .genre-button {
-            background-color: #ccc;
-            border-radius: 1rem;
-            border: none;
-            color: black;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        /* Hiệu ứng khi nút được nhấn */
-        .genre-button.active {
-            background-color: #4caf50;
-            color: white;
-        }
-    </style>
     <body>
         <!--*******************
                 Preloader start
