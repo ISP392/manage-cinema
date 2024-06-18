@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package controller.booking;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,13 +12,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import modal.ScreeningTimes;
+import modal.SeatWithScreeningTime;
+import modal.Users;
 
 /**
  *
- * @author ACER
+ * @author baoquoc
  */
-@WebServlet(name = "GeneralTermsServlet", urlPatterns = {"/generalTerms"})
-public class GeneralTermsServlet extends HttpServlet {
+@WebServlet(name = "pickTicketsServlet", urlPatterns = {"/pick_tickets"})
+public class pickTicketsServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,16 +41,15 @@ public class GeneralTermsServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet GeneralTermsServlet</title>");
+            out.println("<title>Servlet pickTicketsServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet GeneralTermsServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet pickTicketsServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -57,12 +61,30 @@ public class GeneralTermsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("colorMain", "white");
-        request.setAttribute("backgroundColorMain", "red");
+        Users user = (Users) request.getSession().getAttribute("account");
+        if (user == null) {
+            response.sendRedirect("signin");
+        } else {
+            try {
+                String screeningID = request.getParameter("screeningID");
+                if (screeningID == null) {
+                    response.sendRedirect("home");
+                    return;
+                }
+                DAO d = new DAO();
+                List<SeatWithScreeningTime> SWS = d.getSWSByID(Integer.parseInt(screeningID));
+                ScreeningTimes screeningTimes = d.getScreeningTimesByID(Integer.parseInt(screeningID));
+                
+                request.setAttribute("screeningTimes", screeningTimes);
+                request.setAttribute("SWS", SWS);
 
-        request.setAttribute("colorSecond", "#666");
-        request.setAttribute("backgroundColorSecond", "#bfd2d9");
-        request.getRequestDispatcher("/WEB-INF/views/term-conditions/generalTerms.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/views/pickTickets.jsp").forward(request, response);
+
+            } catch (NumberFormatException e) {
+
+            }
+        }
+
     }
 
     /**

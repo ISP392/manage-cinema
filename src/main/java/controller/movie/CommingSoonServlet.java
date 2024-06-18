@@ -2,27 +2,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package controller.movie;
 
 import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.NoSuchAlgorithmException;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import modal.Users;
-import util.Encrypt;
+import java.util.List;
+import modal.Movies;
 
 /**
  *
- * @author caoha
+ * @author LÊ PHƯƠNG MAI
  */
-@WebServlet(name = "NewPasswordServlet", urlPatterns = {"/new_password"})
-public class NewPasswordServlet extends HttpServlet {
+@WebServlet(name = "CommingSoonServlet", urlPatterns = {"/commingSoon"})
+public class CommingSoonServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,15 +39,16 @@ public class NewPasswordServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet NewPasswordServlet</title>");
+            out.println("<title>Servlet CommingSoonServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet NewPasswordServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CommingSoonServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -61,7 +60,10 @@ public class NewPasswordServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/newPass.jsp").forward(request, response);
+        DAO dao = new DAO();
+        List<Movies> moviesCommingSoon = dao.getAllMovieCommingSoon();
+        request.setAttribute("moviesCommingSoon", moviesCommingSoon);
+        request.getRequestDispatcher("/WEB-INF/views/commingSoon.jsp").forward(request, response);
     }
 
     /**
@@ -75,18 +77,7 @@ public class NewPasswordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Users u = (Users) request.getSession().getAttribute("user");
-        String pass = request.getParameter("password");
-        DAO dao = new DAO();
-        //encrypt pass
-        try {
-            pass = Encrypt.toSHA1(pass);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        dao.updatePasswordByEmail(u.getEmail(), pass);
-        request.getSession().removeAttribute("user");
-        request.getRequestDispatcher("/WEB-INF/views/successPass.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
