@@ -17,6 +17,11 @@
         <link href="./assets/css/dashboard-admin.css" rel="stylesheet"/>
 
     </head>
+    <style>
+        .action-rows{
+            width: 120px;
+        }
+    </style>
     <body>
         <!--*******************
             Preloader start
@@ -202,7 +207,7 @@
                             <div class="filter cm-content-box box-primary">
                                 <div class="content-title">
                                     <div class="cpa">
-                                        <i style="margin-right:5px;" class="fa fa-file-lines"></i>List Movies
+                                        <i class="fa-solid fa-file-lines me-1"></i>List Movies
                                     </div>
                                     <div class="tools">
                                         <a href="javascript:void(0);" class="expand SlideToolHeader"><i class="fal fa-angle-down"></i></a>
@@ -224,7 +229,7 @@
                                                         <th><strong>Title</strong></th>
                                                         <th><strong>Modified</strong></th>
                                                         <th><strong>Status</strong></th>
-                                                        <th style="width:85px;"><strong>Actions</strong></th>
+                                                        <th class="action-rows"><strong>Actions</strong></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -242,12 +247,31 @@
                                                             <td>${movie.releaseDate}</td>
                                                             <td>${movie.status}</td>
 
-                                                            <td>
-                                                                <a href="update_movie?movieID=${movie.movieID}" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
-                                                                <a href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=0" class="btn btn-danger shadow btn-xs sharp rounded-circle"><i class="${movie.display == 1 ?'fa fa-eye':'fa fa-eye-slash'}"></i></a>
-                                                            </td>
-                                                        </tr>
-                                                    </c:forEach>
+                                                        <td class="action-rows">
+                                                            <a href="update_movie?movieID=${movie.movieID}" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
+                                                                <c:if test="${movie.getDisplay()==1}">
+                                                                <a href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=0" class="btn btn-danger shadow btn-xs sharp rounded-circle">
+                                                                    <i class="fa fa-eye"></i>
+                                                                </a>
+
+                                                                <a href="addNewSlot?movieID=${movie.getMovieID()}&display=1" class="btn btn-primary shadow btn-xs sharp rounded-circle " >
+                                                                    <i class="fa fa-plus"></i>
+                                                                </a>
+                                                            </c:if>
+
+                                                            <c:if test="${movie.getDisplay()==0}">
+
+                                                                <a  href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=1" class="btn btn-danger shadow btn-xs sharp rounded-circle">
+                                                                    <i class="fa fa-eye-slash"></i>
+                                                                </a>
+
+                                                            </c:if>
+
+
+
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
 
                                                 </tbody>
                                             </table>
