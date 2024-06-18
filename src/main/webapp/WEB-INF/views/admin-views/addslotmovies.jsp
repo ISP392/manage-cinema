@@ -134,7 +134,6 @@
                         </div>
                     </nav>
                 </div>
-                <h2 style="color:red;margin-top:-25px; padding-left: 45px">${message}</h2>
             </div>
             <!--**********************************
                         Header end ti-comment-alt
@@ -222,7 +221,7 @@
                                 <div class="row">
                                     <div class="col-xl-12">
                                         <div class="mb-3" >
-                                            <h3 style="margin:25px; font-weight: bold; color:#40040e">Phim:  ${movie.getTitle().toUpperCase()}</h3>
+                                            <h3 style="margin:25px 0; font-weight: bold; color:#40040e">Phim:  ${movie.getTitle().toUpperCase()}</h3>
                                             <h3 id="errorMessage" style="color:red">${message}</h3>
                                             <label for="cinemaSelect"> Rạp chiếu phim: </label> <br>
 

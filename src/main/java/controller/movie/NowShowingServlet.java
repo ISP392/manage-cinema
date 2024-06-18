@@ -1,4 +1,4 @@
-package controller;
+package controller.movie;
 
 import DAO.DAO;
 import jakarta.servlet.*;

@@ -2,37 +2,36 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package controller.account;
 
 import DAO.DAO;
-
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
 
-import controller.Google.Constants;
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import modal.Users;
+import util.Encrypt;
 
 /**
- * @author baoquoc
+ *
+ * @author caoha
  */
-@WebServlet(name = "SignIn", urlPatterns = {"/signin"})
-public class SignInServlet extends HttpServlet {
+@WebServlet(name = "NewPasswordServlet", urlPatterns = {"/new_password"})
+public class NewPasswordServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -42,65 +41,52 @@ public class SignInServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SignIn</title>");
+            out.println("<title>Servlet NewPasswordServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SignIn at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet NewPasswordServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //load .env file
-        Dotenv dotenv = Dotenv.load();
-        String localhost = dotenv.get("LOCALHOST");
-        HttpSession session = request.getSession();
-
-        String error = (String) session.getAttribute("error");
-        session.removeAttribute("error");
-
-        request.setAttribute("localhost", localhost);
-        request.setAttribute("error", error);
-        request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/newPass.jsp").forward(request, response);
     }
 
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        DAO d = new DAO();
-        Users user = d.checkLogin(username, password);
-        if (user == null) {
-            request.getSession().setAttribute("error", "Username or password was incorrect!!");
-            response.sendRedirect("signin");
-        } else {
-            HttpSession session = request.getSession();
-            session.setAttribute("account", user);
-            response.sendRedirect("nowShowing");
-
+        Users u = (Users) request.getSession().getAttribute("user");
+        String pass = request.getParameter("password");
+        DAO dao = new DAO();
+        //encrypt pass
+        try {
+            pass = Encrypt.toSHA1(pass);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
+        dao.updatePasswordByEmail(u.getEmail(), pass);
+        request.getSession().removeAttribute("user");
+        request.getRequestDispatcher("/WEB-INF/views/successPass.jsp").forward(request, response);
     }
 
     /**

@@ -1,4 +1,4 @@
-package controller;
+package util;
 
 import DAO.DAO;
 import jakarta.servlet.*;
