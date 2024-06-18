@@ -25,7 +25,6 @@ public class Movies {
 
     private int likeCount;
     private String name;
-    
     public Movies() {
     }
 
@@ -50,10 +49,9 @@ public class Movies {
         this.duration = duration;
         this.display = display;
         this.trailerURL = trailerURL;
-        this.status = (display == 1) ? "Đang chiếu" : "Hidden";
+        this.status = status;
 
     }
-    
 
     public Movies(int movieID, String title, String description, Date releaseDate, String posterImage, int duration, int display, String trailerURL, String name) {
         this.movieID = movieID;
@@ -78,7 +76,6 @@ public class Movies {
         this.trailerURL = trailerURL;
         this.likeCount = likeCount;
     }
-    
 
     public int getMovieID() {
         return movieID;
@@ -151,6 +148,7 @@ public class Movies {
     public void setStatus(String status) {
         this.status = status;
     }
+
     public String getName() {
         return name;
     }
@@ -158,6 +156,5 @@ public class Movies {
     public void setName(String name) {
         this.name = name;
     }
-
 
 }
