@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-3">
                         <p> </p>
-                        <strong>CGV Việt Nam</strong>
+                        <strong>BANNY Việt Nam</strong>
                         <p> </p>
                         <p><a href="introduce" style="color: #666666 ">Giới Thiệu</a> </p>
                         <p><a href="#" style="color: #666666 ">Tiện Ích Online</a></p>

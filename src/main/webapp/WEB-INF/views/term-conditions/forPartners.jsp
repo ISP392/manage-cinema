@@ -70,7 +70,7 @@
                     <p>Để giữ vững vị thế là doanh nghiệp hàng đầu trong ngành điện ảnh Việt Nam, CJ BANNY không chỉ chú trọng đến dịch vụ đẳng cấp mà còn cam kết tuân thủ mọi luật lệ và quy định hiện hành của Việt Nam cũng như Giá trị cốt lõi của chúng tôi. Để đạt được điều đó, chúng tôi kỳ vọng rằng Quý Đối Tác sẵn sàng duy trì các Giá trị cốt lõi của chúng tôi về đạo đức và tính chính trực. CJ BANNY đã xây dựng Bộ Quy tắc Ứng xử dành cho Nhà Cung Cấp để trình bày rõ những kỳ vọng của chúng tôi về sự liêm chính trong kinh doanh, quyền lợi người lao động, sức khỏe và an toàn, và quản lý môi trường. Chúng tôi mong muốn Quý Đối Tác đáp ứng các tiêu chuẩn và thúc đẩy các nguyên tắc được nêu trong Bộ quy tắc này, nhằm thúc đẩy cam kết của CJ BANNY Việt Nam đối với tất cả các khía cạnh về tính bền vững</p>
                     <p>Nếu Quý Đối Tác có bất kỳ thắc mắc nào về các vấn đề đạo đức hoặc phát hiện hành vi vi phạm Quy tắc Ứng xử, vui lòng liên hệ ngay với chúng tôi thông qua bất kỳ phương thức nào sau đây</p>
                     <p>- Email: ksnb@cgv.vn</p>
-                    <p>- Gửi thư đến : Phòng kiểm soát nội bộ – Công ty TNHH CJ BANNY Việt Nam</p>
+                    <p>- Gửi thư đến : Phòng kiểm soát nội bộ – Công ty TNHH BANNY Việt Nam</p>
                     <p>Lầu 02, Tòa nhà Rivera Park Saigon, Số 7/28 Thành Thái, Quận 10, Thành phố Hồ Chí Minh, Việt Nam</p>
                     <p>Chúng tôi trân trọng chuyên môn, sản phẩm và dịch vụ mà Quý Đối Tác đã cung cấp đến BANNY. Cảm ơn Quý Đối Tác vì những nỗ lực trong việc đáp ứng các yêu cầu kinh doanh của chúng tôi với sự chính trực không khoan nhượng</p>
                     <p></p>
