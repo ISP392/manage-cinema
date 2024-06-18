@@ -36,7 +36,7 @@
                             </li>
                             <li style="background-color:${backgroundColorSecond}">
                                 <a style="color: ${colorSecond}" href="contact">
-                                    LIÊN HỆ CGV
+                                    LIÊN HỆ BANNY
                                 </a>
                             </li>
                             <li style="background-color:${backgroundColorMain}">
@@ -73,7 +73,7 @@
                     <p class="intro">ĐIỀU KHOẢN CHUNG</p>
                     <p> </p>
                     <p>Chào mừng bạn đến với <strong>website banny.vn</strong> và <strong>ứng dụng di động Banny Cinemas (“Ứng Dụng”)</strong>, 
-                        được thiết lập và sở hữu bởi CÔNG TY TNHH CJ CGV VIỆT NAM (“<strong>Banny Việt Nam</strong>”, “<strong>chúng tôi</strong>”). </p>
+                        được thiết lập và sở hữu bởi CÔNG TY TNHH CJ BANNY VIỆT NAM (“<strong>Banny Việt Nam</strong>”, “<strong>chúng tôi</strong>”). </p>
                     <p> </p>
                     <p>Trước khi sử dụng Ứng Dụng hoặc tạo tài khoản để trải nghiệm các sản phẩm, dịch vụ do Banny Việt Nam cung cấp (“<strong>Tài Khoản</strong>”), 
                         vui lòng tham khảo và chắc chắn rằng bạn đã hiểu rõ <strong>Điều Khoản Chung</strong> để hiểu rõ quyền lợi và nghĩa vụ của mình trong tương quan với Banny Việt Nam. </p>
@@ -176,7 +176,7 @@
                     <p> </p>
                     <p>13.5 NGƯỜI SỬ DỤNG CÓ QUYỀN YÊU CẦU CHẤM DỨT TÀI KHOẢN CỦA NGƯỜI SỬ DỤNG VÀ/HOẶC DỪNG SỬ DỤNG DỊCH VỤ TRONG TRƯỜNG HỢP KHÔNG THỎA MÃN VỚI DỊCH VỤ. </p>
                     <p> </p>
-                    <p>13.6 TRƯỜNG HỢP BANNY VIỆT NAM, THEO PHÁN QUYẾT CỦA TÒA ÁN CÓ THẨM QUYỀN, PHẢI CHỊU TRÁCH NHIỆM TRONG GIỚI HẠN TỐI ĐA PHÁP LUẬT CHO PHÉP (BAO GỒM ĐỐI VỚI LỖI BẤT CẨN KHÔNG ĐÁNG KỂ) THÌ TRÁCH NHIỆM CỦA BANNY VIỆT NAM ĐỐI VỚI NGƯỜI SỬ DỤNG HOẶC BẤT KỲ BÊN THỨ BA NÀO CHỈ GIỚI HẠN TRONG MỨC THẤP HƠN GIỮA (A) GIÁ TRỊ CỦA (05) GIAO DỊCH GẦN NHẤT VỚI CGV VIỆT NAM CỦA NGƯỜI SỬ DỤNG; HOẶC (B) KHOẢN TIỀN KHÁC NHƯ XÁC ĐỊNH CỤ THỂ TRONG PHÁN QUYẾT CHUNG THẨM CỦA TÒA ÁN CÓ THẨM QUYỀN. </p>
+                    <p>13.6 TRƯỜNG HỢP BANNY VIỆT NAM, THEO PHÁN QUYẾT CỦA TÒA ÁN CÓ THẨM QUYỀN, PHẢI CHỊU TRÁCH NHIỆM TRONG GIỚI HẠN TỐI ĐA PHÁP LUẬT CHO PHÉP (BAO GỒM ĐỐI VỚI LỖI BẤT CẨN KHÔNG ĐÁNG KỂ) THÌ TRÁCH NHIỆM CỦA BANNY VIỆT NAM ĐỐI VỚI NGƯỜI SỬ DỤNG HOẶC BẤT KỲ BÊN THỨ BA NÀO CHỈ GIỚI HẠN TRONG MỨC THẤP HƠN GIỮA (A) GIÁ TRỊ CỦA (05) GIAO DỊCH GẦN NHẤT VỚI BANNY VIỆT NAM CỦA NGƯỜI SỬ DỤNG; HOẶC (B) KHOẢN TIỀN KHÁC NHƯ XÁC ĐỊNH CỤ THỂ TRONG PHÁN QUYẾT CHUNG THẨM CỦA TÒA ÁN CÓ THẨM QUYỀN. </p>
                   
                 </div>
 

@@ -147,21 +147,21 @@ public class addNewSlot extends HttpServlet {
         String endTime = request.getParameter("endTimeInput");
         int locationID = 0;
         DAO dao = new DAO();
-        if (cinema.equals("CGV Hùng Vương Plaza")) {
+        if (cinema.equals("BANNY Hùng Vương Plaza")) {
             locationID = 2;
-        } else if (cinema.equals("CGV Menas Mall")) {
+        } else if (cinema.equals("BANNY Menas Mall")) {
             locationID = 2;
-        } else if (cinema.equals("CGV Crescent Mall")) {
+        } else if (cinema.equals("BANNY Crescent Mall")) {
             locationID = 2;
-        } else if (cinema.equals("CGV Vincom Center Bà Triệu")) {
+        } else if (cinema.equals("BANNY Vincom Center Bà Triệu")) {
             locationID = 1;
-        } else if (cinema.equals("CGV Hồ Gươm Plaza")) {
+        } else if (cinema.equals("BANNY Hồ Gươm Plaza")) {
             locationID = 1;
-        } else if (cinema.equals("CGV Aeon Long Biên")) {
+        } else if (cinema.equals("BANNY Aeon Long Biên")) {
             locationID = 1;
-        } else if (cinema.equals("CGV Vĩnh Trung Plaza")) {
+        } else if (cinema.equals("BANNY Vĩnh Trung Plaza")) {
             locationID = 3;
-        } else if (cinema.equals("CGV Vincom Đà Nẵng")) {
+        } else if (cinema.equals("BANNY Vincom Đà Nẵng")) {
             locationID = 3;
         }
 
