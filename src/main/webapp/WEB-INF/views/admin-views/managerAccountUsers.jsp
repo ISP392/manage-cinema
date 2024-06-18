@@ -1,12 +1,13 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: baoquoc
-  Date: 12/06/2024
-  Time: 13:50
-  To change this template use File | Settings | File Templates.
+<%-- 
+    Document   : managerAccountUsers
+    Created on : Jun 15, 2024, 6:29:43 PM
+    Author     : MISS NGA
 --%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page import="java.util.List" %>
+<%@ page import=" modal.Users" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -14,14 +15,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
         <title>Admin Dashboard</title>
+        <!-- Include Bootstrap CSS -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
         <link href="./assets/css/dashboard-admin.css" rel="stylesheet"/>
 
+
     </head>
-    <style>
-        .action-rows{
-            width: 120px;
-        }
-    </style>
     <body>
         <!--*******************
             Preloader start
@@ -195,145 +194,170 @@
                   Content body start
               ***********************************-->
             <div class="content-body">
-                <!-- row -->
                 <div class="container-fluid">
-                    <!-- Row -->
                     <div class="row">
-                        <div class="col-xl-12">
-
-                            <div class="mb-4">
-                                <a href="add_movie" class="btn btn-primary">Add Movie</a>
-                            </div>
-
-                            <div class="filter cm-content-box box-primary">
-                                <div class="content-title">
-                                    <div class="cpa">
-                                        <i class="fa-solid fa-file-lines me-1"></i>List Movies
-                                    </div>
-                                    <div class="tools">
-                                        <a href="javascript:void(0);" class="expand SlideToolHeader"><i class="fal fa-angle-down"></i></a>
-                                    </div>
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Manage Users</h4>
+                                    <form action="./SearchUserServlet" method="get" class="d-flex">
+                                        <input type="number" class="form-control" name="userId" placeholder="Search" id="search">
+                                        <button type="submit" class="btn btn-primary ms-2">Search</button>
+                                    </form>
                                 </div>
-                                <div class="cm-content-body form excerpt">
-                                    <div class="card-body pt-2">
-                                        <div class="table-responsive">
+                                <div class="filter cm-content-box box-primary">
+                                    <div class="content-title">
+                                        <div class="cpa">
+                                            <i style="margin-right:5px;" class="fa fa-file-lines"></i>List Users
+                                        </div>
+                                        <div class="tools">
+                                            <a href="javascript:void(0);" class="expand SlideToolHeader"><i class="fal fa-angle-down"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="cm-content-body form excerpt">
+                                        <div class="card-body pt-2">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-sm mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th><strong>UserID</strong></th>
+                                                            <th><strong>Name</strong></th>
+                                                            <th><strong>Email</strong></th>
+                                                            <th><strong>Role</strong></th>
+                                                            <th style="width:85px;"><strong>Actions</strong></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="userTableBody">
 
-                                            <table class="table table-responsive-sm mb-0">
-
-                                                <thead>
-                                                    <tr>
-                                                        <th style="">
-                                                            <div class="form-check">
-                                                                <label class="form-check-label" >
-                                                                </label>
-                                                            </div>
-                                                        </th>
-                                                        <th><strong>Title</strong></th>
-                                                        <!--  <th>Duration</th>  -->
-                                                        <th><strong>Modified</strong></th>
-                                                        <th><strong>Status</strong></th>
-                                                        <th class="action-rows"><strong>Actions</strong></th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody>
-                                                    <c:if test="${not empty errorMessage}">
-                                                    <p style="color:red">${errorMessage}</p>
-                                                </c:if>
-
-                                                <c:set var="itemsPerPage" value="10" />
-                                                <c:set var="currentPage" value="${tag}" />
-
-
-                                                <c:forEach  var="movie" items="${listMovies}" varStatus="status">
-                                                    <c:set var="movieNumber" value="${(currentPage - 1) * itemsPerPage + status.index + 1}" />
-                                                    <tr>
-
-                                                        <td>${movieNumber}</td>
-                                                        <td>${movie.title.toUpperCase()}</td>
-                                                  <!--      <td>${movie.duration}</td> -->
-                                                        <td>${movie.releaseDate}</td>
-                                                        <td>${movie.status}</td>
-
-                                                        <td class="action-rows">
-                                                            <a href="update_movie?movieID=${movie.movieID}" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
-                                                                <c:if test="${movie.getDisplay()==1}">
-                                                                <a href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=0" class="btn btn-danger shadow btn-xs sharp rounded-circle">
-                                                                    <i class="fa fa-eye"></i>
+                                                        <%
+                                                 List<Users> listUser = (List<Users>) request.getAttribute("listUser");
+                                                 int roleId = (Integer) request.getAttribute("roleId");
+                                                 for (Users user : listUser) {
+                                                        %>
+                                                        <tr>
+                                                            <td><%= user.getUserID() %></td>
+                                                            <td><%= user.getDisplayName().toUpperCase() %></td>
+                                                            <td><%= user.getEmail() %></td>
+                                                            <td>
+                                                                <% 
+                                                                    if (user.getRoleID().getRoleID() == 1) {
+                                                                        out.print("ADMIN");
+                                                                    } else if (user.getRoleID().getRoleID() == 2) {
+                                                                        out.print("USER");
+                                                                    }else if (user.getRoleID().getRoleID() == 3) {
+                                                                        out.print("STAFF");
+                                                                    } else {
+                                                                        out.print("Unknown Role");
+                                                                    }
+                                                                %>
+                                                            </td>
+                                                            <td>
+                                                                <a href="javascript:void(0);" 
+                                                                   class="btn btn-primary shadow btn-xs sharp rounded-circle me-1 edit-role" 
+                                                                   data-userid="<%= user.getUserID() %>" 
+                                                                   data-roleid="<%= user.getRoleID().getRoleID() %>">
+                                                                    <i class="fa fa-pencil"></i>
                                                                 </a>
 
-                                                                <a href="addNewSlot?movieID=${movie.getMovieID()}&display=1" class="btn btn-primary shadow btn-xs sharp rounded-circle " >
-                                                                    <i class="fa fa-plus"></i>
-                                                                </a>
-                                                            </c:if>
+                                                            </td>
 
-                                                            <c:if test="${movie.getDisplay()==0}">
+                                                        </tr>
+                                                        <%
+                                                            }
+                                                        %>
 
-                                                                <a  href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=1" class="btn btn-danger shadow btn-xs sharp rounded-circle">
-                                                                    <i class="fa fa-eye-slash"></i>
-                                                                </a>
-
-                                                            </c:if>
-
-
-
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-
-                                                </tbody>
-                                            </table>
-
-                                            <div class="d-flex align-items-center justify-content-xl-between flex-wrap justify-content-center mt-3">
-                                                <small class="mb-xl-0 mb-2">
-
-                                                </small>
-
-                                                <ul class="pagination">
-
-                                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                                        <a class="page-link" href="?index=${currentPage - 1}">&lsaquo;</a>
-                                                    </li>
-                                                    <c:forEach begin="1" end="${endPage}" var="i">
-                                                        <li class="page-item ${currentPage == i ? 'active' : ''}">
-                                                            <a class="page-link" href="?index=${i}">${i}</a>
-                                                        </li>
-                                                    </c:forEach>
-                                                    <li class="page-item ${currentPage == endPage ? 'disabled' : ''}">
-                                                        <a class="page-link" href="?index=${currentPage + 1}">&rsaquo;</a>
-                                                    </li>
-
-                                                </ul>
+                                                    </tbody>
+                                                </table>
 
                                             </div>
+                                           <!-- Pagination controls -->
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination">
+                                                <c:forEach var="i" begin="1" end="${noOfPages}">
+                                                    <li class="page-item <c:if test='${i == currentPage}'>active</c:if>'">
+                                                        <a class="page-link" href="ShowUsersServlet?page=${i}">${i}</a>
+                                                    </li>
+                                                </c:forEach>
+                                            </ul>
+                                        </nav>
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="updateRoleModal" tabindex="-1" role="dialog" aria-labelledby="updateRoleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <form action="UpdateRoleServlet" method="post">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="updateRoleModalLabel">Update Role</h5>
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input type="hidden" name="userID" id="modalUserID">
+                                                <div class="form-group">
+                                                    <label for="modalRoleID">Role</label>
+                                                    <select name="roleID" id="modalRoleID" class="form-control">
+                                                        <option value="2">User</option>
+                                                        <option value="3">Staff</option>
+                                                        <option value="1">Admin</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>   
+
                         </div>
+                        <!--**********************************
+                              Content body end
+                          ***********************************-->
                     </div>
+
                     <!--**********************************
-                          Content body end
-                      ***********************************-->
-                </div>
-                <!--**********************************
-                    Main wrapper end
-                ***********************************-->
+                        Main wrapper end
+                    ***********************************-->
 
-                <!--**********************************
-                    Scripts
-                ***********************************-->
-                <!-- Required vendors -->
-                <script src="./assets/JS/vendor/global/global.min.js"></script>
+                    <!--**********************************
+                        Scripts
+                    ***********************************-->
+                    <!-- Required vendors -->
+                    <script src="./assets/JS/vendor/global/global.min.js"></script>
 
-                <!-- Apex Chart -->
-                <script src="./assets/JS/vendor/apexchart/apexchart.js"></script>
+                    <!-- Apex Chart -->
+                    <script src="./assets/JS/vendor/apexchart/apexchart.js"></script>
 
-                <!-- Dashboard 1 -->
-                <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
+                    <!-- Dashboard 1 -->
+                    <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
 
-                <script src="./assets/JS/js/custom.min.js"></script>
-                </body>
-                </html>
+                    <script src="./assets/JS/js/custom.min.js"></script>
+
+
+                    <script>
+                        $(document).ready(function () {
+                            $('.edit-role').on('click', function () {
+                                var userID = $(this).data('userid');
+                                var roleID = $(this).data('roleid');
+
+                                $('#modalUserID').val(userID);
+                                $('#modalRoleID').val(roleID);
+
+                                $('#updateRoleModal').modal('show');
+                            });
+                        });
+                    </script>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                    </script>
+
+                    </body>
+                    </html>
 
 
