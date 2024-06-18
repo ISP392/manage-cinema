@@ -24,6 +24,14 @@ public class Theaters {
         this.totalSeats = totalSeats;
     }
 
+    public Theaters(int theaterID,Cinemas cinemaID, int theaterNumber) {
+        this.theaterID = theaterID;
+        this.cinemaID = cinemaID;
+        this.theaterNumber = theaterNumber;
+    }
+
+    
+
     public int getTheaterID() {
         return theaterID;
     }

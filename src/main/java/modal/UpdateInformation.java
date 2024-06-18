@@ -1,14 +1,15 @@
 package modal;
 
-import util.Encrypt;
-
-import java.security.NoSuchAlgorithmException;
-
 public class UpdateInformation {
     private String information;
     private String oldEmail;
     private String oldDisplayName;
     private String oldPassword;
+
+    public UpdateInformation(String information, String oldEmail) {
+        this.information = information;
+        this.oldEmail = oldEmail;
+    }
 
     public UpdateInformation(String information, String oldEmail, String oldDisplayName, String oldPassword) {
         this.information = information;

@@ -197,13 +197,13 @@
                         <div class="col-xl-12">
 
                             <div class="mb-4">
-                                <a href="content-add.html" class="btn btn-primary">Add Movie</a>
+                                <a href="add_movie" class="btn btn-primary">Add Movie</a>
                             </div>
 
                             <div class="filter cm-content-box box-primary">
                                 <div class="content-title">
                                     <div class="cpa">
-                                        <i class="fa-solid fa-file-lines me-1"></i>List Movies
+                                        <i style="margin-right:5px;" class="fa fa-file-lines"></i>List Movies
                                     </div>
                                     <div class="tools">
                                         <a href="javascript:void(0);" class="expand SlideToolHeader"><i class="fal fa-angle-down"></i></a>
@@ -254,7 +254,7 @@
                                                             <a href="javascript:void(0);" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
                                                                 <c:if test="${movie.getDisplay()==1}">
                                                                 <a href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=0" class="btn btn-danger shadow btn-xs sharp rounded-circle" onclick="return confirm('Are you sure you want to hide this movie?');">
-                                                                    <i class="fa fa-trash"></i>
+                                                                    <i class="fa fa-eye"></i>
                                                                 </a>
 
                                                                 <a href="addNewSlot?movieID=${movie.getMovieID()}&display=1" class="btn btn-primary shadow btn-xs sharp rounded-circle " onclick="return confirm('Are you sure you want to add this slot?');">
@@ -265,7 +265,7 @@
                                                             <c:if test="${movie.getDisplay()==0}">
 
                                                                 <a  href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=1">
-                                                                    <i class="fa fa-eye"></i>
+                                                                    <i class="fa fa-eye-slash"></i>
                                                                 </a>
 
                                                             </c:if>

@@ -2,8 +2,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-    
     <style>
         .input-register{
                 margin-bottom: 15px;
@@ -58,8 +56,7 @@
                             </h6>
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="form3Example1cg"
-                                >Your Name</label
-                                >
+                                >Your Name</label>
                                 <input
                                         type="text"
                                         placeholder="Your Name"

@@ -21,6 +21,12 @@ public class Users {
     public Users() {
     }
 
+    public Users(String email) {
+        this.email = email;
+    }
+
+
+
     public Users(int userID, String email) {
         this.userID = userID;
         this.email = email;
@@ -30,6 +36,13 @@ public class Users {
         this.displayName = displayName;
         this.email = email;
     }
+
+    public Users(String email, String password, int dummy) {
+        this.email = email;
+        this.password = password;
+    }
+
+
 
     public Users(String userName, String displayName, String email) {
         this.userName = userName;
