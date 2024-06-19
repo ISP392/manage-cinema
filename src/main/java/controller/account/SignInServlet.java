@@ -2,32 +2,32 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
-package controller;
+package controller.account;
 
 import DAO.DAO;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import controller.Google.Constants;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.util.List;
-
-import modal.Movies;
+import jakarta.servlet.http.HttpSession;
+import modal.Users;
 
 /**
- * @author ACER
+ * @author baoquoc
  */
-@WebServlet(name = "HomeServlet", urlPatterns = {"/home"})
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "SignIn", urlPatterns = {"/signin"})
+public class SignInServlet extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request  servlet request
      * @param response servlet response
@@ -42,10 +42,10 @@ public class HomeServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");
+            out.println("<title>Servlet SignIn</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SignIn at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,11 +64,17 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DAO d = new DAO();
-        List<Movies> movies = d.getMovie(true);
-        request.setAttribute("movies", movies);
-//        request.getRequestDispatcher("/WEB-INF/views/nowShowing.jsp").forward(request, response);
-        request.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
+        //load .env file
+        Dotenv dotenv = Dotenv.load();
+        String localhost = dotenv.get("LOCALHOST");
+        HttpSession session = request.getSession();
+
+        String error = (String) session.getAttribute("error");
+        session.removeAttribute("error");
+
+        request.setAttribute("localhost", localhost);
+        request.setAttribute("error", error);
+        request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
     }
 
     /**
@@ -82,7 +88,19 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        DAO d = new DAO();
+        Users user = d.checkLogin(username, password);
+        if (user == null) {
+            request.getSession().setAttribute("error", "Username or password was incorrect!!");
+            response.sendRedirect("signin");
+        } else {
+            HttpSession session = request.getSession();
+            session.setAttribute("account", user);
+            response.sendRedirect("nowShowing");
+
+        }
     }
 
     /**

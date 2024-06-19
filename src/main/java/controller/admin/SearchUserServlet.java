@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package controller.admin;
 
 import DAO.DAO;
+import com.mysql.cj.conf.IntegerProperty;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +14,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
-import modal.Movies;
+import modal.Users;
 
 /**
  *
- * @author LÊ PHƯƠNG MAI
+ * @author MISS NGA
  */
-@WebServlet(name = "CommingSoonServlet", urlPatterns = {"/commingSoon"})
-public class CommingSoonServlet extends HttpServlet {
+@WebServlet(name = "SearchUserServlet", urlPatterns = {"/SearchUserServlet"})
+public class SearchUserServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +40,10 @@ public class CommingSoonServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CommingSoonServlet</title>");            
+            out.println("<title>Servlet SearchUserServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CommingSoonServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SearchUserServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,10 +61,21 @@ public class CommingSoonServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String userId = request.getParameter("userId");
+        int id = Integer.parseInt(userId);
         DAO dao = new DAO();
-        List<Movies> moviesCommingSoon = dao.getAllMovieCommingSoon();
-        request.setAttribute("moviesCommingSoon", moviesCommingSoon);
-        request.getRequestDispatcher("/WEB-INF/views/commingSoon.jsp").forward(request, response);
+        List<Users> listUser = dao.getUserById(id);
+
+        int roleId = 0;
+        for (Users users : listUser) {
+         //   System.out.println("Role " + users.getRoleID().getRoleID());
+            roleId = users.getRoleID().getRoleID();
+        }
+        if (listUser.size() > 0) {
+            request.setAttribute("roleId", roleId);
+            request.setAttribute("listUser", listUser);
+            request.getRequestDispatcher("/WEB-INF/views/admin-views/managerAccountUsers.jsp").forward(request, response);
+        }
     }
 
     /**

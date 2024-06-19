@@ -1,48 +1,30 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%-- 
+    Document   : managerAccountUsers
+    Created on : Jun 15, 2024, 6:29:43 PM
+    Author     : MISS NGA
+--%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page import="java.util.List" %>
+<%@ page import=" modal.Users" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
         <title>Admin Dashboard</title>
-        <link href="./assets/css/dashboard-admin.css" rel="stylesheet" />
-        <style>
-            .genre-buttons {
-                display: flex;
-                flex-wrap: wrap;
-            }
+        <!-- Include Bootstrap CSS -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="./assets/css/dashboard-admin.css" rel="stylesheet"/>
 
-            .genre-button {
-                background-color: #ccc;
-                border-radius: 1rem;
-                border: none;
-                color: black;
-                padding: 10px 20px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 16px;
-                margin: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
 
-            /* Hiệu ứng khi nút được nhấn */
-            .genre-button.active {
-                background-color: #4caf50;
-                color: white;
-            }
-            .form-group {
-                width: calc(50% - 10px); /* Để các form group hiển thị theo 2 cột */
-            }
-        </style>
     </head>
-
     <body>
         <!--*******************
-                Preloader start
-            ********************-->
+            Preloader start
+        ********************-->
         <div id="preloader">
             <div class="waviy">
                 <span style="--i: 1">L</span>
@@ -58,16 +40,16 @@
             </div>
         </div>
         <!--*******************
-                Preloader end
-            ********************-->
+            Preloader end
+        ********************-->
 
         <!--**********************************
-                Main wrapper start
-            ***********************************-->
+            Main wrapper start
+        ***********************************-->
         <div id="main-wrapper">
             <!--**********************************
-                        Nav header start
-                    ***********************************-->
+                  Nav header start
+              ***********************************-->
             <div class="nav-header">
                 <a href="home_admin" class="brand-logo">
                     <svg class="logo-abbr" width="53" height="53" viewBox="0 0 53 53">
@@ -108,11 +90,11 @@
                 </div>
             </div>
             <!--**********************************
-                        Nav header end
-                    ***********************************-->
+                  Nav header end
+              ***********************************-->
             <!--**********************************
-                        Header start
-                    ***********************************-->
+                  Header start
+              ***********************************-->
             <div class="header">
                 <div class="header-content">
                     <nav class="navbar navbar-expand">
@@ -136,12 +118,12 @@
                 </div>
             </div>
             <!--**********************************
-                        Header end ti-comment-alt
-                    ***********************************-->
+                  Header end ti-comment-alt
+              ***********************************-->
 
             <!--**********************************
-                        Sidebar start
-                    ***********************************-->
+                  Sidebar start
+              ***********************************-->
             <div class="dlabnav">
                 <div class="dlabnav-scroll">
                     <ul class="metismenu" id="menu">
@@ -153,8 +135,8 @@
                                 data-bs-toggle="dropdown"
                                 >
                                 <div class="header-info ms-3">
-                                    <span class="font-w600">Hi, <b>${admin.displayName}</b></span>
-                                    <small class="text-end font-w400">${admin.email}</small>
+                                    <span class="font-w600">Hi, <b>baothiquoc</b></span>
+                                    <small class="text-end font-w400">baothiquoc@gmail.com</small>
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
@@ -198,154 +180,184 @@
                             <ul aria-expanded="false">
                                 <li><a href="list_movie">Movie</a></li>
                                 <li><a href="menu.html">Slot</a></li>
-                                <li><a href="email-template.html">Staff</a></li>
+                                <li><a href="manager_user">Staff</a></li>
                             </ul>
                         </li>
                     </ul>
                 </div>
             </div>
             <!--**********************************
-                        Sidebar end
-                    ***********************************-->
+                  Sidebar end
+              ***********************************-->
 
             <!--**********************************
-                        Content body start
-                    ***********************************-->
+                  Content body start
+              ***********************************-->
             <div class="content-body">
-                <!-- row -->
                 <div class="container-fluid">
-                    <!-- Row -->
-                    <form action="addNewSlot" method="post" onsubmit="return validateDateTime();">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="row">
-                                    <div class="col-xl-12">
-                                        <div class="mb-3" >
-                                            <h3 style="margin:25px 0; font-weight: bold; color:#40040e">Phim:  ${movie.getTitle().toUpperCase()}</h3>
-                                            <h3 id="errorMessage" style="color:red">${message}</h3>
-                                            <label for="cinemaSelect"> Rạp chiếu phim: </label> <br>
-
-                                            <select id="cinemaSelect" name="cinemaSelect" class="form-control">
-                                                <option value="BANNY Hùng Vương Plaza">BANNY Hùng Vương Plaza</option>
-                                                <option value="BANNY Menas Mall">BANNY Menas Mall</option>
-                                                <option value="BANNY Crescent Mall">BANNY Crescent Mall</option>
-                                                <option value="BANNY Vincom Center Bà Triệu">BANNY Vincom Center Bà Triệu</option>
-                                                <option value="BANNY Hồ Gươm Plaza">BANNY Hồ Gươm Plaza</option>
-                                                <option value="BANNY Aeon Long Biên">BANNY Aeon Long Biên</option>
-                                                <option value="BANNY Vĩnh Trung Plaza">BANNY Vĩnh Trung Plaza</option>
-                                                <option value="BANNY Vincom Đà Nẵng">BANNY Vincom Đà Nẵng</option>
-                                            </select>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Manage Users</h4>
+                                    <form action="./SearchUserServlet" method="get" class="d-flex">
+                                        <input type="number" class="form-control" name="userId" placeholder="Search" id="search">
+                                        <button type="submit" class="btn btn-primary ms-2">Search</button>
+                                    </form>
+                                </div>
+                                <div class="filter cm-content-box box-primary">
+                                    <div class="content-title">
+                                        <div class="cpa">
+                                            <i style="margin-right:5px;" class="fa fa-file-lines"></i>List Users
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="dateInput" > Ngày chiếu</label>
-                                            <input type="date" id="dateInput" class="form-control" 
-                                                   name="dateInput" />
+                                        <div class="tools">
+                                            <a href="javascript:void(0);" class="expand SlideToolHeader"><i class="fal fa-angle-down"></i></a>
                                         </div>
-                                        <label   for="theaterNumber">Rạp chiếu</label>
-                                        <div class="card h-auto">
+                                    </div>
+                                    <div class="cm-content-body form excerpt">
+                                        <div class="card-body pt-2">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-sm mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th><strong>UserID</strong></th>
+                                                            <th><strong>Name</strong></th>
+                                                            <th><strong>Email</strong></th>
+                                                            <th><strong>Role</strong></th>
+                                                            <th style="width:85px;"><strong>Actions</strong></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="userTableBody">
 
-                                            <select id="theaterNumber" name="theaterNumber" class="form-control" >
-                                                <option value="1">Phòng 1</option>
-                                                <option value="2">Phòng 2</option>
-                                                <option value="3">Phòng 3</option>
-                                                <option value="4">Phòng 4</option>
+                                                        <%
+                                                 List<Users> listUser = (List<Users>) request.getAttribute("listUser");
+                                                 int roleId = (Integer) request.getAttribute("roleId");
+                                                 for (Users user : listUser) {
+                                                        %>
+                                                        <tr>
+                                                            <td><%= user.getUserID() %></td>
+                                                            <td><%= user.getDisplayName().toUpperCase() %></td>
+                                                            <td><%= user.getEmail() %></td>
+                                                            <td>
+                                                                <% 
+                                                                    if (user.getRoleID().getRoleID() == 1) {
+                                                                        out.print("ADMIN");
+                                                                    } else if (user.getRoleID().getRoleID() == 2) {
+                                                                        out.print("USER");
+                                                                    }else if (user.getRoleID().getRoleID() == 3) {
+                                                                        out.print("STAFF");
+                                                                    } else {
+                                                                        out.print("Unknown Role");
+                                                                    }
+                                                                %>
+                                                            </td>
+                                                            <td>
+                                                                <a href="javascript:void(0);" 
+                                                                   class="btn btn-primary shadow btn-xs sharp rounded-circle me-1 edit-role" 
+                                                                   data-userid="<%= user.getUserID() %>" 
+                                                                   data-roleid="<%= user.getRoleID().getRoleID() %>">
+                                                                    <i class="fa fa-pencil"></i>
+                                                                </a>
 
-                                            </select>
+                                                            </td>
+
+                                                        </tr>
+                                                        <%
+                                                            }
+                                                        %>
+
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                           <!-- Pagination controls -->
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination">
+                                                <c:forEach var="i" begin="1" end="${noOfPages}">
+                                                    <li class="page-item <c:if test='${i == currentPage}'>active</c:if>'">
+                                                        <a class="page-link" href="ShowUsersServlet?page=${i}">${i}</a>
+                                                    </li>
+                                                </c:forEach>
+                                            </ul>
+                                        </nav>
 
                                         </div>
-
-
-                                        <div class="mb-3">
-                                            <label  for="startTimeInput">Giờ bắt đầu chiếu: (nên chọn giờ chẵn)</label><br>
-                                            <input class="form-control" type="time" id="startTimeInput" required name="startTimeInput">
-                                            <input type="hidden" id="duration" name="durationInput" value="${duration}"/>
-                                        </div>   
-
-
-                                        <div class="mb-3">
-                                            <label for="endTimeInput">Giờ kết thúc chiếu:</label><br>
-                                            <input class="form-control" style="appearance: none;" type="time" readonly id="endTimeInput" required name="endTimeInput">
-                                        </div>  
-
-
-                                        <button type="submit" class="btn btn-primary mb-3 open">
-                                            <input type="hidden" name="movieID" value="${movie.getMovieID()}"/>
-                                            Add Slot
-                                        </button>
-                                        </form>
-
-
-
                                     </div>
                                 </div>
-                                <!--**********************************
-                                            Content body end
-                                        ***********************************-->
                             </div>
-                            <!--**********************************
-                                    Main wrapper end
-                                ***********************************-->
+                            <!-- Modal -->
+                            <div class="modal fade" id="updateRoleModal" tabindex="-1" role="dialog" aria-labelledby="updateRoleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <form action="UpdateRoleServlet" method="post">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="updateRoleModalLabel">Update Role</h5>
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input type="hidden" name="userID" id="modalUserID">
+                                                <div class="form-group">
+                                                    <label for="modalRoleID">Role</label>
+                                                    <select name="roleID" id="modalRoleID" class="form-control">
+                                                        <option value="2">User</option>
+                                                        <option value="3">Staff</option>
+                                                        <option value="1">Admin</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>   
 
-                            <!--**********************************
-                                    Scripts
-                                ***********************************-->
-                            <!-- Required vendors -->
-                            <script src="./assets/JS/vendor/global/global.min.js"></script>
-                            <script src="./assets/JS/vendor/ckeditor/ckeditor.js"></script>
+                        </div>
+                        <!--**********************************
+                              Content body end
+                          ***********************************-->
+                    </div>
 
-                            <!-- Apex Chart -->
-                            <script src="./assets/JS/vendor/apexchart/apexchart.js"></script>
+                    <!--**********************************
+                        Main wrapper end
+                    ***********************************-->
 
-                            <!-- Dashboard 1 -->
-                            <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
+                    <!--**********************************
+                        Scripts
+                    ***********************************-->
+                    <!-- Required vendors -->
+                    <script src="./assets/JS/vendor/global/global.min.js"></script>
 
-                            <script src="./assets/JS/js/custom.min.js"></script>
+                    <!-- Apex Chart -->
+                    <script src="./assets/JS/vendor/apexchart/apexchart.js"></script>
+
+                    <!-- Dashboard 1 -->
+                    <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
+
+                    <script src="./assets/JS/js/custom.min.js"></script>
 
 
+                    <script>
+                        $(document).ready(function () {
+                            $('.edit-role').on('click', function () {
+                                var userID = $(this).data('userid');
+                                var roleID = $(this).data('roleid');
 
-                            <script>
-                        function validateDateTime() {
-                            var dateInput = document.getElementById('dateInput').value;
-                            var startTimeInput = document.getElementById('startTimeInput').value;
-                            var durationInput = document.getElementById('duration').value;
+                                $('#modalUserID').val(userID);
+                                $('#modalRoleID').val(roleID);
 
-                            var date = new Date(dateInput);
-                            var startTime = new Date(dateInput + ' ' + startTimeInput);
+                                $('#updateRoleModal').modal('show');
+                            });
+                        });
+                    </script>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                    </script>
 
-                            // Round duration to nearest 10 minutes
-                            var duration = Math.ceil(durationInput / 10) * 10 + 10;
-                            
+                    </body>
+                    </html>
 
-                            // Calculate end time
-                            var endTime = new Date(startTime.getTime() + duration * 60000);
 
-                            // Format end time as HH:mm
-                            var endTimeString = endTime.getHours().toString().padStart(2, '0') + ':' + endTime.getMinutes().toString().padStart(2, '0');
-
-                            // Fill end time into endTimeInput field
-                            document.getElementById('endTimeInput').value = endTimeString;
-
-                            // Check if date is valid and in the future
-                            if (isNaN(date.getTime()) || date <= new Date()) {
-                                document.getElementById('errorMessage').innerText = 'Please enter a valid date in the future.';
-                                return false;
-                            }
-
-                            // Check if start time is earlier than end time
-                            if (startTime > endTime) {
-                                document.getElementById('errorMessage').innerText = 'Start time must be earlier than end time.';
-                                return false;
-                            }
-
-                            // If all checks pass, return true to allow the form to be submitted
-                            return true;
-                        }
-
-                        // Add event listener for start time and duration input changes
-                        document.getElementById('startTimeInput').addEventListener('change', validateDateTime);
-                        document.getElementById('duration').addEventListener('change', validateDateTime);
-                            </script>
-
-                            </body>
-
-                            </html>

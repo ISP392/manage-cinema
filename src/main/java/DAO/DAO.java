@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 import modal.Genres;
 import modal.MovieGenres;
 import modal.Role;
-import modal.UserGoogleDto;
+import modal.*;
 
 import modal.Movies;
 import modal.Users;
@@ -210,7 +210,7 @@ public class DAO extends DBContext {
     }
 
     //check email and password == null
-    public boolean checkEmailAndPasswordNull(String email){
+    public boolean checkEmailAndPasswordNull(String email) {
         String sql = "SELECT * FROM Users WHERE email = ? AND (password = '' or password is null)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -225,13 +225,16 @@ public class DAO extends DBContext {
         return false;
     }
 
-    public List<Users> getUsers() {
-        String sql = "SELECT * FROM Users";
+    public List<Users> getUsers(int offset, int noOfRecords) {
+        String sql = "SELECT * FROM Users LIMIT ?, ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, offset);
+            ps.setInt(2, noOfRecords);
             ResultSet rs = ps.executeQuery();
             List<Users> list = new ArrayList<>();
             while (rs.next()) {
+                Role r = new Role(rs.getInt("roleID"));
                 Users u = new Users();
                 u.setUserID(rs.getInt("userID"));
                 u.setDisplayName(rs.getString("displayName"));
@@ -239,6 +242,7 @@ public class DAO extends DBContext {
                 u.setPassword(rs.getString("password"));
                 u.setEmail(rs.getString("email"));
                 u.setPoint(rs.getInt("point"));
+                u.setRoleID(r);
                 list.add(u);
             }
             return list;
@@ -246,6 +250,58 @@ public class DAO extends DBContext {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public int getNoOfRecords() {
+        String sql = "SELECT COUNT(*) FROM Users";
+        try (
+                PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public List<Users> getUserById(int id) {
+        String sql = "SELECT * FROM Users where userID=" + id;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            List<Users> list = new ArrayList<>();
+            while (rs.next()) {
+                Role r = new Role(rs.getInt("roleID"));
+
+                Users u = new Users();
+                u.setUserID(rs.getInt("userID"));
+                u.setDisplayName(rs.getString("displayName"));
+                u.setUserName(rs.getString("username"));
+                u.setPassword(rs.getString("password"));
+                u.setEmail(rs.getString("email"));
+                u.setPoint(rs.getInt("point"));
+                u.setRoleID(r);
+                list.add(u);
+            }
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Update the user's role in the database
+    public void updateUserRole(int userID, int roleID) {
+        String sql = "UPDATE Users SET roleID = ? WHERE userID = ?";
+        try (
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, roleID);
+            stmt.setInt(2, userID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // check login of user
@@ -571,7 +627,7 @@ public class DAO extends DBContext {
     }
 
     //update password by email
-    public void updatePasswordByEmail(String email, String password){
+    public void updatePasswordByEmail(String email, String password) {
         String sql = "UPDATE Users SET password = ? WHERE email = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -584,7 +640,7 @@ public class DAO extends DBContext {
     }
 
     //update movie by movieID
-    public void updateMovieByID(String title, String description, Date releaseDate, String posterImage, int duration, String trailerUrl, int movieID){
+    public void updateMovieByID(String title, String description, Date releaseDate, String posterImage, int duration, String trailerUrl, int movieID) {
         String sql = "UPDATE Movies SET title = ?, description = ?, releaseDate = ?, posterImage = ?, duration = ?, trailerUrl = ? WHERE movieID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -602,7 +658,7 @@ public class DAO extends DBContext {
     }
 
     //delete movie genre by movieID
-    public void deleteMovieGenreByMovieID(int movieID){
+    public void deleteMovieGenreByMovieID(int movieID) {
         String sql = "DELETE FROM MovieGenres WHERE movieID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -611,6 +667,22 @@ public class DAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
+    }
+    
+    //count paging tickets by userID
+    public int countPagingTickets(int userID) {
+        String sql = "select count(*) from Tickets where userID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                rs.getInt(1);// Get first integer value of rs and assign count
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return 0;
     }
 
     //paging list tickets by userID
@@ -627,15 +699,15 @@ public class DAO extends DBContext {
                 + "o.orderID, o.quantity, o.allPrice, "
                 + "t.price, t.purchaseDate "
                 + "FROM Tickets t "
-                + "JOIN Users u ON u.userID = t.userID "
-                + "JOIN Roles r ON r.roleID = u.roleID "
-                + "JOIN Movies m ON m.movieID = t.movieID "
-                + "JOIN Cinemas c ON c.cinemaID = t.cinemaID "
-                + "JOIN Location l ON c.locationID = l.locationID "
-                + "JOIN Seats s ON s.seatID = t.seatID "
-                + "JOIN ScreeningTimes st ON s.screeningID = st.screeningID "
-                + "JOIN Theaters th ON th.theaterID = st.theaterID "
-                + "JOIN Orders o ON o.orderID = t.orderID "
+                + "JOIN Users u ON t.userID = u.userID "
+                + "JOIN Roles r ON u.roleID = r.roleID "
+                + "JOIN Movies m ON t.movieID = m.movieID "
+                + "JOIN Cinemas c ON t.cinemaID = c.cinemaID "
+                + "JOIN Location l ON l.locationID = c.locationID "
+                + "JOIN Seats s ON t.seatID = s.seatID "
+                + "JOIN ScreeningTimes st ON st.screeningID = s.screeningID "
+                + "JOIN Theaters th ON st.theaterID = th.theaterID "
+                + "JOIN Orders o ON t.orderID = o.orderID "
                 + "WHERE u.userID = ? "
                 + "ORDER BY t.ticketID "
                 + "LIMIT 5 OFFSET ?";
@@ -649,7 +721,7 @@ public class DAO extends DBContext {
                 Users u = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("username"), rs.getString("password"), rs.getString("email"), r, rs.getInt("point"), rs.getString("providerID"));
                 Location l = new Location(rs.getInt("locationID"), rs.getString("name"));
                 Cinemas c = new Cinemas(rs.getInt("cinemaID"), rs.getString("name"), rs.getDate("movieDate"), l);
-                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerURL"));
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"));
                 Theaters th = new Theaters(rs.getInt("theaterID"), c, rs.getInt("theaterNumber"), rs.getInt("totalSeats"));
                 ScreeningTimes st = new ScreeningTimes(rs.getInt("screeningID"), th, m, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"));
                 Seats s = new Seats(rs.getInt("seatID"), st, rs.getString("seatNumber"), rs.getString("seatStatus"));
@@ -663,23 +735,6 @@ public class DAO extends DBContext {
         return list;
     }
 
-
-    //count paging tickets by userID
-    public int countPagingTickets(int userID) {
-        String sql = "select count(*) from Tickets where userID = ?";
-        int count = 0;
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, userID);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                count = rs.getInt(1);// Get first integer value of rs and assign count
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        return count;
-    }
 
     //get list screening time
     public List<ScreeningTimes> getAllFlimList(int movieID, int cinemaID, Date movieDate, Timestamp startTime) {
@@ -742,7 +797,7 @@ public class DAO extends DBContext {
         }
         return list;
     }
-    
+
     public List<SeatWithScreeningTime> getSWSByID(int screeningID) {
         String sql = "select m.display, l.locationID, l.name AS location, c.cinemaID, c.name AS cinemasName, c.movieDate, t.theaterID, t.theaterNumber, st.screeningID, st.startTime, st.endTime, m.movieID, m.title, m.description, m.releaseDate, m.posterImage, m.duration, s.seatID, s.seatNumber from ScreeningTimes st join Theaters t on t.theaterID = st.theaterID join Movies m on m.movieID = st.movieID join Cinemas c on c.cinemaID = t.cinemaID join Location l on l.locationID = c.locationID JOIN Seats s on s.screeningID = st.screeningID where st.screeningID = ?";
         List<SeatWithScreeningTime> list = new ArrayList<>();
@@ -766,7 +821,7 @@ public class DAO extends DBContext {
         }
         return list;
     }
-    
+
     //get list screening time by id
     public ScreeningTimes getScreeningTimesByID(int screeningID) {
         String sql = "select m.display,l.locationID, l.name as location, c.cinemaID, c.name as cinemasName, c.movieDate, t.theaterID, t.theaterNumber, st.screeningID, st.startTime, st.endTime, m.movieID,m.title, m.description, m.releaseDate, m.posterImage, m.duration from Location l join Cinemas c on l.locationID = c.locationID join Theaters t on c.cinemaID = t.cinemaID join ScreeningTimes st on t.theaterID = st.theaterID join Movies m on st.movieID = m.movieID where st.screeningID = ?";
@@ -790,10 +845,11 @@ public class DAO extends DBContext {
 
     public static void main(String[] args) {
         DAO dao = new DAO();
-        //test getSWSByID
-        ScreeningTimes st = dao.getScreeningTimesByID(247);
-        System.out.println(st.getTheaterID().getCinemaID().getName());
-        
+        int userID = 52;
+        int ticketCount = dao.countPagingTickets(userID);
+        System.out.println("Number òf ticket by ID" + userID + ":" + ticketCount);
+
+       
     }
 
     public Timestamp getLastestEndTimeOfTheater(String cinemasName, Date movieDate, int theaterNumber) {

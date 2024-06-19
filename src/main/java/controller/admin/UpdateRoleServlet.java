@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package controller.admin;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,10 +15,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author ACER
+ * @author MISS NGA
  */
-@WebServlet(name = "ContactServlet", urlPatterns = {"/contact"})
-public class ContactServlet extends HttpServlet {
+@WebServlet(name = "UpdateRoleServlet", value = "/UpdateRoleServlet")
+public class UpdateRoleServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,10 +37,10 @@ public class ContactServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ContactServlet</title>");
+            out.println("<title>Servlet UpdateRoleServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ContactServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UpdateRoleServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -57,12 +58,7 @@ public class ContactServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("colorMain", "white");
-        request.setAttribute("backgroundColorMain", "red");
-
-        request.setAttribute("colorSecond", "#666");
-        request.setAttribute("backgroundColorSecond", "#bfd2d9");
-        request.getRequestDispatcher("/WEB-INF/views/term-conditions/contact.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -76,7 +72,14 @@ public class ContactServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int userID = Integer.parseInt(request.getParameter("userID"));
+        int roleID = Integer.parseInt(request.getParameter("roleID"));
+        DAO dao = new DAO();
+        // Update the user's role
+        dao.updateUserRole(userID, roleID);
+
+        // Redirect back to the user management page (adjust the URL as needed)
+        response.sendRedirect("ShowUsersServlet");
     }
 
     /**

@@ -199,7 +199,7 @@ baoquoc --%>
                             <ul aria-expanded="false">
                                 <li><a href="list_movie">Movie</a></li>
                                 <li><a href="menu.html">Slot</a></li>
-                                <li><a href="email-template.html">Staff</a></li>
+                                <li><a href="manager_user">Staff</a></li>
                             </ul>
                         </li>
                     </ul>

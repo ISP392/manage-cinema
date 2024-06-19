@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller;
+package controller.information;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,8 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author ACER
  */
-@WebServlet(name="CarrerServlet", urlPatterns={"/carrer"})
-public class CarrerServlet extends HttpServlet {
+@WebServlet(name="PaymentPolicyServlet", urlPatterns={"/paymentPolicy"})
+public class PaymentPolicyServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +35,10 @@ public class CarrerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CarrerServlet</title>");  
+            out.println("<title>Servlet PaymentPolicyServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CarrerServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet PaymentPolicyServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,7 +55,12 @@ public class CarrerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/Carrer.jsp").forward(request, response);
+        request.setAttribute("colorMain", "white");
+        request.setAttribute("backgroundColorMain", "red");
+
+        request.setAttribute("colorSecond", "#666");
+        request.setAttribute("backgroundColorSecond", "#bfd2d9");
+        request.getRequestDispatcher("/WEB-INF/views/term-conditions/paymentPolicy.jsp").forward(request, response);
     } 
 
     /** 

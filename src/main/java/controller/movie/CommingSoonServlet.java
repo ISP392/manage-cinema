@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package controller.movie;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,13 +12,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import modal.Movies;
 
 /**
  *
- * @author ACER
+ * @author LÊ PHƯƠNG MAI
  */
-@WebServlet(name = "TransactionTermsServlet", urlPatterns = {"/transactionTerms"})
-public class TransactionTermsServlet extends HttpServlet {
+@WebServlet(name = "CommingSoonServlet", urlPatterns = {"/commingSoon"})
+public class CommingSoonServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,10 +39,10 @@ public class TransactionTermsServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet TransactionTermsServlet</title>");
+            out.println("<title>Servlet CommingSoonServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet TransactionTermsServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CommingSoonServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -57,13 +60,10 @@ public class TransactionTermsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        request.setAttribute("colorMain", "white");
-        request.setAttribute("backgroundColorMain", "red");
-
-        request.setAttribute("colorSecond", "#666");
-        request.setAttribute("backgroundColorSecond", "#bfd2d9");
-        request.getRequestDispatcher("/WEB-INF/views/term-conditions/transactionTerms.jsp").forward(request, response);
+        DAO dao = new DAO();
+        List<Movies> moviesCommingSoon = dao.getAllMovieCommingSoon();
+        request.setAttribute("moviesCommingSoon", moviesCommingSoon);
+        request.getRequestDispatcher("/WEB-INF/views/commingSoon.jsp").forward(request, response);
     }
 
     /**
