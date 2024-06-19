@@ -1,5 +1,9 @@
-<%-- Document : homeAdmin Created on : Jun 10, 2024, 11:31:16 PM Author :
-baoquoc --%> 
+<%-- 
+    Document   : addFoodItems
+    Created on : Jun 18, 2024, 8:19:37 PM
+    Author     : ACER
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -198,6 +202,21 @@ baoquoc --%>
                             </a>
                             <ul aria-expanded="false">
                                 <li><a href="list_movie">Movie</a></li>
+                                <li><a href="menu.html">Slot</a></li>
+                                <li><a href="email-template.html">Staff</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a
+                                class="has-arrow ai-icon"
+                                href="javascript:void(0)"
+                                aria-expanded="false"
+                                >
+                                <i class="fa fa-gear fw-bold"></i>
+                                <span class="nav-text">Add Other</span>
+                            </a>
+                            <ul aria-expanded="false">
+                                <li><a href="list_food">FoodItems</a></li>
                                 <li><a href="menu.html">Slot</a></li>
                                 <li><a href="email-template.html">Staff</a></li>
                             </ul>
@@ -514,3 +533,4 @@ baoquoc --%>
         </script>
     </body>
 </html>
+

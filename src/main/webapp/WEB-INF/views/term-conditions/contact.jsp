@@ -25,7 +25,7 @@
                 color: red;
                 font-size: 25px;
             }
-            
+
         </style>
     </head>
     <%@include file="../header.jsp" %>
@@ -76,34 +76,57 @@
                         </ul>
                     </div>
                 </div>
-                                    <div class="dashboard" style="font-size: 15px">
+                <div class="dashboard" style="font-size: 15px">
                     <p class="intro">Liên Hệ Với Chúng Tôi</p>
-                    <p><iframe style="width: 790px; height: 400px; text-align: center" src="https://www.youtube.com/embed/e1ZSLVTZ47M?si=PwhrebPce5tDRpn1"></iframe></p>
+                    <p><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d39755.95530212734!2d105.54036370520225!3d21.00283487454809!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135abc60e7d3f19%3A0x2be9d7d0b5abcbf4!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBGUFQgSMOgIE7hu5lp!5e0!3m2!1svi!2s!4v1718714840136!5m2!1svi!2s" width="790" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+                    <p><h5>TRỤ SỞ CHÍNH</h5> </p>
+                    <hr>
+                    <p>Tầng 2, Rivera Park Saigon - Số 7/28 Thành Thái, P.14, Q.10, Thành phố Hồ Chí Minh. </p>
+                    <p><h5>DỊCH VỤ KHÁCH HÀNG</h5> </p>
+                    <hr>
+                    <p>Hotline: 1900 6017 </p>
+                    <p>Giờ làm việc: 8:00 - 22:00</p>
+                    <p>Tất cả các ngày bao gồm cả Lễ Tết </p>
+                    <p>Email hỗ trợ: <a href="#" style="color: red">hoidap@cgv.vn</a> </p>
+                    <p><h5>LIÊN HỆ QUẢNG CÁO</h5> </p>
+                    <hr>                    
+                    <p>Phòng kinh doanh: +84-28-3636 57 57 </p>
+                    <p>Ext: 278 (Mr. Quốc Bảo)  </p>
+                    <p>Hotline: 0335400414 </p>
+                    <p>Email: <a href="#" style="color: red">ad.cgv@cj.net </p>
                     <p> </p>
-                    <p> <strong>Banny</strong> là một trong năm Cụm Rạp Chiếu Phim lớn nhất toàn cầu và <strong>Banny Việt Nam</strong> là Nhà Phát Hành, nhà quản lý và vận hành Cụm Rạp Chiếu Phim BANNY Cinemas lớn nhất tại Việt Nam. Mục tiêu của <strong>Banny Việt Nam</strong> là trở thành công ty giải trí điển hình, đóng góp cho sự phát triển không ngừng của lĩnh vực điện ảnh Việt Nam nói riêng và công nghiệp văn hóa mang đậm bản sắc Việt Nam nói chung.</p>
+                    <h5><p style="color: black">LIÊN HỆ MUA VÉ NHÓM, THẺ QUÀ TẶNG, TỔ CHỨC SỰ KIỆN, THUÊ RẠP,… THAM GIA CHƯƠNG TRÌNH GIÁO DỤC CÙNG ĐIỆN ẢNH </p></h5>
+                    <hr>
+                    <p style="color: black">Phòng Kinh Doanh: </p>
+                    <p>- Miền Bắc: <a href="#" style="color: red">Liên hệ <strong>Tại đây!</strong> </a></p>
+                    <p>(Phương Mai/Nguyễn Nga) </p>
+                    <p>Email: <a href="#" style="color: red">sale.cinema@banny.vn </a></p>
                     <p> </p>
-                    <p><strong>Banny Việt Nam</strong> hội nhập, hài hòa và góp phần tạo nên khái niệm độc đáo về việc chuyển đổi cụm rạp chiếu phim truyền thống thành tổ hợp văn hóa <strong>“Cultureplex”</strong>, nơi khán giả không chỉ đến để thưởng thức điện ảnh đa dạng thông qua các công nghệ tiên tiến như <strong>SCREENX, IMAX, STARIUM, 4DX, Dolby Atmos</strong>, mà còn để thưởng thức ẩm thực hoàn toàn mới và khác biệt với các trải nghiệm dịch vụ chất lượng nhất tại Cụm Rạp Chiếu Phim BANNY Cinemas.</p>
-                    <p><strong>Banny Việt Nam</strong> hướng sự quan tâm đến phát triển nội tại của công nghiệp văn hóa tại Việt Nam, đồng hành cùng điện ảnh nước nhà. Thông qua những nỗ lực trong việc xây dựng <strong>chương trình Nhà biên kịch tài năng, Dự án phim ngắn CJ, Lớp học làm phim TOTO, BANNY ArtHouse, phối hợp Học Viện Điện Ảnh Hàn Quốc (KAFA) tổ chức Khóa đào tạo cho các đạo diễn xuất sắc của Dự án phim ngắn CJ, 
-                            Banny Việt Nam</strong> mong muốn sẽ đồng hành và hỗ trợ phát triển cho các nhà làm phim trẻ tài năng của Việt Nam. Ngoài ra, bằng những nỗ lực của doanh nghiệp, BANNY Việt Nam đã và đang phối hợp với các bên liên quan nhằm đưa các tác phẩm điện ảnh có nội hàm và đậm bản sắc Việt Nam tham gia các Liên Hoan Phim Quốc tế uy tín; tài trợ cho các hoạt động Liên Hoan Phim uy tín tổ chức tại Việt Nam như <strong>Liên Hoan Phim Quốc tế Hà Nội, Liên Hoan Phim Việt Nam,… </p>
+                    <p>- Miền Nam: </p>
+                    <p>Tele: 0906 942 227 (Ms. Hà Vy) </p>
+                    <p>Email: <a href="#" style="color: red">Havy.caothi@banny.vn </a></p>
                     <p> </p>
-                    <p style="font-weight: normal"><strong>Banny Việt Nam</strong> trên hành trình mang điện ảnh đến mọi miền Tổ quốc, cũng tập trung đến đối tượng khán giả ở các khu vực ít có điều kiện tiếp cận với điện ảnh, bằng cách tạo cơ hội để người dân địa phương có thể thưởng thức những 
-                        tác phẩm điện ảnh chất lượng thông qua các chương trình vì cộng đồng như <strong>Trăng cười</strong> và <strong>Điện ảnh cho mọi người.</strong></p>
+                    <h5><p>LIÊN HỆ HỢP TÁC TRUYỀN THÔNG & TÀI TRỢ </p></h5>
+                    <hr>
+                    <p>Phòng truyền thông: +84-28-3636-5757 </p>
+                    <p>Ext: 168 (Ms. Hạ) </p>
+                    <p>Email: <a href="#" style="color: red">hadaothi@banny.vn </a></p>
                     <p> </p>
-                    <p style="font-weight: normal"><strong>Banny Việt Nam</strong> cam kết nỗ lực, tiếp tục cuộc hành trình bền bỉ trong việc góp phần xây dựng một nền công nghiệp điện ảnh Việt Nam ngày càng vững mạnh cùng các khách hàng tiềm năng, các nhà làm phim, các đối tác kinh doanh uy tín, và cùng toàn thể xã hội.</p>
-                    <div class="image">
-                        <ul class="image-intro" >
-                            <li class="img1"><img class="img" src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/about-1.jpg" alt=""/></li>
-                            <li class="img1"><img class="img" src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/about-2.PNG" alt=""/></li>
-                            <li class="img1"><img class="img" src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/about-3.PNG" alt=""/></li>
-                            <li class="img1"><img class="img" src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/about-4.PNG" alt=""/></li>
-                            <li><img class="img" src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/about-5.PNG" alt=""/></li>
-                            <li><img class="img" src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/about-6.PNG" alt=""/></li>
-                            <li><img class="img" src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/about-7.JPG" alt=""/></li>
-                            <li><img class="img" src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/about-8.JPG" alt=""/></li>
-                            <li><img class="img" src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/about-9.PNG" alt=""/></li>
-                        </ul>
+                    <h5><p>LIÊN HỆ HỢP TÁC TIẾP THỊ TRUYỀN THÔNG THƯƠNG HIỆU </p></h5>
+                    <hr>
+                    <p>Phòng Cinema Marketing: +84-28-3636 57 57 </p>
+                    <p>Ext: 302 (Ms. Nga) </p>
+                    <p>Email: <a href="#" style="color: red">NgaNguyen@banny.vn </a></p>
+                    <p> </p>
+                    <h5><p>VỀ CÁC RẠP CGV </p></h5>
+                    <hr>
+                    <p>Chi tiết về các rạp CGV (địa chỉ, giá vé), vui lòng nhấn vào <a href="#" style="color: red">đây.</a> </p>
+                    <p> </p>
+                    <p> </p>
+                    <p> </p>
+                    <p> </p>
+                    <p> </p>
 
-                    </div>
                 </div>
 
             </div>

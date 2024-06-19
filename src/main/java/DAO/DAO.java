@@ -36,6 +36,37 @@ import java.sql.Timestamp;
 public class DAO extends DBContext {
 
 
+    public void addFoodItem(String foodName, String description, double price, String imgFoodItems) {
+        String sql = "INSERT INTO FoodItems (foodName, description, price, imgFoodItems) VALUES (?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, foodName);
+            ps.setString(2, description);
+            ps.setDouble(3, price);
+            ps.setString(4, imgFoodItems);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
+    //get food recently added
+    public FoodItem getFoodItemRecentlyAdded() {
+        String sql = "SELECT * FROM FoodItems ORDER BY FoodItemID DESC LIMIT 1";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                FoodItem f = new FoodItem(rs.getInt("FoodItemID"), rs.getString("foodName"), rs.getString("description"), (int) rs.getDouble("price"), rs.getString("imgFoodItems"));
+                return f;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    
     public Movies getMovieByIDForAddSlot(int movieID) {
         String sql = "select * from Movies as m where movieID = ? and releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ";
         try {
