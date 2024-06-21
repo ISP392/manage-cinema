@@ -26,7 +26,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                 src="https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/icon_promotion25.png"
                 alt=" "
               />
-              <a href="#">TIN MỚI & ƯU ĐÃI</a>
+              <a href="newOffer">TIN MỚI & ƯU ĐÃI</a>
             </p>
           </div>
           <div class="header-my-ticket">
