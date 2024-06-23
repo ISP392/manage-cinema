@@ -4,9 +4,8 @@
  */
 package DAO;
 
-import com.mysql.cj.protocol.a.MysqlTextValueDecoder;
+import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,7 +33,37 @@ import java.sql.Timestamp;
  */
 public class DAO extends DBContext {
 
+    public void insertAddFood(String foodName, String description, int price, String imgFoodItems) {
+        String sql = "INSERT INTO FoodItems (foodName, description, price, imgFoodItems) VALUES (?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, foodName);
+            ps.setString(2, description);
+            ps.setInt(3, price);
+            ps.setString(4, imgFoodItems);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
     
+     public void insertAddVoucher(String voucherName, String voucherdescription, float discountAmount, Date startDate, Date endDate, int quantity) {
+        String sql = "INSERT INTO Voucher (voucherName, voucherdescription, discountAmount, startDate, endDate, quantity) VALUES (?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql); 
+            ps.setString(1, voucherName);
+            ps.setString(2, voucherdescription);
+            ps.setFloat(3, discountAmount);
+            ps.setDate(4, startDate);
+            ps.setDate(5, endDate);
+            ps.setInt(6, quantity);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
+  
     public Movies getMovieByIDForAddSlot(int movieID) {
         String sql = "select * from Movies as m where movieID = ? and releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ";
         try {

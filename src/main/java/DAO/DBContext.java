@@ -32,6 +32,7 @@ public class DBContext{
     public static void main(String[] args) {
         if (new DBContext().connection != null) {
             System.out.println("Connected");
+            
         } else {
             System.out.println("Not connected");
         }
