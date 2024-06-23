@@ -58,7 +58,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                     <span class="img">
                       <a href="detail-movie?movieID=${commingSoon.movieID}">
                         <img
-                          src="./assets/images/posterImages/${commingSoon.posterImage}"
+                          src="${commingSoon.posterImage}"
                         />
                       </a>
                     </span>

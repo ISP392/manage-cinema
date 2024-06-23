@@ -101,18 +101,15 @@ public class addMovieServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         DAO dao = new DAO();
-        String title = getPartValue(request.getPart("movieTitle"));
-        String description = getPartValue(request.getPart("description"));
-        Date releaseDate = Date.valueOf(getPartValue(request.getPart("releaseDate")));
-        String duration = getPartValue(request.getPart("duration"));
-        String genres = getPartValue(request.getPart("selectedGenres"));
-        String trailerUrl = getPartValue(request.getPart("trailerUrl"));
+        String title = request.getParameter("movieTitle");
+        String description = request.getParameter("description");
+        Date releaseDate = Date.valueOf(request.getParameter("releaseDate"));
+        String duration = request.getParameter("duration");
+        String genres = request.getParameter("selectedGenres");
+        String trailerUrl = request.getParameter("trailerUrl");
+        String posterImage = request.getParameter("poster");
 
-            Dotenv dotenv = Dotenv.load();
-        String realPath = dotenv.get("URL_UPLOAD_IMAGE");
-
-        // Tạo đối tượng Path từ đường dẫn thực tế
-        Path dirPath = Paths.get(realPath);
+       
      try {
             //check if date is 30 days from now will return a error message
             Date currentDate = new Date(System.currentTimeMillis());
@@ -121,26 +118,8 @@ public class addMovieServlet extends HttpServlet {
             if (diffDays > 30) {
                 request.setAttribute("message", "Release date must be at most 30 days before now");
                 request.getRequestDispatcher("/WEB-INF/views/admin-views/addMovie.jsp").forward(request, response);
-            } else {
-                // Kiểm tra nếu thư mục không tồn tại thì tạo mới
-                if (!Files.exists(dirPath)) {
-                    Files.createDirectories(dirPath);
-                }
-                // Lấy phần của request chứa file ảnh
-                Part part = request.getPart("posterImage");
-                // Lấy tên file gốc
-                String fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
-                // Tạo tên file duy nhất để tránh trùng lặp
-                String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
-                // Tạo đường dẫn tới file ảnh trong thư mục uploads
-                Path imagePath = Paths.get(realPath, uniqueFileName);
-                // Ghi dữ liệu từ input stream của file ảnh vào đường dẫn vừa tạo
-                try (InputStream input = part.getInputStream()) {
-                    Files.copy(input, imagePath);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                dao.insertNewMovie(title, description, releaseDate, uniqueFileName, Integer.parseInt(duration), trailerUrl);
+            }else {
+                dao.insertNewMovie(title, description, releaseDate, posterImage, Integer.parseInt(duration), trailerUrl);
                 Movies movie = dao.getMovieRecentlyAdded();
                 String[] genreList = genres.split(", ");
                 for (String genre : genreList) {
@@ -154,11 +133,6 @@ public class addMovieServlet extends HttpServlet {
         }
     }
 
-    private String getPartValue(Part part) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(part.getInputStream(), StandardCharsets.UTF_8))) {
-            return reader.lines().collect(Collectors.joining("\n"));
-        }
-    }
 
     /**
      * Returns a short description of the servlet.
