@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 import modal.Genres;
 import modal.MovieGenres;
 import modal.Role;
-import modal.*;
 
 import modal.Movies;
 import modal.Users;
@@ -602,7 +601,7 @@ public class DAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"), rs.getInt("likeCount"));
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"));
                 return m;
             }
         } catch (SQLException e) {
@@ -841,14 +840,7 @@ public class DAO extends DBContext {
         return null;
     }
 
-    public static void main(String[] args) {
-        DAO dao = new DAO();
-        int userID = 52;
-        int ticketCount = dao.countPagingTickets(userID);
-        System.out.println("Number òf ticket by ID" + userID + ":" + ticketCount);
-
-       
-    }
+   
 
     public Timestamp getLastestEndTimeOfTheater(String cinemasName, Date movieDate, int theaterNumber) {
         String sql = "SELECT st.endTime \n"
@@ -959,13 +951,22 @@ public class DAO extends DBContext {
             ps.setInt(1, movieID);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"));
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"), rs.getString("slug"));
                 return m;
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
         return null;
+    }
+
+     public static void main(String[] args) {
+        DAO dao = new DAO();
+        //test get movie by id
+        Movies m = dao.getMovieByID(159);
+        System.out.println(m.getSlug());
+
+       
     }
 
 }

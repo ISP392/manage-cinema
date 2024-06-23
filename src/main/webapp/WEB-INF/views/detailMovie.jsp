@@ -36,7 +36,7 @@
         <div class="col-3">
             <div class="poster-image" style="">
                 <img style="width: 181px; height:259px; margin-bottom: 10px;border-radius: 8px"
-                     src="./assets/images/posterImages/${movie.posterImage}" alt="alt"/>
+                     src="${movie.posterImage}" alt="alt"/>
             </div>
             <c:if test="${not empty sessionScope.account}">
                 <button class="Btn" data-id="${movie.movieID}">
