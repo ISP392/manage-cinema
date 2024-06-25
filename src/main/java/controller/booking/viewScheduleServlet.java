@@ -51,7 +51,7 @@ public class viewScheduleServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet viewScheduleServlet</title>");            
+            out.println("<title>Servlet viewScheduleServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet viewScheduleServlet at " + request.getContextPath() + "</h1>");
@@ -71,89 +71,83 @@ public class viewScheduleServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Users user = (Users) request.getSession().getAttribute("account");
-        if (user == null) {
-            response.sendRedirect("signin");
-        } else {
+        try {
+            String movieID = request.getParameter("movieid");
+            String date = request.getParameter("date");
+            String direction = request.getParameter("direction");
+            //get current hour and minute
+            Timestamp startTime = new Timestamp(System.currentTimeMillis());
+
+            // Get the current year and month
+            LocalDate now = LocalDate.now();
+            int year = now.getYear();
+            int month = now.getMonthValue();
+
+            // Combine the current year and month with the given date
+            String mainDate = year + "-" + String.format("%02d", month) + "-" + String.format("%02d", Integer.parseInt(date));
+
+            if (movieID == null && date == null && direction == null) {
+                response.sendRedirect("home");
+                return;
+            }
+            request.setAttribute("direction", direction);
+            request.setAttribute("date", date);
+            request.setAttribute("movieID", movieID);
+
+            DAO d = new DAO();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            java.sql.Date dateSql = null;
             try {
-                String movieID = request.getParameter("movieid");
-                String date = request.getParameter("date");
-                String direction = request.getParameter("direction");
-                //get current hour and minute
-                Timestamp startTime = new Timestamp(System.currentTimeMillis());
+                java.util.Date utilDate = sdf.parse(mainDate);
+                dateSql = new java.sql.Date(utilDate.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //lay ra cac rap chieu phim do
+            List<Cinemas> listCinemas = d.getAllCinemas(Integer.parseInt(movieID), dateSql, Integer.parseInt(direction));
 
-                // Get the current year and month
-                LocalDate now = LocalDate.now();
-                int year = now.getYear();
-                int month = now.getMonthValue();
+            //lay ra list direction
+            List<Location> listDirection = d.getAllDirection();
 
-                // Combine the current year and month with the given date
-                String mainDate = year + "-" + String.format("%02d", month) + "-" + String.format("%02d", Integer.parseInt(date));
+            // Create a map to store the list of lists of ScreeningTimes for each cinema
+            Map<String, List<List<ScreeningTimes>>> cinemaScreeningTimes = new HashMap<>();
 
-                if (movieID == null && date == null && direction == null) {
-                    response.sendRedirect("home");
-                    return;
-                }
-                request.setAttribute("direction", direction);
-                request.setAttribute("date", date);
-                request.setAttribute("movieID", movieID);
-
-                DAO d = new DAO();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                java.sql.Date dateSql = null;
-                try {
-                    java.util.Date utilDate = sdf.parse(mainDate);
-                    dateSql = new java.sql.Date(utilDate.getTime());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                //lay ra cac rap chieu phim do
-                List<Cinemas> listCinemas = d.getAllCinemas(Integer.parseInt(movieID), dateSql, Integer.parseInt(direction));
-
-                //lay ra list direction
-                List<Location> listDirection = d.getAllDirection();
-
-                // Create a map to store the list of lists of ScreeningTimes for each cinema
-                Map<String, List<List<ScreeningTimes>>> cinemaScreeningTimes = new HashMap<>();
-
-                // For each cinema, get the cinemaID and use it to get the list of ScreeningTimes
-                for (Cinemas cinema : listCinemas) {
-                    String cinemaName = cinema.getName();
-                    List<ScreeningTimes> listScreeningTimes = d.getAllFlimList(Integer.parseInt(movieID), cinema.getCinemaID(), dateSql, startTime);
-                    if (listCinemas != null && listScreeningTimes.isEmpty()) {
-                        request.setAttribute("isEmpty", true);
-                    } else {
-                        request.setAttribute("isEmpty", false);
-                        request.setAttribute("listCinemas", listCinemas);
-                        // Sort the listScreeningTimes in ascending order based on the start time
-                        Collections.sort(listScreeningTimes, new Comparator<ScreeningTimes>() {
-                            @Override
-                            public int compare(ScreeningTimes st1, ScreeningTimes st2) {
-                                return st1.getStartTime().compareTo(st2.getStartTime());
-                            }
-                        });
-
-                        // If the cinema name is already in the map, add the listScreeningTimes to the existing list
-                        if (cinemaScreeningTimes.containsKey(cinemaName)) {
-                            cinemaScreeningTimes.get(cinemaName).add(listScreeningTimes);
-                        } else {
-                            // If the cinema name is not in the map, create a new list and add the listScreeningTimes to it
-                            List<List<ScreeningTimes>> lists = new ArrayList<>();
-                            lists.add(listScreeningTimes);
-                            cinemaScreeningTimes.put(cinemaName, lists);
+            // For each cinema, get the cinemaID and use it to get the list of ScreeningTimes
+            for (Cinemas cinema : listCinemas) {
+                String cinemaName = cinema.getName();
+                List<ScreeningTimes> listScreeningTimes = d.getAllFlimList(Integer.parseInt(movieID), cinema.getCinemaID(), dateSql, startTime);
+                if (listCinemas != null && listScreeningTimes.isEmpty()) {
+                    request.setAttribute("isEmpty", true);
+                } else {
+                    request.setAttribute("isEmpty", false);
+                    request.setAttribute("listCinemas", listCinemas);
+                    // Sort the listScreeningTimes in ascending order based on the start time
+                    Collections.sort(listScreeningTimes, new Comparator<ScreeningTimes>() {
+                        @Override
+                        public int compare(ScreeningTimes st1, ScreeningTimes st2) {
+                            return st1.getStartTime().compareTo(st2.getStartTime());
                         }
+                    });
+
+                    // If the cinema name is already in the map, add the listScreeningTimes to the existing list
+                    if (cinemaScreeningTimes.containsKey(cinemaName)) {
+                        cinemaScreeningTimes.get(cinemaName).add(listScreeningTimes);
+                    } else {
+                        // If the cinema name is not in the map, create a new list and add the listScreeningTimes to it
+                        List<List<ScreeningTimes>> lists = new ArrayList<>();
+                        lists.add(listScreeningTimes);
+                        cinemaScreeningTimes.put(cinemaName, lists);
                     }
                 }
-                // Add the map to the request attributes
-                request.setAttribute("listDirection", listDirection);
-                request.setAttribute("cinemaScreeningTimes", cinemaScreeningTimes);
-
-            } catch (NumberFormatException e) {
-                request.setAttribute("isEmpty", true);
             }
-            request.getRequestDispatcher("/WEB-INF/views/scheduleMovie.jsp").forward(request, response);
-        }
+            // Add the map to the request attributes
+            request.setAttribute("listDirection", listDirection);
+            request.setAttribute("cinemaScreeningTimes", cinemaScreeningTimes);
 
+        } catch (NumberFormatException e) {
+            request.setAttribute("isEmpty", true);
+        }
+        request.getRequestDispatcher("/WEB-INF/views/scheduleMovie.jsp").forward(request, response);
     }
 
     /**

@@ -35,6 +35,17 @@ public class Movies {
         this.display = display;
     }
 
+    public Movies(int movieID, String title) {
+        this.movieID = movieID;
+        this.title = title;
+    }
+
+    public Movies(int movieID, String title, String posterImage) {
+        this.movieID = movieID;
+        this.title = title;
+        this.posterImage = posterImage;
+    }
+
     public Movies(int movieID, String title, String description, Date releaseDate, String posterImage, int duration, int display, String trailerURL, String slug) {
         this.movieID = movieID;
         this.title = title;

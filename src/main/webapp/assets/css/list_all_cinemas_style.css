@@ -1,0 +1,249 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    /* Prevent horizontal scrolling */
+}
+
+
+.header h2 {
+    color: black;
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 2.25rem;
+    padding: 15px;
+    text-align: center;
+}
+
+.container-list-movie {
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    max-width: 960px;
+    margin: 20px auto;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 70vh;
+    /* Full height to ensure the layout is balanced */
+    overflow: hidden;
+    /* Prevent content overflow */
+    position: relative;
+}
+
+.sidebar {
+    flex: 1;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid #e0e0e0;
+    background-color: white;
+    z-index: 1;
+}
+
+/* Container needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Style the button used to open the dropdown */
+.dropbtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 10px;
+    color: #D82D8B;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    border: 1px solid #D82D8B;
+    width: 160px;
+    height: 36px;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: #f1f1f1
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: #fff0f6;
+}
+
+.content {
+    flex: 2;
+    overflow-y: auto;
+    /* Enable scrolling for the content */
+    background-color: white;
+    position: relative;
+}
+
+.location-selector,
+.date-selector,
+.movie-schedule {
+    padding: 20px 20px 0 20px;
+    margin-bottom: 20px;
+}
+
+.movie-schedule {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.theater-list {
+    width: 100%;
+}
+
+.theater-list.select {
+    background-color: #fff0f6;
+}
+
+.theater-detail {
+    font-size: 16px;
+    display: flex;
+    padding: 0 20px 0 20px;
+    height: 52px;
+    align-items: center;
+    font-weight: 700;
+}
+
+.theater-detail:hover {
+    background-color: #FAFAFA;
+}
+
+.theater-detail a {
+    color: black;
+    text-decoration: none;
+}
+
+.location-selector select {
+    border-radius: 0.25rem;
+    height: 2.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0 1rem 0 1rem;
+    margin-bottom: 10px;
+}
+
+.date-buttons {
+    display: flex;
+    gap: 5px;
+    /* Reduced gap for closer button alignment */
+    position: sticky;
+    /* Sticky position to make it fixed while scrolling */
+    top: 0;
+    background-color: white;
+    z-index: 1;
+    padding: 20px 0 20px 20px;
+    /* Adding some padding for spacing */
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.date-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    /* Adjusted height for better appearance */
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    /* Reduced border radius */
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.date-button .date-number {
+    font-size: 16px;
+    /* Adjusted font size */
+    font-weight: bold;
+    height: 50%;
+    color: #333;
+}
+
+.date-button .date-label {
+    width: 100%;
+    height: 50%;
+    font-size: 12px;
+    color: #777;
+    display: flex;
+    border-radius: 0 0 9px 9px;
+    justify-content: center;
+    background-color: white;
+}
+
+.date-button:hover {
+    background-color: #e0e0e0;
+}
+
+.date-button.selected {
+    background-color: #ff4d69;
+    /* Adjusted color for better contrast */
+    color: white;
+    border-color: #ff4d69;
+}
+
+.date-button.selected .date-number {
+    color: white;
+}
+
+.date-button.selected .date-label {
+    color: black;
+}
+
+.container-img {
+    display: flex;
+    gap: 1.5rem;
+    min-height: 230px;
+}
+
+.movie-schedule img {
+    height: 170px;
+    border-radius: 5px;
+}
+
+.schedule-times {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.time-slot {
+    color: #0284c7;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #0284c7;
+    cursor: pointer;
+    margin-top: 10px;
+}
