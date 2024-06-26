@@ -16,9 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.*;
 
-import modal.Cinemas;
-import modal.Movies;
-import modal.ScreeningTimes;
+import modal.*;
 
 /**
  *
@@ -80,9 +78,17 @@ public class List_all_cinemas extends HttpServlet {
 
         if(date == null || locationID == null){
             response.sendRedirect("home");
-        }else if(cinema == null){
+        }else if(cinema == null || cinema.isEmpty()){
             cinemas = dao.getAllCinemasByLocationID(Integer.parseInt(locationID));
-            cinema = cinemas.get(0).getName();
+            //check if this location dont has any cinema, return error
+            if(cinemas.isEmpty()){
+                request.setAttribute("error", "Vị trí này chưa có rạp nào");
+                request.setAttribute("locationID", Integer.parseInt(locationID));
+                request.setAttribute("locations", dao.getAllDirection());
+                request.getRequestDispatcher("/WEB-INF/views/cinemas/list_all_cinemas.jsp").forward(request, response);
+            }else{
+                cinema = cinemas.get(0).getName();
+            }
         }else{
             cinemas = dao.getAllCinemasByLocationID(Integer.parseInt(locationID));
         }
@@ -118,11 +124,22 @@ public class List_all_cinemas extends HttpServlet {
             }
         }
 
+        List<GenresByMovie> GBM = new ArrayList<>();
+        //get list genres by each movie id
+        for (Movies movie : movies) {
+            List< MovieGenres> mg = dao.getMovieGenres(movie.getMovieID());
+            for(MovieGenres m : mg){
+                GBM.add(new GenresByMovie(m.getMovieID().getMovieID(), m.getGenreID().getName()));
+            }
+        }
+
+
        //get all locations
        request.setAttribute("cinema", cinema);
        request.setAttribute("cinemas", cinemas);
        request.setAttribute("locations", dao.getAllDirection());
        request.setAttribute("locationID", Integer.parseInt(locationID));
+       request.setAttribute("GenresByMovie", GBM);
        request.setAttribute("moviesMap", moviesMap);
 
         request.getRequestDispatcher("/WEB-INF/views/cinemas/list_all_cinemas.jsp").forward(request, response);
