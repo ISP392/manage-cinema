@@ -73,6 +73,15 @@
                         </c:forEach>
                     </ul>
                 </div>
+                <c:if test="${empty cinemas}">
+                    <div style="display: flex; flex-direction: column">
+                        <div class="no-movie" style="padding-top: 1.25rem">
+                            <img style="display:block; margin: 0 auto" src="https://homepage.momocdn.net/next-js/_next/static/public/cinema/not-found.svg" alt="alt"/>
+                        </div>
+                        <div style="font-weight: 600; font-size: 1.125rem; line-height: 1.75rem; display:block; margin: 0 auto">Úi, Rạp chiếu không tìm thấy.</div>
+                        <div style="color:#737373; font-size: 0.875rem; line-height: 1.25rem; display:block; margin: 0 auto">Bạn hãy thử chọn vị trí khác nhé</div>
+                    </div>
+                </c:if>
                 <c:forEach items="${cinemas}" var="cinema_for">
                     <div
                         class="theater-list ${cinema_for.name eq cinema ? 'select' : ''}"
@@ -135,7 +144,19 @@
                                         >${moviesMapEntry.key.title}</a
                                     >
                                     <div style="font-size: 13px; color: #3a3a3a">
-                                        Hài, Hoạt Hình, Chính Kịch, Gia Đình
+                                            <%--get movie id and for each movie get all movie genres--%>
+                                        <c:set var="genresString" value="" scope="page"/>
+                                        <c:forEach items="${GenresByMovie}" var="GBM" varStatus="status">
+                                            <%-- check if movieMapEntry.key.movieID == GBM.movieID--%>
+                                            <c:if test="${moviesMapEntry.key.movieID == GBM.movieID}">
+                                                <c:set var="genresString" value="${genresString}${GBM.genreName}" scope="page"/>
+                                                <%--add semicolon each movie genres--%>
+                                                <c:if test="${!status.last}">
+                                                    <c:set var="genresString" value="${genresString} " scope="page"/>
+                                                </c:if>
+                                            </c:if>
+                                        </c:forEach>
+                                        <c:out value="${genresString}"/>
                                     </div>
                                     <div class="schedule-times">
                                         <c:forEach items="${moviesMapEntry.value}" var="list_screen_time">
