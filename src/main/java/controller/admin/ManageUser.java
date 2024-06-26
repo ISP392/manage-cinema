@@ -58,8 +58,8 @@ public class ManageUser extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         List<Users> listUser = new ArrayList<>();
-         request.setAttribute("listUser", listUser); 
+        List<Users> listUser = new ArrayList<>();
+        request.setAttribute("listUser", listUser); 
         request.getRequestDispatcher("/WEB-INF/views/admin-views/managerAccountUsers.jsp").forward(request, response);
     } 
 

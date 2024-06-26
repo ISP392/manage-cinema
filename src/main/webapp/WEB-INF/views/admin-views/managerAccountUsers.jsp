@@ -216,6 +216,12 @@
                                     </div>
                                     <div class="cm-content-body form excerpt">
                                         <div class="card-body pt-2">
+                                            <c:if test="${not empty errorMessage}">
+                                                <div class="alert alert-danger" role="alert">
+                                                    ${errorMessage}
+                                                </div>
+                                            </c:if>
+                                            <c:if test="${empty errorMessage}">
                                             <div class="table-responsive">
                                                 <table class="table table-responsive-sm mb-0">
                                                     <thead>
@@ -228,7 +234,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="userTableBody">
-
+                                                        
                                                         <%
                                                  List<Users> listUser = (List<Users>) request.getAttribute("listUser");
                                                  int roleId = (Integer) request.getAttribute("roleId");
@@ -242,7 +248,8 @@
                                                                 <% 
                                                                     if (user.getRoleID().getRoleID() == 1) {
                                                                         out.print("ADMIN");
-                                                                    } else if (user.getRoleID().getRoleID() == 2) {
+                                                                    }
+                                                                    else if(user.getRoleID().getRoleID() == 2) {
                                                                         out.print("USER");
                                                                     }else if (user.getRoleID().getRoleID() == 3) {
                                                                         out.print("STAFF");
@@ -265,22 +272,28 @@
                                                         <%
                                                             }
                                                         %>
-
+                                                        
+                                                    
                                                     </tbody>
                                                 </table>
 
                                             </div>
-                                           <!-- Pagination controls -->
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination">
-                                                <c:forEach var="i" begin="1" end="${noOfPages}">
-                                                    <li class="page-item <c:if test='${i == currentPage}'>active</c:if>'">
-                                                        <a class="page-link" href="ShowUsersServlet?page=${i}">${i}</a>
-                                                    </li>
-                                                </c:forEach>
-                                            </ul>
-                                        </nav>
+                                            <!-- Pagination controls -->
+                                            <style>
+                                                .small-select {
+                                                    width: 100px; /* Bạn có thể điều chỉnh giá trị này theo nhu cầu */
+                                                    font-size: 12px; /* Giảm kích thước chữ */
+                                                }
+                                            </style>
 
+                                            <nav aria-label="Page navigation">
+                                                <select class="form-select small-select" onchange="location = this.value;">
+                                                    <c:forEach var="i" begin="1" end="${noOfPages}">
+                                                        <option value="SearchUserServlet?page=${i}" <c:if test='${i == currentPage}'>selected</c:if>>Page ${i}</option>
+                                                    </c:forEach>
+                                                </select>
+                                            </nav>
+                                            </c:if>
                                         </div>
                                     </div>
                                 </div>
@@ -293,7 +306,7 @@
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="updateRoleModalLabel">Update Role</h5>
                                                 <span aria-hidden="true">&times;</span>
-                                                </button>
+
                                             </div>
                                             <div class="modal-body">
                                                 <input type="hidden" name="userID" id="modalUserID">
@@ -302,7 +315,6 @@
                                                     <select name="roleID" id="modalRoleID" class="form-control">
                                                         <option value="2">User</option>
                                                         <option value="3">Staff</option>
-                                                        <option value="1">Admin</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -340,22 +352,22 @@
 
 
                     <script>
-                        $(document).ready(function () {
-                            $('.edit-role').on('click', function () {
-                                var userID = $(this).data('userid');
-                                var roleID = $(this).data('roleid');
+                                                    $(document).ready(function () {
+                                                        $('.edit-role').on('click', function () {
+                                                            var userID = $(this).data('userid');
+                                                            var roleID = $(this).data('roleid');
 
-                                $('#modalUserID').val(userID);
-                                $('#modalRoleID').val(roleID);
+                                                            $('#modalUserID').val(userID);
+                                                            $('#modalRoleID').val(roleID);
 
-                                $('#updateRoleModal').modal('show');
-                            });
-                        });
+                                                            $('#updateRoleModal').modal('show');
+                                                        });
+                                                    });
                     </script>
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
                     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-                    </script>
+
 
                     </body>
                     </html>

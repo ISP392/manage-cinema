@@ -4,25 +4,18 @@
  */
 package DAO;
 
-import com.mysql.cj.protocol.a.MysqlTextValueDecoder;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Connection;
 
 import modal.*;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import modal.Genres;
 import modal.MovieGenres;
 import modal.Role;
-import modal.*;
 
 import modal.Movies;
 import modal.Users;
@@ -224,7 +217,8 @@ public class DAO extends DBContext {
     public int getNoOfRecords() {
         String sql = "SELECT COUNT(*) FROM Users";
         try (
-                PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = connection.prepareStatement(sql); 
+                ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -703,6 +697,7 @@ public class DAO extends DBContext {
         }
         return list;
     }
+    
 
 
     //get list screening time

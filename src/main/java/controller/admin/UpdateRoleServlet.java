@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import modal.Users;
 
 /**
  *
@@ -75,11 +76,13 @@ public class UpdateRoleServlet extends HttpServlet {
         int userID = Integer.parseInt(request.getParameter("userID"));
         int roleID = Integer.parseInt(request.getParameter("roleID"));
         DAO dao = new DAO();
+
         // Update the user's role
         dao.updateUserRole(userID, roleID);
 
         // Redirect back to the user management page (adjust the URL as needed)
-        response.sendRedirect("ShowUsersServlet");
+        response.sendRedirect("SearchUserServlet");
+
     }
 
     /**
