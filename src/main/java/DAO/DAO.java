@@ -1024,11 +1024,9 @@ public class DAO extends DBContext {
      public static void main(String[] args) {
          //test getScreeningTimeByMovieDateAndCinemaName
             DAO dao = new DAO();
-            Date sqlDate = Date.valueOf("2024-6-25");
-            String cinemaName = "BANNY Vincom Center Bà Triệu";
-            List<ScreeningTimes> list = dao.getScreeningTimeOfMovieByMovieDateAndCinemaName(sqlDate, cinemaName, 78);
-            for (ScreeningTimes st : list) {
-                System.out.println(st.getMovieID().getTitle());
+            List<MovieGenres> mg = dao.getMovieGenres(1);
+            for(MovieGenres m : mg){
+                System.out.println(m.getGenreID().getName());
             }
     }
 
