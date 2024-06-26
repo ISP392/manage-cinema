@@ -30,6 +30,15 @@ public class ScreeningTimes {
         this.endTime = endTime;
     }
 
+
+    public ScreeningTimes(int screeningID, Movies movieID, Timestamp startTime, Timestamp endTime, Theaters theaterID) {
+        this.screeningID = screeningID;
+        this.movieID = movieID;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.theaterID = theaterID;
+    }
+
     public int getScreeningID() {
         return screeningID;
     }

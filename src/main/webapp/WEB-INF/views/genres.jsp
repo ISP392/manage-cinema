@@ -46,7 +46,7 @@
                     <span class="img">
                       <a href="detail-movie?movieID=${movie.movieID}">
                         <img
-                          src="./assets/images/posterImages/${movie.posterImage}"
+                          src="${movie.posterImage}"
                         />
                       </a>
                     </span>

@@ -4,6 +4,10 @@
  */
 package DAO;
 
+<<<<<<< HEAD
+=======
+import java.math.BigDecimal;
+>>>>>>> 285c85a791963534d0850cf2775717ec7fbadf25
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,7 +32,37 @@ import java.sql.Timestamp;
  */
 public class DAO extends DBContext {
 
+    public void insertAddFood(String foodName, String description, int price, String imgFoodItems) {
+        String sql = "INSERT INTO FoodItems (foodName, description, price, imgFoodItems) VALUES (?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, foodName);
+            ps.setString(2, description);
+            ps.setInt(3, price);
+            ps.setString(4, imgFoodItems);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
     
+     public void insertAddVoucher(String voucherName, String voucherdescription, float discountAmount, Date startDate, Date endDate, int quantity) {
+        String sql = "INSERT INTO Voucher (voucherName, voucherdescription, discountAmount, startDate, endDate, quantity) VALUES (?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql); 
+            ps.setString(1, voucherName);
+            ps.setString(2, voucherdescription);
+            ps.setFloat(3, discountAmount);
+            ps.setDate(4, startDate);
+            ps.setDate(5, endDate);
+            ps.setInt(6, quantity);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
+  
     public Movies getMovieByIDForAddSlot(int movieID) {
         String sql = "select * from Movies as m where movieID = ? and releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ";
         try {
@@ -567,7 +601,7 @@ public class DAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"), rs.getInt("likeCount"));
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"));
                 return m;
             }
         } catch (SQLException e) {
@@ -745,6 +779,24 @@ public class DAO extends DBContext {
         return list;
     }
 
+    //get all cinemas by locationID
+    public List<Cinemas> getAllCinemasByLocationID(int locationID){
+        List<Cinemas> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT c.name FROM project_cinema_update.Cinemas c where c.locationID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, locationID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Cinemas c = new Cinemas( rs.getString("name"));
+                list.add(c);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
     //get all direction
     public List<Location> getAllDirection() {
         List<Location> list = new ArrayList<>();
@@ -807,14 +859,7 @@ public class DAO extends DBContext {
         return null;
     }
 
-    public static void main(String[] args) {
-        DAO dao = new DAO();
-        int userID = 52;
-        int ticketCount = dao.countPagingTickets(userID);
-        System.out.println("Number òf ticket by ID" + userID + ":" + ticketCount);
-
-       
-    }
+   
 
     public Timestamp getLastestEndTimeOfTheater(String cinemasName, Date movieDate, int theaterNumber) {
         String sql = "SELECT st.endTime \n"
@@ -925,13 +970,67 @@ public class DAO extends DBContext {
             ps.setInt(1, movieID);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"));
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"), rs.getString("trailerUrl"), rs.getString("slug"));
                 return m;
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
         return null;
+    }
+
+    //get screening time by movie date and cinema name
+    public List<ScreeningTimes> getScreeningTimeOfMovieByMovieDateAndCinemaName(Date sqlDate, String cinemaName, int movieID){
+        String sql = "select st.movieID, l.name,l.locationID, m.title, m.posterImage, st.screeningID, st.startTime, st.endTime, t.theaterID from Location l join Cinemas c on l.locationID = c.locationID join Theaters t on t.cinemaID = c.cinemaID join ScreeningTimes st on st.theaterID = t.theaterID join Movies m on m.movieID = st.movieID where c.movieDate = ? and m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() and c.name = ? and m.movieID = ?";
+        List<ScreeningTimes> list = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setDate(1, sqlDate);
+            ps.setString(2, cinemaName);
+            ps.setInt(3, movieID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Location l = new Location(rs.getInt("locationID"),rs.getString("name"));
+                Cinemas c = new Cinemas(rs.getString("name"), l);
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("posterImage"));
+                Theaters t = new Theaters(rs.getInt("theaterID"), c);
+                ScreeningTimes st = new ScreeningTimes(rs.getInt("screeningID"), m,rs.getTimestamp("startTime"), rs.getTimestamp("endTime"), t);
+                list.add(st);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    //get list movie by movie date and cinema name
+    public List<Movies> getMovieByMovieDateAndCinemaName(Date sqlDate, String cinemaName){
+        String sql = "select DISTINCT m.title, m.movieID, m.posterImage from Location l join Cinemas c on l.locationID = c.locationID join Theaters t on t.cinemaID = c.cinemaID join ScreeningTimes st on st.theaterID = t.theaterID join Movies m on m.movieID = st.movieID where c.movieDate = ? and m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() and c.name = ?";
+        List<Movies> list = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setDate(1, sqlDate);
+            ps.setString(2, cinemaName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("posterImage"));
+                list.add(m);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+     public static void main(String[] args) {
+         //test getScreeningTimeByMovieDateAndCinemaName
+            DAO dao = new DAO();
+            Date sqlDate = Date.valueOf("2024-6-25");
+            String cinemaName = "BANNY Vincom Center Bà Triệu";
+            List<ScreeningTimes> list = dao.getScreeningTimeOfMovieByMovieDateAndCinemaName(sqlDate, cinemaName, 78);
+            for (ScreeningTimes st : list) {
+                System.out.println(st.getMovieID().getTitle());
+            }
     }
 
 }

@@ -5,7 +5,6 @@
 package modal;
 
 import java.sql.Date;
-import java.util.Objects;
 
 /**
  *
@@ -22,9 +21,7 @@ public class Movies {
     private int display;
     private String trailerURL;
     private String status;
-
-    private int likeCount;
-    private String name;
+    private String slug;
     public Movies() {
     }
 
@@ -37,6 +34,31 @@ public class Movies {
         this.duration = duration;
         this.display = display;
     }
+
+    public Movies(int movieID, String title) {
+        this.movieID = movieID;
+        this.title = title;
+    }
+
+    public Movies(int movieID, String title, String posterImage) {
+        this.movieID = movieID;
+        this.title = title;
+        this.posterImage = posterImage;
+    }
+
+    public Movies(int movieID, String title, String description, Date releaseDate, String posterImage, int duration, int display, String trailerURL, String slug) {
+        this.movieID = movieID;
+        this.title = title;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.posterImage = posterImage;
+        this.duration = duration;
+        this.display = display;
+        this.trailerURL = trailerURL;
+        this.slug = slug;
+    }
+    
+    
     
     
 
@@ -49,33 +71,11 @@ public class Movies {
         this.duration = duration;
         this.display = display;
         this.trailerURL = trailerURL;
-        this.status = status;
 
     }
 
-    public Movies(int movieID, String title, String description, Date releaseDate, String posterImage, int duration, int display, String trailerURL, String name) {
-        this.movieID = movieID;
-        this.title = title;
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.posterImage = posterImage;
-        this.duration = duration;
-        this.display = display;
-        this.trailerURL = trailerURL;
-        this.name = name;
-    }
-
-    public Movies(int movieID, String title, String description, Date releaseDate, String posterImage, int duration, int display, String trailerURL, int likeCount) {
-        this.movieID = movieID;
-        this.title = title;
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.posterImage = posterImage;
-        this.duration = duration;
-        this.display = display;
-        this.trailerURL = trailerURL;
-        this.likeCount = likeCount;
-    }
+    
+    
 
     public int getMovieID() {
         return movieID;
@@ -149,12 +149,15 @@ public class Movies {
         this.status = status;
     }
 
-    public String getName() {
-        return name;
+
+    public String getSlug() {
+        return slug;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
+    
+    
 
 }

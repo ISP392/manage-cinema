@@ -53,7 +53,6 @@ public class addNewSlot extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -216,7 +215,7 @@ public class addNewSlot extends HttpServlet {
             // //insert screeningTimes
             dao.insertScreeningTimes(theaterID, Integer.parseInt(movieID), startTimeTimestamp, endTimeTimestamp);
             response.getWriter().print("Insert new slot successfully");
-            response.sendRedirect("home");
+            response.sendRedirect("list_movie");
         }
 
     }

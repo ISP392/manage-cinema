@@ -1,6 +1,6 @@
 <%-- Document : header Created on : Jan 11, 2024, 11:35:33 PM Author : bquoc
---%> <%@page contentType="text/html" pageEncoding="UTF-8" %> <%@taglib
-prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+--%> <%@page contentType="text/html" pageEncoding="UTF-8" %> 
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -17,6 +17,16 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     />
   </head>
   <body>
+    <%
+    java.util.List<Integer> daysOfMonth_header = new java.util.ArrayList<>();
+    java.util.Date date_header = new java.util.Date();
+    java.util.Calendar cal_header = java.util.Calendar.getInstance();
+    cal_header.setTime(date_header);
+    for (int i = 0; i < 10; i++) {
+        int day = cal_header.get(java.util.Calendar.DAY_OF_MONTH);
+        daysOfMonth_header.add(day);
+    }
+    %>
     <div class="header-language-background">
       <div class="header-container">
         <div class="header-option">
@@ -26,7 +36,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                 src="https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/icon_promotion25.png"
                 alt=" "
               />
-              <a href="#">TIN MỚI & ƯU ĐÃI</a>
+              <a href="newOffer">TIN MỚI & ƯU ĐÃI</a>
             </p>
           </div>
           <div class="header-my-ticket">
@@ -122,16 +132,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
               </ul>
             </li>
             <li class="level0-nav-1-parent">
-              <a class="level0-has-children" href="#">THÀNH VIÊN</a>
-              <ul class="level0">
-                <li class="level1-nav1-1">
-                  <a href="#" class="level1">TÀI KHOẢN BANNY</a>
-                </li>
-                <li class="level1-nav1-2">
-                  <a href="#" class="level1">QUYỀN LỢI</a>
-                </li>
-                <li class="level1-nav1-2"></li>
-              </ul>
+              <a class="level0-has-children" href="list_all_cinemas?date=<%= daysOfMonth_header.get(0) %>&locationID=1&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu">RẠP CHIẾU</a>
             </li>
           </ol>
         </div>

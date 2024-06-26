@@ -5,6 +5,7 @@
 package controller.admin;
 
 import DAO.DAO;
+import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,21 +14,28 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.util.List;
-import modal.MovieGenres;
+import jakarta.servlet.http.Part;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Date;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import modal.Movies;
 import modal.Users;
 
-import java.sql.Date;
-
 /**
  *
- * @author baoquoc
+ * @author ACER
  */
-@WebServlet(name = "updateMovieServlet", urlPatterns = {"/update_movie"})
+@WebServlet(name = "addFoodServlet", urlPatterns = {"/addFood"})
+
 @MultipartConfig
-public class updateMovieServlet extends HttpServlet {
+public class addFoodServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,15 +54,16 @@ public class updateMovieServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet updateMovieServlet</title>");
+            out.println("<title>Servlet addFoodServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet updateMovieServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet addFoodServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -66,22 +75,12 @@ public class updateMovieServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         Users u = (Users) request.getSession().getAttribute("admin");
         if (u == null || u.getRoleID().getRoleID() != 1) {
             response.sendRedirect("admin");
         } else {
-            DAO dao = new DAO();
-            String movieID = request.getParameter("movieID");
-            Movies m = dao.getMovieByID(Integer.parseInt(movieID));
-            List<MovieGenres> list = dao.getMovieGenres(Integer.parseInt(movieID));
-            String genresID = "";
-            for (MovieGenres mg : list) {
-                genresID += mg.getGenreID().getGenreID() + ", ";
-            }
-
-            request.setAttribute("genresID", genresID);
-            request.setAttribute("movie", m);
-            request.getRequestDispatcher("/WEB-INF/views/admin-views/updateMovie.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/addOther/addFood.jsp").forward(request, response);
         }
     }
 
@@ -97,39 +96,47 @@ public class updateMovieServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         DAO dao = new DAO();
-        String title = request.getParameter("movieTitle");
-        String description = request.getParameter("description").trim();
-        Date releaseDate = Date.valueOf(request.getParameter("releaseDate"));
-        String duration = request.getParameter("duration");
-        String genres = request.getParameter("selectedGenres");
-        String trailerUrl = request.getParameter("trailerUrl");
-        String movieID = request.getParameter("movieID");
-        String posterImage = request.getParameter("posterImage");
 
+        String foodName = getPartValue(request.getPart("foodName"));
+        String description = getPartValue(request.getPart("description"));
+        int price = Integer.parseInt(request.getParameter("price"));
+
+        Dotenv dotenv = Dotenv.load();
+        String realPath = dotenv.get("URL_UPLOAD_IMAGE");
+
+        // Tạo đối tượng Path từ đường dẫn thực tế
+        Path dirPath = Paths.get(realPath);
         try {
-            //check if date is 30 days from now will return a error message
-            Date currentDate = new Date(System.currentTimeMillis());
-            long diff = currentDate.getTime() - releaseDate.getTime();
-            long diffDays = diff / (24 * 60 * 60 * 1000);
-            if (diffDays > 30) {
-                request.setAttribute("message", "Release date must be at most 30 days before now");
-                request.getRequestDispatcher("/WEB-INF/views/admin-views/updateMovie.jsp").forward(request, response);
-            }else {
-                dao.updateMovieByID(title, description, releaseDate, posterImage, Integer.parseInt(duration), trailerUrl, Integer.parseInt(movieID));
-
-                dao.deleteMovieGenreByMovieID(Integer.parseInt(movieID));
-                String[] genreList = genres.split(", ");
-
-                for (String genre : genreList) {
-                    dao.insertMovieGenre(Integer.parseInt(genre), Integer.parseInt(movieID));
-                }
-
-                response.sendRedirect("list_movie");
+            // Kiểm tra nếu thư mục không tồn tại thì tạo mới
+            if (!Files.exists(dirPath)) {
+                Files.createDirectories(dirPath);
             }
+            // Lấy phần của request chứa file ảnh
+            Part part = request.getPart("imgFoodItems");
+            // Lấy tên file gốc
+            String fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+            // Tạo tên file duy nhất để tránh trùng lặp
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
+            // Tạo đường dẫn tới file ảnh trong thư mục uploads
+            Path imagePath = Paths.get(realPath, uniqueFileName);
+            // Ghi dữ liệu từ input stream của file ảnh vào đường dẫn vừa tạo
+            try (InputStream input = part.getInputStream()) {
+                Files.copy(input, imagePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            dao.insertAddFood(foodName, description, price, uniqueFileName);
+            response.sendRedirect("addFood");
+
         } catch (IOException | ServletException e) {
             e.printStackTrace();
         }
+    }
 
+    private String getPartValue(Part part) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(part.getInputStream(), StandardCharsets.UTF_8))) {
+            return reader.lines().collect(Collectors.joining("\n"));
+        }
     }
 
     /**

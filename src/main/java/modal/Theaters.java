@@ -30,7 +30,10 @@ public class Theaters {
         this.theaterNumber = theaterNumber;
     }
 
-    
+    public Theaters(int theaterID, Cinemas cinemaID) {
+        this.theaterID = theaterID;
+        this.cinemaID = cinemaID;
+    }
 
     public int getTheaterID() {
         return theaterID;

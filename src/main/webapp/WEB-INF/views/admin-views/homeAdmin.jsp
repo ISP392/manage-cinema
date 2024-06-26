@@ -177,6 +177,20 @@
                                 <li><a href="manager_user">Staff</a></li>
                             </ul>
                         </li>
+                         <li>
+                            <a
+                                class="has-arrow ai-icon"
+                                href="javascript:void(0)"
+                                aria-expanded="false"
+                                >
+                                <i class="fa fa-gear fw-bold"></i>
+                                <span class="nav-text">Add Other</span>
+                            </a>
+                            <ul aria-expanded="false">
+                                <li><a href="addVoucher">Add Voucher</a></li>
+                                <li><a href="addFood">Add Food</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
