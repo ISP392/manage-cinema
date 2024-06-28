@@ -7,6 +7,36 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
+    <style>
+        .seats-container {
+            width: 100%;
+            text-align: center;
+        }
+
+        .seat-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .group {
+            display: flex;
+        }
+
+        .seat-gap {
+            width: 50px;  /* Chiều rộng của khoảng trống, chỉ hiển thị khi totalColumns > 18 */
+        }
+
+        .seat {
+            padding: 5px;
+            margin: 2px;
+            display: inline-block;
+        }
+
+
+
+    </style>
+
     <body>
         <%@include file="header.jsp" %>
         <div class="main-container-seat-booking">
@@ -30,25 +60,53 @@
                                 <div class="row">
                                     <form style="width:97%" id="seatForm" action="payment" method="post" onsubmit="return validateForm()">
                                         <div class="seats-container">
-
                                             <c:forEach var="row" items="${'ABCDEFGHIJ'.split('')}">
-                                                <c:forEach var="col" begin="1" end="10">
-                                                    <c:set var="seatCode" value="${row}${String.format('%02d', col)}" />
-                                                    <c:set var="seatFound" value="false" />
-                                                    <c:forEach var="s" items="${SWS}">
-                                                        <c:if test="${s.getSeatID().getSeatNumber().equals(seatCode)}">
-                                                            <label class="seat seat-occupied active" loc="${seatCode}" price="75000">${seatCode}</label>
-                                                            <c:set var="seatFound" value="true" />
-                                                        </c:if>
-                                                        <c:if test="${seatFound}">
-                                                            <c:out value="" />
-                                                        </c:if>
-                                                    </c:forEach>
-                                                    <c:if test="${!seatFound}">
-                                                        <label class="seat seat-standard" onclick="toggleSeat(this)" loc="${seatCode}" price="75000">${seatCode}</label>
-                                                    </c:if>
-                                                </c:forEach>
-                                                <br>
+                                                <div class="seat-row">
+                                                    <c:choose>
+                                                        <c:when test="${19 > 18}">
+                                                            <!-- Hiển thị với khoảng trống -->
+                                                            <div class="group">
+                                                                <c:forEach var="col" begin="1" end="${(19 div 2) - 1}">
+                                                                    <!-- Phần ghế bên trái -->
+                                                                    <c:set var="seatCode" value="${row}${String.format('%02d', col)}" />
+                                                                    <c:if test="${SWS.contains(seatCode)}">
+                                                                        <label class="seat seat-occupied active" onclick="toggleSeat(this)" loc="${seatCode}" price="75000">${seatCode}</label>
+                                                                    </c:if>
+                                                                    <c:if test="${!SWS.contains(seatCode)}">
+                                                                        <label class="seat seat-standard" onclick="toggleSeat(this)" loc="${seatCode}" price="75000">${seatCode}</label>
+                                                                    </c:if>
+                                                                </c:forEach>
+                                                            </div>
+                                                            <div class="seat-gap"></div>
+                                                            <div class="group">
+                                                                <c:forEach var="col" begin="${(19 div 2) + 1}" end="${19}">
+                                                                    <!-- Phần ghế bên phải -->
+                                                                    <c:set var="seatCode" value="${row}${String.format('%02d', col)}" />
+                                                                    <c:if test="${SWS.contains(seatCode)}">
+                                                                        <label class="seat seat-occupied active" onclick="toggleSeat(this)" loc="${seatCode}" price="75000">${seatCode}</label>
+                                                                    </c:if>
+                                                                    <c:if test="${!SWS.contains(seatCode)}">
+                                                                        <label class="seat seat-standard" onclick="toggleSeat(this)" loc="${seatCode}" price="75000">${seatCode}</label>
+                                                                    </c:if>
+                                                                </c:forEach>
+                                                            </div>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <!-- Hiển thị mà không có khoảng trống -->
+                                                            <div class="group">
+                                                                <c:forEach var="col" begin="1" end="${19}">
+                                                                    <c:set var="seatCode" value="${row}${String.format('%02d', col)}" />
+                                                                    <c:if test="${SWS.contains(seatCode)}">
+                                                                        <label class="seat seat-occupied active" onclick="toggleSeat(this)" loc="${seatCode}" price="75000">${seatCode}</label>
+                                                                    </c:if>
+                                                                    <c:if test="${!SWS.contains(seatCode)}">
+                                                                        <label class="seat seat-standard" onclick="toggleSeat(this)" loc="${seatCode}" price="75000">${seatCode}</label>
+                                                                    </c:if>
+                                                                </c:forEach>
+                                                            </div>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </div>
                                             </c:forEach>
                                         </div>
                                         <br>
@@ -66,7 +124,7 @@
                                                 <ul>
                                                     <li class="item-first">
                                                         <div class="product-detail" style="width: 30vh">
-                                                            <img src="./assets/images/posterImages/${screeningTimes.getMovieID().getPosterImage()}" width="74px" height="108px" alt="alt"/>
+                                                            <img src="${screeningTimes.getMovieID().getPosterImage()}" width="74px" height="108px" alt="alt"/>
                                                             <p>${screeningTimes.getMovieID().getTitle().toUpperCase()}</p>
                                                         </div>
                                                     </li>
