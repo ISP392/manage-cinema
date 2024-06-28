@@ -26,6 +26,17 @@ public class Cinemas {
         this.locationID = locationID;
     }
 
+    public Cinemas(String name, Location locationID) {
+        this.name = name;
+        this.locationID = locationID;
+    }
+
+    public Cinemas(String name) {
+        this.name = name;
+    }
+    
+    
+
     public int getCinemaID() {
         return cinemaID;
     }

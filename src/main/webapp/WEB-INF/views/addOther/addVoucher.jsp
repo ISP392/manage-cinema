@@ -121,7 +121,7 @@
                     <nav class="navbar navbar-expand">
                         <div class="collapse navbar-collapse">
                             <div class="header-left">
-                                <div class="dashboard_bar">Add Food</div>
+                                <div class="dashboard_bar">Add Voucher</div>
                             </div>
                             <ul class="navbar-nav header-right" style="margin-left: 15px">
                                 <li class="nav-item dropdown notification_dropdown">
@@ -412,4 +412,3 @@
         </script>
     </body>
 </html>
-
