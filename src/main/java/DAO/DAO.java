@@ -34,6 +34,22 @@ import java.sql.Timestamp;
  */
 public class DAO extends DBContext {
 
+    public String getRankTitle(String title, String description, float maxPoint, float minPoint){
+        String sql = "SELECT TITLE FROM Point WHERE TITLE BETWEEN minpoint and maxpoint ";
+        try{
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, title);
+            ps.setString(2, description);
+            ps.setFloat(3, maxPoint);
+            ps.setFloat(4, minPoint);
+            ResultSet rs = ps.executeQuery();
+        }catch(SQLException e){
+            System.out.println(e);
+        }
+        return title;
+    }
+    
+    
     public void insertAddFood(String foodName, String description, int price, String imgFoodItems) {
         String sql = "INSERT INTO FoodItems (foodName, description, price, imgFoodItems) VALUES (?, ?, ?, ?)";
         try {

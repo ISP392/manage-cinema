@@ -132,7 +132,8 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
             <div class="box-account">
               <div class="status-member">
                 <div class="tier">
-                  <label>Cấp độ thẻ: </label>
+                    <label>Cấp độ thẻ: <p>${title}</p> </label>
+                  
                   <span class="member-icon"></span>
                 </div>
                 <div class="total-spending">
