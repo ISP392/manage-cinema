@@ -990,6 +990,18 @@ label {
   border: 2px solid #ced4da !important;
 }
 
+.fixed-section {
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* Màu nền của các phần cố định */
+    z-index: 100; /* Đảm bảo các phần cố định hiển thị trên các nội dung khác */
+}
+
+.selected-movie, .order-summary {
+    max-height: 80vh; /* Giới hạn chiều cao tối đa của các phần cố định */
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung vượt quá kích thước cho phép */
+}
+
 @media (min-width: 992px) {
   .col-lg-6 img {
     display: block; /* Hiển thị ảnh */
@@ -1002,3 +1014,4 @@ label {
     display: none; /* Ẩn ảnh */
   }
 }
+

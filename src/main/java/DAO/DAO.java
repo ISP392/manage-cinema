@@ -1021,6 +1021,29 @@ public class DAO extends DBContext {
         return list;
     }
 
+    public List<FoodItem> getFood() {
+        List<FoodItem> foodItems = new ArrayList<>();
+        String sql = "SELECT * FROM FoodItems";
+
+        try (
+             PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                FoodItem foodItem = new FoodItem();
+                foodItem.setFoodItemID(rs.getInt("foodItemID"));
+                foodItem.setFoodName(rs.getString("foodName"));
+                foodItem.setDescription(rs.getString("description"));
+                foodItem.setPrice(rs.getInt("price"));
+                foodItem.setImgFoodItems(rs.getString("imgFoodItems"));
+                foodItems.add(foodItem);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return foodItems;
+    }
+    
      public static void main(String[] args) {
          //test getScreeningTimeByMovieDateAndCinemaName
             DAO dao = new DAO();
@@ -1029,5 +1052,7 @@ public class DAO extends DBContext {
                 System.out.println(m.getGenreID().getName());
             }
     }
+
+    
 
 }
