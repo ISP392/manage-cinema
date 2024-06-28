@@ -29,16 +29,31 @@ import java.sql.Timestamp;
  */
 public class DAO extends DBContext {
 
-    public int getPoint(int userId){
-        String sql = "SELECT * FROM Users WHERE point ";
+    public String getPoint(int userId){
+        String sql = "SELECT point FROM Users where userID = ?";
+        
         try{
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                int point = rs.getInt("point");
+                if(point >= 1000){
+                    return "Platinum";
+                }else if(point >= 500){
+                    return "gold";
+                }else if(point >= 100){
+                    return "Silver";
+                }else{
+                    return "Bronze";
+                }
+                
+            }
         }catch(SQLException e){
             System.out.println(e);
         }
-        return userId;
+        return " ";
     }
     
     

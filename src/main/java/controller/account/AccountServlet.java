@@ -22,11 +22,13 @@ public class AccountServlet extends HttpServlet {
 
             request.setAttribute("colorSecond", "#666");
             request.setAttribute("backgroundColorSecond", "#bfd2d9");
+            DAO dao = new DAO();
+            int userId = user.getUserID(); // Assume getUserID() method exists in Users class
+            String rank = dao.getPoint(userId);
+            request.setAttribute("userRank", rank);
+
             request.getRequestDispatcher("/WEB-INF/views/informationUser.jsp").forward(request, response);
         }
-        DAO dao = new DAO();
-        String title = request.getParameter("title");
-        
     }
 
     @Override
