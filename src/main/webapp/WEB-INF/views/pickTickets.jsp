@@ -28,9 +28,8 @@
                             <div class="ticketbox">
                                 <div class="screen"></div>
                                 <div class="row">
-                                    <form style="width:97%" id="seatForm" action="payment" method="post" onsubmit="return validateForm()">
+                                    <form style="width:97%" id="seatForm" action="pickFood" method="post" onsubmit="return validateForm()">
                                         <div class="seats-container">
-
                                             <c:forEach var="row" items="${'ABCDEFGHIJ'.split('')}">
                                                 <c:forEach var="col" begin="1" end="10">
                                                     <c:set var="seatCode" value="${row}${String.format('%02d', col)}" />
@@ -81,11 +80,18 @@
                                                     </li>
                                                 </ul> 
                                                 <!--<input type="hidden" name=""-->
+                                                <!-- Hidden inputs to store data to be sent to the servlet -->
+                                                <input type="hidden" name="movieTitle" value="${screeningTimes.getMovieID().getTitle()}">
+                                                <input type="hidden" name="cinemaName" value="${screeningTimes.getTheaterID().getCinemaID().getName()}">
+                                                <input type="hidden" name="screeningStartTime" value="<fmt:formatDate value='${screeningTimes.getStartTime()}' pattern='yyyy-MM-dd HH:mm' />">
+                                                <input type="hidden" name="screeningEndTime" value="<fmt:formatDate value='${screeningTimes.getEndTime()}' pattern='yyyy-MM-dd HH:mm' />">
+                                                <input type="hidden" name="theaterNumber" value="${screeningTimes.getTheaterID().getTheaterNumber()}">
                                                 <input type="hidden" name="selectedSeats" id="hiddenSelectedSeats">
                                                 <input type="hidden" name="totalPrice" id="hiddenTotalPrice">
                                                 <input type="hidden" name="screeningID" value="${screeningTimes.getScreeningID()}">
 
                                                 <input style="font-weight: bold; font-size: 20px" type="submit" value="ĐẶT VÉ">
+                                                
                                             </div>
                                         </div>
                                     </form>
