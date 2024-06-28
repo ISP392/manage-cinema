@@ -4,24 +4,19 @@
  */
 package DAO;
 
-import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Connection;
 
 import modal.*;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import modal.Genres;
 import modal.MovieGenres;
 import modal.Role;
-import modal.*;
 
 import modal.Movies;
 import modal.Users;
@@ -34,19 +29,16 @@ import java.sql.Timestamp;
  */
 public class DAO extends DBContext {
 
-    public String getRankTitle(String title, String description, float maxPoint, float minPoint){
-        String sql = "SELECT TITLE FROM Point WHERE TITLE BETWEEN minpoint and maxpoint ";
+    public int getPoint(int userId){
+        String sql = "SELECT * FROM Users WHERE point ";
         try{
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, title);
-            ps.setString(2, description);
-            ps.setFloat(3, maxPoint);
-            ps.setFloat(4, minPoint);
+            ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
         }catch(SQLException e){
             System.out.println(e);
         }
-        return title;
+        return userId;
     }
     
     
