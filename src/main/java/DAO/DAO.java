@@ -4,19 +4,15 @@
  */
 package DAO;
 
-import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Connection;
 
 import modal.*;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import modal.Genres;
 import modal.MovieGenres;
@@ -33,6 +29,34 @@ import java.sql.Timestamp;
  */
 public class DAO extends DBContext {
 
+    public String getPoint(int userId){
+        String sql = "SELECT point FROM Users where userID = ?";
+        
+        try{
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                int point = rs.getInt("point");
+                if(point >= 1000){
+                    return "Platinum";
+                }else if(point >= 500){
+                    return "gold";
+                }else if(point >= 100){
+                    return "Silver";
+                }else{
+                    return "Bronze";
+                }
+                
+            }
+        }catch(SQLException e){
+            System.out.println(e);
+        }
+        return " ";
+    }
+    
+    
     public void insertAddFood(String foodName, String description, int price, String imgFoodItems) {
         String sql = "INSERT INTO FoodItems (foodName, description, price, imgFoodItems) VALUES (?, ?, ?, ?)";
         try {
