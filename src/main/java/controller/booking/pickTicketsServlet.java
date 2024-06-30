@@ -78,7 +78,9 @@ public class pickTicketsServlet extends HttpServlet {
                 ScreeningTimes screeningTimes = d.getScreeningTimesByID(Integer.parseInt(screeningID));
 
                 int[] vipSeat = cc.getVIPDetails(screeningTimes.getTheaterID().getCinemaID().getName(), screeningTimes.getTheaterID().getTheaterNumber());
+                List<String> damagedSeats = cc.getDamagedSeats(screeningTimes.getTheaterID().getCinemaID().getName(), screeningTimes.getTheaterID().getTheaterNumber());
 
+                request.setAttribute("damagedSeats", damagedSeats);
                 request.setAttribute("vipSeat", vipSeat);
                 request.setAttribute("screeningTimes", screeningTimes);
                 request.setAttribute("SWS", SWS);
