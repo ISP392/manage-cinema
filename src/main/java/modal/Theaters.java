@@ -12,23 +12,27 @@ public class Theaters {
     private int theaterID;
     private Cinemas cinemaID;
     private int theaterNumber;
-    private int totalSeats;
+    private int rows;
+    private int cols;
 
     public Theaters() {
     }
 
-    public Theaters(int theaterID, Cinemas cinemaID, int theaterNumber, int totalSeats) {
+    public Theaters(int theaterID, Cinemas cinemaID, int theaterNumber) {
         this.theaterID = theaterID;
         this.cinemaID = cinemaID;
         this.theaterNumber = theaterNumber;
-        this.totalSeats = totalSeats;
     }
 
-    public Theaters(int theaterID,Cinemas cinemaID, int theaterNumber) {
+    public Theaters(int theaterID, Cinemas cinemaID, int theaterNumber, int rows, int cols) {
         this.theaterID = theaterID;
         this.cinemaID = cinemaID;
         this.theaterNumber = theaterNumber;
+        this.rows = rows;
+        this.cols = cols;
     }
+    
+
 
     public Theaters(int theaterID, Cinemas cinemaID) {
         this.theaterID = theaterID;
@@ -59,13 +63,22 @@ public class Theaters {
         this.theaterNumber = theaterNumber;
     }
 
-    public int getTotalSeats() {
-        return totalSeats;
+    public int getRows() {
+        return rows;
     }
 
-    public void setTotalSeats(int totalSeats) {
-        this.totalSeats = totalSeats;
+    public void setRows(int rows) {
+        this.rows = rows;
     }
+
+    public int getCols() {
+        return cols;
+    }
+
+    public void setCols(int cols) {
+        this.cols = cols;
+    }
+    
     
     
 }

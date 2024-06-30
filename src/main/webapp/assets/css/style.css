@@ -735,6 +735,10 @@ img {
   border: 1px solid #01c73c;
   cursor: pointer;
 }
+.seat-vip{
+    border: 1px solid #f71708;
+    cursor: pointer;
+}
 .seat-selected {
   font-weight: bold;
   background: #b11500 !important;
@@ -792,6 +796,12 @@ img {
   background-color: #bbb;
 }
 
+.icon.vip:before{
+    border:2px solid #f71708;
+}
+.icon.standard:before{
+    border:2px solid #01c73c;
+}
 .bottom-content {
   display: flex;
   justify-content: center;

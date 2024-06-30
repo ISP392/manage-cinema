@@ -16,6 +16,7 @@ import java.util.List;
 import modal.ScreeningTimes;
 import modal.SeatWithScreeningTime;
 import modal.Users;
+import util.CinemaConfig;
 
 /**
  *
@@ -71,21 +72,24 @@ public class pickTicketsServlet extends HttpServlet {
                     response.sendRedirect("home");
                     return;
                 }
+                CinemaConfig cc = new CinemaConfig();
                 DAO d = new DAO();
                 List<SeatWithScreeningTime> SWS = d.getSWSByID(Integer.parseInt(screeningID));
                 ScreeningTimes screeningTimes = d.getScreeningTimesByID(Integer.parseInt(screeningID));
-                
+
+                int[] vipSeat = cc.getVIPDetails(screeningTimes.getTheaterID().getCinemaID().getName(), screeningTimes.getTheaterID().getTheaterNumber());
+
+                request.setAttribute("vipSeat", vipSeat);
                 request.setAttribute("screeningTimes", screeningTimes);
                 request.setAttribute("SWS", SWS);
 
                 request.getRequestDispatcher("/WEB-INF/views/pickTickets.jsp").forward(request, response);
-
             } catch (NumberFormatException e) {
-
+                e.printStackTrace();
             }
         }
-
     }
+
 
     /**
      * Handles the HTTP <code>POST</code> method.
