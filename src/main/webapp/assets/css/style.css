@@ -735,6 +735,10 @@ img {
   border: 1px solid #01c73c;
   cursor: pointer;
 }
+.seat-vip{
+    border: 1px solid #f71708;
+    cursor: pointer;
+}
 .seat-selected {
   font-weight: bold;
   background: #b11500 !important;
@@ -755,6 +759,22 @@ img {
   font-size: 7pt;
   padding: 1px 0;
 }
+
+.seat-damaged{
+    background-color: #bbb;
+    display: flex;
+    cursor: not-allowed;
+    justify-content: center;
+    align-items: center;
+}
+.seat-damaged::before {
+    content: "X"; /* Ký tự hiển thị */
+    position: absolute; /* Vị trí tuyệt đối so với khối ghế */
+    color: red; /* Màu của ký tự */
+    font-size: 20px; /* Kích thước của ký tự */
+    font-weight: bold; /* Độ đậm của ký tự */
+}
+
 
 .ticketbox-notice {
   display: flex;
@@ -792,6 +812,12 @@ img {
   background-color: #bbb;
 }
 
+.icon.vip:before{
+    border:2px solid #f71708;
+}
+.icon.standard:before{
+    border:2px solid #01c73c;
+}
 .bottom-content {
   display: flex;
   justify-content: center;
