@@ -1,8 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Staff Home - Cinema Booking System</title>
+    <title>Staff Home</title>
+    <!-- Link to FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -11,14 +14,33 @@
             padding: 0;
             color: #333;
         }
-        
+        .background-container {
+            position: fixed;
+            top: 10;
+            left: 10;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .background-blur {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('<c:url value="/assets/images/Movie-background.jpg"/>') no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(10px); /* Làm mờ ảnh nền */
+        }
         .container {
             margin: 20px auto;
             padding: 20px;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.9); /* Màu nền trắng mờ */
             max-width: 1200px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            text-align: center; /* Canh giữa nội dung */
         }
         .content {
             display: flex;
@@ -60,21 +82,32 @@
             background-color: #c0392b;
             color: white;
         }
+        .card i {
+            font-size: 3em; /* Kích thước icon */
+            margin-bottom: 10px;
+            color: #c0392b; /* Màu của icon */
+        }
     </style>
 </head>
 <body>
-    <%@include file="headerStaff.jsp" %>
+    <div class="background-container">
+        <div class="background-blur"></div>
+    </div>
+    <%@include file="header.jsp" %>
     <div class="container">
         <div class="content">
             <div class="card">
+                <i class="fas fa-ticket-alt"></i> <!-- Icon bán vé -->
                 <h3>Sell Tickets</h3>
                 <a href="sell_ticket.jsp">Go to Sell Tickets</a>
             </div>
             <div class="card">
+                <i class="fas fa-chart-line"></i> <!-- Icon báo cáo -->
                 <h3>Daily Report</h3>
-                <a href="report.jsp">Daily Report</a>
+                <a href="report.jsp">View Daily Report</a>
             </div>
             <div class="card">
+                <i class="fas fa-headset"></i> <!-- Icon hỗ trợ khách hàng -->
                 <h3>Support Customers</h3>
                 <a href="support.jsp">Support Customers</a>
             </div>

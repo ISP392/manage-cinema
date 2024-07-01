@@ -19,6 +19,8 @@ import java.util.Calendar;
 import java.util.List;
 import modal.Movies;
 import modal.Users;
+import modal.Cinemas;
+import util.CinemaConfig;
 
 /**
  *
@@ -138,31 +140,19 @@ public class addNewSlot extends HttpServlet {
             throws ServletException, IOException {
         String movieID = request.getParameter("movieID");
         String cinema = request.getParameter("cinemaSelect");
-        response.getWriter().print("cinema: " + cinema);
 
         String movieDateStr = request.getParameter("dateInput");
         String theaterNumber = request.getParameter("theaterNumber");
         String startTime = request.getParameter("startTimeInput");
         String endTime = request.getParameter("endTimeInput");
-        int locationID = 0;
+
+        CinemaConfig cinemaConfig = new CinemaConfig();
+        int locationID = cinemaConfig.getLocationIdByCinemaName(cinema);
+        int[] dimensions = cinemaConfig.getRowsAndColumns(cinema, Integer.parseInt(theaterNumber));
+        int rows = dimensions[0];
+        int columns = dimensions[1];
+        
         DAO dao = new DAO();
-        if (cinema.equals("BANNY Hùng Vương Plaza")) {
-            locationID = 2;
-        } else if (cinema.equals("BANNY Menas Mall")) {
-            locationID = 2;
-        } else if (cinema.equals("BANNY Crescent Mall")) {
-            locationID = 2;
-        } else if (cinema.equals("BANNY Vincom Center Bà Triệu")) {
-            locationID = 1;
-        } else if (cinema.equals("BANNY Hồ Gươm Plaza")) {
-            locationID = 1;
-        } else if (cinema.equals("BANNY Aeon Long Biên")) {
-            locationID = 1;
-        } else if (cinema.equals("BANNY Vĩnh Trung Plaza")) {
-            locationID = 3;
-        } else if (cinema.equals("BANNY Vincom Đà Nẵng")) {
-            locationID = 3;
-        }
 
         //response.getWriter().print("locationID: " + locationID);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -204,17 +194,15 @@ public class addNewSlot extends HttpServlet {
             //insert new cinemas
             dao.insertNewCinemas(cinema, Date.valueOf(movieDateStr), locationID);
             //get id of cinemas recently inserted
-            int cinemasID = dao.getCinemasRecentlyAdded();
-           
+            Cinemas c = dao.getCinemasRecentlyAdded();
+
             // //insert new theaters
-            dao.insertTheaters(cinemasID, Integer.parseInt(theaterNumber));
+            dao.insertTheaters(c.getCinemaID(), Integer.parseInt(theaterNumber), rows, columns);
             // //get id of theaters recently inserted
             int theaterID = dao.getTheaterIDRecentlyAdded();
-            response.getWriter().print("theaterID: " + theaterID);
 
             // //insert screeningTimes
             dao.insertScreeningTimes(theaterID, Integer.parseInt(movieID), startTimeTimestamp, endTimeTimestamp);
-            response.getWriter().print("Insert new slot successfully");
             response.sendRedirect("list_movie");
         }
 

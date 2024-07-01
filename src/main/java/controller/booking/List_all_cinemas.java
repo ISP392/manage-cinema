@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.Timestamp;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -66,6 +67,10 @@ public class List_all_cinemas extends HttpServlet {
         String date = request.getParameter("date");
         String cinema = request.getParameter("cinemaName");
         String locationID = request.getParameter("locationID");
+        
+        //get current hour and minute
+            Timestamp startTime = new Timestamp(System.currentTimeMillis());
+
 
 
         //get current year and month
@@ -104,7 +109,7 @@ public class List_all_cinemas extends HttpServlet {
         for (Movies movie : movies) {
             String movieTitle = movie.getTitle();
             // Lấy danh sách giờ chiếu cho phim theo ngày chiếu và tên rạp
-            List<ScreeningTimes> screeningTimes = dao.getScreeningTimeOfMovieByMovieDateAndCinemaName(sqlDate, cinema, movie.getMovieID());
+            List<ScreeningTimes> screeningTimes = dao.getScreeningTimeOfMovieByMovieDateAndCinemaName(sqlDate, cinema, movie.getMovieID(), startTime);
 
             // Sắp xếp danh sách giờ chiếu theo thứ tự tăng dần dựa trên thời gian bắt đầu
             Collections.sort(screeningTimes, new Comparator<ScreeningTimes>() {

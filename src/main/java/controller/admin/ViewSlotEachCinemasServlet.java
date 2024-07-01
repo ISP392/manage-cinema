@@ -2,9 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.booking;
+package controller.admin;
 
-import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,18 +11,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import modal.ScreeningTimes;
-import modal.SeatWithScreeningTime;
-import modal.Users;
-import util.CinemaConfig;
 
 /**
  *
  * @author baoquoc
  */
-@WebServlet(name = "pickTicketsServlet", urlPatterns = {"/pick_tickets"})
-public class pickTicketsServlet extends HttpServlet {
+@WebServlet(name = "ViewSlotEachCinemasServlet", urlPatterns = {"/view-slot"})
+public class ViewSlotEachCinemasServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +36,10 @@ public class pickTicketsServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet pickTicketsServlet</title>");            
+            out.println("<title>Servlet ViewSlotEachCinemasServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet pickTicketsServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ViewSlotEachCinemasServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,36 +56,8 @@ public class pickTicketsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Users user = (Users) request.getSession().getAttribute("account");
-        if (user == null) {
-            response.sendRedirect("signin");
-        } else {
-            try {
-                String screeningID = request.getParameter("screeningID");
-                if (screeningID == null) {
-                    response.sendRedirect("home");
-                    return;
-                }
-                CinemaConfig cc = new CinemaConfig();
-                DAO d = new DAO();
-                List<SeatWithScreeningTime> SWS = d.getSWSByID(Integer.parseInt(screeningID));
-                ScreeningTimes screeningTimes = d.getScreeningTimesByID(Integer.parseInt(screeningID));
-
-                int[] vipSeat = cc.getVIPDetails(screeningTimes.getTheaterID().getCinemaID().getName(), screeningTimes.getTheaterID().getTheaterNumber());
-                List<String> damagedSeats = cc.getDamagedSeats(screeningTimes.getTheaterID().getCinemaID().getName(), screeningTimes.getTheaterID().getTheaterNumber());
-
-                request.setAttribute("damagedSeats", damagedSeats);
-                request.setAttribute("vipSeat", vipSeat);
-                request.setAttribute("screeningTimes", screeningTimes);
-                request.setAttribute("SWS", SWS);
-
-                request.getRequestDispatcher("/WEB-INF/views/pickTickets.jsp").forward(request, response);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
+        request.getRequestDispatcher("/WEB-INF/views/admin-views/viewSlotEachCinemas.jsp").forward(request, response);
     }
-
 
     /**
      * Handles the HTTP <code>POST</code> method.
