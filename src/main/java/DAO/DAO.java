@@ -29,6 +29,7 @@ import java.sql.Timestamp;
  */
 public class DAO extends DBContext {
 
+    
     public String getPoint(int userId){
         String sql = "SELECT point FROM Users where userID = ?";
         

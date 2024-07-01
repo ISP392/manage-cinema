@@ -55,14 +55,15 @@ public class Email {
     }
 
     public static void main(String[] args) {
-        Random random = new Random();
-        // Generate random code with 6 digits
-        int code = random.nextInt(900000) + 100000;
-        if (sendEmail("lephuongmai862003@gmail.com", "Code", "Your code is: " + code)) {
-            System.out.println("success");
-        } else {
-            System.out.println("false");
-        }
+//        Random random = new Random();
+//        // Generate random code with 6 digits
+//        int code = random.nextInt(900000) + 100000;
+//        if (sendEmail("lephuongmai862003@gmail.com", "Code", "Your code is: " + code)) {
+//            System.out.println("success");
+//        } else {
+//            System.out.println("false");
+//        }
+        sendEmail("daothihabg03@gmail.com", "new employment application", " ");
 
     }
 }
