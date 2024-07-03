@@ -210,6 +210,7 @@
                                     <div class="cpa">
                                         <i class="fa-solid fa-file-lines me-1"></i>List Movies
                                     </div>
+                                    <input type="text" id="searchInput" placeholder="Search for movies..." class="form-control mb-3">
                                     <div class="tools">
                                         <a href="javascript:void(0);" class="expand SlideToolHeader"><i class="fal fa-angle-down"></i></a>
                                     </div>

@@ -177,7 +177,7 @@
                                 <li><a href="manager_user">Staff</a></li>
                             </ul>
                         </li>
-                         <li>
+                        <li>
                             <a
                                 class="has-arrow ai-icon"
                                 href="javascript:void(0)"
@@ -189,6 +189,7 @@
                             <ul aria-expanded="false">
                                 <li><a href="addVoucher">Add Voucher</a></li>
                                 <li><a href="addFood">Add Food</a></li>
+                                <li><a href="addEvent">Add Event</a></li>
                             </ul>
                         </li>
                     </ul>
