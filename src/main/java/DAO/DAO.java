@@ -1029,10 +1029,9 @@ public class DAO extends DBContext {
         return null;
     }
 
-    //get screening time by movie date and cinema name
-    public List<ScreeningTimes> getScreeningTimeOfMovieByMovieDateAndCinemaName(Date sqlDate, String cinemaName, int movieID) {
-        String sql = "select st.movieID, l.name,l.locationID, m.title, m.posterImage, st.screeningID, st.startTime, st.endTime, t.theaterID from Location l join Cinemas c on l.locationID = c.locationID join Theaters t on t.cinemaID = c.cinemaID join ScreeningTimes st on st.theaterID = t.theaterID join Movies m on m.movieID = st.movieID where c.movieDate = ? and m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() and c.name = ? and m.movieID = ?";
-    public List<ScreeningTimes> getScreeningTimeOfMovieByMovieDateAndCinemaName(Date sqlDate, String cinemaName, int movieID, Timestamp startTime) {
+    // get screening time by movie date and cinema name
+    public List<ScreeningTimes> getScreeningTimeOfMovieByMovieDateAndCinemaName(Date sqlDate, String cinemaName,
+            int movieID, Timestamp startTime) {
         String sql = "select st.movieID, l.name,l.locationID, m.title, m.posterImage, st.screeningID, st.startTime, st.endTime, t.theaterID from Location l join Cinemas c on l.locationID = c.locationID join Theaters t on t.cinemaID = c.cinemaID join ScreeningTimes st on st.theaterID = t.theaterID join Movies m on m.movieID = st.movieID where c.movieDate = ? and m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() and c.name = ? and m.movieID = ? and st.startTime > DATE_ADD(?, INTERVAL 10 MINUTE)";
         List<ScreeningTimes> list = new ArrayList<>();
         try {
@@ -1097,13 +1096,77 @@ public class DAO extends DBContext {
         }
         return foodItems;
     }
+    // get all cinemas
+    public List<Cinemas> getAllCinemas() {
+        List<Cinemas> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT c.name FROM project_cinema_update.Cinemas c where c.name not like 'CGV%'";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Cinemas c = new Cinemas(rs.getString("name"));
+                list.add(c);
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+    // get ScreeningTimes in one week
+    public List<Cinemas> getAllMovieDateInOneWeek(Date startDate, Date endDate, String cinemasName,
+                                                  int theaterNumber) {
+        List<Cinemas> list = new ArrayList<>();
+        String sql = "select distinct c.movieDate from Location l join Cinemas c on l.locationID = c.locationID join Theaters t on t.cinemaID = c.cinemaID join ScreeningTimes st on st.theaterID = t.theaterID join Movies m on m.movieID = st.movieID where c.movieDate BETWEEN ? AND ? and c.name = ? and t.theaterNumber = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setDate(1, startDate);
+            ps.setDate(2, endDate);
+            ps.setString(3, cinemasName);
+            ps.setInt(4, theaterNumber);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Cinemas c = new Cinemas();
+                c.setMovieDate(rs.getDate("movieDate"));
+                list.add(c);
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    // get all Screening time in each day
+    public List<ScreeningTimes> getAllScreeningTimesEachDay(Date movieDate, String cinemaName) {
+        List<ScreeningTimes> list = new ArrayList<>();
+        String sql = "select st.movieID, l.name,l.locationID, m.title, m.posterImage, st.screeningID, st.startTime, st.endTime, t.theaterID from Location l join Cinemas c on l.locationID = c.locationID join Theaters t on t.cinemaID = c.cinemaID join ScreeningTimes st on st.theaterID = t.theaterID join Movies m on m.movieID = st.movieID where c.movieDate = ? and m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() and c.name = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setDate(1, movieDate);
+            ps.setString(2, cinemaName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Cinemas c = new Cinemas(rs.getString("title"));
+                Theaters t = new Theaters(rs.getInt("theaterID"), c);
+                ScreeningTimes st = new ScreeningTimes(t, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"));
+                list.add(st);
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
 
     public static void main(String[] args) {
         //test getScreeningTimeByMovieDateAndCinemaName
         DAO dao = new DAO();
-        List<Movies> mg = dao.searchMovies("m");
-        for (Movies m : mg) {
-            System.out.println(m.getTitle());
+        Date sqlDate = Date.valueOf("2024-07-02");
+        String cinemaName = "BANNY Vincom Center Bà Triệu";
+        List<ScreeningTimes> list = dao.getAllScreeningTimesEachDay(sqlDate, cinemaName);
+        for (ScreeningTimes st : list) {
+            System.out.println(st.getTheaterID().getCinemaID().getName() + ", start time: " + st.getStartTime());
         }
     }
 
