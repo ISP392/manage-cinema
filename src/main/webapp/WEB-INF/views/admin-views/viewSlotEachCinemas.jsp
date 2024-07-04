@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 
 <%@ page import="java.util.Calendar"%>
@@ -59,7 +60,7 @@
             font-family: Arial, sans-serif;
         }
         table {
-            width: 100%;
+            width: 1490px;
             border-collapse: collapse;
             margin-top: 20px;
         }
@@ -79,6 +80,16 @@
         .selected {
             background-color: #007BFF;
             color: white;
+        }
+        .slot{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #D5F8F9;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            height: 100px;
         }
     </style>
 </head>
@@ -145,35 +156,67 @@
     <tr>
         <th style="width: 200px;">Date</th>
         <% for (int i = 0; i < 7; i++) { %>
-        <th><%= displayFormat.format(weekDays[i]) %></th>
+            <th><%= displayFormat.format(weekDays[i]) %></th>
         <%-- Hidden input để lưu trữ ngày đầy đủ --%>
         <input type="hidden" name="weekStartDate" value="<%= fullDateFormat.format(weekDays[i]) %>">
         <% } %>
     </tr>
     </thead>
-    <tbody>
-        <c:forEach var="day" items="${weekDays}">
-            <c:set var="formattedDate">
-                <fmt:formatDate value="${day}" pattern="MM/dd"/>
-            </c:set>
-            <c:if test="${showtimeMap.containsKey(formattedDate)}">
-                <c:forEach var="showtime" items="${showtimeMap.value}">
-                    <tr>
-                        <td>${showtime.getTheaterID().getCinemaID().getName()}</td>
-                    </tr>
+    <!-- <tbody>
+    <c:forEach var="day" items="${weekDays}">
+        <c:set var="formattedDate">
+            <fmt:formatDate value="${day}" pattern="MM/dd"/>
+        </c:set>
+        <tr>
+            <c:if test="${showtimeMap[formattedDate] != null}">
+                <c:forEach var="showtime" items="${showtimeMap[formattedDate]}">
+                    <td>${showtime.theaterID.cinemaID.name}</td>
+                    <td>${formattedDate}</td>
                 </c:forEach>
+                    <td>yes</td>
+            </c:if>
+            <c:if test="${showtimeMap[formattedDate] == null}">
                 <tr>
-                    <td>yesádf</td>
+                    <td>no123</td>
                     <td>${formattedDate}</td>
                 </tr>
             </c:if>
-            <c:if test="${!showtimeMap.containsKey(formattedDate)}">
-                <tr>
-                    <td>no</td>
-                    <td>${formattedDate}</td>
-                </tr>
-            </c:if>
-        </c:forEach>
+        </tr>
+        
+    </c:forEach>
+    </tbody> -->
+    <tbody>
+        <tr>
+            <td>-</td>
+            <c:forEach var="day" items="${weekDays}">
+                <c:set var="formattedDate">
+                    <fmt:formatDate value="${day}" pattern="MM/dd"/>
+                </c:set>
+                <c:choose>
+                    <c:when test="${showtimeMap[formattedDate] != null}">
+                        <td style="width: 200px; vertical-align: top;">
+                            <c:forEach var="showtime" items="${showtimeMap[formattedDate]}" varStatus="status">
+                            <div class="slot">   
+                                <div>${showtime.theaterID.cinemaID.name}</div>
+                                <div style="font-size: 20px; font-weight: bold; margin-top: 10px;">
+                                    <c:set var="parsedDate" value="${fn:substring(showtime.startTime, 0, 19)}" />
+                                    <c:set var="parsedDate2" value="${fn:substring(showtime.endTime, 0, 19)}" />
+
+
+                                    <fmt:parseDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm:ss" var="dateObj" />
+                                    <fmt:parseDate value="${parsedDate2}" pattern="yyyy-MM-dd HH:mm:ss" var="dateObj2" />
+                                    <fmt:formatDate value="${dateObj}" pattern="HH:mm" /> ~ <fmt:formatDate value="${dateObj2}" pattern="HH:mm" />
+                                </div>
+                            </div>
+                            </c:forEach>
+                        </td>
+                    </c:when>
+                    <c:otherwise>
+                        <td>-</td>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+        </tr>
     </tbody>
 </table>
 

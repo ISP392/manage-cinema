@@ -107,6 +107,7 @@ public class ViewSlotEachCinemasServlet extends HttpServlet {
                 }
             }
 
+
             request.setAttribute("showtimeMap", showtimeMap);
             request.setAttribute("listCinemas", listCinemas);
             request.setAttribute("cinemaName", cinemaName);

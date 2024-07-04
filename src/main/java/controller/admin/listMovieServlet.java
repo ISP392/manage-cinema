@@ -59,6 +59,7 @@ public class listMovieServlet extends HttpServlet {
                 m.setStatus("Hidden");
             }
         }
+         
 
         request.setAttribute("endPage", endPage);
         request.setAttribute("tag", index);
