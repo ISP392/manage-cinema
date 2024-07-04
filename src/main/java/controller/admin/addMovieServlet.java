@@ -5,8 +5,6 @@
 package controller.admin;
 
 import DAO.DAO;
-import io.github.cdimascio.dotenv.Dotenv;
-import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,23 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.sql.Date;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import modal.Movies;
 import modal.Users;
 
@@ -39,7 +21,7 @@ import modal.Users;
  *
  * @author baoquoc
  */
-@WebServlet(name = "addMovieServlet", urlPatterns = {"/add_movie"})
+@WebServlet(name = "addMovieServlet", urlPatterns = { "/add_movie" })
 @MultipartConfig
 public class addMovieServlet extends HttpServlet {
 
@@ -47,10 +29,10 @@ public class addMovieServlet extends HttpServlet {
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -69,14 +51,15 @@ public class addMovieServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
+    // + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -92,10 +75,10 @@ public class addMovieServlet extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -109,30 +92,29 @@ public class addMovieServlet extends HttpServlet {
         String trailerUrl = request.getParameter("trailerUrl");
         String posterImage = request.getParameter("poster");
 
-       
-     try {
-            //check if date is 30 days from now will return a error message
+        try {
+            // check if date is 30 days from now will return a error message
             Date currentDate = new Date(System.currentTimeMillis());
             long diff = currentDate.getTime() - releaseDate.getTime();
             long diffDays = diff / (24 * 60 * 60 * 1000);
             if (diffDays > 30) {
                 request.setAttribute("message", "Release date must be at most 30 days before now");
                 request.getRequestDispatcher("/WEB-INF/views/admin-views/addMovie.jsp").forward(request, response);
-            }else {
-                dao.insertNewMovie(title, description, releaseDate, posterImage, Integer.parseInt(duration), trailerUrl);
+            } else {
+                dao.insertNewMovie(title, description, releaseDate, posterImage, Integer.parseInt(duration),
+                        trailerUrl);
                 Movies movie = dao.getMovieRecentlyAdded();
                 String[] genreList = genres.split(", ");
                 for (String genre : genreList) {
                     dao.insertMovieGenre(Integer.parseInt(genre), movie.getMovieID());
                 }
                 response.sendRedirect("list_movie");
-             }
+            }
 
         } catch (IOException | ServletException e) {
             e.printStackTrace();
         }
     }
-
 
     /**
      * Returns a short description of the servlet.
