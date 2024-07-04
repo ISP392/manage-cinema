@@ -107,15 +107,15 @@
                     <!--//create five date buttons-->
                     <% for (int i = 0; i < 5; i++) {%>
                     <input type="hidden" name="mainDate" value="<%= String.format("%tF", cal.getTime()) %>">
-                        <a href="list_all_cinemas?date=<%= daysOfMonth.get(i) %>&locationID=${locationID}&cinemaName=${cinema}">
-                            <!--check the i = 0 class date-button has selected-->
-                            <div class="date-button <%= (Integer.parseInt(String.valueOf(request.getParameter("date"))) == daysOfMonth.get(i) ? "selected" : "") %>">
-                                <div class="date-number"><%= daysOfMonth.get(i) %></div>
-                                <div class="date-label"><%= dayOfWeeks.get(i) %></div>
-                            </div>
-                        </a>
+                    <a href="list_all_cinemas?date=<%= daysOfMonth.get(i) %>&locationID=${locationID}&cinemaName=${cinema}">
+                        <!--check the i = 0 class date-button has selected-->
+                        <div class="date-button <%= (Integer.parseInt(String.valueOf(request.getParameter("date"))) == daysOfMonth.get(i) ? "selected" : "") %>">
+                            <div class="date-number"><%= daysOfMonth.get(i) %></div>
+                            <div class="date-label"><%= dayOfWeeks.get(i) %></div>
+                        </div>
+                    </a>
                     <% }%>    
-                    
+
                 </div>
                 <div class="movie-schedule-container">
                     <c:if test="${empty moviesMap}">
@@ -144,7 +144,7 @@
                                         >${moviesMapEntry.key.title}</a
                                     >
                                     <div style="font-size: 13px; color: #3a3a3a">
-                                            <%--get movie id and for each movie get all movie genres--%>
+                                        <%--get movie id and for each movie get all movie genres--%>
                                         <c:set var="genresString" value="" scope="page"/>
                                         <c:forEach items="${GenresByMovie}" var="GBM" varStatus="status">
                                             <%-- check if movieMapEntry.key.movieID == GBM.movieID--%>
@@ -159,10 +159,23 @@
                                         <c:out value="${genresString}"/>
                                     </div>
                                     <div class="schedule-times">
-                                        <c:forEach items="${moviesMapEntry.value}" var="list_screen_time">
-                                            <div class="time-slot"><span style="font-size: 15px; font-weight: 700"><fmt:formatDate value="${list_screen_time.startTime}" pattern="HH:mm" /></span> ~ <fmt:formatDate value="${list_screen_time.endTime}" pattern="HH:mm" /></div>
-                                        </c:forEach>
+                                        <c:if test="${empty moviesMapEntry.value}">
+                                            <div class="time-slot">Suất chiếu vừa kết thúc</div>
+                                        </c:if>
+                                        <c:if test="${not empty moviesMapEntry.value}">
+                                            <c:forEach items="${moviesMapEntry.value}" var="list_screen_time">
+                                                <div class="time-slot">
+                                                    <a href="pick_tickets?screeningID=${list_screen_time.screeningID}">
+                                                        <span style="font-size: 15px; font-weight: 700">
+                                                            <fmt:formatDate value="${list_screen_time.startTime}" pattern="HH:mm" />
+                                                        </span> ~
+                                                        <fmt:formatDate value="${list_screen_time.endTime}" pattern="HH:mm" />
+                                                    </a>
+                                                </div>
+                                            </c:forEach>
+                                        </c:if>
                                     </div>
+
                                 </div>
                             </div>
                         </div>

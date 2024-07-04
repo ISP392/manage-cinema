@@ -1,0 +1,97 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Home Header</title>
+    <!-- Link to FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Màu nền nhạt */
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f5f5da; /* Màu nền nhạt */
+            padding: 10px 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .logo img {
+            height: 90px;
+            display: block;
+        }
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            flex: 1;
+        }
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+            border-radius: 4px;
+            margin: 0 5px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a:hover {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .nav i {
+            margin-right: 8px; /* Khoảng cách giữa icon và text */
+        }
+        .account-info {
+            font-size: 1.6em;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 4px;
+            margin-right: 10px;
+            background-color: #e74c3c;
+            color: white;
+        }
+        .account-info a:hover {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .account-info a {
+            color: #333;
+            text-decoration: none;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+            border-radius: 4px;
+            margin: 0 5px;
+            font-size: 1.0em;
+            display: flex;
+            align-items: center;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <div class="logo">
+            <img src="<c:url value='./assets/images/logo_mini.png' />" alt="Logo"> <!-- Đường dẫn tới logo -->
+        </div>
+        <div class="nav-links">
+            <a href="staff_home.jsp"><i class="fas fa-home"></i> Home</a>
+            <a href="sell_ticket.jsp"><i class="fas fa-ticket-alt"></i> Sell Tickets</a>
+            <a href="report.jsp"><i class="fas fa-chart-line"></i> Daily Report</a>
+            <a href="support.jsp"><i class="fas fa-headset"></i> Support</a>
+            <a href="logout.jsp"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+        <div class="account-info">
+            <a href="information.jsp"><i class="fas fa-user"></i> Cao Thi Ha Vy</a><!-- Hiển thị tài khoản đang đăng nhập -->
+        </div>
+    </div>
+</body>
+</html>

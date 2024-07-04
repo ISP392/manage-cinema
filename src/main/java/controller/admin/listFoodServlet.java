@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.booking;
+package controller.admin;
 
 import DAO.DAO;
 import java.io.IOException;
@@ -12,18 +12,18 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import modal.ScreeningTimes;
-import modal.SeatWithScreeningTime;
+import modal.Movies;
 import modal.Users;
-import util.CinemaConfig;
 
 /**
  *
- * @author baoquoc
+ * @author ACER
  */
-@WebServlet(name = "pickTicketsServlet", urlPatterns = {"/pick_tickets"})
-public class pickTicketsServlet extends HttpServlet {
+@WebServlet(name = "listFoodServlet", urlPatterns = {"/listFood"})
+public class listFoodServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,15 +42,16 @@ public class pickTicketsServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet pickTicketsServlet</title>");            
+            out.println("<title>Servlet listFoodServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet pickTicketsServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet listFoodServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -62,36 +63,54 @@ public class pickTicketsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Users user = (Users) request.getSession().getAttribute("account");
-        if (user == null) {
-            response.sendRedirect("signin");
+        Users u = (Users) request.getSession().getAttribute("admin");
+        if (u == null || u.getRoleID().getRoleID() != 1) {
+            response.sendRedirect("admin");
         } else {
-            try {
-                String screeningID = request.getParameter("screeningID");
-                if (screeningID == null) {
-                    response.sendRedirect("home");
-                    return;
-                }
-                CinemaConfig cc = new CinemaConfig();
-                DAO d = new DAO();
-                List<SeatWithScreeningTime> SWS = d.getSWSByID(Integer.parseInt(screeningID));
-                ScreeningTimes screeningTimes = d.getScreeningTimesByID(Integer.parseInt(screeningID));
+            DAO dao = new DAO();
 
-                int[] vipSeat = cc.getVIPDetails(screeningTimes.getTheaterID().getCinemaID().getName(), screeningTimes.getTheaterID().getTheaterNumber());
-                List<String> damagedSeats = cc.getDamagedSeats(screeningTimes.getTheaterID().getCinemaID().getName(), screeningTimes.getTheaterID().getTheaterNumber());
-
-                request.setAttribute("damagedSeats", damagedSeats);
-                request.setAttribute("vipSeat", vipSeat);
-                request.setAttribute("screeningTimes", screeningTimes);
-                request.setAttribute("SWS", SWS);
-
-                request.getRequestDispatcher("/WEB-INF/views/pickTickets.jsp").forward(request, response);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
+            String indexPage = request.getParameter("index");
+            if (indexPage == null) {
+                indexPage = "1";
             }
+            int index = Integer.parseInt(indexPage);
+            int pageSize = 10;
+
+            int totalMovies = dao.getMovieCount();
+            int endPage = totalMovies / pageSize;
+            if (totalMovies % pageSize != 0) {
+                endPage++;
+            }
+
+            List<Movies> listMovies = dao.getMoviesByPage(index, pageSize);
+
+            Date currentDate = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(currentDate);
+            cal.add(Calendar.DAY_OF_MONTH, -30);
+            Date date30DaysAgo = cal.getTime();
+
+            for (Movies m : listMovies) {
+                if (m.getDisplay() == 1) {
+                    if (m.getReleaseDate().after(currentDate)) {
+                        m.setStatus("Sắp Chiếu");
+                    } else if (m.getReleaseDate().after(date30DaysAgo) && m.getReleaseDate().before(currentDate)) {
+                        m.setStatus("Đang chiếu");
+                    } else {
+                        m.setStatus("Đã chiếu");
+                    }
+                } else if (m.getDisplay() == 0) {
+                    m.setStatus("Hidden");
+                }
+            }
+
+            request.setAttribute("endPage", endPage);
+            request.setAttribute("tag", index);
+            request.setAttribute("listFoods", listMovies);
+
+            request.getRequestDispatcher("/WEB-INF/views/addOther/listFood.jsp").forward(request, response);
         }
     }
-
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -104,7 +123,7 @@ public class pickTicketsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
     }
 
     /**

@@ -21,12 +21,12 @@
             }
 
             .all-movie{
-                 border: 2px solid black; /* Thêm màu cho border để dễ nhìn thấy */
-    background: red;
-    display: inline-block;
-    padding: 5px 10px; /* Giảm kích thước padding */
-    text-align: center;
-    margin: 0 auto; /* Căn giữa phần tử */
+                border: 2px solid black; /* Thêm màu cho border để dễ nhìn thấy */
+                background: red;
+                display: inline-block;
+                padding: 5px 10px; /* Giảm kích thước padding */
+                text-align: center;
+                margin: 0 auto; /* Căn giữa phần tử */
             }
 
         </style>
@@ -52,7 +52,7 @@
 
                 <div class="all-movie">
                     <a href="nowShowing">Xem Phim Ngay!</a>
-                    
+
                 </div>
             </div>
             <div class="col-2"></div>

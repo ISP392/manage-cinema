@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/XML/XMLDocument.xml to edit this template
+-->
+
+<!--SO COT MAX = 20-->
+<!--SO HANG MAX = 12-->
+
+
+<root>
+    <cinemas>
+        <cinema name="BANNY Hùng Vương Plaza" locationID="2">
+            <theaters>
+                <theater room="1" rows="11" columns="10" vipStartCol="3" vipEndCol="5" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="2" rows="12" columns="12" vipStartCol="4" vipEndCol="8" vipStartRow="2" vipEndRow="4">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="3" rows="7" columns="6" vipStartCol="2" vipEndCol="4" vipStartRow="2" vipEndRow="3">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="4" rows="13" columns="12" vipStartCol="5" vipEndCol="7" vipStartRow="4" vipEndRow="6">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+            </theaters>
+        </cinema>
+        <cinema name="BANNY Menas Mall" locationID="2">
+            <theaters>
+                <theater room="1" rows="10" columns="12" vipStartCol="4" vipEndCol="6" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="2" rows="11" columns="15" vipStartCol="5" vipEndCol="10" vipStartRow="2" vipEndRow="4">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="3" rows="12" columns="16" vipStartCol="6" vipEndCol="11" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="4" rows="10" columns="10" vipStartCol="3" vipEndCol="5" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+            </theaters>
+        </cinema>
+        <cinema name="BANNY Crescent Mall" locationID="2">
+            <theaters>
+                <theater room="1" rows="10" columns="12" vipStartCol="4" vipEndCol="6" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="2" rows="11" columns="15" vipStartCol="5" vipEndCol="10" vipStartRow="2" vipEndRow="4">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="3" rows="13" columns="19" vipStartCol="7" vipEndCol="12" vipStartRow="4" vipEndRow="6">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="4" rows="15" columns="20" vipStartCol="8" vipEndCol="13" vipStartRow="4" vipEndRow="7">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+            </theaters>
+        </cinema>
+        <cinema name="BANNY Vincom Center Bà Triệu" locationID="1">
+            <theaters>
+                <theater room="1" rows="10" columns="19" vipStartCol="7" vipEndCol="12" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="2" rows="13" columns="13" vipStartCol="4" vipEndCol="8" vipStartRow="4" vipEndRow="6">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="3" rows="11" columns="15" vipStartCol="5" vipEndCol="10" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="4" rows="10" columns="10" vipStartCol="3" vipEndCol="5" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+            </theaters>
+        </cinema>
+        <cinema name="BANNY Hồ Gươm Plaza" locationID="1">
+            <theaters>
+                <theater room="1" rows="10" columns="10" vipStartCol="3" vipEndCol="5" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="2" rows="12" columns="13" vipStartCol="4" vipEndCol="7" vipStartRow="4" vipEndRow="6">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="3" rows="11" columns="15" vipStartCol="5" vipEndCol="10" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="4" rows="14" columns="19" vipStartCol="7" vipEndCol="12" vipStartRow="4" vipEndRow="6">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+            </theaters>
+        </cinema>
+        <cinema name="BANNY Aeon Long Biên" locationID="1">
+            <theaters>
+                <theater room="1" rows="15" columns="20" vipStartCol="8" vipEndCol="13" vipStartRow="5" vipEndRow="7">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="2" rows="15" columns="19" vipStartCol="7" vipEndCol="12" vipStartRow="5" vipEndRow="7">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="3" rows="11" columns="18" vipStartCol="6" vipEndCol="11" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="4" rows="11" columns="12" vipStartCol="4" vipEndCol="7" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+            </theaters>
+        </cinema>
+        <cinema name="BANNY Vĩnh Trung Plaza" locationID="3">
+            <theaters>
+                <theater room="1" rows="12" columns="12" vipStartCol="4" vipEndCol="7" vipStartRow="4" vipEndRow="6">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="2" rows="11" columns="15" vipStartCol="5" vipEndCol="10" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="3" rows="14" columns="16" vipStartCol="6" vipEndCol="11" vipStartRow="4" vipEndRow="6">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="4" rows="13" columns="10" vipStartCol="3" vipEndCol="5" vipStartRow="4" vipEndRow="6">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+            </theaters>
+        </cinema>
+        <cinema name="BANNY Vincom Đà Nẵng" locationID="3">
+            <theaters>
+                <theater room="1" rows="10" columns="10" vipStartCol="3" vipEndCol="5" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="2" rows="10" columns="20" vipStartCol="8" vipEndCol="13" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="3" rows="15" columns="13" vipStartCol="4" vipEndCol="8" vipStartRow="4" vipEndRow="6">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+                <theater room="4" rows="10" columns="15" vipStartCol="5" vipEndCol="10" vipStartRow="3" vipEndRow="5">
+                    <damagedSeats>
+                        <seat>B03</seat>
+                        <seat>D05</seat>
+                        <seat>H01</seat>
+                    </damagedSeats>
+                </theater>
+            </theaters>
+        </cinema>
+    </cinemas>
+</root>
+
