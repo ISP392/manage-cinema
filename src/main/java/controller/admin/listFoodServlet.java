@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import modal.FoodItem;
 import modal.Movies;
 import modal.Users;
 
@@ -82,31 +83,14 @@ public class listFoodServlet extends HttpServlet {
                 endPage++;
             }
 
-            List<Movies> listMovies = dao.getMoviesByPage(index, pageSize);
 
             Date currentDate = new Date();
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(currentDate);
-            cal.add(Calendar.DAY_OF_MONTH, -30);
-            Date date30DaysAgo = cal.getTime();
+        
 
-            for (Movies m : listMovies) {
-                if (m.getDisplay() == 1) {
-                    if (m.getReleaseDate().after(currentDate)) {
-                        m.setStatus("Sắp Chiếu");
-                    } else if (m.getReleaseDate().after(date30DaysAgo) && m.getReleaseDate().before(currentDate)) {
-                        m.setStatus("Đang chiếu");
-                    } else {
-                        m.setStatus("Đã chiếu");
-                    }
-                } else if (m.getDisplay() == 0) {
-                    m.setStatus("Hidden");
-                }
-            }
+            
 
             request.setAttribute("endPage", endPage);
             request.setAttribute("tag", index);
-            request.setAttribute("listFoods", listMovies);
 
             request.getRequestDispatcher("/WEB-INF/views/addOther/listFood.jsp").forward(request, response);
         }

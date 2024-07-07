@@ -21,6 +21,7 @@ import java.sql.Timestamp;
  */
 public class DAO extends DBContext {
 
+    
     public List<Movies> searchMovies(String query) {
         List<Movies> list = new ArrayList<>();
         try {
