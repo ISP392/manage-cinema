@@ -29,7 +29,7 @@
 </head>
 <body>
 <%@include file="header.jsp" %>
-    <form action="employmentInformation" method="post">
+<form action="employmentInformation" method="post" onsubmit="return validateForm()" enctype="multipart/form-data">
 
     <div class="mask d-flex align-items-center h-100 gradient-custom-3">
         <div class="container h-100">
@@ -105,4 +105,63 @@
 </form>
 <%@include file="footer.jsp" %>
 </body>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Display success notification if request contains a success message -->
+<%
+    String successMessage = (String) request.getAttribute("success");
+    if (successMessage != null) {
+%>
+    <script type="text/javascript">
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: '<%= successMessage %>',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    </script>
+<%
+    }
+%>
+
+<!-- Display error notification if request contains an error message -->
+<%
+    String errorMessage = (String) request.getAttribute("error");
+    if (errorMessage != null) {
+%>
+    <script type="text/javascript">
+        Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: '<%= errorMessage %>',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    </script>
+<%
+    }
+%>
+<script>
+        function validateForm() {
+            const name = document.getElementById('name').value;
+            console.log(name);
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const dob = document.getElementById('dob').value;
+            const address = document.getElementById('address').value;
+            const position = document.getElementById('position').value;
+            const cv = document.getElementById('cv').value;
+
+            if (!name || !email || !phone || !dob || !address || !position || !cv) {
+                alert('Vui lòng điền đầy đủ thông tin.');
+                                event.preventDefault(); // Ngăn chặn việc gửi biểu mẫu
+
+                return false;
+            }
+            return true;
+        }
+    </script>
 </html>

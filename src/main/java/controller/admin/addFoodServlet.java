@@ -33,7 +33,6 @@ import modal.Users;
  * @author ACER
  */
 @WebServlet(name = "addFoodServlet", urlPatterns = {"/addFood"})
-
 @MultipartConfig
 public class addFoodServlet extends HttpServlet {
 

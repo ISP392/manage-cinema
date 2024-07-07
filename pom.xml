@@ -22,6 +22,11 @@
         </repository>
     </distributionManagement>
     <dependencies>
+<!--        <dependency>
+            <groupId>org.glassfish.jakarta.el</groupId>
+            <artifactId>jakarta.el</artifactId>
+            <version>4.0.2</version>
+        </dependency>-->
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
@@ -170,6 +175,7 @@
                     <artifactId>jakarta.activation</artifactId>
                     <version>1.2.1</version>
                 </dependency>
+               
             </dependencies>
         </profile>
     </profiles>
