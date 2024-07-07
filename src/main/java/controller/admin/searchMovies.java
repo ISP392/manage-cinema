@@ -2,37 +2,37 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.account;
+package controller.admin;
 
 import DAO.DAO;
-
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
-
-import controller.Google.Constants;
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import modal.Users;
+import java.util.List;
+import modal.Movies;
 
 /**
- * @author baoquoc
+ *
+ * @author LÊ PHƯƠNG MAI
  */
-@WebServlet(name = "SignIn", urlPatterns = {"/signin"})
-public class SignInServlet extends HttpServlet {
+@WebServlet(name = "searchMovies", urlPatterns = {"/searchMovies"})
+public class searchMovies extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -42,64 +42,59 @@ public class SignInServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SignIn</title>");
+            out.println("<title>Servlet searchMovies</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SignIn at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet searchMovies at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        //load .env file
-        Dotenv dotenv = Dotenv.load();
-        String localhost = dotenv.get("LOCALHOST");
-        HttpSession session = request.getSession();
 
-        String error = (String) session.getAttribute("error");
-        session.removeAttribute("error");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Thiết lập encoding cho request và response
+           request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
 
-        request.setAttribute("localhost", localhost);
-        request.setAttribute("error", error);
-        request.getRequestDispatcher("/WEB-INF/views/signIn.jsp").forward(request, response);
+        String searchQuery = request.getParameter("searchQuery");
+        DAO d = new DAO();
+        List<Movies> listMovies = d.searchMovies(searchQuery);
+
+        // Chuyển đổi danh sách phim thành JSON
+        Gson gson = new Gson();
+        String json = gson.toJson(listMovies);
+
+        // Log thông tin JSON
+        
+
+        response.getWriter().write(json);
     }
+    
 
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        DAO d = new DAO();
-        Users user = d.checkLogin(username, password);
-        if (user == null) {
-            request.getSession().setAttribute("error", "Username or password was incorrect!!");
-            response.sendRedirect("signin");
-        } else {
-            HttpSession session = request.getSession();
-            session.setAttribute("account", user);
-            response.sendRedirect("nowShowing");
-
-        }
+        processRequest(request, response);
     }
 
     /**
