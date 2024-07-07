@@ -24,10 +24,15 @@ public class Seats {
         this.seatStatus = seatStatus;
     }
 
-    public Seats(int seatID, String seatNumber, ScreeningTimes screeningID){
+    public Seats(int seatID, String seatNumber, ScreeningTimes screeningID) {
         this.seatID = seatID;
         this.seatNumber = seatNumber;
         this.screeningID = screeningID;
+    }
+
+    public Seats(ScreeningTimes screeningID, String seatNumber) {
+        this.screeningID = screeningID;
+        this.seatNumber = seatNumber;
     }
 
     public int getSeatID() {
@@ -61,6 +66,5 @@ public class Seats {
     public void setSeatStatus(String seatStatus) {
         this.seatStatus = seatStatus;
     }
-    
-    
+
 }

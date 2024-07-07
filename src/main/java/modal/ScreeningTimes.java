@@ -7,7 +7,6 @@ package modal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-
 /**
  *
  * @author MISS NGA
@@ -30,13 +29,18 @@ public class ScreeningTimes {
         this.endTime = endTime;
     }
 
-
     public ScreeningTimes(int screeningID, Movies movieID, Timestamp startTime, Timestamp endTime, Theaters theaterID) {
         this.screeningID = screeningID;
         this.movieID = movieID;
         this.startTime = startTime;
         this.endTime = endTime;
         this.theaterID = theaterID;
+    }
+
+    public ScreeningTimes(Theaters theaterID, Timestamp startTimes, Timestamp endTime) {
+        this.theaterID = theaterID;
+        this.startTime = startTimes;
+        this.endTime = endTime;
     }
 
     public int getScreeningID() {
@@ -78,5 +82,5 @@ public class ScreeningTimes {
     public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
     }
-  
+
 }

@@ -2,81 +2,106 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Staff Home - Cinema Booking System</title>
+    <meta charset="UTF-8">
+    <title>Staff Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #faf3e0; /* Màu nền nhạt */
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
             color: #333;
         }
-        
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 24px;
+        }
         .container {
+            max-width: 1200px;
             margin: 20px auto;
             padding: 20px;
-            background-color: white;
-            max-width: 1200px;
+            background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
-        .content {
+        .card {
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+        .card:hover {
+            background-color: #c0392b;
+        }
+        .card i {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        .card a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+        .grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
         }
-        .card {
-            background-color: #f7c6c7; /* Màu nền nhạt cho thẻ */
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            width: 30%;
-            margin: 15px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-        .card h3 {
-            margin: 0 0 15px 0;
-            font-size: 1.5em;
-            color: #c0392b; /* Màu chữ cho tiêu đề thẻ */
-        }
-        .card a {
-            text-decoration: none;
-            color: #c0392b;
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 20px;
-            border: 1px solid #c0392b;
-            border-radius: 4px;
-            transition: background-color 0.3s, color 0.3s;
-            font-size: 1em;
-        }
-        .card a:hover {
-            background-color: #c0392b;
-            color: white;
-        }
     </style>
 </head>
 <body>
-    <%@include file="headerStaff.jsp" %>
+    <div class="header">
+        Staff Dashboard
+    </div>
     <div class="container">
-        <div class="content">
+        <div class="grid">
             <div class="card">
-                <h3>Sell Tickets</h3>
-                <a href="sell_ticket.jsp">Go to Sell Tickets</a>
+                <i class="fas fa-ticket-alt"></i>
+                <a href="sell_ticket.jsp">Sell Tickets</a>
             </div>
             <div class="card">
-                <h3>Daily Report</h3>
-                <a href="report.jsp">Daily Report</a>
+                <i class="fas fa-check-square"></i>
+                <a href="confirm_booking.jsp">Confirm Bookings</a>
             </div>
             <div class="card">
-                <h3>Support Customers</h3>
-                <a href="support.jsp">Support Customers</a>
+                <i class="fas fa-file-alt"></i>
+                <a href="manage_transactions.jsp">Manage Transactions</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-headset"></i>
+                <a href="customer_support.jsp">Customer Support</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-tags"></i>
+                <a href="manage_promotions.jsp">Manage Promotions</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-chart-line"></i>
+                <a href="daily_report.jsp">Daily Report</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-user-cog"></i>
+                <a href="profile.jsp">Profile</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-calendar-alt"></i>
+                <a href="work_schedule.jsp">Work Schedule</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-qrcode"></i>
+                <a href="check_ticket.jsp">Check Tickets</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-sign-out-alt"></i>
+                <a href="logout.jsp">Logout</a>
             </div>
         </div>
     </div>
