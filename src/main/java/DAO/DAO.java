@@ -3,8 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DAO;
-
-import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +22,7 @@ import java.util.stream.Collectors;
  * @author MISS NGA
  */
 public class DAO extends DBContext {
-
+  
     public List<Movies> searchMovies(String query) {
         List<Movies> list = new ArrayList<>();
         try {
@@ -295,7 +293,8 @@ public class DAO extends DBContext {
     public int getNoOfRecords() {
         String sql = "SELECT COUNT(*) FROM Users";
         try (
-                PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = connection.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -916,6 +915,17 @@ public class DAO extends DBContext {
                 c.setTotal(rs.getString(3));
                 c.setUser(getUserById(userID).get(0));
                 c.setTickets(getTicketsByBillID(rs.getInt(1)));
+
+    // get all cinemas by locationID
+    public List<Cinemas> getAllCinemasByLocationID(int locationID) {
+        List<Cinemas> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT c.name FROM project_cinema_update.Cinemas c where c.locationID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, locationID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Cinemas c = new Cinemas(rs.getString("name"));
                 list.add(c);
             }
         } catch (SQLException e) {
@@ -923,6 +933,7 @@ public class DAO extends DBContext {
         }
         return list;
     }
+
 
     // get all cinemas by locationID
     public List<Cinemas> getAllCinemasByLocationID(int locationID) {
@@ -1187,7 +1198,10 @@ public class DAO extends DBContext {
         String sql = "SELECT * FROM FoodItems";
 
         try (
-                PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+                PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery(
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 FoodItem foodItem = new FoodItem();
