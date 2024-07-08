@@ -234,6 +234,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="userTableBody">
+
                                                         <%
                                                  List<Users> listUser = (List<Users>) request.getAttribute("listUser");
                                                  int roleId = (Integer) request.getAttribute("roleId");
@@ -311,6 +312,10 @@
                                                     <select name="roleID" id="modalRoleID" class="form-control">
                                                         <option value="2">User</option>
                                                         <option value="3">Staff</option>
+<<<<<<< Updated upstream
+=======
+                                                        <option value="1">Admin</option>
+>>>>>>> Stashed changes
                                                     </select>
                                                 </div>
                                             </div>
@@ -348,17 +353,17 @@
 
 
                     <script>
-                                                    $(document).ready(function () {
-                                                        $('.edit-role').on('click', function () {
-                                                            var userID = $(this).data('userid');
-                                                            var roleID = $(this).data('roleid');
+                        $(document).ready(function () {
+                            $('.edit-role').on('click', function () {
+                                var userID = $(this).data('userid');
+                                var roleID = $(this).data('roleid');
 
-                                                            $('#modalUserID').val(userID);
-                                                            $('#modalRoleID').val(roleID);
+                                $('#modalUserID').val(userID);
+                                $('#modalRoleID').val(roleID);
 
-                                                            $('#updateRoleModal').modal('show');
-                                                        });
-                                                    });
+                                $('#updateRoleModal').modal('show');
+                            });
+                        });
                     </script>
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

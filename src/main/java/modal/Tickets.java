@@ -5,7 +5,6 @@
 package modal;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 
 
@@ -23,7 +22,8 @@ public class Tickets {
     private Timestamp purchaseDate;
     private Seats seatID;
     private Orders orderID;
-
+    
+    
     public Tickets() {
     }
 
@@ -100,6 +100,28 @@ public class Tickets {
 
     public void setOrderID(Orders orderID) {
         this.orderID = orderID;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + this.ticketID;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Tickets other = (Tickets) obj;
+        return this.ticketID == other.ticketID;
     }
 
     

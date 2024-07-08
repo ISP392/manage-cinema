@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import modal.Bill;
 import modal.Tickets;
 import modal.Users;
 
@@ -43,25 +44,9 @@ public class HistoryPaymentServlet extends HttpServlet {
             request.setAttribute("colorSecond", "#666");
             request.setAttribute("backgroundColorSecond", "#bfd2d9");
 
-            String indexPage = request.getParameter("index");
-            if (indexPage == null) {
-                indexPage = "1";
-            }
-            int index = Integer.parseInt(indexPage);
-
-            //get list history payment
             DAO dao = new DAO();
-            List<Tickets> listTickets = dao.pagingTickets(user.getUserID(), index);
-            int count = dao.countPagingTickets(user.getUserID());
-            int endPage = count / 5;
-            if (count % 5 != 0) {
-                endPage++;
-            }
-
-            request.setAttribute("endPage", endPage);
-            request.setAttribute("tag", index);
-            request.setAttribute("listTickets", listTickets);
-
+            List<Bill> bills = dao.getAllBillByUSerID(user.getUserID());
+            request.setAttribute("bills", bills);
             request.getRequestDispatcher("/WEB-INF/views/historyPaymennt.jsp").forward(request, response);
         }
     }

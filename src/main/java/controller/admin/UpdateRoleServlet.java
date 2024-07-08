@@ -76,7 +76,6 @@ public class UpdateRoleServlet extends HttpServlet {
         int userID = Integer.parseInt(request.getParameter("userID"));
         int roleID = Integer.parseInt(request.getParameter("roleID"));
         DAO dao = new DAO();
-
         // Update the user's role
         dao.updateUserRole(userID, roleID);
 

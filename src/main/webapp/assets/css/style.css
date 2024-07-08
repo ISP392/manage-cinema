@@ -735,6 +735,10 @@ img {
   border: 1px solid #01c73c;
   cursor: pointer;
 }
+.seat-vip{
+    border: 1px solid #f71708;
+    cursor: pointer;
+}
 .seat-selected {
   font-weight: bold;
   background: #b11500 !important;
@@ -755,6 +759,22 @@ img {
   font-size: 7pt;
   padding: 1px 0;
 }
+
+.seat-damaged{
+    background-color: #bbb;
+    display: flex;
+    cursor: not-allowed;
+    justify-content: center;
+    align-items: center;
+}
+.seat-damaged::before {
+    content: "X"; /* Ký tự hiển thị */
+    position: absolute; /* Vị trí tuyệt đối so với khối ghế */
+    color: red; /* Màu của ký tự */
+    font-size: 20px; /* Kích thước của ký tự */
+    font-weight: bold; /* Độ đậm của ký tự */
+}
+
 
 .ticketbox-notice {
   display: flex;
@@ -792,6 +812,12 @@ img {
   background-color: #bbb;
 }
 
+.icon.vip:before{
+    border:2px solid #f71708;
+}
+.icon.standard:before{
+    border:2px solid #01c73c;
+}
 .bottom-content {
   display: flex;
   justify-content: center;
@@ -990,6 +1016,18 @@ label {
   border: 2px solid #ced4da !important;
 }
 
+.fixed-section {
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* Màu nền của các phần cố định */
+    z-index: 100; /* Đảm bảo các phần cố định hiển thị trên các nội dung khác */
+}
+
+.selected-movie, .order-summary {
+    max-height: 80vh; /* Giới hạn chiều cao tối đa của các phần cố định */
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung vượt quá kích thước cho phép */
+}
+
 @media (min-width: 992px) {
   .col-lg-6 img {
     display: block; /* Hiển thị ảnh */
@@ -1002,3 +1040,4 @@ label {
     display: none; /* Ẩn ảnh */
   }
 }
+

@@ -420,10 +420,16 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                               >
                                 <input
                                   type="text"
+                                  class="form-control"
+                                  placeholder="New Poster Image"
+                                  name="poster_image"
+                                  id="posterImage"
+                                />
+                                <input
+                                  type="text"
                                   class="form-control d-none"
                                   id="imageUpload"
                                   name="posterImage"
-                                  id="posterImage"
                                   value="${movie.posterImage}"
                                 />
                               </div>
@@ -491,6 +497,14 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
     <script src="./assets/JS/js/custom.min.js"></script>
     <script>
+<<<<<<< Updated upstream
+=======
+      document.querySelector('input[name="poster_image"]').addEventListener('change', function() {
+        var imageUrl = this.value;
+        document.querySelector('#imageUpload').value = imageUrl;
+        document.querySelector('#imagePreview').style.backgroundImage = 'url(' + imageUrl + ')';
+      });
+>>>>>>> Stashed changes
       document.addEventListener("DOMContentLoaded", function () {
         var buttons = document.querySelectorAll(".genre-button");
         var selectedGenresInput = document.getElementById("selectedGenres");

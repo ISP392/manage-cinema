@@ -1,121 +1,109 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
+<head>
     <meta charset="UTF-8">
-    <title>Pick Food</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Assuming you have a styles.css file for styling -->
+    <title>Staff Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* Basic styling for the page */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-        }
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-        .header, .content, .footer {
-            padding: 20px;
-            margin: 10px 0;
+            color: #333;
         }
         .header {
-            background-color: #007bff;
-            color: white;
-            border-bottom: 1px solid #ddd;
-            text-align: center;
-        }
-        .content {
-            background-color: #fff;
-            padding: 20px;
-        }
-        .footer {
-            text-align: right;
-        }
-        .combo-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            background-color: #333;
+            color: #fff;
             padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-        }
-        .combo-item img {
-            width: 100px;
-            height: 100px;
-        }
-        .combo-item .details {
-            flex-grow: 1;
-            padding: 0 20px;
-        }
-        .combo-item .quantity {
-            display: flex;
-            align-items: center;
-        }
-        .combo-item .quantity input {
-            width: 40px;
             text-align: center;
+            font-size: 24px;
         }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .card {
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px;
+            text-align: center;
+            transition: background-color 0.3s ease;
             cursor: pointer;
         }
-        button:hover {
-            background-color: #0056b3;
+        .card:hover {
+            background-color: #c0392b;
+        }
+        .card i {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        .card a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
         }
     </style>
 </head>
 <body>
-<div class="container">
     <div class="header">
-        <h1>Chọn Combo Ưu Đãi</h1>
+        Staff Dashboard
     </div>
-    <div class="content">
-        <form action="processOrder.jsp" method="post">
-            <div class="combo-item">
-                <img src="images/combo-see-me.png" alt="Combo See-Me">
-                <div class="details">
-                    <h3>Combo See-Me Kim Cương</h3>
-                    <p>Tiết kiệm 56k!!! Sở hữu ngay: 1 Ly Ké kim cương kèm nước + 1 bắp (69oz)</p>
-                </div>
-                <div class="quantity">
-                    <label for="comboSeeMe">Số lượng:</label>
-                    <input type="number" name="comboSeeMe" id="comboSeeMe" min="0" value="0">
-                </div>
+    <div class="container">
+        <div class="grid">
+            <div class="card">
+                <i class="fas fa-ticket-alt"></i>
+                <a href="sell_ticket.jsp">Sell Tickets</a>
             </div>
-            <div class="combo-item">
-                <img src="images/beta-combo.png" alt="Beta Combo">
-                <div class="details">
-                    <h3>Beta Combo 69oz</h3>
-                    <p>Tiết kiệm 28k!!! Gồm: 1 Bắp (69oz) + 1 Nước có gaz (22oz)</p>
-                </div>
-                <div class="quantity">
-                    <label for="betaCombo">Số lượng:</label>
-                    <input type="number" name="betaCombo" id="betaCombo" min="0" value="0">
-                </div>
+            <div class="card">
+                <i class="fas fa-check-square"></i>
+                <a href="confirm_booking.jsp">Confirm Bookings</a>
             </div>
-            <div class="combo-item">
-                <img src="images/sweet-combo.png" alt="Sweet Combo">
-                <div class="details">
-                    <h3>Sweet Combo 69oz</h3>
-                    <p>Tiết kiệm 46k!!! Gồm: 1 Bắp (69oz) + 2 Nước có gaz (22oz)</p>
-                </div>
-                <div class="quantity">
-                    <label for="sweetCombo">Số lượng:</label>
-                    <input type="number" name="sweetCombo" id="sweetCombo" min="0" value="0">
-                </div>
+            <div class="card">
+                <i class="fas fa-file-alt"></i>
+                <a href="manage_transactions.jsp">Manage Transactions</a>
             </div>
-            <div class="footer">
-                <button type="submit">Tiếp Tục</button>
+            <div class="card">
+                <i class="fas fa-headset"></i>
+                <a href="customer_support.jsp">Customer Support</a>
             </div>
-        </form>
+            <div class="card">
+                <i class="fas fa-tags"></i>
+                <a href="manage_promotions.jsp">Manage Promotions</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-chart-line"></i>
+                <a href="daily_report.jsp">Daily Report</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-user-cog"></i>
+                <a href="profile.jsp">Profile</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-calendar-alt"></i>
+                <a href="work_schedule.jsp">Work Schedule</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-qrcode"></i>
+                <a href="check_ticket.jsp">Check Tickets</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-sign-out-alt"></i>
+                <a href="logout.jsp">Logout</a>
+            </div>
+        </div>
     </div>
-</div>
 </body>
 </html>
