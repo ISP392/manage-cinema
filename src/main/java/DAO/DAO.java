@@ -4,10 +4,7 @@
  */
 package DAO;
 
-<<<<<<< HEAD
-=======
 import java.math.BigDecimal;
->>>>>>> 285c85a791963534d0850cf2775717ec7fbadf25
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -731,7 +728,6 @@ public class DAO extends DBContext {
         }
         return list;
     }
-    
 
 
     //get list screening time
@@ -1021,6 +1017,8 @@ public class DAO extends DBContext {
         }
         return list;
     }
+    
+    
 
      public static void main(String[] args) {
          //test getScreeningTimeByMovieDateAndCinemaName
@@ -1032,5 +1030,7 @@ public class DAO extends DBContext {
                 System.out.println(st.getMovieID().getTitle());
             }
     }
+
+    
 
 }

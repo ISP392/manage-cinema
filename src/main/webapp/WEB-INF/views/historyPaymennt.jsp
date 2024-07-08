@@ -119,7 +119,7 @@
                                                                             <ul>
                                                                                 <li class="item" style="width: 210px; word-break: break-word;margin-right: 0;width: 300px">
                                                                                     <p><span>Mã vé:</span> ${ticket.getTicketID()}</p>
-                                                                                    <p><span>Rạp:</span> ${ticket.getCinemaID().getName()}</p>
+                                                                                    <p><span>Rạp chiếu:</span> ${ticket.getCinemaID().getName()}</p>
                                                                                     <p><span>Suất chiếu:</span> <fmt:formatDate value="${ticket.getSeatID().getScreeningID().getStartTime()}" pattern="HH:mm"/>, <fmt:formatDate value="${ticket.getSeatID().getScreeningID().getStartTime()}" pattern="yyyy-MM-dd" /></p>
                                                                                     <p><span>Phòng Cinema: </span>Cinemas ${ticket.getSeatID().getScreeningID().getTheaterID().getTheaterNumber()}</p>
                                                                                     <p><span>Ghế:</span> <span id="selectedSeats">${ticket.getSeatID().getSeatNumber()}</span></p>

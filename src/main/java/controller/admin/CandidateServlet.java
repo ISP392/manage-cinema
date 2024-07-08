@@ -8,20 +8,15 @@ package controller.admin;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import modal.Users;
 
 /**
  *
  * @author MISS NGA
  */
-@WebServlet(name = "ManageUser", value = "/manager_user")
-public class ManageUser extends HttpServlet {
+public class CandidateServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -38,10 +33,10 @@ public class ManageUser extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ManageUser</title>");  
+            out.println("<title>Servlet CandidateServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ManageUser at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CandidateServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,9 +53,7 @@ public class ManageUser extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         List<Users> listUser = new ArrayList<>();
-         request.setAttribute("listUser", listUser); 
-        request.getRequestDispatcher("/WEB-INF/views/admin-views/managerAccountUsers.jsp").forward(request, response);
+        processRequest(request, response);
     } 
 
     /** 
