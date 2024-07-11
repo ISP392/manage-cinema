@@ -141,7 +141,7 @@ public class addEvent extends HttpServlet {
             Part filePart = request.getPart("eventImg");
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 
-            String relativePath = "uploads" + File.separator + fileName;
+            String relativePath =  File.separator + fileName;
             String absolutePath = getServletContext().getRealPath("") + File.separator + relativePath;
             File uploadDir = new File(getServletContext().getRealPath("") + File.separator + "uploads");
             if (!uploadDir.exists()) {
@@ -159,7 +159,7 @@ public class addEvent extends HttpServlet {
             // Thêm sự kiện vào cơ sở dữ liệu
             try {
                 dao.insertAddEvent(eventName, eventDescription, new java.sql.Date(startTime.getTime()), new java.sql.Date(endTime.getTime()), relativePath);
-                response.sendRedirect("home"); // Chuyển hướng về trang chủ sau khi thêm thành công
+                response.sendRedirect("listEvent"); // Chuyển hướng về trang chủ sau khi thêm thành công
             } catch (Exception e) {
                 e.printStackTrace();
                 request.setAttribute("message", "An error occurred while adding the event");

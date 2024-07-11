@@ -175,6 +175,7 @@
                                 <li><a href="list_movie">Movie</a></li>
                                 <li><a href="menu.html">Slot</a></li>
                                 <li><a href="manager_user">Staff</a></li>
+                                <li><a href="listEvent">Event</a></li>
                             </ul>
                         </li>
                         <li>

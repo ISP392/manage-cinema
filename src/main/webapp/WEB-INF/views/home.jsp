@@ -271,8 +271,14 @@
                                             <span class="img">
                                                 <a href="ShowEventDetail?eventID=${event.getEventID()}">
 
-                                                    <img src="${pageContext.request.contextPath}/${event.getEventImg()}" class="card-img-top" /> 
+                                                    <img src="./assets/images/${event.getEventImg()}" class="card-img-top" /> 
                                                 </a>
+
+<!--                                                   <a href="ShowEventDetail?eventID=${event.getEventID()}">
+
+    <img src="${pageContext.request.contextPath}/${event.getEventImg()}" class="card-img-top" /> 
+</a>-->
+
                                             </span>
                                         </div>
                                         <dl class="list-text">
@@ -286,31 +292,11 @@
                                     </li>
 
                                 </c:if>
-                                <c:if test="${account.getRoleID().getRoleID() == 1}">
-                                    <li>
-                                        <div class="curr-box">
-                                            <span class="num"><%= eventNumber++ %></span>
-                                            <span class="img">
-                                                <a href="detail-movie?movieID=${poster.movieID}">
-                                                    <img
-                                                        src="./assets/images/posterImages/${poster.posterImage}"
-                                                        />
-                                                </a>
-                                            </span>
-                                        </div>
-                                        <dl class="list-text">
-                                            <dt>
-                                                <a href="ShowEventDetail?eventID=${event.getEventID()}">
 
-                                                    <img src="${pageContext.request.contextPath}/${event.getEventImg()}" class="card-img-top" /> 
-                                                </a>
-                                            </dt>
-                                            <dd>
 
-                                            </dd>
-                                        </dl>
-                                    </li>
-                                </c:if>
+
+
+
                             </c:forEach>
                         </ul>
                     </div>

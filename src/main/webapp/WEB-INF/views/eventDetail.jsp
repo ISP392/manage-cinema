@@ -14,8 +14,8 @@
                 padding: 20px;
             }
             .event-image {
-                max-width: 300px;
-                margin-right: 20px;
+                max-width: 500px;
+                margin-right: 50px;
             }
             .event-details {
                 flex-grow: 1;
@@ -40,15 +40,22 @@
         <div class="container event-detail-container">
             <div>
                 <div class="event-title">${event.getEventName()}</div>
-                <img src="${pageContext.request.contextPath}/${event.getEventImg()}" class="event-image" alt="Event Image">
+<!--                <img src="${pageContext.request.contextPath}/${event.getEventImg()}" class="event-image" alt="Event Image" style="width: 50cm">-->
+                 <img src="./assets/images/${event.getEventImg()}" class="event-image" alt="Event Image" style="width: 50cm">
             </div>
             <div class="event-details">
                 <div class="event-description">${event.getEventDescription()}</div>
+                
+                <a href="nowShowing" >Tại đây</a>
                 <div class="event-time"><strong>Start Time:</strong> ${event.getStartTime()}</div>
                 <div class="event-time"><strong>End Time:</strong> ${event.getEndTime()}</div>
-                <a href="updateEvent?eventID=${event.getEventID()}">Update</a>
-                <a></a>
-                <a href="deleteEvent?eventID=${event.getEventID()}">Delete</a>
+         
+                
+              
+<!--                <a href="updateEvent?eventID=${event.getEventID()}">Update</a>
+               
+                <a href="deleteEvent?eventID=${event.getEventID()}">Delete</a>-->
+             
             </div>
         </div>
         <%@include file="footer.jsp" %>

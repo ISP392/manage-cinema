@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: baoquoc
-  Date: 12/06/2024
-  Time: 13:50
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -15,7 +9,13 @@
 
         <title>Admin Dashboard</title>
         <link href="./assets/css/dashboard-admin.css" rel="stylesheet"/>
-
+        <script type="text/javascript">
+            function confirmDelete(eventID) {
+                if (confirm("Bạn có chắc chắn muốn xóa sự kiện này không?")) {
+                    window.location.href = "deleteEvent?eventID=" + eventID;
+                }
+            }
+        </script>
     </head>
     <style>
         .action-rows{
@@ -208,9 +208,9 @@
                             <div class="filter cm-content-box box-primary">
                                 <div class="content-title">
                                     <div class="cpa">
-                                        <i class="fa-solid fa-file-lines me-1"></i>List Movies
+                                        <i class="fa-solid fa-file-lines me-1"></i>List Event
                                     </div>
-            
+
                                     <div class="tools">
                                         <a href="javascript:void(0);" class="expand SlideToolHeader"><i class="fal fa-angle-down"></i></a>
                                     </div>
@@ -229,10 +229,14 @@
                                                                 </label>
                                                             </div>
                                                         </th>
-                                                        <th><strong>Title</strong></th>
-                                                        <!--  <th>Duration</th>  -->
-                                                        <th><strong>Modified</strong></th>
-                                                        <th><strong>Status</strong></th>
+                                                        <th><strong>Event Name</strong></th>
+
+                                                        <th><strong>Event Description</strong></th>
+                                                        <th><strong>Start Time</strong></th>
+                                                        <th><strong>End Time</strong></th>
+                                                        <th><strong>End Poster</strong></th>
+
+
                                                         <th class="action-rows"><strong>Actions</strong></th>
                                                     </tr>
                                                 </thead>
@@ -245,53 +249,35 @@
                                                 <c:set var="itemsPerPage" value="10" />
                                                 <c:set var="currentPage" value="${tag}" />
 
-
-                                                <c:forEach  var="movie" items="${listMovies}" varStatus="status">
-                                                    <c:set var="movieNumber" value="${(currentPage - 1) * itemsPerPage + status.index + 1}" />
+                                                <c:forEach var="event" items="${listEvents}" varStatus="status">
+                                                    <c:set var="eventNumber" value="${(currentPage - 1) * itemsPerPage + status.index + 1}" />
                                                     <tr>
-
-                                                        <td>${movieNumber}</td>
-                                                        <td>${movie.title.toUpperCase()}</td>
-                                                  <!--      <td>${movie.duration}</td> -->
-                                                        <td>${movie.releaseDate}</td>
-                                                        <td>${movie.status}</td>
-
+                                                        <td>${eventNumber}</td>
+                                                        <td>${event.eventName.toUpperCase()}</td>
+                                                        <td>${event.eventDescription}</td>
+                                                        <td>${event.startTime}</td>
+                                                        <td>${event.endTime}</td>
+                                                        <td>
+                                                            <a href="ShowEventDetail?eventID=${event.eventID}">
+                                                                <img src="${pageContext.request.contextPath}/${event.eventImg}" class="card-img-top" /> 
+                                                            </a>
+                                                        </td>
                                                         <td class="action-rows">
-                                                            <a href="update_movie?movieID=${movie.movieID}" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
-                                                                <c:if test="${movie.getDisplay()==1}">
-                                                                <a href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=0" class="btn btn-danger shadow btn-xs sharp rounded-circle">
-                                                                    <i class="fa fa-eye"></i>
-                                                                </a>
-
-                                                                <a href="addNewSlot?movieID=${movie.getMovieID()}&display=1" class="btn btn-primary shadow btn-xs sharp rounded-circle " >
-                                                                    <i class="fa fa-plus"></i>
-                                                                </a>
-                                                            </c:if>
-
-                                                            <c:if test="${movie.getDisplay()==0}">
-
-                                                                <a  href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=1" class="btn btn-danger shadow btn-xs sharp rounded-circle">
-                                                                    <i class="fa fa-eye-slash"></i>
-                                                                </a>
-
-                                                            </c:if>
-
-
-
+                                                            <a href="updateEvent?eventID=${event.eventID}" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1">
+                                                                <i class="fa fa-pencil"></i>
+                                                            </a>
+                                                            <a href="javascript:void(0);" onclick="confirmDelete(${event.eventID})" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1">
+                                                                <i class="fa fa-trash"></i>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
-
                                                 </tbody>
                                             </table>
 
                                             <div class="d-flex align-items-center justify-content-xl-between flex-wrap justify-content-center mt-3">
-                                                <small class="mb-xl-0 mb-2">
-
-                                                </small>
-
+                                                <small class="mb-xl-0 mb-2"></small>
                                                 <ul class="pagination">
-
                                                     <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
                                                         <a class="page-link" href="?index=${currentPage - 1}">&lsaquo;</a>
                                                     </li>
@@ -303,7 +289,6 @@
                                                     <li class="page-item ${currentPage == endPage ? 'disabled' : ''}">
                                                         <a class="page-link" href="?index=${currentPage + 1}">&rsaquo;</a>
                                                     </li>
-
                                                 </ul>
 
                                             </div>

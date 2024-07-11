@@ -52,7 +52,7 @@ public class UpdateEvent extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UpdateEvent</title>");            
+            out.println("<title>Servlet UpdateEvent</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet UpdateEvent at " + request.getContextPath() + "</h1>");
@@ -73,7 +73,7 @@ public class UpdateEvent extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         int eventID = Integer.parseInt(request.getParameter("eventID"));
+        int eventID = Integer.parseInt(request.getParameter("eventID"));
         DAO dao = new DAO();
         Events event = dao.getEventById(eventID);
         request.setAttribute("event", event);
@@ -92,102 +92,85 @@ public class UpdateEvent extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         DAO dao = new DAO();
-        String eventName = null;
-        String eventDescription = null;
-        String startTimeStr = null;
-        String endTimeStr = null;
-        int eventID = 0;
+        String eventName = request.getParameter("eventName");
+        String eventDescription = request.getParameter("eventDescription");
+        String startTimeStr = request.getParameter("startTime");
+        String endTimeStr = request.getParameter("endTime");
+        int eventID = Integer.parseInt(request.getParameter("eventID"));
+
+        // Kiểm tra ngày thời điểm hiện tại
+        java.util.Date currentDate = new java.util.Date();
+
+        // Xử lý ngày thời điểm bắt đầu và kết thúc
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date startTime = null;
+        java.util.Date endTime = null;
 
         try {
-            Collection<Part> parts = request.getParts();
-            for (Part part : parts) {
-                String name = part.getName();
-                if (name.equals("eventName")) {
-                    eventName = extractFormData(part);
-                } else if (name.equals("eventDescription")) {
-                    eventDescription = extractFormData(part);
-                } else if (name.equals("startTime")) {
-                    startTimeStr = extractFormData(part);
-                } else if (name.equals("endTime")) {
-                    endTimeStr = extractFormData(part);
-                } else if (name.equals("eventID")) {
-                    eventID = Integer.parseInt(extractFormData(part));
-                }
+            if (startTimeStr != null && !startTimeStr.isEmpty()) {
+                startTime = sdf.parse(startTimeStr);
+            }
+            if (endTimeStr != null && !endTimeStr.isEmpty()) {
+                endTime = sdf.parse(endTimeStr);
+            }
+        } catch (ParseException e) {
+            request.setAttribute("message", "Invalid date format");
+            request.getRequestDispatcher("/WEB-INF/views/updateEvent.jsp").forward(request, response);
+            return;
+        }
+
+        // Kiểm tra nếu thiếu thông tin bắt buộc
+        if (eventName == null || eventName.isBlank() || eventDescription == null || eventDescription.isBlank() || startTime == null || endTime == null) {
+            request.setAttribute("message", "Event name, description, and dates must be provided");
+            request.getRequestDispatcher("/WEB-INF/views/updateEvent.jsp").forward(request, response);
+            return;
+        }
+
+        // Kiểm tra nếu ngày bắt đầu là trước ngày hiện tại
+        if (startTime.before(currentDate) || endTime.before(startTime)) {
+            request.setAttribute("message", "Start date, End date must be in the future");
+            request.getRequestDispatcher("/WEB-INF/views/updateEvent.jsp").forward(request, response);
+            return;
+        }
+
+        // Xử lý tệp hình ảnh
+        Part filePart = request.getPart("eventImg");
+        String fileName = null;
+        String relativePath = null;
+        if (filePart != null && filePart.getSize() > 0) {
+            fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+            relativePath =   fileName; // Chỉ định thư mục lưu trữ ảnh
+            String absolutePath = getServletContext().getRealPath("") + File.separator + relativePath;
+            File uploadDir = new File(getServletContext().getRealPath("") + File.separator + "uploads");
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
             }
 
-            // Kiểm tra ngày thời điểm hiện tại
-            java.util.Date currentDate = new java.util.Date();
-
-            // Xử lý ngày thời điểm bắt đầu và kết thúc
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date startTime = null;
-            java.util.Date endTime = null;
-
-            try {
-                if (startTimeStr != null && !startTimeStr.isEmpty()) {
-                    startTime = sdf.parse(startTimeStr);
-                }
-                if (endTimeStr != null && !endTimeStr.isEmpty()) {
-                    endTime = sdf.parse(endTimeStr);
-                }
-            } catch (ParseException e) {
-                request.setAttribute("message", "Invalid date format");
+            try (InputStream fileContent = filePart.getInputStream()) {
+                Files.copy(fileContent, Paths.get(absolutePath), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                request.setAttribute("message", "File upload failed");
                 request.getRequestDispatcher("/WEB-INF/views/updateEvent.jsp").forward(request, response);
                 return;
             }
+        } else {
+            // Nếu không có tệp tải lên mới, sử dụng URL ảnh hiện tại
+            relativePath = request.getParameter("currentEventImg");
+        }
 
-            // Kiểm tra nếu thiếu thông tin bắt buộc
-            if (eventName == null || eventName.isBlank() || eventDescription == null || eventDescription.isBlank() || startTime == null || endTime == null) {
-                request.setAttribute("message", "Event name, description, and dates must be provided");
-                request.getRequestDispatcher("/WEB-INF/views/updateEvent.jsp").forward(request, response);
-                return;
-            }
-
-            // Kiểm tra nếu ngày bắt đầu là trước ngày hiện tại
-            if (startTime.before(currentDate) || endTime.before(startTime)) {
-                request.setAttribute("message", "Start date, End date must be in the future");
-                request.getRequestDispatcher("/WEB-INF/views/updateEvent.jsp").forward(request, response);
-                return;
-            }
-
-            // Xử lý tệp hình ảnh
-            Part filePart = request.getPart("eventImg");
-            String fileName = null;
-            String relativePath = null;
-            if (filePart != null && filePart.getSize() > 0) {
-                fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                relativePath = File.separator + fileName;
-                String absolutePath = getServletContext().getRealPath("") + File.separator + relativePath;
-                File uploadDir = new File(getServletContext().getRealPath("") + File.separator );
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdir();
-                }
-
-                try (InputStream fileContent = filePart.getInputStream()) {
-                    Files.copy(fileContent, Paths.get(absolutePath), StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException e) {
-                    request.setAttribute("message", "File upload failed");
-                    request.getRequestDispatcher("/WEB-INF/views/updateEvent.jsp").forward(request, response);
-                    return;
-                }
-            }
-
-            // Cập nhật sự kiện vào cơ sở dữ liệu
-            try {
-                dao.updateEvent(eventID, eventName, eventDescription, new java.sql.Date(startTime.getTime()), new java.sql.Date(endTime.getTime()), relativePath);
-                response.sendRedirect("home"); // Chuyển hướng về trang chủ sau khi cập nhật thành công
-            } catch (Exception e) {
-                e.printStackTrace();
-                request.setAttribute("message", "An error occurred while updating the event");
-                request.getRequestDispatcher("/WEB-INF/views/updateEvent.jsp").forward(request, response);
-            }
-        } catch (ServletException | IOException e) {
+        // Cập nhật sự kiện vào cơ sở dữ liệu
+        try {
+            dao.updateEvent(eventID, eventName, eventDescription, new java.sql.Date(startTime.getTime()), new java.sql.Date(endTime.getTime()), relativePath);
+            response.sendRedirect("listEvent"); 
+        } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("message", "Error processing form data");
+            request.setAttribute("message", "An error occurred while updating the event");
             request.getRequestDispatcher("/WEB-INF/views/updateEvent.jsp").forward(request, response);
         }
+
     }
- private String extractFormData(Part part) throws IOException {
+
+    private String extractFormData(Part part) throws IOException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(part.getInputStream(), StandardCharsets.UTF_8))) {
             StringBuilder value = new StringBuilder();
             char[] buffer = new char[1024];
@@ -198,6 +181,7 @@ public class UpdateEvent extends HttpServlet {
             return value.toString();
         }
     }
+
     /**
      * Returns a short description of the servlet.
      *

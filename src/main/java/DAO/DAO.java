@@ -184,6 +184,25 @@ public class DAO extends DBContext {
         return list;
     }
 
+    public List<Events> getEventByPage(int page, int pageSize) {
+        String sql = "SELECT * FROM backup_project_cinema_update.events ORDER BY startTime DESC LIMIT ? OFFSET ?";
+        List<Events> list = new ArrayList<>();
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, pageSize);
+            ps.setInt(2, (page - 1) * pageSize);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Events ev = new Events(rs.getInt("eventID"), rs.getString("eventImg"), rs.getString("eventName"), rs.getString("eventDescription"), rs.getDate("startTime"), rs.getDate("endTime"));
+                    list.add(ev);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
     public int getMovieCount() {
         String sql = "SELECT COUNT(*) FROM Movies";
         try {
@@ -194,6 +213,18 @@ public class DAO extends DBContext {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getEventCount() {
+        String sql = "SELECT count(*) FROM backup_project_cinema_update.events";
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
         return 0;
     }
@@ -1127,7 +1158,7 @@ public class DAO extends DBContext {
     public static void main(String[] args) {
         //test getScreeningTimeByMovieDateAndCinemaName
         DAO dao = new DAO();
-        List<Events> ev = dao.getAllEvent();
+        List<Events> ev = dao.getEventByPage(1, 10);
         for (Events e : ev) {
             System.out.println(e.getEventName());
         }

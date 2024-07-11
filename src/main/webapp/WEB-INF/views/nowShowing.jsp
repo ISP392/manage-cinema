@@ -178,10 +178,14 @@
                                         <div class="curr-box">
                                             <span class="num"><%= eventNumber++ %></span>
                                             <span class="img">
-                                                <a href="ShowEventDetail?eventID=${event.getEventID()}">
+                                                 <a href="ShowEventDetail?eventID=${event.getEventID()}">
+
+                                                    <img src="./assets/images/${event.getEventImg()}" class="card-img-top" /> 
+                                                </a>
+<!--                                                <a href="ShowEventDetail?eventID=${event.getEventID()}">
 
                                                     <img src="${pageContext.request.contextPath}/${event.getEventImg()}" class="card-img-top" /> 
-                                                </a>
+                                                </a>-->
                                             </span>
                                         </div>
                                         <dl class="list-text">
