@@ -83,7 +83,7 @@ public class Email {
             // Tạo đối tượng Message
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("managecinema2003@gmail.com")); // Thay bằng email của bạn
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("daothihabg03@gmail.com")); // Thay bằng email người nhận
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("managecinemaa@gmail.com")); // Thay bằng email người nhận
             message.setSubject("Subject of the email");
 
             // Tạo phần nội dung chính của email
@@ -119,7 +119,7 @@ public class Email {
 
      public static void main(String[] args) {
         try {
-            sendEmailWithFile("daothihabg03@gmail.com", "Subject of the email", "This is the email content.",
+            sendEmailWithFile("managecinemaa@gmail.com", "Subject of the email", "This is the email content.",
                     "C:\\ISP392_Project\\manage-cinema\\src\\main\\webapp\\assets\\cvs", "PT2_L2-cca4e4a3-918a-4bf2-b404-5742fbb5e9ec.docx");
         } catch (IOException e) {
             e.printStackTrace();

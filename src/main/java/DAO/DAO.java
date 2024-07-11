@@ -4,7 +4,6 @@
  */
 package DAO;
 
-import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -797,7 +796,7 @@ public class DAO extends DBContext {
         return null;
     }
 
-    // paging list tickets by userID
+// paging list tickets by userID
     public List<Tickets> pagingTickets(int userID, int index) {
         List<Tickets> list = new ArrayList<>();
         String sql = "SELECT t.ticketID, u.userID, u.displayName, u.username, u.password, u.email, u.providerID, u.point, "

@@ -186,7 +186,7 @@
 
         <%@include file="footer.jsp" %>
         <script type="text/javascript">
-            function toggle(item){
+            function toggle(item) {
                 $('#' + item).hasClass('show') ? $('#' + item).removeClass('show') : $('#' + item).addClass('show')
             }
         </script>
