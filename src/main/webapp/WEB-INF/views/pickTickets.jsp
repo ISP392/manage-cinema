@@ -73,7 +73,7 @@
                                                     onsubmit="return validateForm()">
                                                     <div class="seats-container">
                                                         <c:forEach var="row"
-                                                            items="${'ABCDEFGHIJKLMN'.substring(0, screeningTimes.theaterID.rows).split('')}">
+                                                            items="${'ABCDEFGHIJKLMNOPQRST'.substring(0, screeningTimes.theaterID.rows).split('')}">
                                                             <div class="seat-row">
                                                                 <c:choose>
                                                                     <c:when
