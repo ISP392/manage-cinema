@@ -13,29 +13,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import modal.Bill;
-import modal.Tickets;
 import modal.Users;
 
 /**
  *
- * @author MISS NGA
+ * @author Miss Nga
  */
 @WebServlet(name = "HistoryPaymentServlet", urlPatterns = {"/historyPayment"})
 public class HistoryPaymentServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        Users user = (Users) request.getSession().getAttribute("account");
+    throws ServletException, IOException {
+       
+     Users user = (Users) request.getSession().getAttribute("account");
         if (user == null || user.getRoleID() == null || user.getRoleID().getName() == null) {
             response.sendRedirect("signin");
         } else {
@@ -44,6 +35,7 @@ public class HistoryPaymentServlet extends HttpServlet {
             request.setAttribute("colorSecond", "#666");
             request.setAttribute("backgroundColorSecond", "#bfd2d9");
 
+
             DAO dao = new DAO();
             List<Bill> bills = dao.getAllBillByUSerID(user.getUserID());
             request.setAttribute("bills", bills);
@@ -51,14 +43,7 @@ public class HistoryPaymentServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import modal.*;
 import util.Encrypt;
 import java.sql.Date;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * @author MISS NGA
  */
-public class DAO extends DBContext {
+public class DAO extends DBContext {    
 
     public List<Movies> searchMovies(String query) {
         List<Movies> list = new ArrayList<>();
@@ -184,6 +183,7 @@ public class DAO extends DBContext {
         }
         return 0;
     }
+    
 
     public List<Movies> getAllMovieCommingSoon() {
         String sql = "SELECT * FROM Movies m WHERE m.releaseDate > CURDATE()";
@@ -294,7 +294,8 @@ public class DAO extends DBContext {
     public int getNoOfRecords() {
         String sql = "SELECT COUNT(*) FROM Users";
         try (
-                PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = connection.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -796,7 +797,7 @@ public class DAO extends DBContext {
         return null;
     }
 
-// paging list tickets by userID
+    // paging list tickets by userID
     public List<Tickets> pagingTickets(int userID, int index) {
         List<Tickets> list = new ArrayList<>();
         String sql = "SELECT t.ticketID, u.userID, u.displayName, u.username, u.password, u.email, u.providerID, u.point, "
@@ -1186,8 +1187,8 @@ public class DAO extends DBContext {
         String sql = "SELECT * FROM FoodItems";
 
         try (
-                PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 FoodItem foodItem = new FoodItem();
                 foodItem.setFoodItemID(rs.getInt("foodItemID"));

@@ -312,10 +312,7 @@
                                                     <select name="roleID" id="modalRoleID" class="form-control">
                                                         <option value="2">User</option>
                                                         <option value="3">Staff</option>
-<<<<<<< Updated upstream
-=======
                                                         <option value="1">Admin</option>
->>>>>>> Stashed changes
                                                     </select>
                                                 </div>
                                             </div>
