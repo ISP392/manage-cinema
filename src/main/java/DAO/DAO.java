@@ -50,7 +50,7 @@ public class DAO extends DBContext {
     }
 
     public void insertAddEvent(String eventName, String eventDescription, Date startTime, Date endTime, String eventImg) {
-        String sql = "INSERT INTO Events (eventImg, eventName, eventDescription, startTime, endTime) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO backup_database.events (eventImg, eventName, eventDescription, startTime, endTime) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, eventImg);
@@ -185,7 +185,7 @@ public class DAO extends DBContext {
     }
 
     public List<Events> getEventByPage(int page, int pageSize) {
-        String sql = "SELECT * FROM backup_project_cinema_update.events ORDER BY startTime DESC LIMIT ? OFFSET ?";
+        String sql = "SELECT * FROM  events ORDER BY startTime DESC LIMIT ? OFFSET ?";
         List<Events> list = new ArrayList<>();
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {

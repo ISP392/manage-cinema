@@ -202,7 +202,7 @@
                         <div class="col-xl-12">
 
                             <div class="mb-4">
-                                <a href="add_movie" class="btn btn-primary">Add Movie</a>
+                                <a href="addEvent" class="btn btn-primary">Add Event</a>
                             </div>
 
                             <div class="filter cm-content-box box-primary">

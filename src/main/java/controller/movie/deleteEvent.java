@@ -61,7 +61,7 @@ public class deleteEvent extends HttpServlet {
         int eventID = Integer.parseInt(request.getParameter("eventID"));
         DAO dao = new DAO();
         dao.deleteEvent(eventID);
-        response.sendRedirect("home");
+        response.sendRedirect("listEvent");
     }
 
     /**

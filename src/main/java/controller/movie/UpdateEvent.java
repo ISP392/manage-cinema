@@ -120,7 +120,7 @@ public class UpdateEvent extends HttpServlet {
         }
 
         // Kiểm tra nếu thiếu thông tin bắt buộc
-        if (eventName == null || eventName.isBlank() || eventDescription == null || eventDescription.isBlank() || startTime == null || endTime == null) {
+        if (eventName == null || eventName.isBlank() || eventDescription == null || eventDescription.isBlank() || startTime == null ) {
             request.setAttribute("message", "Event name, description, and dates must be provided");
             request.getRequestDispatcher("/WEB-INF/views/updateEvent.jsp").forward(request, response);
             return;
