@@ -216,7 +216,7 @@
                 <!-- row -->
                 <div class="container-fluid">
                     <!-- Row -->
-                    <form action="addNewSlot" method="post" onsubmit="return validateDateTime();">
+                    <form action="updateNewSlot" method="post" onsubmit="return validateDateTime();">
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="row">
@@ -227,14 +227,15 @@
                                             <h3 id="errorMessage" style="color:red">${message}</h3>
 
 
-
+                                            <input type="text"  value="${sid}" name="sid"  hidden="">
 
                                           
                                                 <div class="row align-items-center">
                                                     <div class="col-md-6 ">
                                                         <label for="theaterName">Tên phim:</label>
                                                         <select id="theaterName" name="theaterName" class="form-control" onchange="updateDuration()">
-                                                            <option value="" disabled selected>Chọn phim</option>
+                                                              <option  value="${movieName}" >${movieName}</option>
+                                                          
                                                             <c:forEach items="${listAllMovies}" var="l">
                                                                 <option value="${l.title}" data-duration="${l.duration}">${l.title}</option>
                                                             </c:forEach>
@@ -242,13 +243,13 @@
                                                     </div>
                                                     <div class="col-md-6 text-right">
                                                         <label for="duration">Thời gian phim:</label>
-                                                        <input type="text" id="duration" name="duration" class="form-control" readonly>
+                                                        <input type="text" id="duration" value="${duration}" name="duration" class="form-control" readonly>
                                                     </div>
                                                 </div>
                                             
                                             <label for="cinemaSelect" style="margin-top: 15px"> Rạp chiếu phim: </label> <br>
 
-                                              <select id="cinemaSelect" name="cinemaSelect" class="form-control">
+                                            <select id="cinemaSelect" name="cinemaSelect" class="form-control">
                                                 <c:forEach items="${cinemases}" var="l">
                                                     <option value="${l.name}">${l.name}</option>
                                                 </c:forEach>
@@ -258,7 +259,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="dateInput" > Ngày chiếu</label>
-                                            <input type="date" id="dateInput" class="form-control" 
+                                            <input type="date" id="dateInput" value="${date}" class="form-control" 
                                                    name="dateInput" />
                                         </div>
                                         <label   for="theaterNumber">Rạp chiếu</label>
@@ -277,13 +278,13 @@
 
                                         <div class="mb-3">
                                             <label  for="startTimeInput">Giờ bắt đầu chiếu: (nên chọn giờ chẵn)</label><br>
-                                            <input class="form-control" type="time" id="startTimeInput" required name="startTimeInput">
+                                            <input class="form-control" value="${formattedTimeStart}" type="time" id="startTimeInput" required name="startTimeInput">
                                         </div>   
 
 
                                         <div class="mb-3">
                                             <label for="endTimeInput">Giờ kết thúc chiếu:</label><br>
-                                            <input class="form-control" style="appearance: none;" type="time" readonly id="endTimeInput" required name="endTimeInput">
+                                            <input class="form-control" value="${formattedTimeEnd}" style="appearance: none;" type="time" readonly id="endTimeInput" required name="endTimeInput">
                                         </div>  
 
                                         <button type="submit" class="btn btn-primary mb-3 open">

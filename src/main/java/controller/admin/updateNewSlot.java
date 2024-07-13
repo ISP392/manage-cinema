@@ -5,29 +5,32 @@
 package controller.admin;
 
 import DAO.DAO;
+import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import modal.Movies;
-import modal.Users;
 import modal.Cinemas;
+import modal.Movies;
+import modal.ScreeningTimes;
+import modal.Theaters;
 import util.CinemaConfig;
 
 /**
  *
- * @author LÊ PHƯƠNG MAI
+ * @author Dan
  */
-@WebServlet(name = "addNewSlot", urlPatterns = {"/addNewSlot"})
-public class addNewSlot extends HttpServlet {
+@WebServlet(name = "updateNewSlot", urlPatterns = {"/updateNewSlot"})
+public class updateNewSlot extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,15 +49,16 @@ public class addNewSlot extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet addNewSlot</title>");
+            out.println("<title>Servlet updateNewSlot</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet addNewSlot at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet updateNewSlot at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -66,68 +70,38 @@ public class addNewSlot extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        Users u = (Users) request.getSession().getAttribute("admin");
-//        if (u == null || u.getRoleID().getRoleID() != 1 || movieID == null) {
-//            response.sendRedirect("admin");
-//        } else {
+        int sid = Integer.parseInt(request.getParameter("id"));
         DAO dao = new DAO();
-        List<Movies> listAllMovies = dao.getMovie();
-        request.setAttribute("listAllMovies", listAllMovies);
-         List<Cinemas>  cinemases = dao.getAllCinemas();
-         request.setAttribute("cinemases", cinemases);
-//            Movies movie = dao.getMovieByIDForAddSlot(Integer.parseInt(movieID));
-//           
-//            if (movie == null) {
-//                request.setAttribute("errorMessage", "Hãy Chọn Những Phim Đang Chiếu");
-//
-//                String indexPage = request.getParameter("index");
-//                if (indexPage == null) {
-//                    indexPage = "1";
-//                }
-//                int index = Integer.parseInt(indexPage);
-//                int pageSize = 10;
-//
-//                int totalMovies = dao.getMovieCount();
-//                int endPage = totalMovies / pageSize;
-//                if (totalMovies % pageSize != 0) {
-//                    endPage++;
-//                }
-//
-//                List<Movies> listMovies = dao.getMoviesByPage(index, pageSize);
-//
-//                java.util.Date currentDate = new java.util.Date();
-//                Calendar cal = Calendar.getInstance();
-//                cal.setTime(currentDate);
-//                cal.add(Calendar.DAY_OF_MONTH, -30);
-//                java.util.Date date30DaysAgo = cal.getTime();
-//
-//                for (Movies m : listMovies) {
-//                    if (m.getDisplay() == 1) {
-//                        if (m.getReleaseDate().after(currentDate)) {
-//                            m.setStatus("Sắp Chiếu");
-//                        } else if (m.getReleaseDate().after(date30DaysAgo) && m.getReleaseDate().before(currentDate)) {
-//                            m.setStatus("Đang chiếu");
-//                        } else {
-//                            m.setStatus("Đã chiếu");
-//                        }
-//                    } else if (m.getDisplay() == 0) {
-//                        m.setStatus("Hidden");
-//                    }
-//                }
-//
-//                request.setAttribute("endPage", endPage);
-//                request.setAttribute("tag", index);
-//                request.setAttribute("listMovies", listMovies);
-//                request.getRequestDispatcher("/WEB-INF/views/admin-views/listMovie.jsp").forward(request, response);
-//                return;
-//            }
-//
-//            int duration = movie.getDuration();
-//            request.setAttribute("duration", duration);
-//            request.setAttribute("movie", movie);
-        request.getRequestDispatcher("WEB-INF/views/admin-views/addslotmovies.jsp").forward(request, response);
-//        }
+        ScreeningTimes screeningTimes = dao.getAllScreeningById(sid);
+        Movies movie = dao.getMovieByID(screeningTimes.getMovieId());
+        String movieName = movie.getTitle();
 
+        List<Cinemas> cinemases = dao.getAllCinemas();
+        List<Movies> listAllMovies = dao.getMovie();
+        request.setAttribute("sid", sid);
+        request.setAttribute("listAllMovies", listAllMovies);
+        request.setAttribute("cinemases", cinemases);
+        request.setAttribute("movieName", movieName);
+        request.setAttribute("duration", movie.getDuration());
+        request.setAttribute("screeningTimes", screeningTimes);
+        Timestamp timestampStart = screeningTimes.getStartTime();
+        Timestamp timestampEnd = screeningTimes.getEndTime();
+        // Chuyển đổi Timestamp sang Date
+        Date date = new Date(timestampStart.getTime());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+
+        // Chuyển đổi Timestamp sang String theo định dạng mong muốn
+        String formattedTimeStart = sdf.format(timestampStart);
+        String formattedTimeEnd = sdf.format(timestampEnd);
+        // In ra thời gian theo định dạng HH:mm:ss
+//        System.out.println(formattedTimeStart);
+//        System.out.println(formattedTimeEnd);
+        request.setAttribute("date", date);
+        request.setAttribute("formattedTimeStart", formattedTimeStart);
+        request.setAttribute("formattedTimeEnd", formattedTimeEnd);
+
+        request.getRequestDispatcher("/WEB-INF/views/admin-views/updateNewSlot.jsp").forward(request, response);
     }
 
     /**
@@ -141,6 +115,7 @@ public class addNewSlot extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int sid = Integer.parseInt(request.getParameter("sid"));
         String theaterName = request.getParameter("theaterName");
         System.out.println(theaterName);
         String cinema = request.getParameter("cinemaSelect");
@@ -193,9 +168,12 @@ public class addNewSlot extends HttpServlet {
         if (endTimeLastestSlot != null && endTimeLastestSlot.after(startTimeTimestamp)) {
             request.setAttribute("message", "Start time of new slot have to later than end time of lastest slot is " + endTimeLastestSlot);
             request.setAttribute("movie", movie);
-             List<Movies> listAllMovies = dao.getMovie();
-        request.setAttribute("listAllMovies", listAllMovies);
-            request.getRequestDispatcher("WEB-INF/views/admin-views/addslotmovies.jsp").forward(request, response);
+            List<Movies> listAllMovies = dao.getMovie();
+            List<Cinemas> cinemases = dao.getAllCinemas();
+            request.setAttribute("cinemases", cinemases);
+            request.setAttribute("listAllMovies", listAllMovies);
+
+            request.getRequestDispatcher("WEB-INF/views/admin-views/updateNewSlot.jsp").forward(request, response);
             return;
         } else {
             //insert new cinemas
@@ -208,8 +186,13 @@ public class addNewSlot extends HttpServlet {
             // //get id of theaters recently inserted
             int theaterID = dao.getTheaterIDRecentlyAdded();
 
-            // //insert screeningTimes
-            dao.insertScreeningTimes(theaterID, movieID, startTimeTimestamp, endTimeTimestamp);
+            //update screeningTimes
+//            System.out.println(theaterID);
+//             System.out.println(movieID);
+//              System.out.println(startTimeTimestamp);
+//               System.out.println(endTimeTimestamp);
+//                System.out.println(sid);
+            dao.updateScreeningTimes(theaterID, movieID, startTimeTimestamp, endTimeTimestamp, sid);
             response.sendRedirect("home_admin");
         }
 

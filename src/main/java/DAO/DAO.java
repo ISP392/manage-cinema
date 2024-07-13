@@ -19,7 +19,7 @@ import java.sql.Timestamp;
 /**
  * @author MISS NGA
  */
-public class DAO extends DBContext {    
+public class DAO extends DBContext {
 
     public List<Movies> searchMovies(String query) {
         List<Movies> list = new ArrayList<>();
@@ -291,8 +291,7 @@ public class DAO extends DBContext {
     public int getNoOfRecords() {
         String sql = "SELECT COUNT(*) FROM Users";
         try (
-                PreparedStatement stmt = connection.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -422,6 +421,47 @@ public class DAO extends DBContext {
                         rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
                         rs.getInt("display"), rs.getString("trailerURL"));
                 list.add(m);
+            }
+            return list;
+        } catch (Exception e) {
+            System.err.print(e);
+        }
+        return null;
+    }
+
+    public List<Movies> getMovie() {
+        String sql = "SELECT * FROM Movies m WHERE m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() ORDER BY m.releaseDate asc;";
+
+        List<Movies> list = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"),
+                        rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
+                        rs.getInt("display"), rs.getString("trailerURL"));
+                list.add(m);
+            }
+            return list;
+        } catch (Exception e) {
+            System.err.print(e);
+        }
+        return null;
+    }
+
+    public Movies getMovieByName(String name) {
+        String sql = "select  * from movies where title = ?";
+
+        Movies list = new Movies();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"),
+                        rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
+                        rs.getInt("display"), rs.getString("trailerURL"));
+                return m;
             }
             return list;
         } catch (Exception e) {
@@ -1037,6 +1077,23 @@ public class DAO extends DBContext {
         }
     }
 
+    public void updateScreeningTimes(int theaterID, int movieID, Timestamp startTime, Timestamp endTime, int sid) {
+        String sql = "UPDATE project_cinema_update.screeningtimes\n"
+                + "SET theaterID = ?, movieID = ?, startTime = ?, endTime = ?\n"
+                + "WHERE screeningID = ?;";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, theaterID);
+            ps.setInt(2, movieID);
+            ps.setTimestamp(3, startTime);
+            ps.setTimestamp(4, endTime);
+            ps.setInt(5, sid);
+           ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
     // void get movie by movieID
     public Movies getMovieByID(int movieID) {
         String sql = "SELECT * FROM Movies AS m WHERE m.movieID = ?";
@@ -1107,8 +1164,7 @@ public class DAO extends DBContext {
         String sql = "SELECT * FROM FoodItems";
 
         try (
-                PreparedStatement ps = connection.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 FoodItem foodItem = new FoodItem();
@@ -1177,12 +1233,33 @@ public class DAO extends DBContext {
             ps.setString(2, cinemaName);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
+                Movies movie = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("posterImage"));
                 Cinemas c = new Cinemas(rs.getString("title"));
                 Theaters t = new Theaters(rs.getInt("theaterID"), c);
-                ScreeningTimes st = new ScreeningTimes(t, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"));
+                ScreeningTimes st = new ScreeningTimes(rs.getInt("screeningID"), t, movie, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"));
                 list.add(st);
             }
             return list;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    public ScreeningTimes getAllScreeningById(int id) {
+        ScreeningTimes list = new ScreeningTimes();
+        String sql = "SELECT * FROM project_cinema_update.screeningtimes a where a.screeningID = ? ";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ScreeningTimes st = new ScreeningTimes(
+                        rs.getInt(1), rs.getInt(2), rs.getInt(3),
+                         rs.getTimestamp("startTime"), rs.getTimestamp("endTime"));
+                return st;
+            }
+
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -1316,7 +1393,6 @@ public class DAO extends DBContext {
     }
 
     // insert tickets
-
     public void insertTickets(int userID, int movieID, int cinemaID, String price, Timestamp purchaseDate, int seatID,
             int orderID) {
         String sql = "INSERT INTO Tickets (userID, movieID, cinemaID, price, purchaseDate, seatID, orderID) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -1392,7 +1468,7 @@ public class DAO extends DBContext {
     public static void main(String[] args) {
         // test insert seat
         DAO dao = new DAO();
-        dao.insertSeats(252, "A01");
+        System.out.println(dao.getAllCinemas());
     }
 
 }
