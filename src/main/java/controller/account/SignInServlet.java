@@ -17,7 +17,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import modal.Shift;
 import modal.Users;
+import modal.staffstatus;
 
 /**
  * @author baoquoc
@@ -95,18 +98,35 @@ public class SignInServlet extends HttpServlet {
             response.sendRedirect("signin");
         } else {
             HttpSession session = request.getSession();
-            session.setAttribute("account", user);
-            // Redirect based on user role
-            if (user.getRoleID().getRoleID() == 2) {
-                response.sendRedirect("home");
-            } else if (user.getRoleID().getRoleID() == 3) {
-                response.sendRedirect("homeStaff");
-            } else {
-                // Default or other roles can be redirected to a common page
-                response.sendRedirect("nowShowing");
-            }
 
+            staffstatus status = user.getPhone(); // Lấy đối tượng staffstatus từ user
+            if (status == null || !"approve".equals(status.getStatus())) {
+                request.getSession().setAttribute("error", "Your account is not approved!");
+                response.sendRedirect("signin");
+                return;
+            }
+            // Lấy thời gian hiện tại
+            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+            Shift shift = d.getShiftForUser(status.getPhone());
+
+            if (shift == null || currentTime.before(shift.getStartTime()) || currentTime.after(shift.getEndTime())) {
+                request.getSession().setAttribute("error", "You are not in your shift time!");
+                response.sendRedirect("signin");
+            } else {
+                session.setAttribute("account", user);
+                // Redirect based on user role
+                if (user.getRoleID().getRoleID() == 2) {
+                    response.sendRedirect("home");
+                } else if (user.getRoleID().getRoleID() == 3) {
+                    response.sendRedirect("homeStaff");
+                } else {
+                    // If the role is not 2 or 3, redirect back to signin with an error
+                    request.getSession().setAttribute("error", "Invalid user role!");
+                    response.sendRedirect("signin");
+                }
+            }
         }
+
     }
 
     /**

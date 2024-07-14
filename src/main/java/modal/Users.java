@@ -4,7 +4,6 @@
  */
 package modal;
 
-import java.sql.Date;
 
 /**
  *
@@ -20,9 +19,7 @@ public class Users {
     private String email;
     private String providerID;
     private int point;
-    private Date dob;
-    private String phone;
-    private String address;
+    private staffstatus phone;
 
     public Users() {
     }
@@ -31,18 +28,19 @@ public class Users {
         this.email = email;
     }
 
-    public Users(int userID, String displayName, String password, Role roleID, String email, int point, Date dob, String phone, String address) {
+    public Users(int userID, String displayName, String userName, String password, Role roleID, String email, String providerID, int point, staffstatus phone) {
         this.userID = userID;
         this.displayName = displayName;
         this.userName = userName;
         this.password = password;
         this.roleID = roleID;
         this.email = email;
+        this.providerID = providerID;
         this.point = point;
-        this.dob = dob;
         this.phone = phone;
-        this.address = address;
     }
+
+    
 
     public Users(int userID, String email) {
         this.userID = userID;
@@ -150,34 +148,20 @@ public class Users {
         this.providerID = providerID;
     }
 
-    public Date getDob() {
-        return dob;
-    }
-
-    public void setDob(Date dob) {
-        this.dob = dob;
-    }
-
-    public String getPhone() {
+    public staffstatus getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(staffstatus phone) {
         this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     @Override
     public String toString() {
-        return "Users{" + "userID=" + userID + ", displayName=" + displayName + ", userName=" + userName + ", password=" + password + ", roleID=" + roleID + ", email=" + email + ", providerID=" + providerID + ", point=" + point + ", dob=" + dob + ", phone=" + phone + ", address=" + address + '}';
+        return "Users{" + "userID=" + userID + ", displayName=" + displayName + ", userName=" + userName + ", password=" + password + ", roleID=" + roleID + ", email=" + email + ", providerID=" + providerID + ", point=" + point + ", phone=" + phone + '}';
     }
+
+   
     
     
 }

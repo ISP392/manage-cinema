@@ -12,8 +12,11 @@ import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import modal.Shift;
 
 import modal.Users;
+import modal.staffstatus;
 
 @WebServlet(name = "LoginGoogleHandler", value = "/LoginGoogleHandler")
 public class LoginGoogleHandler extends HttpServlet {
@@ -34,9 +37,35 @@ public class LoginGoogleHandler extends HttpServlet {
             u = d.getUserByEmail(user.getEmail());
             session.setAttribute("account", u);
         }
-        response.sendRedirect("home");
-    }
 
+        // kiểm tra ca làm việc của nhân viên
+        staffstatus status = d.getStaffStatus(u.getPhone().getPhone());
+        if (status == null || !"approve".equals(status.getStatus())) {
+            request.getSession().setAttribute("error", "Your account is not approved!");
+            response.sendRedirect("signin");
+            return;
+        }
+
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        Shift shift = d.getShiftForUser(status.getPhone());
+
+        if (shift == null || currentTime.before(shift.getStartTime()) || currentTime.after(shift.getEndTime())) {
+            request.getSession().setAttribute("error", "You are not in your shift time!");
+            response.sendRedirect("signin");
+        } else {
+            session.setAttribute("account", u);
+            // Redirect based on user role
+            if (u.getRoleID().getRoleID() == 2) {
+                response.sendRedirect("home");
+            } else if (u.getRoleID().getRoleID() == 3) {
+                response.sendRedirect("homeStaff");
+            } else {
+                // If the role is not 2 or 3, redirect back to signin with an error
+                request.getSession().setAttribute("error", "Invalid user role!");
+                response.sendRedirect("signin");
+            }
+        }
+    }
 
     public static String getToken(String code) throws ClientProtocolException, IOException {
         // call api to get token

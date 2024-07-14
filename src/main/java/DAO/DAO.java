@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * @author MISS NGA
  */
-public class DAO extends DBContext {    
+public class DAO extends DBContext {
 
     public List<Movies> searchMovies(String query) {
         List<Movies> list = new ArrayList<>();
@@ -183,7 +183,6 @@ public class DAO extends DBContext {
         }
         return 0;
     }
-    
 
     public List<Movies> getAllMovieCommingSoon() {
         String sql = "SELECT * FROM Movies m WHERE m.releaseDate > CURDATE()";
@@ -294,8 +293,7 @@ public class DAO extends DBContext {
     public int getNoOfRecords() {
         String sql = "SELECT COUNT(*) FROM Users";
         try (
-                PreparedStatement stmt = connection.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -360,15 +358,59 @@ public class DAO extends DBContext {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
+                staffstatus phone = getStaffStatus(rs.getString("phone"));
                 Role r = new Role(rs.getInt("roleID"), rs.getString("name"));
-                return new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("userName"),
-                        rs.getString("password"), rs.getString("email"), r, rs.getInt("point"),
-                        rs.getString("providerID"));
+                return new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("userName"), rs.getString("password"),
+                        r, rs.getString("email"), rs.getString("providerID"), rs.getInt("point"), phone);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public staffstatus getStaffStatus(String phone) {
+        staffstatus status = null;
+        String query = "SELECT * FROM staffstatus WHERE phone = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, phone);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                status = new staffstatus();
+                status.setPhone(rs.getString("phone"));
+                status.setStatus(rs.getString("status"));
+                status.setAddress(rs.getString("address"));
+                status.setDob(rs.getDate("dob"));
+                status.setStaffName(rs.getString("staffName"));
+                status.setStaffEmail(rs.getString("staffEmail"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return status;
+
+    }
+
+    public Shift getShiftForUser(String phone) {
+        Shift shift = null;
+        String query = "SELECT Shift.*, staffstatus.phone AS staffPhone, staffstatus.status, staffstatus.address, staffstatus.dob, staffstatus.staffName, staffstatus.staffEmail "
+                + "FROM Shift "
+                + "JOIN staffstatus ON Shift.phone = staffstatus.phone "
+                + "WHERE Shift.phone = ? "
+                + "ORDER BY startTime DESC LIMIT 1";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, phone);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                staffstatus staffStatus = new staffstatus(rs.getString("staffPhone"), rs.getString("status"), rs.getString("address"), rs.getDate("dob"), rs.getString("staffName"), rs.getString("staffEmail"));
+                shift = new Shift(rs.getInt("shiftID"), staffStatus, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"), rs.getDouble("startAmount"), rs.getDouble("endAmount"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return shift;
     }
 
     // check login of admin
@@ -539,10 +581,10 @@ public class DAO extends DBContext {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
+                staffstatus phone = getStaffStatus(rs.getString("phone"));
                 Role r = new Role(rs.getInt("roleID"));
-                Users u = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("username"),
-                        rs.getString("password"), rs.getString("email"), r, rs.getInt("point"),
-                        rs.getString("providerID"));
+                Users u = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("userName"), rs.getString("password"),
+                        r, rs.getString("email"), rs.getString("providerID"), rs.getInt("point"), phone);
                 return u;
             }
         } catch (SQLException e) {
@@ -1187,8 +1229,7 @@ public class DAO extends DBContext {
         String sql = "SELECT * FROM FoodItems";
 
         try (
-                PreparedStatement ps = connection.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 FoodItem foodItem = new FoodItem();
                 foodItem.setFoodItemID(rs.getInt("foodItemID"));
@@ -1470,7 +1511,50 @@ public class DAO extends DBContext {
     public static void main(String[] args) {
         // test insert seat
         DAO dao = new DAO();
-        dao.insertSeats(252, "A01");
+
+        // Kiểm tra hàm checkLogin
+        String username = "linh";  // Thay đổi cho phù hợp với dữ liệu của bạn
+        String password = "123";  // Thay đổi cho phù hợp với dữ liệu của bạn
+        Users user = dao.checkLogin(username, password);
+        if (user != null) {
+            System.out.println("Login successful:");
+            System.out.println("User ID: " + user.getUserID());
+            System.out.println("Display Name: " + user.getDisplayName());
+            System.out.println("Role: " + user.getRoleID().getName());
+            System.out.println("Email: " + user.getEmail());
+            System.out.println("Phone: " + user.getPhone().getPhone());
+        } else {
+            System.out.println("Login failed.");
+        }
+
+        // Kiểm tra hàm getStaffStatus
+        String phone = "0362076531";  // Thay đổi cho phù hợp với dữ liệu của bạn
+        staffstatus status = dao.getStaffStatus(phone);
+        if (status != null) {
+            System.out.println("Staff status found:");
+            System.out.println("Phone: " + status.getPhone());
+            System.out.println("Status: " + status.getStatus());
+            System.out.println("Address: " + status.getAddress());
+            System.out.println("DOB: " + status.getDob());
+            System.out.println("Staff Name: " + status.getStaffName());
+            System.out.println("Staff Email: " + status.getStaffEmail());
+        } else {
+            System.out.println("Staff status not found.");
+        }
+
+        // Kiểm tra hàm getShiftForUser
+        Shift shift = dao.getShiftForUser(phone);
+        if (shift != null) {
+            System.out.println("Shift found:");
+            System.out.println("Shift ID: " + shift.getShiftID());
+            System.out.println("Phone: " + shift.getPhone().getPhone());
+            System.out.println("Start Time: " + shift.getStartTime());
+            System.out.println("End Time: " + shift.getEndTime());
+            System.out.println("Start Amount: " + shift.getStartAmount());
+            System.out.println("End Amount: " + shift.getEndAmount());
+        } else {
+            System.out.println("Shift not found.");
+        }
     }
 
 }
