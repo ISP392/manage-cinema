@@ -53,10 +53,6 @@ public class SignInServlet extends HttpServlet {
             out.println("</html>");
         }
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> e5f9b2bdaeb66f1668e9988fde80f35c950a7ed3
     /**
      * Handles the HTTP <code>GET</code> method.
      *

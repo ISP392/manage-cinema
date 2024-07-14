@@ -8,12 +8,8 @@ package controller.movie;
 import DAO.DAO;
 
 import java.io.IOException;
-<<<<<<< HEAD
-
-=======
 import java.io.PrintWriter;
 import java.io.IOException;
->>>>>>> e5f9b2bdaeb66f1668e9988fde80f35c950a7ed3
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

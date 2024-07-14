@@ -3,10 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DAO;
-<<<<<<< HEAD
-
-=======
->>>>>>> e5f9b2bdaeb66f1668e9988fde80f35c950a7ed3
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,11 +21,6 @@ import java.util.stream.Collectors;
  * @author MISS NGA
  */
 public class DAO extends DBContext {
-<<<<<<< HEAD
-
-=======
-  
->>>>>>> e5f9b2bdaeb66f1668e9988fde80f35c950a7ed3
     public List<Movies> searchMovies(String query) {
         List<Movies> list = new ArrayList<>();
         try {
@@ -965,17 +956,6 @@ public class DAO extends DBContext {
                 c.setTotal(rs.getString(3));
                 c.setUser(getUserById(userID).get(0));
                 c.setTickets(getTicketsByBillID(rs.getInt(1)));
-
-    // get all cinemas by locationID
-    public List<Cinemas> getAllCinemasByLocationID(int locationID) {
-        List<Cinemas> list = new ArrayList<>();
-        String sql = "SELECT DISTINCT c.name FROM project_cinema_update.Cinemas c where c.locationID = ?";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, locationID);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Cinemas c = new Cinemas(rs.getString("name"));
                 list.add(c);
             }
         } catch (SQLException e) {
@@ -984,10 +964,6 @@ public class DAO extends DBContext {
         return list;
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> e5f9b2bdaeb66f1668e9988fde80f35c950a7ed3
     // get all cinemas by locationID
     public List<Cinemas> getAllCinemasByLocationID(int locationID) {
         List<Cinemas> list = new ArrayList<>();
@@ -1251,15 +1227,7 @@ public class DAO extends DBContext {
         String sql = "SELECT * FROM FoodItems";
 
         try (
-<<<<<<< HEAD
                 PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-=======
-
-                PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery(
-                PreparedStatement ps = connection.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()) {
-
->>>>>>> e5f9b2bdaeb66f1668e9988fde80f35c950a7ed3
             while (rs.next()) {
                 FoodItem foodItem = new FoodItem();
                 foodItem.setFoodItemID(rs.getInt("foodItemID"));
