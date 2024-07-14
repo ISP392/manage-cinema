@@ -502,6 +502,10 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
         document.querySelector('#imageUpload').value = imageUrl;
         document.querySelector('#imagePreview').style.backgroundImage = 'url(' + imageUrl + ')';
       });
+<<<<<<< HEAD
+=======
+
+>>>>>>> e5f9b2bdaeb66f1668e9988fde80f35c950a7ed3
       document.addEventListener("DOMContentLoaded", function () {
         var buttons = document.querySelectorAll(".genre-button");
         var selectedGenresInput = document.getElementById("selectedGenres");

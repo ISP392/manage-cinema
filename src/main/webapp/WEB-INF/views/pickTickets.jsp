@@ -345,8 +345,63 @@
                     <%@include file="footer.jsp" %>
             </body>
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
             </html>
 =======
             </html>
 >>>>>>> Stashed changes
+=======
+                    <script>
+                        function toggleSeat(seat) {
+                            seat.classList.toggle('seat-selected');
+
+                            // Get all selected seats
+                            var selectedSeats = document.querySelectorAll('.seat-selected');
+
+                            // Create an array to store the seat codes
+                            var seatCodes = [];
+
+                            // Loop through the selected seats and add their codes to the array
+                            selectedSeats.forEach(function (seat) {
+                                seatCodes.push(seat.getAttribute('loc'));
+                            });
+
+                            // Join the seat codes with a comma and set the value of the hidden input field
+                            document.getElementById('hiddenSelectedSeats').value = seatCodes.join(', ');
+
+                            document.getElementById('selectedSeats').textContent = seatCodes.join(', ');
+
+                            // Calculate the total price
+                            var totalPrice = document.getElementById("totalPrice");
+                            var hiddenTotalPrice = document.getElementById("hiddenTotalPrice");
+                            var selectedSeatsCount = seatCodes.length;
+                            var pricePerSeat = 75000; // Price per seat
+                            var total = selectedSeatsCount * pricePerSeat;
+                            totalPrice.innerHTML = formatMoney(total);
+                            hiddenTotalPrice.value = total; // Set the value of the hidden input field
+
+                            // Function to format money
+                            function formatMoney(amount) {
+                                return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            }
+                        }
+                        function validateForm() {
+                            var hiddenSelectedSeats = document.getElementById('hiddenSelectedSeats');
+                            if (hiddenSelectedSeats.value === '') {
+                                alert('Please choose your seats first.');
+                                return false;
+                            } else {
+                                return confirm('Do you agree to book this seat?');
+                            }
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+        <%@include file="footer.jsp" %>
+    </body>
+
+</html>
+
+>>>>>>> e5f9b2bdaeb66f1668e9988fde80f35c950a7ed3
