@@ -75,6 +75,4 @@ public class Cinemas {
     public void setLocationID(Location locationID) {
         this.locationID = locationID;
     }
-    
-    
 }

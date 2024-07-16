@@ -104,25 +104,8 @@ public class Tickets {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + this.ticketID;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Tickets other = (Tickets) obj;
-        return this.ticketID == other.ticketID;
+    public String toString() {
+        return "Tickets{" + "ticketID=" + ticketID + ", userID=" + userID + ", movieID=" + movieID + ", cinemaID=" + cinemaID + ", price=" + price + ", purchaseDate=" + purchaseDate + ", seatID=" + seatID + ", orderID=" + orderID + '}';
     }
 
     

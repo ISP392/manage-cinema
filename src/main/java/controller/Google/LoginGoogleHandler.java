@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 import modal.Shift;
 
 import modal.Users;
-import modal.staffstatus;
+import modal.StaffStatus;
 
 @WebServlet(name = "LoginGoogleHandler", value = "/LoginGoogleHandler")
 public class LoginGoogleHandler extends HttpServlet {
@@ -30,6 +30,7 @@ public class LoginGoogleHandler extends HttpServlet {
         u.setProviderID("google");
         HttpSession session = request.getSession();
         DAO d = new DAO();
+
         if (!d.checkEmail(user.getEmail())) {
             d.addLoginGoogle(u);
             session.setAttribute("account", u);
@@ -38,32 +39,35 @@ public class LoginGoogleHandler extends HttpServlet {
             session.setAttribute("account", u);
         }
 
-        // kiểm tra ca làm việc của nhân viên
-        staffstatus status = d.getStaffStatus(u.getPhone().getPhone());
-        if (status == null || !"approve".equals(status.getStatus())) {
-            request.getSession().setAttribute("error", "Your account is not approved!");
-            response.sendRedirect("signin");
-            return;
+        // Check user role
+        if (u.getRoleID().getRoleID() == 3) {
+            // kiểm tra ca làm việc của nhân viên
+            StaffStatus status = d.getStaffStatus(u.getPhone().getPhone());
+            if (status == null || !"approve".equals(status.getStatus())) {
+                request.getSession().setAttribute("error", "Your account is not approved!");
+                response.sendRedirect("signin");
+                return;
+            }
+
+            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+            Shift shift = d.getShiftForUser(status.getPhone());
+
+            if (shift == null || currentTime.before(shift.getStartTime()) || currentTime.after(shift.getEndTime())) {
+                request.getSession().setAttribute("error", "You are not in your shift time!");
+                response.sendRedirect("signin");
+                return;
+            }
         }
 
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        Shift shift = d.getShiftForUser(status.getPhone());
-
-        if (shift == null || currentTime.before(shift.getStartTime()) || currentTime.after(shift.getEndTime())) {
-            request.getSession().setAttribute("error", "You are not in your shift time!");
-            response.sendRedirect("signin");
+        // Redirect based on user role
+        if (u.getRoleID().getRoleID() == 2) {
+            response.sendRedirect("home");
+        } else if (u.getRoleID().getRoleID() == 3) {
+            response.sendRedirect("homeStaff");
         } else {
-            session.setAttribute("account", u);
-            // Redirect based on user role
-            if (u.getRoleID().getRoleID() == 2) {
-                response.sendRedirect("home");
-            } else if (u.getRoleID().getRoleID() == 3) {
-                response.sendRedirect("homeStaff");
-            } else {
-                // If the role is not 2 or 3, redirect back to signin with an error
-                request.getSession().setAttribute("error", "Invalid user role!");
-                response.sendRedirect("signin");
-            }
+            // If the role is not 2 or 3, redirect back to signin with an error
+            request.getSession().setAttribute("error", "Invalid user role!");
+            response.sendRedirect("signin");
         }
     }
 

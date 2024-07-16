@@ -2,15 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 package modal;
 
-import java.sql.Date;
+import java.util.Date;
 
-/**
- *
- * @author MISS NGA
- */
-public class staffstatus {
+public class StaffStatus {
     private String phone;
     private String status;
     private String address;
@@ -18,10 +15,10 @@ public class staffstatus {
     private String staffName;
     private String staffEmail;
 
-    public staffstatus() {
+    public StaffStatus() {
     }
 
-    public staffstatus(String phone, String status, String address, Date dob, String staffName, String staffEmail) {
+    public StaffStatus(String phone, String status, String address, Date dob, String staffName, String staffEmail) {
         this.phone = phone;
         this.status = status;
         this.address = address;
@@ -77,6 +74,5 @@ public class staffstatus {
     public void setStaffEmail(String staffEmail) {
         this.staffEmail = staffEmail;
     }
-    
-    
 }
+

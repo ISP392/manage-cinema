@@ -199,6 +199,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                 <li><a href="list_movie">Movie</a></li>
                 <li><a href="menu.html">Slot</a></li>
                 <li><a href="manager_user">Staff</a></li>
+                <li><a href="manage-staff-status">Staff status</a></li>
               </ul>
             </li>
           </ul>
@@ -497,75 +498,79 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
     <script src="./assets/JS/js/custom.min.js"></script>
     <script>
-      document.querySelector('input[name="poster_image"]').addEventListener('change', function() {
-        var imageUrl = this.value;
-        document.querySelector('#imageUpload').value = imageUrl;
-        document.querySelector('#imagePreview').style.backgroundImage = 'url(' + imageUrl + ')';
-      });
-<<<<<<< HEAD
-=======
+                  document.querySelector('input[name="poster_image"]').addEventListener('change', function() {
+                      var imageUrl = this.value;
+                              document.querySelector('#imageUpload').value = imageUrl;
+                              document.querySelector('#imagePreview').style.backgroundImage = 'url(' + imageUrl + ')';
+                      });
+                              << << << < HEAD
+      =======
+    
+    >>>>>>> e5f9b2bdaeb66f1668e9988fde80f35c950a7ed3
+    document.addEventListener("DOMContentLoaded", function () 
+                      {
+                              var buttons = document.querySelectorAll(".genre-button");
+                      var selectedGenresInput = document.getElementById("selectedGenres");
+                      var selectedGenresBefore = document.getElementById(
+                              "selectedGenresBefore"
+                              ).value;
 
->>>>>>> e5f9b2bdaeb66f1668e9988fde80f35c950a7ed3
-      document.addEventListener("DOMContentLoaded", function () {
-        var buttons = document.querySelectorAll(".genre-button");
-        var selectedGenresInput = document.getElementById("selectedGenres");
-        var selectedGenresBefore = document.getElementById(
-          "selectedGenresBefore"
-        ).value;
+                      // Chuyển đổi giá trị của selectedGenresBefore thành mảng
+                      var selectedGenresBeforeArray = selectedGenresBefore
+                              .split(", ")
+                              .map(Number);
 
-        // Chuyển đổi giá trị của selectedGenresBefore thành mảng
-        var selectedGenresBeforeArray = selectedGenresBefore
-          .split(", ")
-          .map(Number);
+                      // Active các nút ban đầu dựa trên giá trị của selectedGenresBefore
+                      buttons.forEach(function (button) {
+                          if (selectedGenresBeforeArray.includes(Number(button.value))) {
+                              button.classList.add("active");
+                          }
+                      });
 
-        // Active các nút ban đầu dựa trên giá trị của selectedGenresBefore
-        buttons.forEach(function (button) {
-          if (selectedGenresBeforeArray.includes(Number(button.value))) {
-            button.classList.add("active");
-          }
-        });
+                      // Thiết lập giá trị ban đầu cho selectedGenres
+                      selectedGenresInput.value = selectedGenresBefore;
 
-        // Thiết lập giá trị ban đầu cho selectedGenres
-        selectedGenresInput.value = selectedGenresBefore;
+                      // Thêm sự kiện click cho các nút
+                      buttons.forEach(function (button) {
+                          button.addEventListener("click", function () {
+                                  button.classList.toggle("active");
 
-        // Thêm sự kiện click cho các nút
-        buttons.forEach(function (button) {
-          button.addEventListener("click", function () {
-            button.classList.toggle("active");
+                                  // Lấy ra tất cả các nút đã được chọn và đưa vào một mảng
+                                  var selectedGenres = Array.from(
+                                          document.querySelectorAll(".genre-button.active")
+                                          ).map((button) => button.value);
 
-            // Lấy ra tất cả các nút đã được chọn và đưa vào một mảng
-            var selectedGenres = Array.from(
-              document.querySelectorAll(".genre-button.active")
-            ).map((button) => button.value);
-
-            // Gán giá trị của mảng vào input để hiển thị
-            selectedGenresInput.value = selectedGenres.join(", ");
-          });
-        });
-      });
-
-      function readURL(input) {
-        if (input.files && input.files[0]) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            $("#imagePreview").css(
-              "background-image",
-              "url(" + e.target.result + ")"
-            );
-            $("#imagePreview").hide();
-            $("#imagePreview").fadeIn(650);
-          };
-          reader.readAsDataURL(input.files[0]);
-        }
-      }
-      $("#imageUpload").on("change", function () {
-        readURL(this);
-      });
-      $(".remove-img").on("click", function () {
-        var imageUrl = "images/no-img-avatar.png";
-        $(".avatar-preview, #imagePreview").removeAttr("style");
-        $("#imagePreview").css("background-image", "url(" + imageUrl + ")");
-      });
-    </script>
+                                  // Gán giá trị của mảng vào input để hiển thị
+                                  selectedGenresInput.value = selectedGenres.join(", ");
+                              });
+                          });
+              });
+              
+              function readURL(input) 
+                          {
+                                  if (input.files && input.files[0]) {
+                              var reader = new FileReader();
+                              reader.onload = function (e) {
+                                          $("#imagePreview").css(
+                                                  "background-image",
+                                                  "url(" + e.target.result + ")"
+                                                  );
+                                          $("#imagePreview").hide();
+                                          $("#imagePreview").fadeIn(650);
+                                  };
+                                  reader.readAsDataURL(input.files[0]);
+                              }
+            }
+                              
+            $("#imageUpload").on("change", function () {
+                                      readURL(this);
+            });
+            $(".remove-img").on("click", function () 
+                              {
+                                      var imageUrl = "images/no-img-avatar.png";
+                              $(".avatar-preview, #imagePreview").removeAttr("style");
+                              $("#imagePreview").css("background-image", "url(" + imageUrl + ")");
+            });
+              </script>
   </body>
 </html>

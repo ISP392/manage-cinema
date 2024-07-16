@@ -12,7 +12,7 @@ import java.sql.Timestamp;
  */
 public class Shift {
     private int shiftID;
-    private staffstatus phone;
+    private StaffStatus phone;
     private Timestamp startTime;
     private Timestamp endTime;
     private double startAmount;
@@ -21,7 +21,7 @@ public class Shift {
     public Shift() {
     }
 
-    public Shift(int shiftID, staffstatus phone, Timestamp startTime, Timestamp endTime, double startAmount, double endAmount) {
+    public Shift(int shiftID, StaffStatus phone, Timestamp startTime, Timestamp endTime, double startAmount, double endAmount) {
         this.shiftID = shiftID;
         this.phone = phone;
         this.startTime = startTime;
@@ -38,11 +38,11 @@ public class Shift {
         this.shiftID = shiftID;
     }
 
-    public staffstatus getPhone() {
+    public StaffStatus getPhone() {
         return phone;
     }
 
-    public void setPhone(staffstatus phone) {
+    public void setPhone(StaffStatus phone) {
         this.phone = phone;
     }
 

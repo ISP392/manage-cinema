@@ -4,13 +4,13 @@
  */
 package modal;
 
-
 /**
  *
-
+ *
  * @author MISS NGA
  */
 public class Users {
+
     private int userID;
     private String displayName;
     private String userName;
@@ -19,16 +19,12 @@ public class Users {
     private String email;
     private String providerID;
     private int point;
-    private staffstatus phone;
+    private StaffStatus phone;
 
     public Users() {
     }
 
-    public Users(String email) {
-        this.email = email;
-    }
-
-    public Users(int userID, String displayName, String userName, String password, Role roleID, String email, String providerID, int point, staffstatus phone) {
+    public Users(int userID, String displayName, String userName, String password, Role roleID, String email, String providerID, int point, StaffStatus phone) {
         this.userID = userID;
         this.displayName = displayName;
         this.userName = userName;
@@ -41,13 +37,16 @@ public class Users {
     }
 
     
+    public Users(String email) {
+        this.email = email;
+    }
 
     public Users(int userID, String email) {
         this.userID = userID;
         this.email = email;
     }
 
-    public Users( String email,String displayName) {
+    public Users(String email, String displayName) {
         this.displayName = displayName;
         this.email = email;
     }
@@ -57,14 +56,11 @@ public class Users {
         this.password = password;
     }
 
-
-
     public Users(String userName, String displayName, String email) {
         this.userName = userName;
         this.displayName = displayName;
         this.email = email;
     }
-
 
     public Users(int userID, String displayName, String userName, String password, String email, Role roleID, int point, String providerID) {
         this.userID = userID;
@@ -148,11 +144,11 @@ public class Users {
         this.providerID = providerID;
     }
 
-    public staffstatus getPhone() {
+    public StaffStatus getPhone() {
         return phone;
     }
 
-    public void setPhone(staffstatus phone) {
+    public void setPhone(StaffStatus phone) {
         this.phone = phone;
     }
 
@@ -161,7 +157,6 @@ public class Users {
         return "Users{" + "userID=" + userID + ", displayName=" + displayName + ", userName=" + userName + ", password=" + password + ", roleID=" + roleID + ", email=" + email + ", providerID=" + providerID + ", point=" + point + ", phone=" + phone + '}';
     }
 
-   
     
-    
+
 }

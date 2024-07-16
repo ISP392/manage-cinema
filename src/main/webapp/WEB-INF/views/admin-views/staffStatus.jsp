@@ -1,60 +1,27 @@
 <%-- 
-    Document   : manageCandidates
-    Created on : Jun 26, 2024, 1:59:16 PM
-    Author     : MISS NGA
+    Document   : staffStatus
+    Created on : Jul 16, 2024, 2:30:07 PM
+    Author     : HP
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page import="java.util.List" %>
-<%@ page import=" modal.Users" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8"/>
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-        <title>Manage Candidates</title>
-        <!-- Include Bootstrap CSS -->
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+        <title>Admin Dashboard</title>
         <link href="./assets/css/dashboard-admin.css" rel="stylesheet"/>
-        <link href="./assets/JS/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-        <style>
-            .tab {
-                display: none;
-            }
-            .tab.active {
-                display: block;
-            }
-            .tabs {
-                cursor: pointer;
-                padding: 10px;
-                background: #ccc;
-                display: inline-block;
-                margin-right: 5px;
-            }
-            .tabs.active {
-                background: #aaa;
-            }
-        </style>
-        <script>
-            function showTab(tabId) {
-                var tabs = document.getElementsByClassName('tab');
-                for (var i = 0; i < tabs.length; i++) {
-                    tabs[i].classList.remove('active');
-                }
-                document.getElementById(tabId).classList.add('active');
-
-                var tabButtons = document.getElementsByClassName('tabs');
-                for (var i = 0; i < tabButtons.length; i++) {
-                    tabButtons[i].classList.remove('active');
-                }
-                document.getElementById(tabId + '-tab').classList.add('active');
-            }
-        </script>
 
 
     </head>
+    <style>
+        .action-rows{
+            width: 120px;
+        }
+    </style>
     <body>
         <!--*******************
             Preloader start
@@ -215,6 +182,8 @@
                                 <li><a href="list_movie">Movie</a></li>
                                 <li><a href="menu.html">Slot</a></li>
                                 <li><a href="manager_user">Staff</a></li>
+                                <li><a href="manage-staff-status">Staff status</a></li>
+
                             </ul>
                         </li>
                     </ul>
@@ -223,169 +192,161 @@
             <!--**********************************
                   Sidebar end
               ***********************************-->
-            <!-- Content body start -->
+
+            <!--**********************************
+                  Content body start
+              ***********************************-->
             <div class="content-body">
+                <!-- row -->
                 <div class="container-fluid">
+                    <!-- Row -->
                     <div class="row">
                         <div class="col-xl-12">
+                            <c:if test="${param.error != null}">
+                                <div class="alert alert-danger" role="alart">
+                                    ${param.error}
+                                </div>
+                            </c:if>
+                            <c:if test="${param.success != null}">
+                                <div class="alert alert-success" role="alart">
+                                    ${param.success}
+                                </div>
+                            </c:if>
                             <div class="filter cm-content-box box-primary">
                                 <div class="content-title">
                                     <div class="cpa">
-                                        <i class="fa-solid fa-file-lines me-1"></i>Manage Candidates
-                                    </div>
-                                    <div class="tools">
-                                        <a href="javascript:void(0);" class="expand SlideToolHeader"><i class="fal fa-angle-down"></i></a>
+                                        <i class="fa-solid fa-file-lines me-1"></i>List staff status
+
                                     </div>
                                 </div>
                                 <div class="cm-content-body form excerpt">
                                     <div class="card-body pt-2">
-                                        <!-- error message -->
-                                        <c:if test="${not empty errorMessage}">
-                                            <div class="alert alert-danger" role="alert">
-                                                ${errorMessage}
-                                                <a href="javascript:history.back()" class="btn btn-primary">Go Back</a>
-                                            </div>
-                                        </c:if>
-                                        <div>
-                                            <div id="all-tab" class="tabs active" onclick="showTab('all')">All Candidates</div>
-                                            <div id="approved-tab" class="tabs" onclick="showTab('approved')">Approved Candidates</div>
-                                            <div id="rejected-tab" class="tabs" onclick="showTab('rejected')">Rejected Candidates</div>
-                                        </div>
-                                        <div id="all" class="tab active">
-                                            <h2>All Candidates</h2>
-                                            <div class="table-responsive">
-                                                <table class="table table-responsive-sm mb-0">
-                                                    <thead>
+                                        <div class="table-responsive">
+                                            <table id="staffTable" class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Phone</th>
+                                                        <th>Status</th>
+                                                        <th>Address</th>
+                                                        <th>DOB</th>
+                                                        <th>Name</th>
+                                                        <th>Email</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <c:forEach var="staff" items="${staffStatus}" varStatus="status">
                                                         <tr>
-                                                            <th><strong>ID</strong></th>
-                                                            <th><strong>Name</strong></th>
-                                                            <th><strong>Email</strong></th>
-                                                            <th><strong>Phone</strong></th>
-                                                            <th><strong>DOB</strong></th>
-                                                            <th><strong>Address</strong></th>
-                                                            <th><strong>CV</strong></th>
-                                                            <th><strong>Actions</strong></th>
+                                                            <td>${status.index + 1}</td>
+                                                            <td>${staff.phone}</td>
+                                                            <td>${staff.status}</td>
+                                                            <td>${staff.address}</td>
+                                                            <td>${staff.dob}</td>
+                                                            <td>${staff.staffName}</td>
+                                                            <td>${staff.staffEmail}</td>
+                                                            <td>
+                                                                <c:if test="${staff.status == 'pending'}">
+                                                                    <a onclick="return confirm('Are you sure to approve this staff?')" 
+                                                                       href="manage-staff-status?action=approve&phone=${staff.phone}" 
+                                                                       class="btn btn-success btn-sm">
+                                                                        <i class="fa fa-check"></i> Approve
+                                                                    </a>
+                                                                    <a onclick="return confirm('Are you sure to reject this staff?')" 
+                                                                       href="manage-staff-status?action=reject&phone=${staff.phone}" 
+                                                                       class="btn btn-danger btn-sm">
+                                                                        <i class="fa fa-times"></i> Reject
+                                                                    </a>
+                                                                </c:if>
+                                                            </td>
                                                         </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach var="user" items="${sessionScope.accountsForApproval}" varStatus="status">
-                                                            <tr>
-                                                                <td>${(currentPage - 1) * 5 + status.index + 1}</td>
-                                                                <td>${user.name}</td>
-                                                                <td>${user.email}</td>
-                                                                <td>${user.phone}</td>
-                                                                <td>${user.dob}</td>
-                                                                <td>${user.address}</td>
-                                                                <td>${user.cv}</td>
-                                                                <td>
-                                                                    <a href="approve_account?userID=${user.userID}" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-check"></i></a>
-                                                                    <a href="reject_account?userID=${user.userID}" class="btn btn-danger shadow btn-xs sharp rounded-circle"><i class="fa fa-times"></i></a>
-                                                                </td>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </tbody>
-                                                </table>
-                                                <div class="d-flex align-items-center justify-content-xl-between flex-wrap justify-content-center mt-3">
-                                                    <ul class="pagination">
-                                                        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                                            <a class="page-link" href="?index=${currentPage - 1}">&lsaquo;</a>
-                                                        </li>
-                                                        <c:forEach begin="1" end="${endPage}" var="i">
-                                                            <li class="page-item ${currentPage == i ? 'active' : ''}">
-                                                                <a class="page-link" href="?index=${i}">${i}</a>
-                                                            </li>
-                                                        </c:forEach>
-                                                        <li class="page-item ${currentPage == endPage ? 'disabled' : ''}">
-                                                            <a class="page-link" href="?index=${currentPage + 1}">&rsaquo;</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="approved" class="tab">
-                                            <h2>Approved Candidates</h2>
-                                            <div class="table-responsive">
-                                                <table class="table table-responsive-sm mb-0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th><strong>ID</strong></th>
-                                                            <th><strong>Name</strong></th>
-                                                            <th><strong>Email</strong></th>
-                                                            <th><strong>Phone</strong></th>
-                                                            <th><strong>DOB</strong></th>
-                                                            <th><strong>Address</strong></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach var="user" items="${requestScope.approvedUsers}">
-                                                            <tr>
-                                                                <td>${user.userID}</td>
-                                                                <td>${user.name}</td>
-                                                                <td>${user.email}</td>
-                                                                <td>${user.phone}</td>
-                                                                <td>${user.dob}</td>
-                                                                <td>${user.address}</td>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div id="rejected" class="tab">
-                                            <h2>Rejected Candidates</h2>
-                                            <div class="table-responsive">
-                                                <table class="table table-responsive-sm mb-0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th><strong>ID</strong></th>
-                                                            <th><strong>Name</strong></th>
-                                                            <th><strong>Email</strong></th>
-                                                            <th><strong>Phone</strong></th>
-                                                            <th><strong>DOB</strong></th>
-                                                            <th><strong>Address</strong></th>
-                                                            <th><strong>CV</strong></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach var="user" items="${requestScope.rejectedUsers}">
-                                                            <tr>
-                                                                <td>${user.userID}</td>
-                                                                <td>${user.name}</td>
-                                                                <td>${user.email}</td>
-                                                                <td>${user.phone}</td>
-                                                                <td>${user.dob}</td>
-                                                                <td>${user.address}</td>
-                                                                <td>${user.cv}</td>
-                                                            </tr>
-                                                        </c:forEach>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                    </c:forEach>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Content body end -->
                         </div>
-                        <!-- Main wrapper end -->
+                    </div>
+                    <!--**********************************
+                          Content body end
+                      ***********************************-->
+                </div>
+                <!--**********************************
+                    Main wrapper end
+                ***********************************-->
 
-                        <!--***********************************-->
+                <!--**********************************
+                    Scripts
+                ***********************************-->
+                <!-- Required vendors -->
+                <script src="./assets/JS/vendor/global/global.min.js"></script>
 
-                        <!--**********************************
-                            Scripts
-                        ***********************************-->
-                        <!-- Required vendors -->
-                        <script src="./assets/JS/vendor/global/global.min.js"></script>
+                <!-- Apex Chart -->
+                <script src="./assets/JS/vendor/apexchart/apexchart.js"></script>
 
-                        <!-- Apex Chart -->
-                        <script src="./assets/JS/vendor/apexchart/apexchart.js"></script>
+                <!-- Dashboard 1 -->
+                <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
 
-                        <!-- Dashboard 1 -->
-                        <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
+                <script src="./assets/JS/js/custom.min.js"></script>
 
-                        <script src="./assets/JS/js/custom.min.js"></script>
-                        </body>
-                        </html>
 
+                <script>
+            $(document).ready(function () {
+                $("#searchInput").on("keyup", function () {
+                    var query = $(this).val();
+                    console.log("Search query: ", query); // Log để kiểm tra query
+                    $.ajax({
+                        url: "/manage-cinema/searchMovies", // Đường dẫn đầy đủ đến servlet tìm kiếm
+                        type: "GET",
+                        data: {searchQuery: query},
+                        success: function (response) {
+                            try {
+                                console.log("Response: ", response); // Log phản hồi để kiểm tra
+
+                                // Nếu phản hồi không phải là chuỗi JSON hợp lệ, chuyển đổi nó
+                                if (typeof response !== 'string') {
+                                    response = JSON.stringify(response);
+                                }
+
+                                var movies = JSON.parse(response);
+                                var movieListHtml = "";
+                                $.each(movies, function (index, movie) {
+                                    movieListHtml += "<tr>";
+                                    movieListHtml += "<td>" + (index + 1) + "</td>";
+                                    movieListHtml += "<td>" + movie.title.toUpperCase() + "</td>";
+                                    movieListHtml += "<td>" + movie.releaseDate + "</td>";
+                                    movieListHtml += "<td>" + movie.status + "</td>";
+                                    movieListHtml += "<td class='action-rows'>";
+                                    movieListHtml += "<a href='update_movie?movieID=" + movie.movieID + "' class='btn btn-primary shadow btn-xs sharp rounded-circle me-1'><i class='fa fa-pencil'></i></a>";
+                                    if (movie.display == 1) {
+                                        movieListHtml += "<a href='updateDisplayMovie?movieID=" + movie.movieID + "&display=0' class='btn btn-danger shadow btn-xs sharp rounded-circle'><i class='fa fa-eye'></i></a>";
+                                        movieListHtml += "<a href='addNewSlot?movieID=" + movie.movieID + "&display=1' class='btn btn-primary shadow btn-xs sharp rounded-circle'><i class='fa fa-plus'></i></a>";
+                                    } else {
+                                        movieListHtml += "<a href='updateDisplayMovie?movieID=" + movie.movieID + "&display=1' class='btn btn-danger shadow btn-xs sharp rounded-circle'><i class='fa fa-eye-slash'></i></a>";
+                                    }
+                                    movieListHtml += "</td>";
+                                    movieListHtml += "</tr>";
+                                });
+                                console.log("Generated HTML: ", movieListHtml); // Log HTML được tạo ra
+                                $("#movieList").html(movieListHtml); // Cập nhật DOM
+                            } catch (e) {
+                                console.error("Error parsing JSON response: ", e);
+                                console.log("Response: ", response);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("AJAX Error: ", error);
+                            console.log("Response: ", xhr.responseText);
+                        }
+                    });
+                });
+            });
+
+
+                </script>
+                </body>
+                </html>
 
 
