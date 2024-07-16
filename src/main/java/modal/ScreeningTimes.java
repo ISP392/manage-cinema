@@ -12,9 +12,10 @@ import java.time.LocalDateTime;
  * @author MISS NGA
  */
 public class ScreeningTimes {
+
     private int screeningID;
-      private int theaterId;
-       private int movieId;
+    private int theaterId;
+    private int movieId;
     private Theaters theaterID;
     private Movies movieID;
     private Timestamp startTime;
@@ -58,10 +59,6 @@ public class ScreeningTimes {
         this.startTime = startTime;
         this.endTime = endTime;
     }
-
-    
-
-    
 
     public ScreeningTimes(int screeningID, Theaters theaterID, Movies movieID, Timestamp startTime, Timestamp endTime) {
         this.screeningID = screeningID;

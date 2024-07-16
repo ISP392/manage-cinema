@@ -191,7 +191,7 @@
             </tbody> -->
             <tbody>
                 <tr>
-                    <td>-</td>
+                    <td><a href="addNewSlot" >Add Slot</a></td>
 
                     <c:forEach var="day" items="${weekDays}">
                         <c:set var="formattedDate">
@@ -213,9 +213,9 @@
                                             </div>
 
                                         </div>
-                                        <a href="addNewSlot">add</a>
+                                        
                                        
-                                        <a href="updateNewSlot?id=${showtime.screeningID}">update</a>
+                                        <a href="updateNewSlot?id=${showtime.screeningID}">Update Slot</a>
 
                                     </c:forEach>      
 

@@ -95,8 +95,7 @@ public class updateNewSlot extends HttpServlet {
         String formattedTimeStart = sdf.format(timestampStart);
         String formattedTimeEnd = sdf.format(timestampEnd);
         // In ra thời gian theo định dạng HH:mm:ss
-//        System.out.println(formattedTimeStart);
-//        System.out.println(formattedTimeEnd);
+
         request.setAttribute("date", date);
         request.setAttribute("formattedTimeStart", formattedTimeStart);
         request.setAttribute("formattedTimeEnd", formattedTimeEnd);
@@ -116,15 +115,15 @@ public class updateNewSlot extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int sid = Integer.parseInt(request.getParameter("sid"));
-        String theaterName = request.getParameter("theaterName");
-        System.out.println(theaterName);
+        String movieName = request.getParameter("movieName");
         String cinema = request.getParameter("cinemaSelect");
 
         String movieDateStr = request.getParameter("dateInput");
         String theaterNumber = request.getParameter("theaterNumber");
         String startTime = request.getParameter("startTimeInput");
         String endTime = request.getParameter("endTimeInput");
-
+        System.out.println(movieDateStr + startTime);
+        System.out.println(movieDateStr + endTime);
         CinemaConfig cinemaConfig = new CinemaConfig();
         int locationID = cinemaConfig.getLocationIdByCinemaName(cinema);
         int[] dimensions = cinemaConfig.getRowsAndColumns(cinema, Integer.parseInt(theaterNumber));
@@ -132,13 +131,14 @@ public class updateNewSlot extends HttpServlet {
         int columns = dimensions[1];
 
         DAO dao = new DAO();
-        Movies movies = dao.getMovieByName(theaterName);
+        Movies movies = dao.getMovieByName(movieName);
         int movieID = movies.getMovieID();
         //response.getWriter().print("locationID: " + locationID);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date movieDateUtil;
         try {
             movieDateUtil = format.parse(movieDateStr);
+
         } catch (ParseException e) {
             response.getWriter().print("Error: " + e.getMessage());
             e.printStackTrace();
@@ -156,16 +156,74 @@ public class updateNewSlot extends HttpServlet {
         java.sql.Timestamp endTimeTimestamp;
         try {
             startTimeTimestamp = java.sql.Timestamp.valueOf(startTimeStr);
+
             endTimeTimestamp = java.sql.Timestamp.valueOf(endTimeStr);
+
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            response.getWriter().print("Error: " + e.getMessage());
+            ScreeningTimes screeningTimes = dao.getAllScreeningById(sid);
+            Movies movie = dao.getMovieByID(screeningTimes.getMovieId());
+            String movieName1 = movie.getTitle();
+
+            List<Cinemas> cinemases = dao.getAllCinemas();
+            List<Movies> listAllMovies = dao.getMovie();
+            request.setAttribute("sid", sid);
+            request.setAttribute("listAllMovies", listAllMovies);
+            request.setAttribute("cinemases", cinemases);
+            request.setAttribute("movieName", movieName1);
+            request.setAttribute("duration", movie.getDuration());
+            request.setAttribute("screeningTimes", screeningTimes);
+            Timestamp timestampStart = screeningTimes.getStartTime();
+            Timestamp timestampEnd = screeningTimes.getEndTime();
+            // Chuyển đổi Timestamp sang Date
+            Date date = new Date(timestampStart.getTime());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+
+            // Chuyển đổi Timestamp sang String theo định dạng mong muốn
+            String formattedTimeStart = sdf.format(timestampStart);
+            String formattedTimeEnd = sdf.format(timestampEnd);
+            // In ra thời gian theo định dạng HH:mm:ss
+
+            request.setAttribute("date", date);
+            request.setAttribute("formattedTimeStart", formattedTimeStart);
+            request.setAttribute("formattedTimeEnd", formattedTimeEnd);
+            request.setAttribute("messageError", "Eror input day");
+            request.getRequestDispatcher("WEB-INF/views/admin-views/updateNewSlot.jsp").forward(request, response);
             // Handle the exception. For example, you might want to return an error response.
             return;
         }
         Movies movie = dao.getMovieByID(movieID);
         // Check start time of new slot have to later than end time of lastest slot
+        System.out.println(movie);
         if (endTimeLastestSlot != null && endTimeLastestSlot.after(startTimeTimestamp)) {
+            ScreeningTimes screeningTimes = dao.getAllScreeningById(sid);
+            Movies movie1 = dao.getMovieByID(screeningTimes.getMovieId());
+            String movieName2 = movie1.getTitle();
+
+            List<Cinemas> cinemases1 = dao.getAllCinemas();
+            List<Movies> listAllMovies1 = dao.getMovie();
+            request.setAttribute("sid", sid);
+            request.setAttribute("listAllMovies", listAllMovies1);
+            request.setAttribute("cinemases", cinemases1);
+            request.setAttribute("movieName", movieName2);
+            request.setAttribute("duration", movie.getDuration());
+            request.setAttribute("screeningTimes", screeningTimes);
+            Timestamp timestampStart = screeningTimes.getStartTime();
+            Timestamp timestampEnd = screeningTimes.getEndTime();
+            // Chuyển đổi Timestamp sang Date
+            Date date = new Date(timestampStart.getTime());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+
+            // Chuyển đổi Timestamp sang String theo định dạng mong muốn
+            String formattedTimeStart = sdf.format(timestampStart);
+            String formattedTimeEnd = sdf.format(timestampEnd);
+            // In ra thời gian theo định dạng HH:mm:ss
+
+            request.setAttribute("date", date);
+            request.setAttribute("formattedTimeStart", formattedTimeStart);
+            request.setAttribute("formattedTimeEnd", formattedTimeEnd);
+
             request.setAttribute("message", "Start time of new slot have to later than end time of lastest slot is " + endTimeLastestSlot);
             request.setAttribute("movie", movie);
             List<Movies> listAllMovies = dao.getMovie();
@@ -186,12 +244,12 @@ public class updateNewSlot extends HttpServlet {
             // //get id of theaters recently inserted
             int theaterID = dao.getTheaterIDRecentlyAdded();
 
-            //update screeningTimes
-//            System.out.println(theaterID);
-//             System.out.println(movieID);
-//              System.out.println(startTimeTimestamp);
-//               System.out.println(endTimeTimestamp);
-//                System.out.println(sid);
+            // //insert screeningTimes
+            System.out.println(theaterID);
+            System.out.println(movieID);
+            System.out.println(startTimeTimestamp);
+            System.out.println(endTimeTimestamp);
+            System.out.println(sid);
             dao.updateScreeningTimes(theaterID, movieID, startTimeTimestamp, endTimeTimestamp, sid);
             response.sendRedirect("home_admin");
         }

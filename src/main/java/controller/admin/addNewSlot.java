@@ -73,8 +73,8 @@ public class addNewSlot extends HttpServlet {
         DAO dao = new DAO();
         List<Movies> listAllMovies = dao.getMovie();
         request.setAttribute("listAllMovies", listAllMovies);
-         List<Cinemas>  cinemases = dao.getAllCinemas();
-         request.setAttribute("cinemases", cinemases);
+        List<Cinemas> cinemases = dao.getAllCinemas();
+        request.setAttribute("cinemases", cinemases);
 //            Movies movie = dao.getMovieByIDForAddSlot(Integer.parseInt(movieID));
 //           
 //            if (movie == null) {
@@ -141,8 +141,8 @@ public class addNewSlot extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String theaterName = request.getParameter("theaterName");
-        System.out.println(theaterName);
+        String movieName = request.getParameter("movieName");
+        System.out.println(movieName);
         String cinema = request.getParameter("cinemaSelect");
 
         String movieDateStr = request.getParameter("dateInput");
@@ -150,20 +150,30 @@ public class addNewSlot extends HttpServlet {
         String startTime = request.getParameter("startTimeInput");
         String endTime = request.getParameter("endTimeInput");
 
+        // Khởi tạo đối tượng CinemaConfig để lấy thông tin về cinema
         CinemaConfig cinemaConfig = new CinemaConfig();
+        // Lấy ID của địa điểm cinema từ tên cinema và lưu vào biến "locationID"
         int locationID = cinemaConfig.getLocationIdByCinemaName(cinema);
+
         int[] dimensions = cinemaConfig.getRowsAndColumns(cinema, Integer.parseInt(theaterNumber));
+        // Lấy số hàng và cột của rạp chiếu từ tên cinema và số rạp chiếu
         int rows = dimensions[0];
+        // Lưu số hàng của rạp chiếu vào biến "rows"
+
         int columns = dimensions[1];
+        // Lưu số cột của rạp chiếu vào biến "columns"
 
         DAO dao = new DAO();
-        Movies movies = dao.getMovieByName(theaterName);
+        Movies movies = dao.getMovieByName(movieName);
+        System.out.println(movies);
         int movieID = movies.getMovieID();
-        //response.getWriter().print("locationID: " + locationID);
+        // Định dạng chuỗi ngày tháng
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        // Khởi tạo biến để lưu ngày chiếu phim dưới dạng java.util.Date
         java.util.Date movieDateUtil;
         try {
             movieDateUtil = format.parse(movieDateStr);
+            // Chuyển đổi chuỗi ngày tháng thành đối tượng java.util.Date và lưu vào "movieDateUtil"
         } catch (ParseException e) {
             response.getWriter().print("Error: " + e.getMessage());
             e.printStackTrace();
@@ -171,12 +181,13 @@ public class addNewSlot extends HttpServlet {
         }
         java.sql.Date movieDateSql = new java.sql.Date(movieDateUtil.getTime());
 
-        //lay ra slot chieu phim muon nhat
+        // Lấy thời gian kết thúc của suất chiếu gần nhất trong rạp chiếu
         java.sql.Timestamp endTimeLastestSlot = dao.getLastestEndTimeOfTheater(cinema, movieDateSql, Integer.parseInt(theaterNumber));
 
-        // Assuming movieDateStr is a String representing a date in the format "yyyy-MM-dd"
+        // Giả định rằng movieDateStr là chuỗi ngày tháng dạng "yyyy-MM-dd"
         String startTimeStr = movieDateStr + " " + startTime + ":00";
         String endTimeStr = movieDateStr + " " + endTime + ":00";
+        // Khởi tạo các biến để lưu thời gian bắt đầu và kết thúc dưới dạng java.sql.Timestamp
         java.sql.Timestamp startTimeTimestamp;
         java.sql.Timestamp endTimeTimestamp;
         try {
@@ -190,13 +201,14 @@ public class addNewSlot extends HttpServlet {
         }
         Movies movie = dao.getMovieByID(movieID);
         // Check start time of new slot have to later than end time of lastest slot
+        // Kiểm tra xem thời gian bắt đầu của suất chiếu mới có sau thời gian kết thúc của suất chiếu gần nhất hay không
         if (endTimeLastestSlot != null && endTimeLastestSlot.after(startTimeTimestamp)) {
             request.setAttribute("message", "Start time of new slot have to later than end time of lastest slot is " + endTimeLastestSlot);
             request.setAttribute("movie", movie);
-             List<Movies> listAllMovies = dao.getMovie();
-        request.setAttribute("listAllMovies", listAllMovies);
+            List<Movies> listAllMovies = dao.getMovie();
+            request.setAttribute("listAllMovies", listAllMovies);
             request.getRequestDispatcher("WEB-INF/views/admin-views/addslotmovies.jsp").forward(request, response);
-            return;
+
         } else {
             //insert new cinemas
             dao.insertNewCinemas(cinema, Date.valueOf(movieDateStr), locationID);
@@ -207,7 +219,7 @@ public class addNewSlot extends HttpServlet {
             dao.insertTheaters(c.getCinemaID(), Integer.parseInt(theaterNumber), rows, columns);
             // //get id of theaters recently inserted
             int theaterID = dao.getTheaterIDRecentlyAdded();
-
+            System.out.println( movieID);
             // //insert screeningTimes
             dao.insertScreeningTimes(theaterID, movieID, startTimeTimestamp, endTimeTimestamp);
             response.sendRedirect("home_admin");
