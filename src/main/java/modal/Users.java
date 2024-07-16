@@ -3,12 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package modal;
+
 /**
  *
-
+ *
  * @author MISS NGA
  */
 public class Users {
+
     private int userID;
     private String displayName;
     private String userName;
@@ -17,22 +19,34 @@ public class Users {
     private String email;
     private String providerID;
     private int point;
+    private StaffStatus phone;
 
     public Users() {
     }
 
+    public Users(int userID, String displayName, String userName, String password, Role roleID, String email, String providerID, int point, StaffStatus phone) {
+        this.userID = userID;
+        this.displayName = displayName;
+        this.userName = userName;
+        this.password = password;
+        this.roleID = roleID;
+        this.email = email;
+        this.providerID = providerID;
+        this.point = point;
+        this.phone = phone;
+    }
+
+    
     public Users(String email) {
         this.email = email;
     }
-
-
 
     public Users(int userID, String email) {
         this.userID = userID;
         this.email = email;
     }
 
-    public Users( String email,String displayName) {
+    public Users(String email, String displayName) {
         this.displayName = displayName;
         this.email = email;
     }
@@ -42,14 +56,11 @@ public class Users {
         this.password = password;
     }
 
-
-
     public Users(String userName, String displayName, String email) {
         this.userName = userName;
         this.displayName = displayName;
         this.email = email;
     }
-
 
     public Users(int userID, String displayName, String userName, String password, String email, Role roleID, int point, String providerID) {
         this.userID = userID;
@@ -133,8 +144,19 @@ public class Users {
         this.providerID = providerID;
     }
 
+    public StaffStatus getPhone() {
+        return phone;
+    }
+
+    public void setPhone(StaffStatus phone) {
+        this.phone = phone;
+    }
+
     @Override
     public String toString() {
-        return "Users{" + "userID=" + userID + ", displayName=" + displayName + ", userName=" + userName + ", password=" + password + ", roleID=" + roleID + ", email=" + email + ", providerID=" + providerID + ", point=" + point + '}';
+        return "Users{" + "userID=" + userID + ", displayName=" + displayName + ", userName=" + userName + ", password=" + password + ", roleID=" + roleID + ", email=" + email + ", providerID=" + providerID + ", point=" + point + ", phone=" + phone + '}';
     }
+
+    
+
 }
