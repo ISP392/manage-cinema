@@ -50,7 +50,7 @@ public class DAO extends DBContext {
     }
 
     public void insertAddEvent(String eventName, String eventDescription, Date startTime, Date endTime, String eventImg) {
-        String sql = "INSERT INTO backup_database.events (eventImg, eventName, eventDescription, startTime, endTime) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO events (eventImg, eventName, eventDescription, startTime, endTime) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, eventImg);
