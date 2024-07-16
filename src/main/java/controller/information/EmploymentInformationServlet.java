@@ -4,6 +4,7 @@
  */
 package controller.information;
 
+import DAO.DAO;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,7 +19,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
+import modal.StaffStatus;
 import util.Email;
 
 /**
@@ -117,11 +122,23 @@ public class EmploymentInformationServlet extends HttpServlet {
         fileContent.close();
         boolean isSuccess = Email.sendEmailWithFile("New employment application received:", address, textContent, folder, newFileName);
         if (isSuccess) {
+            DAO dao = new DAO();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date dobDate = null;
+            try {
+
+                dobDate = dateFormat.parse(dob);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            StaffStatus staff = new StaffStatus(phone, "Pending", address, dobDate, name, email);
+            dao.addStaff(staff);
             request.setAttribute("success", "Your application was submitted successfully!");
         } else {
             request.setAttribute("error", "Interal server error!!");
         }
-                System.out.println(isSuccess);
+        System.out.println(isSuccess);
         request.getRequestDispatcher("/WEB-INF/views/employmentInformation.jsp").forward(request, response);
 
     }

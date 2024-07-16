@@ -52,7 +52,6 @@
 
                 <div class="all-movie">
                     <a href="nowShowing">Xem Phim Ngay!</a>
-
                 </div>
             </div>
             <div class="col-2"></div>

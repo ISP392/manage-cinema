@@ -201,6 +201,7 @@ baoquoc --%> <%@page contentType="text/html" pageEncoding="UTF-8"%>
                 <li><a href="list_movie">Movie</a></li>
                 <li><a href="menu.html">Slot</a></li>
                 <li><a href="manager_user">Staff</a></li>
+                <li><a href="manage-staff-status">Staff status</a></li>
               </ul>
             </li>
           </ul>

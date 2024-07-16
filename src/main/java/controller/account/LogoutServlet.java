@@ -29,13 +29,6 @@ public class LogoutServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
 
-
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
-    }
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();

@@ -135,7 +135,6 @@ public class List_all_cinemas extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/views/cinemas/list_all_cinemas.jsp").forward(request, response);
     }
 
-
     /**
      * Handles the HTTP <code>POST</code> method.
      *

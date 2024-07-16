@@ -23,7 +23,8 @@ public class Tickets {
     private Timestamp purchaseDate;
     private Seats seatID;
     private Orders orderID;
-
+    
+    
     public Tickets() {
     }
 
@@ -100,6 +101,11 @@ public class Tickets {
 
     public void setOrderID(Orders orderID) {
         this.orderID = orderID;
+    }
+
+    @Override
+    public String toString() {
+        return "Tickets{" + "ticketID=" + ticketID + ", userID=" + userID + ", movieID=" + movieID + ", cinemaID=" + cinemaID + ", price=" + price + ", purchaseDate=" + purchaseDate + ", seatID=" + seatID + ", orderID=" + orderID + '}';
     }
 
     
