@@ -925,6 +925,29 @@ public class DAO extends DBContext {
             return false;
         }
     }
+//    add staffStaus
+
+    public boolean addStaff(StaffStatus staff) {
+        String sql = "INSERT INTO staffstatus (phone, status, address, dob, staffName, staffEmail) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+        try (
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, staff.getPhone());
+            stmt.setString(2, staff.getStatus());
+            stmt.setString(3, staff.getAddress());
+            stmt.setDate(4, new java.sql.Date(staff.getDob().getTime()));
+            stmt.setString(5, staff.getStaffName());
+            stmt.setString(6, staff.getStaffEmail());
+
+            int rowsInserted = stmt.executeUpdate();
+            return rowsInserted > 0;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
 
     public void addStaff(Users u, String phone) {
         String sql = "INSERT INTO Users (displayName, username, password, roleID, email, point, phone) VALUES (?, ?, ?, 3,?,0, ?)";
