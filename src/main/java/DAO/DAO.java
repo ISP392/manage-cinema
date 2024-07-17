@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import com.paypal.api.payments.Order;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -1513,6 +1514,114 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
+    
+     public Orders getOrderById(String orderId) {
+        Orders od = null;
+        String sql = "SELECT * FROM Orders WHERE orderID = ?";
+
+        try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, orderId);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            od = new Orders();
+            od.setOrderID(rs.getInt("orderID"));
+
+            Users user = new Users();
+            user.setUserID(rs.getInt("userID"));
+            od.setUserID(user);
+
+            Movies movie = new Movies();
+            movie.setMovieID(rs.getInt("movieID"));
+            od.setMovieID(movie);
+
+            od.setQuantity(rs.getInt("quantity"));
+            od.setAllPrice(rs.getString("allPrice"));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return od;
+    }
+
+    public List<Tickets> getTicketsByOrderId(String orderId) {
+    List<Tickets> tickets = new ArrayList<>();
+    String sql = "SELECT * FROM Tickets WHERE orderID = ?";
+
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, orderId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Tickets ticket = new Tickets();
+            ticket.setTicketID(rs.getInt("ticketID"));
+
+            Users user = new Users();
+            user.setUserID(rs.getInt("userID"));
+            ticket.setUserID(user);
+
+            Movies movie = new Movies();
+            movie.setMovieID(rs.getInt("movieID"));
+            ticket.setMovieID(movie);
+
+            Cinemas cinema = new Cinemas();
+            cinema.setCinemaID(rs.getInt("cinemaID"));
+            ticket.setCinemaID(cinema);
+
+            ticket.setPrice(rs.getString("price"));
+
+            Seats seat = new Seats();
+            seat.setSeatID(rs.getInt("seatID"));
+            ticket.setSeatID(seat);
+
+            Orders order = new Orders();
+            order.setOrderID(rs.getInt("orderID"));
+            ticket.setOrderID(order);
+
+            ticket.setPurchaseDate(rs.getTimestamp("purchaseDate"));
+
+            tickets.add(ticket);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return tickets;
+}
+
+    
+    public ScreeningTimes getTimeByOrderId(String orderId) {
+    ScreeningTimes st = null;
+    String sql = "SELECT * FROM project_cinema_update.screeningtimes WHERE movieID IN (SELECT movieID FROM project_cinema_update.orders WHERE orderID = ?)";
+
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, orderId);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            st = new ScreeningTimes();
+            st.setScreeningID(rs.getInt("screeningID"));
+
+            Theaters theater = new Theaters();
+            theater.setTheaterID(rs.getInt("theaterID"));
+            st.setTheaterID(theater);
+
+            Movies movie = new Movies();
+            movie.setMovieID(rs.getInt("movieID"));
+            st.setMovieID(movie);
+
+            st.setStartTime(rs.getTimestamp("startTime"));
+            st.setEndTime(rs.getTimestamp("endTime"));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return st;
+}
+    
+    
 
     // insertOrderWithVoucherIDNull
     public void insertOrderWithVoucherIDNull(int userID, int movieID, int quantity, String allPrice) {
@@ -1607,4 +1716,6 @@ public class DAO extends DBContext {
         DAO dao = new DAO();
         dao.insertSeats(252, "A01");
     }
+
+    
 }
