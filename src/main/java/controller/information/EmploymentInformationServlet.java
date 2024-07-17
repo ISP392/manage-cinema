@@ -4,6 +4,7 @@
  */
 package controller.information;
 
+import DAO.DAO;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -92,6 +93,20 @@ public class EmploymentInformationServlet extends HttpServlet {
         String address = request.getParameter("address");
         String position = request.getParameter("position");
         Part filePart = request.getPart("cv");
+
+        DAO dao = new DAO();
+        if (dao.checkEPstaff(email, phone)) {
+            request.setAttribute("errorEmail", "Email is already existed");
+            request.setAttribute("errorPhone", "Phone number is already existed");
+
+            request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
+            return;
+        } else if (dao.checkEPusers(email, phone)) {
+            request.setAttribute("errorEmail", "Email is already existed");
+            request.setAttribute("errorPhone", "Phone number is already existed");
+            request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
+            return;
+        }
         String textContent = "Name: " + name + "\n"
                 + "Email: " + email + "\n"
                 + "Phone: " + phone + "\n"
@@ -121,7 +136,7 @@ public class EmploymentInformationServlet extends HttpServlet {
         } else {
             request.setAttribute("error", "Interal server error!!");
         }
-                System.out.println(isSuccess);
+        System.out.println(isSuccess);
         request.getRequestDispatcher("/WEB-INF/views/employmentInformation.jsp").forward(request, response);
 
     }

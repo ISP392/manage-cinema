@@ -84,11 +84,8 @@ public class listFoodServlet extends HttpServlet {
             }
 
 
-            Date currentDate = new Date();
-        
-
-            
-
+            Date currentDate = new Date();        
+         
             request.setAttribute("endPage", endPage);
             request.setAttribute("tag", index);
 

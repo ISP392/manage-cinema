@@ -19,8 +19,46 @@ import java.sql.Timestamp;
 /**
  * @author MISS NGA
  */
-public class DAO extends DBContext {    
+public class DAO extends DBContext {
 
+    
+
+    public boolean checkEPstaff(String email, String phone) {
+        String sql = "SELECT * FROM staffstatus WHERE staffEmail = ? and phone = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            ps.setString(1, email);
+            ps.setString(2, phone);
+            if (rs.next() && rs.getInt(1) > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean checkEPusers(String email, String phone) {
+        String sql = "SELECT * FROM users WHERE email = ? and phone = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            ps.setString(1, email);
+            ps.setString(2, phone);
+            if (rs.next() && rs.getInt(1) > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    
     public List<Movies> searchMovies(String query) {
         List<Movies> list = new ArrayList<>();
         try {
@@ -291,8 +329,7 @@ public class DAO extends DBContext {
     public int getNoOfRecords() {
         String sql = "SELECT COUNT(*) FROM Users";
         try (
-                PreparedStatement stmt = connection.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -1107,8 +1144,7 @@ public class DAO extends DBContext {
         String sql = "SELECT * FROM FoodItems";
 
         try (
-                PreparedStatement ps = connection.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 FoodItem foodItem = new FoodItem();
@@ -1316,7 +1352,6 @@ public class DAO extends DBContext {
     }
 
     // insert tickets
-
     public void insertTickets(int userID, int movieID, int cinemaID, String price, Timestamp purchaseDate, int seatID,
             int orderID) {
         String sql = "INSERT INTO Tickets (userID, movieID, cinemaID, price, purchaseDate, seatID, orderID) VALUES (?, ?, ?, ?, ?, ?, ?)";
