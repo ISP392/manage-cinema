@@ -13,9 +13,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.List;
+import modal.FoodItem;
 import modal.Orders;
 import modal.ScreeningTimes;
+import modal.TicketInfo;
 import modal.Tickets;
 
 /**
@@ -71,23 +74,28 @@ public class CheckTicketServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException {
-        DAO dao = new DAO();
-    String orderId = request.getParameter("orderID");
-    Orders order = dao.getOrderById(orderId);
-    List<Tickets> tickets = dao.getTicketsByOrderId(orderId);
-    ScreeningTimes time = dao.getTimeByOrderId(orderId);
+       String orderId = req.getParameter("orderID");
+       DAO d = new DAO();
 
-    if (order != null) {
-        request.setAttribute("order", order);
-        request.setAttribute("tickets", tickets);
-        request.setAttribute("time", time);
-    } else {
-        request.setAttribute("error", "Thông tin không hợp lệ.");
-    }
+        if (orderId == null || orderId.isEmpty()) {
+            req.setAttribute("error", "Mã đặt vé không hợp lệ.");
+            req.getRequestDispatcher("/WEB-INF/views/staff-views/result.jsp").forward(req, resp);
+            return;
+        }
 
-    request.getRequestDispatcher("/WEB-INF/views/staff-views/result.jsp").forward(request, response);
+        Orders order = d.getOrderById(orderId);
+        List<TicketInfo> ticketInfos = d.getTicketInfoByOrderId(orderId);
+        List<FoodItem> foodItems = d.getFoodItemsByOrderId(orderId);
+        if (order != null) {
+            req.setAttribute("order", order);
+            req.setAttribute("ticketInfos", ticketInfos);
+            req.setAttribute("foodItems", foodItems);
+        } else {
+            req.setAttribute("error", "Thông tin không hợp lệ.");
+        }
+        req.getRequestDispatcher("/WEB-INF/views/staff-views/result.jsp").forward(req, resp);
     }
 
     /** 
