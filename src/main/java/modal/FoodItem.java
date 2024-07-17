@@ -14,6 +14,8 @@ public class FoodItem {
     private String description;
     private int price;
     private String imgFoodItems;
+    private int quantity;
+    
 
     public FoodItem() {
     }
@@ -64,6 +66,14 @@ public class FoodItem {
 
     public void setImgFoodItems(String imgFoodItems) {
         this.imgFoodItems = imgFoodItems;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
     
     

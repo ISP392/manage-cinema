@@ -1514,40 +1514,51 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
-    
-     public Orders getOrderById(String orderId) {
+
+    // get order detail by orderID
+    public Orders getOrderById(String orderId) {
         Orders od = null;
-        String sql = "SELECT * FROM Orders WHERE orderID = ?";
+        String sql = "SELECT o.*, u.username FROM Orders o JOIN Users u ON o.userID = u.userID WHERE o.orderID = ?";
 
         try {
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1, orderId);
-        ResultSet rs = ps.executeQuery();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, orderId);
+            ResultSet rs = ps.executeQuery();
 
-        if (rs.next()) {
-            od = new Orders();
-            od.setOrderID(rs.getInt("orderID"));
+            if (rs.next()) {
+                od = new Orders();
+                od.setOrderID(rs.getInt("orderID"));
 
-            Users user = new Users();
-            user.setUserID(rs.getInt("userID"));
-            od.setUserID(user);
+                Users user = new Users();
+                user.setUserID(rs.getInt("userID"));
+                user.setUserName(rs.getString("username"));
+                od.setUserID(user);
 
-            Movies movie = new Movies();
-            movie.setMovieID(rs.getInt("movieID"));
-            od.setMovieID(movie);
+                Movies movie = new Movies();
+                movie.setMovieID(rs.getInt("movieID"));
+                od.setMovieID(movie);
 
-            od.setQuantity(rs.getInt("quantity"));
-            od.setAllPrice(rs.getString("allPrice"));
+                od.setQuantity(rs.getInt("quantity"));
+                od.setAllPrice(rs.getString("allPrice"));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return od;
+        return od;
     }
 
-    public List<Tickets> getTicketsByOrderId(String orderId) {
-    List<Tickets> tickets = new ArrayList<>();
-    String sql = "SELECT * FROM Tickets WHERE orderID = ?";
+    // get info list ticket for bill by orderID
+    public List<TicketInfo> getTicketInfoByOrderId(String orderId) {
+    List<TicketInfo> ticketInfos = new ArrayList<>();
+    String sql = "SELECT DISTINCT m.title, st.startTime, st.endTime, t.ticketID, c.name AS nameCinema, s.seatNumber, t.price AS priceTicket, th.theaterNumber " +
+                       "FROM tickets t " +
+                       "JOIN seats s ON t.seatID = s.seatID " +
+                       "JOIN movies m ON t.movieID = m.movieID " +
+                       "JOIN cinemas c ON t.cinemaID = c.cinemaID " +
+                       "JOIN theaters th ON t.cinemaID = th.cinemaID " +
+                       "JOIN screeningtimes st ON s.screeningID = st.screeningID " +
+                       "WHERE t.orderID = ?";
 
     try {
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -1555,73 +1566,53 @@ public class DAO extends DBContext {
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
-            Tickets ticket = new Tickets();
-            ticket.setTicketID(rs.getInt("ticketID"));
+            TicketInfo ticketInfo = new TicketInfo();
+            ticketInfo.setTicketID(rs.getInt("ticketID"));
+            ticketInfo.setTitle(rs.getString("title"));
+            ticketInfo.setStartTime(rs.getTimestamp("startTime"));
+            ticketInfo.setEndTime(rs.getTimestamp("endTime"));
+            ticketInfo.setNameCinema(rs.getString("nameCinema"));
+            ticketInfo.setTheaterNumber(rs.getString("theaterNumber"));
+            ticketInfo.setSeatNumber(rs.getString("seatNumber"));
+            ticketInfo.setPriceTicket(rs.getString("priceTicket"));
 
-            Users user = new Users();
-            user.setUserID(rs.getInt("userID"));
-            ticket.setUserID(user);
-
-            Movies movie = new Movies();
-            movie.setMovieID(rs.getInt("movieID"));
-            ticket.setMovieID(movie);
-
-            Cinemas cinema = new Cinemas();
-            cinema.setCinemaID(rs.getInt("cinemaID"));
-            ticket.setCinemaID(cinema);
-
-            ticket.setPrice(rs.getString("price"));
-
-            Seats seat = new Seats();
-            seat.setSeatID(rs.getInt("seatID"));
-            ticket.setSeatID(seat);
-
-            Orders order = new Orders();
-            order.setOrderID(rs.getInt("orderID"));
-            ticket.setOrderID(order);
-
-            ticket.setPurchaseDate(rs.getTimestamp("purchaseDate"));
-
-            tickets.add(ticket);
+            ticketInfos.add(ticketInfo);
         }
     } catch (SQLException e) {
         e.printStackTrace();
     }
-    return tickets;
+    return ticketInfos;
 }
 
+    // get food item by orderID
+    public List<FoodItem> getFoodItemsByOrderId(String orderId) {
+    List<FoodItem> foodItems = new ArrayList<>();
     
-    public ScreeningTimes getTimeByOrderId(String orderId) {
-    ScreeningTimes st = null;
-    String sql = "SELECT * FROM project_cinema_update.screeningtimes WHERE movieID IN (SELECT movieID FROM project_cinema_update.orders WHERE orderID = ?)";
-
+    String sql = "SELECT f.foodItemID, f.foodName, f.price, od.quantity FROM fooditems f " +
+                   "JOIN OrderDetails od ON f.foodItemID = od.foodItemID " +
+                   "WHERE od.orderID = ?";
     try {
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, orderId);
         ResultSet rs = ps.executeQuery();
 
-        if (rs.next()) {
-            st = new ScreeningTimes();
-            st.setScreeningID(rs.getInt("screeningID"));
+        while (rs.next()) {
+            FoodItem item = new FoodItem();
+            item.setFoodItemID(rs.getInt("foodItemID"));
+            item.setFoodName(rs.getString("foodName"));
+            item.setPrice(rs.getInt("price"));
+            
+            item.setQuantity(rs.getInt("quantity")); // Ensure FoodItem has this field
 
-            Theaters theater = new Theaters();
-            theater.setTheaterID(rs.getInt("theaterID"));
-            st.setTheaterID(theater);
-
-            Movies movie = new Movies();
-            movie.setMovieID(rs.getInt("movieID"));
-            st.setMovieID(movie);
-
-            st.setStartTime(rs.getTimestamp("startTime"));
-            st.setEndTime(rs.getTimestamp("endTime"));
+            foodItems.add(item);
+            
         }
     } catch (SQLException e) {
         e.printStackTrace();
     }
-    return st;
+    return foodItems;
 }
-    
-    
+
 
     // insertOrderWithVoucherIDNull
     public void insertOrderWithVoucherIDNull(int userID, int movieID, int quantity, String allPrice) {
@@ -1712,10 +1703,7 @@ public class DAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        // test insert seat
-        DAO dao = new DAO();
-        dao.insertSeats(252, "A01");
+        DAO dao = new DAO();   
     }
 
-    
 }
