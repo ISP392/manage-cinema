@@ -91,9 +91,9 @@
                         <p><strong>Tổng giá:</strong> ${order.allPrice}</p>
                         <c:forEach var="ticket" items="${tickets}">
                             <p><strong>Mã vé:</strong> ${ticket.ticketID}</p>
-                            <p><strong>Suất chiếu:</strong> ${ticket.movieID.showTime}</p>
-                            <p><strong>Rạp:</strong> ${ticket.cinemaID.cinemaName}</p>
-                            <p><strong>Số ghế:</strong> ${ticket.seatID.seatNumber}</p>
+                            <p><strong>Suất chiếu:</strong> ${time.startTime} - ${time.endTime}</p>
+                            <p><strong>Rạp:</strong> ${cinema.name}</p>
+                            <p><strong>Số ghế:</strong> ${seat.seatNumber}</p>
                             <p><strong>Giá vé:</strong> ${ticket.price}</p>
                         </c:forEach>
                     </div>

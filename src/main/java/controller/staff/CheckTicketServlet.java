@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import modal.Orders;
+import modal.ScreeningTimes;
 import modal.Tickets;
 
 /**
@@ -73,19 +74,20 @@ public class CheckTicketServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         DAO dao = new DAO();
-        String orderId = request.getParameter("orderID");
-        Orders order = dao.getOrderById(orderId);
-        List<Tickets> tickets = dao.getTicketsByOrderId(orderId);
+    String orderId = request.getParameter("orderID");
+    Orders order = dao.getOrderById(orderId);
+    List<Tickets> tickets = dao.getTicketsByOrderId(orderId);
+    ScreeningTimes time = dao.getTimeByOrderId(orderId);
 
-        if (order != null) {
-            request.setAttribute("order", order);
-            request.setAttribute("tickets", tickets);
-        } else {
-            request.setAttribute("error", "Thông tin không hợp lệ.");
-        }
+    if (order != null) {
+        request.setAttribute("order", order);
+        request.setAttribute("tickets", tickets);
+        request.setAttribute("time", time);
+    } else {
+        request.setAttribute("error", "Thông tin không hợp lệ.");
+    }
 
-        request.getRequestDispatcher("/WEB-INF/views/staff-views/result.jsp").forward(request, response);
-    
+    request.getRequestDispatcher("/WEB-INF/views/staff-views/result.jsp").forward(request, response);
     }
 
     /** 
