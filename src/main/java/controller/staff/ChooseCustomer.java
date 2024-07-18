@@ -14,14 +14,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import modal.Orders;
 import modal.Users;
 
 /**
  *
  * @author caoha
  */
-@WebServlet(name="ListCustomerServlet", urlPatterns={"/listCustomer"})
-public class ListCustomerServlet extends HttpServlet {
+@WebServlet(name="ChooseCustomer", urlPatterns={"/chooseCustomer"})
+public class ChooseCustomer extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -38,10 +39,10 @@ public class ListCustomerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ListCustomerServlet</title>");  
+            out.println("<title>Servlet ChooseCustomer</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ListCustomerServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ChooseCustomer at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -69,10 +70,28 @@ public class ListCustomerServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException {
-        processRequest(request, response);
+        String userIDStr = req.getParameter("userID");
+        if (userIDStr == null || userIDStr.isEmpty() || !userIDStr.matches("\\d+")) {
+            req.setAttribute("error", "Mã khách hàng không hợp lệ.");
+            req.getRequestDispatcher("/WEB-INF/views/staff-views/listCustomer.jsp").forward(req, resp);
+            return;
+        }
+        
+        int userID = Integer.parseInt(userIDStr);
+        DAO d = new DAO();
+        List<Users> usersList = d.getUserById(userID);
+        
+        if (usersList != null && !usersList.isEmpty()) {
+            req.setAttribute("user", usersList);
+        } else {
+            req.setAttribute("error", "Không tìm thấy thông tin khách hàng.");
+        }
+        
+        req.getRequestDispatcher("/WEB-INF/views/staff-views/listCustomer.jsp").forward(req, resp);
     }
+
 
     /** 
      * Returns a short description of the servlet.
