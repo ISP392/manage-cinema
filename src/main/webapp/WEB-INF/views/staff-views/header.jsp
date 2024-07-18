@@ -93,7 +93,7 @@
         </div>
         <div class="account-info">
             <c:if test="${sessionScope.account != null}">
-            <a href="information"><i class="fas fa-user"></i> ${sessionScope.account.getDisplayName().toUpperCase()}</a><!-- Hiển thị tài khoản đang đăng nhập -->
+            <i class="fas fa-user"></i> ${sessionScope.account.getDisplayName().toUpperCase()}<!-- Hiển thị tài khoản đang đăng nhập -->
         </c:if>
         </div>
     </div>

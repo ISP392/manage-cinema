@@ -5,6 +5,7 @@
 
 package controller.staff;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,14 +13,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import modal.Users;
 
 /**
  *
- * @author MISS NGA
+ * @author caoha
  */
-@WebServlet(name="homeStaff", urlPatterns={"/homeStaff"})
-public class homeStaff extends HttpServlet {
+@WebServlet(name="ListCustomerServlet", urlPatterns={"/listCustomer"})
+public class ListCustomerServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -36,10 +38,10 @@ public class homeStaff extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet homeStaff</title>");  
+            out.println("<title>Servlet ListCustomerServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet homeStaff at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ListCustomerServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -56,11 +58,7 @@ public class homeStaff extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String userID = (String) session.getAttribute("userID");
-
-        request.setAttribute("userID", userID);
-        request.getRequestDispatcher("/WEB-INF/views/staff-views/homeStaff.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/staff-views/listCustomer.jsp").forward(request, response);
     } 
 
     /** 
