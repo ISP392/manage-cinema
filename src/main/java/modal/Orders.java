@@ -17,6 +17,7 @@ public class Orders {
     private int quantity;
     private String allPrice;
     List<OrderFoodItem> orderFood;
+    private TicketInfo ticketInfo;
 
     public Orders() {
     }
@@ -76,4 +77,14 @@ public class Orders {
     public void setOrderFood(List<OrderFoodItem> orderFood) {
         this.orderFood = orderFood;
     }
+
+    public TicketInfo getTicketInfo() {
+        return ticketInfo;
+    }
+
+    public void setTicketInfo(TicketInfo ticketInfo) {
+        this.ticketInfo = ticketInfo;
+    }
+    
+    
 }

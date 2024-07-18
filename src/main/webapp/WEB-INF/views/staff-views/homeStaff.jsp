@@ -97,19 +97,19 @@
     <div class="container">
         <div class="content">
             <div class="card">
-                <i class="fas fa-ticket-alt"></i> 
+                <i class="fas fa-ticket-alt"></i>
                 <h3>Bán vé</h3>
-                <a href="home">Chuyển vào trang bán vé</a>
+                <a href="home?userID=${userID}">Chuyển vào trang bán vé</a>
             </div>
             <div class="card">
-                <i class="fas fa-file-alt"></i> 
+                <i class="fas fa-file-alt"></i>
                 <h3>Báo cáo</h3>
-                <a href="report">Báo cáo doanh thu ca làm</a>
+                <a href="report?userID=${userID}">Báo cáo doanh thu ca làm</a>
             </div>
             <div class="card">
-                <i class="fas fa-qrcode"></i> 
+                <i class="fas fa-qrcode"></i>
                 <h3>Check vé</h3>
-                <a href="checkTicket">Kiểm tra vé cho khách hàng</a>
+                <a href="checkTicket?userID=${userID}">Kiểm tra vé cho khách hàng</a>
             </div>
         </div>
     </div>

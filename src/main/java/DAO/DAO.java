@@ -1518,7 +1518,11 @@ public class DAO extends DBContext {
     // get order detail by orderID
     public Orders getOrderById(String orderId) {
         Orders od = null;
-        String sql = "SELECT o.*, u.username FROM Orders o JOIN Users u ON o.userID = u.userID WHERE o.orderID = ?";
+        String sql = "SELECT o.*, u.username, od.isChecked "
+                + "FROM Orders o "
+                + "JOIN Users u ON o.userID = u.userID "
+                + "LEFT JOIN OrderDetails od ON o.userID = od.orderID "
+                + "WHERE o.orderID = ?";
 
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -1540,6 +1544,10 @@ public class DAO extends DBContext {
 
                 od.setQuantity(rs.getInt("quantity"));
                 od.setAllPrice(rs.getString("allPrice"));
+                
+                TicketInfo tk = new TicketInfo();
+                tk.setIsChecked(rs.getBoolean("isChecked"));
+                od.setTicketInfo(tk);
 
             }
         } catch (SQLException e) {
@@ -1552,12 +1560,12 @@ public class DAO extends DBContext {
     public List<TicketInfo> getTicketInfoByOrderId(String orderId) {
     List<TicketInfo> ticketInfos = new ArrayList<>();
     String sql = "SELECT DISTINCT m.title, st.startTime, st.endTime, t.ticketID, c.name AS nameCinema, s.seatNumber, t.price AS priceTicket, th.theaterNumber " +
-                       "FROM tickets t " +
-                       "JOIN seats s ON t.seatID = s.seatID " +
-                       "JOIN movies m ON t.movieID = m.movieID " +
-                       "JOIN cinemas c ON t.cinemaID = c.cinemaID " +
-                       "JOIN theaters th ON t.cinemaID = th.cinemaID " +
-                       "JOIN screeningtimes st ON s.screeningID = st.screeningID " +
+                       "FROM Tickets t " +
+                       "JOIN Seats s ON t.seatID = s.seatID " +
+                       "JOIN Movies m ON t.movieID = m.movieID " +
+                       "JOIN Cinemas c ON t.cinemaID = c.cinemaID " +
+                       "JOIN Theaters th ON t.cinemaID = th.cinemaID " +
+                       "JOIN ScreeningTimes st ON s.screeningID = st.screeningID " +
                        "WHERE t.orderID = ?";
 
     try {
@@ -1575,6 +1583,7 @@ public class DAO extends DBContext {
             ticketInfo.setTheaterNumber(rs.getString("theaterNumber"));
             ticketInfo.setSeatNumber(rs.getString("seatNumber"));
             ticketInfo.setPriceTicket(rs.getString("priceTicket"));
+            
 
             ticketInfos.add(ticketInfo);
         }
@@ -1588,7 +1597,7 @@ public class DAO extends DBContext {
     public List<FoodItem> getFoodItemsByOrderId(String orderId) {
     List<FoodItem> foodItems = new ArrayList<>();
     
-    String sql = "SELECT f.foodItemID, f.foodName, f.price, od.quantity FROM fooditems f " +
+    String sql = "SELECT f.foodItemID, f.foodName, f.price, od.quantity FROM FoodItems f " +
                    "JOIN OrderDetails od ON f.foodItemID = od.foodItemID " +
                    "WHERE od.orderID = ?";
     try {
@@ -1701,9 +1710,12 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
+    
 
     public static void main(String[] args) {
         DAO dao = new DAO();   
     }
+
+    
 
 }
