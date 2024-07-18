@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import com.paypal.api.payments.Order;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -1672,6 +1673,105 @@ public class DAO extends DBContext {
         }
     }
 
+    // get order detail by orderID
+    public Orders getOrderById(String orderId) {
+        Orders od = null;
+        String sql = "SELECT o.*, u.username FROM Orders o JOIN Users u ON o.userID = u.userID WHERE o.orderID = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, orderId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                od = new Orders();
+                od.setOrderID(rs.getInt("orderID"));
+
+                Users user = new Users();
+                user.setUserID(rs.getInt("userID"));
+                user.setUserName(rs.getString("username"));
+                od.setUserID(user);
+
+                Movies movie = new Movies();
+                movie.setMovieID(rs.getInt("movieID"));
+                od.setMovieID(movie);
+
+                od.setQuantity(rs.getInt("quantity"));
+                od.setAllPrice(rs.getString("allPrice"));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return od;
+    }
+
+    // get info list ticket for bill by orderID
+    public List<TicketInfo> getTicketInfoByOrderId(String orderId) {
+    List<TicketInfo> ticketInfos = new ArrayList<>();
+    String sql = "SELECT DISTINCT m.title, st.startTime, st.endTime, t.ticketID, c.name AS nameCinema, s.seatNumber, t.price AS priceTicket, th.theaterNumber " +
+                       "FROM tickets t " +
+                       "JOIN seats s ON t.seatID = s.seatID " +
+                       "JOIN movies m ON t.movieID = m.movieID " +
+                       "JOIN cinemas c ON t.cinemaID = c.cinemaID " +
+                       "JOIN theaters th ON t.cinemaID = th.cinemaID " +
+                       "JOIN screeningtimes st ON s.screeningID = st.screeningID " +
+                       "WHERE t.orderID = ?";
+
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, orderId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            TicketInfo ticketInfo = new TicketInfo();
+            ticketInfo.setTicketID(rs.getInt("ticketID"));
+            ticketInfo.setTitle(rs.getString("title"));
+            ticketInfo.setStartTime(rs.getTimestamp("startTime"));
+            ticketInfo.setEndTime(rs.getTimestamp("endTime"));
+            ticketInfo.setNameCinema(rs.getString("nameCinema"));
+            ticketInfo.setTheaterNumber(rs.getString("theaterNumber"));
+            ticketInfo.setSeatNumber(rs.getString("seatNumber"));
+            ticketInfo.setPriceTicket(rs.getString("priceTicket"));
+
+            ticketInfos.add(ticketInfo);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return ticketInfos;
+}
+
+    // get food item by orderID
+    public List<FoodItem> getFoodItemsByOrderId(String orderId) {
+    List<FoodItem> foodItems = new ArrayList<>();
+    
+    String sql = "SELECT f.foodItemID, f.foodName, f.price, od.quantity FROM fooditems f " +
+                   "JOIN OrderDetails od ON f.foodItemID = od.foodItemID " +
+                   "WHERE od.orderID = ?";
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, orderId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            FoodItem item = new FoodItem();
+            item.setFoodItemID(rs.getInt("foodItemID"));
+            item.setFoodName(rs.getString("foodName"));
+            item.setPrice(rs.getInt("price"));
+            
+            item.setQuantity(rs.getInt("quantity")); // Ensure FoodItem has this field
+
+            foodItems.add(item);
+            
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return foodItems;
+}
+
+
     // insertOrderWithVoucherIDNull
     public void insertOrderWithVoucherIDNull(int userID, int movieID, int quantity, String allPrice) {
         String sql = "INSERT INTO Orders (userID, movieID, quantity, allPrice) VALUES (?, ?, ?, ?)";
@@ -1769,4 +1869,5 @@ public class DAO extends DBContext {
 
         // Tính khoảng thời gian giữa thời gian kết thúc của phần tử đầu tiên và thời gian bắt đầu của phần tử cuối cùng
     }
+
 }
