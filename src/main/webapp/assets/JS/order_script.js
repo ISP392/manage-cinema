@@ -73,6 +73,31 @@ function setPoint() {
     pointInput.value = point.replace(' P', ''); // Loại bỏ ký tự ' P' nếu có
 }
 
+function confirmBack() {
+            if (confirm("Bạn có chắc chắn muốn quay lại? Thời gian thanh toán của bạn sẽ bị hủy.")) {
+                localStorage.removeItem('startTime');
+                // Gửi yêu cầu POST để xóa session orderDetail bằng XHR
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/manage-cinema/clearOrderDetailSession", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        window.location.href = 'home';
+                    } else {
+                        console.error('Failed to clear orderDetail session', xhr.status, xhr.statusText);
+                        console.error('Response text:', xhr.responseText);
+                    }
+                };
+
+                xhr.onerror = function () {
+                    console.error('Error:', xhr.statusText);
+                };
+
+                xhr.send();
+            }
+        }
+
 
 
 
@@ -93,24 +118,31 @@ function startCountdown(duration) {
             localStorage.removeItem('startTime');
             alert('Hết thời gian thanh toán! Bạn sẽ được chuyển về trang chủ.');
 
-            // Gửi yêu cầu POST để xóa session orderDetail
-            fetch('/clearOrderDetailSession', {
-                method: 'POST'
-            }).then(function (response) {
-                if (response.ok) {
+            // Gửi yêu cầu POST để xóa session orderDetail bằng XHR
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/manage-cinema/clearOrderDetailSession", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
                     window.location.href = 'home'; // Chuyển hướng về trang chủ
                 } else {
-                    console.error('Failed to clear orderDetail session');
+                    console.error('Failed to clear orderDetail session', xhr.status, xhr.statusText);
+                    console.error('Response text:', xhr.responseText);
                 }
-            }).catch(function (error) {
-                console.error('Error:', error);
-            });
+            };
+
+            xhr.onerror = function () {
+                console.error('Error:', xhr.statusText);
+            };
+
+            xhr.send();
         }
     }, 1000);
 }
 
 window.onload = function () {
-    var initialTime = 5 * 60; // 5 minutes in seconds
+    var initialTime = 5 * 60; // 10 seconds
     var startTime = localStorage.getItem('startTime');
     var timeLeft;
 
@@ -126,17 +158,25 @@ window.onload = function () {
         if (timeLeft <= 0) {
             localStorage.removeItem('startTime');
             alert('Hết thời gian thanh toán! Bạn sẽ được chuyển về trang chủ.');
-            fetch('/clearOrderDetailSession', {
-                method: 'POST'
-            }).then(function (response) {
-                if (response.ok) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/manage-cinema/clearOrderDetailSession", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
                     window.location.href = 'home'; // Chuyển hướng về trang chủ
                 } else {
-                    console.error('Failed to clear orderDetail session');
+                    console.log(xhr);
+                    console.error('Failed to clear orderDetail session', xhr.status, xhr.statusText);
+                    console.error('Response text:', xhr.responseText);
                 }
-            }).catch(function (error) {
-                console.error('Error:', error);
-            });
+            };
+
+            xhr.onerror = function () {
+                console.error('Error:', xhr.statusText);
+            };
+
+            xhr.send();
             return;
         }
     }
@@ -152,4 +192,12 @@ window.onload = function () {
     document.getElementById('seconds').textContent = seconds;
 
     startCountdown(timeLeft);
+    
+    window.onbeforeunload = function (event) {
+        var message = "Thời gian thanh toán của bạn sẽ bị hủy. Bạn có chắc chắn muốn rời khỏi trang này?";
+        localStorage.removeItem('startTime'); // Reset the timer when the user leaves the page
+        event.returnValue = message; // Standard way to show confirmation dialog
+        return message; // For some older browsers
+    };
+
 };
