@@ -15,10 +15,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author caoha
+ * @author MISS NGA
  */
-@WebServlet(name="ReportServlet", urlPatterns={"/report"})
-public class ReportServlet extends HttpServlet {
+@WebServlet(name="homeStaff", urlPatterns={"/homeStaff"})
+public class homeStaff extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +35,10 @@ public class ReportServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ReportServlet</title>");  
+            out.println("<title>Servlet homeStaff</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ReportServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet homeStaff at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,7 +55,7 @@ public class ReportServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/staff-views/shiftReport.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/staff-views/homeStaff.jsp").forward(request, response);
     } 
 
     /** 

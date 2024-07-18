@@ -4,13 +4,13 @@
  */
 package DAO;
 
+import com.paypal.api.payments.Order;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import modal.*;
 import util.Encrypt;
 import java.sql.Date;
@@ -21,17 +21,15 @@ import java.sql.Timestamp;
  */
 public class DAO extends DBContext {
 
-    
-
     public boolean checkEPstaff(String email, String phone) {
-        String sql = "SELECT * FROM staffstatus WHERE staffEmail = ? and phone = ?";
+        String sql = "SELECT * FROM staffstatus WHERE staffEmail = ? or phone = ?";
 
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
             ps.setString(1, email);
             ps.setString(2, phone);
-            if (rs.next() && rs.getInt(1) > 0) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
                 return true;
             }
         } catch (SQLException e) {
@@ -41,14 +39,14 @@ public class DAO extends DBContext {
     }
 
     public boolean checkEPusers(String email, String phone) {
-        String sql = "SELECT * FROM users WHERE email = ? and phone = ?";
+        String sql = "SELECT * FROM users WHERE email = ? or phone = ?";
 
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             ps.setString(1, email);
             ps.setString(2, phone);
-            if (rs.next() && rs.getInt(1) > 0) {
+            if (rs.next()) {
                 return true;
             }
         } catch (SQLException e) {
@@ -57,8 +55,6 @@ public class DAO extends DBContext {
         return false;
     }
 
-
-    
     public List<Movies> searchMovies(String query) {
         List<Movies> list = new ArrayList<>();
         try {
@@ -394,15 +390,59 @@ public class DAO extends DBContext {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
+                StaffStatus phone = getStaffStatus(rs.getString("phone"));
                 Role r = new Role(rs.getInt("roleID"), rs.getString("name"));
-                return new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("userName"),
-                        rs.getString("password"), rs.getString("email"), r, rs.getInt("point"),
-                        rs.getString("providerID"));
+                return new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("userName"), rs.getString("password"),
+                        r, rs.getString("email"), rs.getString("providerID"), rs.getInt("point"), phone);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public StaffStatus getStaffStatus(String phone) {
+        StaffStatus status = null;
+        String query = "SELECT * FROM staffstatus WHERE phone = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, phone);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                status = new StaffStatus();
+                status.setPhone(rs.getString("phone"));
+                status.setStatus(rs.getString("status"));
+                status.setAddress(rs.getString("address"));
+                status.setDob(rs.getDate("dob"));
+                status.setStaffName(rs.getString("staffName"));
+                status.setStaffEmail(rs.getString("staffEmail"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return status;
+
+    }
+
+    public Shift getShiftForUser(String phone) {
+        Shift shift = null;
+        String query = "SELECT Shift.*, staffstatus.phone AS staffPhone, staffstatus.status, staffstatus.address, staffstatus.dob, staffstatus.staffName, staffstatus.staffEmail "
+                + "FROM Shift "
+                + "JOIN staffstatus ON Shift.phone = staffstatus.phone "
+                + "WHERE Shift.phone = ? "
+                + "ORDER BY startTime DESC LIMIT 1";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, phone);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                StaffStatus staffStatus = new StaffStatus(rs.getString("staffPhone"), rs.getString("status"), rs.getString("address"), rs.getDate("dob"), rs.getString("staffName"), rs.getString("staffEmail"));
+                shift = new Shift(rs.getInt("shiftID"), staffStatus, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"), rs.getDouble("startAmount"), rs.getDouble("endAmount"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return shift;
     }
 
     // check login of admin
@@ -573,10 +613,10 @@ public class DAO extends DBContext {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
+                StaffStatus phone = getStaffStatus(rs.getString("phone"));
                 Role r = new Role(rs.getInt("roleID"));
-                Users u = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("username"),
-                        rs.getString("password"), rs.getString("email"), r, rs.getInt("point"),
-                        rs.getString("providerID"));
+                Users u = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("userName"), rs.getString("password"),
+                        r, rs.getString("email"), rs.getString("providerID"), rs.getInt("point"), phone);
                 return u;
             }
         } catch (SQLException e) {
@@ -799,13 +839,10 @@ public class DAO extends DBContext {
                 + "JOIN ScreeningTimes st ON st.screeningID = s.screeningID "
                 + "JOIN Theaters th ON st.theaterID = th.theaterID "
                 + "JOIN Orders o ON t.orderID = o.orderID "
-                + "WHERE u.userID = ? "
-                + "ORDER BY t.ticketID "
-                + "LIMIT 5 OFFSET ?";
+                + "WHERE t.userID = ? ";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, userID);
-            ps.setInt(2, (index - 1) * 5);// calculates the number of records to skip
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Role r = new Role(rs.getInt("roleID"), rs.getString("name"));
@@ -824,6 +861,12 @@ public class DAO extends DBContext {
                 Orders o = new Orders(rs.getInt("orderID"), u, m, rs.getInt("quantity"), rs.getString("allPrice"));
                 Tickets t = new Tickets(rs.getInt("ticketID"), u, m, c, rs.getString("price"),
                         rs.getTimestamp("purchaseDate"), s, o);
+
+                List<OrderFoodItem> orderFoods = this.selectAllOrderFoodItems(t.getOrderID().getOrderID());
+                for (OrderFoodItem orderFood : orderFoods) {
+                    orderFood.setFoods(this.getFoodItemById(orderFood.getFoodItemID()));
+                }
+                t.getOrderID().setOrderFood(orderFoods);
                 list.add(t);
             }
         } catch (SQLException e) {
@@ -832,7 +875,157 @@ public class DAO extends DBContext {
         return list;
     }
 
-    // get list screening time
+    public List<OrderFoodItem> selectAllOrderFoodItems(int orderId) {
+        List<OrderFoodItem> orderFoodItems = new ArrayList<>();
+        String sql = "SELECT * FROM orderfooditems where orderID=?";
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, orderId);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int orderID = rs.getInt("orderID");
+                int foodItemID = rs.getInt("foodItemID");
+                int quantity = rs.getInt("quantity");
+                orderFoodItems.add(new OrderFoodItem(id, orderID, foodItemID, quantity));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e);
+        }
+        return orderFoodItems;
+    }
+
+    public FoodItem getFoodItemById(int id) {
+        List<FoodItem> foodItems = new ArrayList<>();
+        String sql = "SELECT * FROM FoodItems where foodItemID=?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                FoodItem foodItem = new FoodItem();
+                foodItem.setFoodItemID(rs.getInt("foodItemID"));
+                foodItem.setFoodName(rs.getString("foodName"));
+                foodItem.setDescription(rs.getString("description"));
+                foodItem.setPrice(rs.getInt("price"));
+                foodItem.setImgFoodItems(rs.getString("imgFoodItems"));
+                return foodItem;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public StaffStatus getAllStaffByPhone(String phone) {
+        List<StaffStatus> staffList = new ArrayList<>();
+        String sql = "SELECT phone, status, address, dob, staffName, staffEmail FROM staffstatus where  phone=?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, phone);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String status = rs.getString("status");
+                String address = rs.getString("address");
+                java.util.Date dob = rs.getDate("dob");
+                String staffName = rs.getString("staffName");
+                String staffEmail = rs.getString("staffEmail");
+
+                StaffStatus staff = new StaffStatus(phone, status, address, dob, staffName, staffEmail);
+                return staff;
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
+
+    // updaet status staff
+    public boolean updateStatus(String phone, String newStatus) {
+        String sql = "UPDATE staffstatus SET status = ? WHERE phone = ?";
+        try (
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, newStatus);
+            stmt.setString(2, phone);
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+//    add staffStaus
+
+    public boolean addStaff(StaffStatus staff) {
+        String sql = "INSERT INTO staffstatus (phone, status, address, dob, staffName, staffEmail) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+        try (
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, staff.getPhone());
+            stmt.setString(2, staff.getStatus());
+            stmt.setString(3, staff.getAddress());
+            stmt.setDate(4, new java.sql.Date(staff.getDob().getTime()));
+            stmt.setString(5, staff.getStaffName());
+            stmt.setString(6, staff.getStaffEmail());
+
+            int rowsInserted = stmt.executeUpdate();
+            return rowsInserted > 0;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public void addStaff(Users u, String phone) {
+        String sql = "INSERT INTO Users (displayName, username, password, roleID, email, point, phone) VALUES (?, ?, ?, 3,?,0, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, u.getDisplayName());
+            ps.setString(2, u.getUserName());
+            ps.setString(3, u.getPassword());
+            ps.setString(4, u.getEmail());
+            ps.setString(5, phone);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // get all staffstatus
+    public List<StaffStatus> getAllStaff() {
+        List<StaffStatus> staffList = new ArrayList<>();
+        String sql = "SELECT phone, status, address, dob, staffName, staffEmail FROM staffstatus";
+        try (
+                PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String phone = rs.getString("phone");
+                String status = rs.getString("status");
+                String address = rs.getString("address");
+                java.util.Date dob = rs.getDate("dob");
+                String staffName = rs.getString("staffName");
+                String staffEmail = rs.getString("staffEmail");
+
+                StaffStatus staff = new StaffStatus(phone, status, address, dob, staffName, staffEmail);
+                staffList.add(staff);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return staffList;
+    }
+
+// get list screening time
     public List<ScreeningTimes> getAllFlimList(int movieID, int cinemaID, Date movieDate, Timestamp startTime) {
         List<ScreeningTimes> list = new ArrayList<>();
         String sql = "select m.display, l.locationID, l.name as location, c.cinemaID, c.name as cinemasName, c.movieDate, t.theaterID, t.theaterNumber, st.screeningID, st.startTime, st.endTime, m.movieID,m.title, m.description, m.releaseDate, m.posterImage, m.duration from Location l join Cinemas c on l.locationID = c.locationID join Theaters t on c.cinemaID = t.cinemaID join ScreeningTimes st on t.theaterID = st.theaterID join Movies m on st.movieID = m.movieID where m.movieID = ? and c.cinemaID = ? and c.movieDate = ? and st.startTime > DATE_ADD(?, INTERVAL 1 HOUR)";
@@ -1145,7 +1338,6 @@ public class DAO extends DBContext {
 
         try (
                 PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-
             while (rs.next()) {
                 FoodItem foodItem = new FoodItem();
                 foodItem.setFoodItemID(rs.getInt("foodItemID"));
@@ -1288,6 +1480,27 @@ public class DAO extends DBContext {
         return foodItem;
     }
 
+    // get food by id
+    public FoodItem getFoodByID(int foodItemID) {
+        String sql = "SELECT f.foodItemID, f.foodName, f.description, f.price FROM FoodItems f WHERE foodItemID = ?";
+        FoodItem foodItem = new FoodItem();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, foodItemID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                foodItem.setFoodItemID(rs.getInt("foodItemID"));
+                foodItem.setFoodName(rs.getString("foodName"));
+                foodItem.setDescription(rs.getString("description"));
+                foodItem.setPrice(rs.getInt("price"));
+                return foodItem;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return foodItem;
+    }
+
     // insert seat with screeningID and seatNumber
     public void insertSeats(int screeningID, String seatNumber) {
         String sql = "INSERT INTO Seats (screeningID, seatNumber) VALUES (?, ?)";
@@ -1334,6 +1547,111 @@ public class DAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
+    }
+
+    public Orders getOrderById(String orderId) {
+        Orders od = null;
+        String sql = "SELECT * FROM Orders WHERE orderID = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, orderId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                od = new Orders();
+                od.setOrderID(rs.getInt("orderID"));
+
+                Users user = new Users();
+                user.setUserID(rs.getInt("userID"));
+                od.setUserID(user);
+
+                Movies movie = new Movies();
+                movie.setMovieID(rs.getInt("movieID"));
+                od.setMovieID(movie);
+
+                od.setQuantity(rs.getInt("quantity"));
+                od.setAllPrice(rs.getString("allPrice"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return od;
+    }
+
+    public List<Tickets> getTicketsByOrderId(String orderId) {
+        List<Tickets> tickets = new ArrayList<>();
+        String sql = "SELECT * FROM Tickets WHERE orderID = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, orderId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Tickets ticket = new Tickets();
+                ticket.setTicketID(rs.getInt("ticketID"));
+
+                Users user = new Users();
+                user.setUserID(rs.getInt("userID"));
+                ticket.setUserID(user);
+
+                Movies movie = new Movies();
+                movie.setMovieID(rs.getInt("movieID"));
+                ticket.setMovieID(movie);
+
+                Cinemas cinema = new Cinemas();
+                cinema.setCinemaID(rs.getInt("cinemaID"));
+                ticket.setCinemaID(cinema);
+
+                ticket.setPrice(rs.getString("price"));
+
+                Seats seat = new Seats();
+                seat.setSeatID(rs.getInt("seatID"));
+                ticket.setSeatID(seat);
+
+                Orders order = new Orders();
+                order.setOrderID(rs.getInt("orderID"));
+                ticket.setOrderID(order);
+
+                ticket.setPurchaseDate(rs.getTimestamp("purchaseDate"));
+
+                tickets.add(ticket);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tickets;
+    }
+
+    public ScreeningTimes getTimeByOrderId(String orderId) {
+        ScreeningTimes st = null;
+        String sql = "SELECT * FROM project_cinema_update.screeningtimes WHERE movieID IN (SELECT movieID FROM project_cinema_update.orders WHERE orderID = ?)";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, orderId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                st = new ScreeningTimes();
+                st.setScreeningID(rs.getInt("screeningID"));
+
+                Theaters theater = new Theaters();
+                theater.setTheaterID(rs.getInt("theaterID"));
+                st.setTheaterID(theater);
+
+                Movies movie = new Movies();
+                movie.setMovieID(rs.getInt("movieID"));
+                st.setMovieID(movie);
+
+                st.setStartTime(rs.getTimestamp("startTime"));
+                st.setEndTime(rs.getTimestamp("endTime"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return st;
     }
 
     // insertOrderWithVoucherIDNull

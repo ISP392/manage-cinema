@@ -54,6 +54,7 @@
 
                                     </div>
                                     <div class="form-outline mb-4">
+                                        <h6 style="color: red">${errorEmail}</h6>
                                         <label class="form-label" for="form3Example3cg"
                                                >Email</label
                                         >
@@ -61,6 +62,7 @@
 
                                     </div>
                                     <div class="form-outline mb-4">
+                                        <h6 style="color: red">${errorPhone}</h6>
                                         <label class="form-label" for="form3Example3cg"
                                                >Số điện thoại</label
                                         >
@@ -145,9 +147,17 @@
         }
     %>
     <script>
+        function validateEmail(email) {
+            const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        function validatePhone(phone) {
+            const re = /^[0-9]{10,11}$/;
+            return re.test(String(phone));
+        }
         function validateForm() {
             const name = document.getElementById('name').value;
-            console.log(name);
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
             const dob = document.getElementById('dob').value;
@@ -157,11 +167,11 @@
 
             const dobDate = new Date(dob);
             const today = new Date();
-            today.setHours(0, 0, 0, 0); 
+            today.setHours(0, 0, 0, 0);
 
             if (dobDate >= today) {
                 alert('Ngày sinh không hợp lệ.');
-                event.preventDefault(); 
+                event.preventDefault();
                 return false;
 
             }
@@ -174,6 +184,20 @@
             }
             if (age < 18) {
                 alert('Bạn phải từ 18 tuổi trở lên.');
+                return false;
+            }
+
+            if (!validateEmail(email)) {
+                alert('Email không hợp lệ.');
+                return false;
+            }
+
+            if (!validatePhone(phone)) {
+                alert('Số điện thoại không hợp lệ.');
+                return false;
+            }
+            if (name.length > 55) {
+                alert('Họ và Tên không được vượt quá 50 ký tự.');
                 return false;
             }
         }

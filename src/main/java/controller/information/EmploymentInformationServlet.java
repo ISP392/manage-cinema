@@ -19,7 +19,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
+import modal.StaffStatus;
 import util.Email;
 
 /**
@@ -95,18 +99,24 @@ public class EmploymentInformationServlet extends HttpServlet {
         Part filePart = request.getPart("cv");
 
         DAO dao = new DAO();
-        if (dao.checkEPstaff(email, phone)) {
-            request.setAttribute("errorEmail", "Email is already existed");
-            request.setAttribute("errorPhone", "Phone number is already existed");
+        boolean emailExists = dao.checkEPstaff(email, null); 
+        boolean phoneExists = dao.checkEPstaff(null, phone); 
+        boolean emailAndPhoneExist = dao.checkEPstaff(email, phone); 
 
-            request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
-            return;
-        } else if (dao.checkEPusers(email, phone)) {
+        if (emailExists && !phoneExists) {
+            request.setAttribute("errorEmail", "Email is already existed");
+        } else if (!emailExists && phoneExists) {
+            request.setAttribute("errorPhone", "Phone number is already existed");
+        } else if (emailAndPhoneExist) {
             request.setAttribute("errorEmail", "Email is already existed");
             request.setAttribute("errorPhone", "Phone number is already existed");
-            request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
+        }
+
+        if (emailExists || phoneExists) {
+            request.getRequestDispatcher("/WEB-INF/views/employmentInformation.jsp").forward(request, response);
             return;
         }
+
         String textContent = "Name: " + name + "\n"
                 + "Email: " + email + "\n"
                 + "Phone: " + phone + "\n"
@@ -132,6 +142,17 @@ public class EmploymentInformationServlet extends HttpServlet {
         fileContent.close();
         boolean isSuccess = Email.sendEmailWithFile("New employment application received:", address, textContent, folder, newFileName);
         if (isSuccess) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date dobDate = null;
+            try {
+
+                dobDate = dateFormat.parse(dob);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            StaffStatus staff = new StaffStatus(phone, "Pending", address, dobDate, name, email);
+            dao.addStaff(staff);
             request.setAttribute("success", "Your application was submitted successfully!");
         } else {
             request.setAttribute("error", "Interal server error!!");

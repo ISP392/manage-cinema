@@ -181,6 +181,7 @@
                                 <li><a href="list_movie">Movie</a></li>
                                 <li><a href="menu.html">Slot</a></li>
                                 <li><a href="manager_user">Staff</a></li>
+                                <li><a href="manage-staff-status">Staff status</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -216,6 +217,12 @@
                                     </div>
                                     <div class="cm-content-body form excerpt">
                                         <div class="card-body pt-2">
+                                            <c:if test="${not empty errorMessage}">
+                                                <div class="alert alert-danger" role="alert">
+                                                    ${errorMessage}
+                                                </div>
+                                            </c:if>
+                                            <c:if test="${empty errorMessage}">
                                             <div class="table-responsive">
                                                 <table class="table table-responsive-sm mb-0">
                                                     <thead>
@@ -265,22 +272,26 @@
                                                         <%
                                                             }
                                                         %>
-
                                                     </tbody>
                                                 </table>
 
                                             </div>
-                                           <!-- Pagination controls -->
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination">
-                                                <c:forEach var="i" begin="1" end="${noOfPages}">
-                                                    <li class="page-item <c:if test='${i == currentPage}'>active</c:if>'">
-                                                        <a class="page-link" href="ShowUsersServlet?page=${i}">${i}</a>
-                                                    </li>
-                                                </c:forEach>
-                                            </ul>
-                                        </nav>
+                                            <!-- Pagination controls -->
+                                            <style>
+                                                .small-select {
+                                                    width: 100px; /* Bạn có thể điều chỉnh giá trị này theo nhu cầu */
+                                                    font-size: 12px; /* Giảm kích thước chữ */
+                                                }
+                                            </style>
 
+                                            <nav aria-label="Page navigation">
+                                                <select class="form-select small-select" onchange="location = this.value;">
+                                                    <c:forEach var="i" begin="1" end="${noOfPages}">
+                                                        <option value="SearchUserServlet?page=${i}" <c:if test='${i == currentPage}'>selected</c:if>>Page ${i}</option>
+                                                    </c:forEach>
+                                                </select>
+                                            </nav>
+                                            </c:if>
                                         </div>
                                     </div>
                                 </div>

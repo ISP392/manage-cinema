@@ -1,4 +1,5 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" %> 
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -83,14 +84,17 @@
             <img src="<c:url value='./assets/images/logo_mini.png' />" alt="Logo"> <!-- Đường dẫn tới logo -->
         </div>
         <div class="nav-links">
-            <a href="staff_home.jsp"><i class="fas fa-home"></i> Home</a>
-            <a href="sell_ticket.jsp"><i class="fas fa-ticket-alt"></i> Sell Tickets</a>
-            <a href="report.jsp"><i class="fas fa-chart-line"></i> Daily Report</a>
-            <a href="support.jsp"><i class="fas fa-headset"></i> Support</a>
-            <a href="logout.jsp"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="homeStaff"><i class="fas fa-home"></i> Home</a>
+            <a href="nowShowing"><i class="fas fa-ticket-alt"></i> Bán vé</a>
+            <a href="viewReport"><i class="fas fa-chart-line"></i> Doanh thu</a>
+            <a href="checkTicket"><i class="fas fa-qrcode"></i> Check vé</a>
+            <a href="report"><i class="fas fa-file-alt"></i>Báo cáo</a>
+            <a href="logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
         </div>
         <div class="account-info">
-            <a href="information.jsp"><i class="fas fa-user"></i> Cao Thi Ha Vy</a><!-- Hiển thị tài khoản đang đăng nhập -->
+            <c:if test="${sessionScope.account != null}">
+            <a href="information"><i class="fas fa-user"></i> ${sessionScope.account.getDisplayName().toUpperCase()}</a><!-- Hiển thị tài khoản đang đăng nhập -->
+        </c:if>
         </div>
     </div>
 </body>

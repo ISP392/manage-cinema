@@ -5,6 +5,7 @@
 
 package controller.staff;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,13 +13,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import modal.Orders;
+import modal.ScreeningTimes;
+import modal.Tickets;
 
 /**
  *
  * @author caoha
  */
-@WebServlet(name="ReportServlet", urlPatterns={"/report"})
-public class ReportServlet extends HttpServlet {
+@WebServlet(name="CheckTicketServlet", urlPatterns={"/checkTicket"})
+public class CheckTicketServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +40,10 @@ public class ReportServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ReportServlet</title>");  
+            out.println("<title>Servlet CheckTicketServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ReportServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CheckTicketServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,7 +60,7 @@ public class ReportServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/staff-views/shiftReport.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/staff-views/checkticket.jsp").forward(request, response);
     } 
 
     /** 
@@ -68,7 +73,21 @@ public class ReportServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        DAO dao = new DAO();
+    String orderId = request.getParameter("orderID");
+    Orders order = dao.getOrderById(orderId);
+    List<Tickets> tickets = dao.getTicketsByOrderId(orderId);
+    ScreeningTimes time = dao.getTimeByOrderId(orderId);
+
+    if (order != null) {
+        request.setAttribute("order", order);
+        request.setAttribute("tickets", tickets);
+        request.setAttribute("time", time);
+    } else {
+        request.setAttribute("error", "Thông tin không hợp lệ.");
+    }
+
+    request.getRequestDispatcher("/WEB-INF/views/staff-views/result.jsp").forward(request, response);
     }
 
     /** 

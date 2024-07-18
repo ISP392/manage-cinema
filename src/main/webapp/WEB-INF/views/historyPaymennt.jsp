@@ -118,18 +118,33 @@
                                                                             <h4 class="mb-0">${ticket.getMovieID().getTitle().toUpperCase()}</h4>
                                                                             <ul>
                                                                                 <li class="item" style="width: 210px; word-break: break-word;margin-right: 0;width: 300px">
+                                                                                    <c:set var="total" value="${ticket.orderID.allPrice}" />
                                                                                     <p><span>Mã vé:</span> ${ticket.getTicketID()}</p>
                                                                                     <p><span>Rạp:</span> ${ticket.getCinemaID().getName()}</p>
                                                                                     <p><span>Suất chiếu:</span> <fmt:formatDate value="${ticket.getSeatID().getScreeningID().getStartTime()}" pattern="HH:mm"/>, <fmt:formatDate value="${ticket.getSeatID().getScreeningID().getStartTime()}" pattern="yyyy-MM-dd" /></p>
                                                                                     <p><span>Phòng Cinema: </span>Cinemas ${ticket.getSeatID().getScreeningID().getTheaterID().getTheaterNumber()}</p>
                                                                                     <p><span>Ghế:</span> <span id="selectedSeats">${ticket.getSeatID().getSeatNumber()}</span></p>
+                                                                                    <p>
+                                                                                        <c:if test="${ticket.orderID.orderFood.size() == 0}">
+                                                                                            No combo
+                                                                                        </c:if>
+                                                                                        <c:if test="${ticket.orderID.orderFood.size() > 0}">
+                                                                                            <span>Combo:</span> <span id="selectedSeats">
+                                                                                                <c:forEach items="${ticket.orderID.orderFood}" var="food">
+                                                                                                     <c:set var="total" value="${total + (food.quantity * food.foods.price)}" />
+                                                                                                    ${food.foods.foodName} - ${food.quantity} - <img src="./assets/images/food/${food.foods.imgFoodItems}" width="50px" height="height" alt="alt"/>- ${food.foods.price} đồng
+                                                                                                </c:forEach>
+                                                                                            </span>
+                                                                                        </c:if>
+
+                                                                                    </p>
                                                                                 </li>
                                                                             </ul>
                                                                         </div>
                                                                     </div>
                                                                 </td>
-                                                                <td style="font-size: 20px; font-weight: bold">1</td>
-                                                                <td class="text-end" style="font-size: 20px; font-weight: bold">75000 đồng</td>
+                                                                <td style="font-size: 20px; font-weight: bold">${ticket.orderID.quantity}</td>
+                                                                <td class="text-end" style="font-size: 20px; font-weight: bold">${total} đồng</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
