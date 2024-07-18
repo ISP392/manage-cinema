@@ -73,6 +73,6 @@ public class StaffStatus {
 
     public void setStaffEmail(String staffEmail) {
         this.staffEmail = staffEmail;
-    }
+    } 
 }
 

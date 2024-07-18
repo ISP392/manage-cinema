@@ -14,6 +14,9 @@ import modal.*;
 import util.Encrypt;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author MISS NGA
@@ -784,6 +787,7 @@ public class DAO extends DBContext {
     // paging list tickets by userID
     public List<Tickets> pagingTickets(int userID, int index) {
         List<Tickets> list = new ArrayList<>();
+        List<Integer> ticketIDs = new ArrayList<>();
         String sql = "SELECT t.ticketID, u.userID, u.displayName, u.username, u.password, u.email, u.providerID, u.point, "
                 + "r.roleID, r.name, "
                 + "m.movieID, m.title, m.description, m.releaseDate, m.posterImage, m.duration, m.display, "
@@ -801,13 +805,14 @@ public class DAO extends DBContext {
                 + "JOIN Cinemas c ON t.cinemaID = c.cinemaID "
                 + "JOIN Location l ON l.locationID = c.locationID "
                 + "JOIN Seats s ON t.seatID = s.seatID "
-                + "JOIN ScreeningTimes st ON st.screeningID = s.screeningID "
+                + "JOIN ScreeningTimes st ON s.screeningID = st.screeningID "
                 + "JOIN Theaters th ON st.theaterID = th.theaterID "
                 + "JOIN Orders o ON t.orderID = o.orderID "
-                + "WHERE t.userID = ? ";
+                + "WHERE t.userID = ? GROUP BY t.movieID LIMIT ?, 5"; // Thêm GROUP BY để tránh trùng lặp
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, userID);
+            ps.setInt(2, (index - 1) * 5);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Role r = new Role(rs.getInt("roleID"), rs.getString("name"));
@@ -827,6 +832,8 @@ public class DAO extends DBContext {
                 Tickets t = new Tickets(rs.getInt("ticketID"), u, m, c, rs.getString("price"),
                         rs.getTimestamp("purchaseDate"), s, o);
 
+                ticketIDs.add(t.getTicketID());
+
                 List<OrderFoodItem> orderFoods = this.selectAllOrderFoodItems(t.getOrderID().getOrderID());
                 for (OrderFoodItem orderFood : orderFoods) {
                     orderFood.setFoods(this.getFoodItemById(orderFood.getFoodItemID()));
@@ -834,15 +841,57 @@ public class DAO extends DBContext {
                 t.getOrderID().setOrderFood(orderFoods);
                 list.add(t);
             }
+            // Lấy danh sách Seats từ danh sách ticketID
+            List<Seats> allSeats = selectSeatsByTicketID(ticketIDs);
+            for (Tickets ticket : list) {
+                List<Seats> seatsForTicket = new ArrayList<>();
+                for (Seats seat : allSeats) {
+                    if (seat.getScreeningID().getScreeningID() == ticket.getSeatID().getScreeningID().getScreeningID()) {
+                        seatsForTicket.add(seat);
+                    }
+                }
+                ticket.setSeats(seatsForTicket);
+            }
         } catch (SQLException e) {
             System.out.println(e);
         }
         return list;
     }
 
+    public List<Seats> selectSeatsByTicketID(List<Integer> ticketIDs) {
+        List<Seats> seats = new ArrayList<>();
+        String sql = "SELECT s.seatID, s.seatNumber, s.seatStatus, "
+                + "st.screeningID, st.startTime, st.endTime, th.theaterID, th.theaterNumber, m.movieID, m.title, m.description, m.releaseDate, m.posterImage, m.duration, m.display "
+                + "FROM Seats s "
+                + "JOIN Tickets t ON s.seatID = t.seatID "
+                + "JOIN ScreeningTimes st ON s.screeningID = st.screeningID "
+                + "JOIN Theaters th ON st.theaterID = th.theaterID "
+                + "JOIN Movies m ON st.movieID = m.movieID "
+                + "WHERE t.ticketID = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            for (Integer ticketID : ticketIDs) {
+                ps.setInt(1, ticketID);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    Theaters theater = new Theaters(rs.getInt("theaterID"), null, rs.getInt("theaterNumber"));
+                    Movies movie = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"));
+                    ScreeningTimes screening = new ScreeningTimes(rs.getInt("screeningID"), theater, movie, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"));
+                    Seats seat = new Seats(rs.getInt("seatID"), screening, rs.getString("seatNumber"), rs.getString("seatStatus"));
+                    seats.add(seat);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return seats;
+    }
+
     public List<OrderFoodItem> selectAllOrderFoodItems(int orderId) {
         List<OrderFoodItem> orderFoodItems = new ArrayList<>();
-        String sql = "SELECT * FROM orderfooditems where orderID=?";
+        String sql = "SELECT * FROM OrderDetails where orderID=?";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, orderId);
@@ -948,7 +997,7 @@ public class DAO extends DBContext {
             return false;
         }
     }
-
+  
     public void addStaff(Users u, String phone) {
         String sql = "INSERT INTO Users (displayName, username, password, roleID, email, point, phone) VALUES (?, ?, ?, 3,?,0, ?)";
         try {
@@ -1603,8 +1652,34 @@ public class DAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        // test insert seat
         DAO dao = new DAO();
-        dao.insertSeats(252, "A01");
+
+        // Kiểm tra phương thức pagingTickets
+        int userID = 42; // Thay thế bằng userID thực tế
+        int index = 1;  // Thay thế bằng index thực tế
+        List<Tickets> tickets = dao.pagingTickets(userID, index);
+
+        System.out.println("Tickets:");
+        for (Tickets ticket : tickets) {
+            System.out.println("Ticket ID: " + ticket.getTicketID());
+            System.out.println("Movie: " + ticket.getMovieID().getTitle());
+            System.out.println("Seats:");
+            for (Seats seat : ticket.getSeats()) {
+                System.out.println("  Seat Number: " + seat.getSeatNumber());
+            }
+            System.out.println();
+        }
+
+        // Kiểm tra phương thức selectSeatsByTicketID
+        List<Integer> ticketIDs = Arrays.asList(159, 160, 161); // Thay thế bằng danh sách ticketID thực tế
+        List<Seats> seats = dao.selectSeatsByTicketID(ticketIDs);
+
+        System.out.println("Seats:");
+        for (Seats seat : seats) {
+            System.out.println("Seat ID: " + seat.getSeatID());
+            System.out.println("Seat Number: " + seat.getSeatNumber());
+            System.out.println("Screening ID: " + seat.getScreeningID().getScreeningID());
+            System.out.println();
+        }
     }
 }

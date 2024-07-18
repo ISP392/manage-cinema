@@ -132,6 +132,7 @@ public class EmploymentInformationServlet extends HttpServlet {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            
             StaffStatus staff = new StaffStatus(phone, "Pending", address, dobDate, name, email);
             dao.addStaff(staff);
             request.setAttribute("success", "Your application was submitted successfully!");

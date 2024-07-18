@@ -1,20 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modal;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
-
-
+import java.util.ArrayList;
+import java.util.List;
 
 /**
+ * Tickets class
  *
- * @author MISS NGA
+ * @autor MISS NGA
  */
 public class Tickets {
+
     private int ticketID;
     private Users userID;
     private Movies movieID;
@@ -23,10 +19,7 @@ public class Tickets {
     private Timestamp purchaseDate;
     private Seats seatID;
     private Orders orderID;
-    
-    
-    public Tickets() {
-    }
+    private List<Seats> seats;
 
     public Tickets(int ticketID, Users userID, Movies movieID, Cinemas cinemaID, String price, Timestamp purchaseDate, Seats seatID, Orders orderID) {
         this.ticketID = ticketID;
@@ -37,6 +30,7 @@ public class Tickets {
         this.purchaseDate = purchaseDate;
         this.seatID = seatID;
         this.orderID = orderID;
+        this.seats = new ArrayList<>();
     }
 
     public int getTicketID() {
@@ -103,10 +97,19 @@ public class Tickets {
         this.orderID = orderID;
     }
 
+    public List<Seats> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(List<Seats> seats) {
+        this.seats = seats;
+    }
+    
     @Override
     public String toString() {
         return "Tickets{" + "ticketID=" + ticketID + ", userID=" + userID + ", movieID=" + movieID + ", cinemaID=" + cinemaID + ", price=" + price + ", purchaseDate=" + purchaseDate + ", seatID=" + seatID + ", orderID=" + orderID + '}';
     }
 
+    
     
 }
