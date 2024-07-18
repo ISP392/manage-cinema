@@ -5,27 +5,21 @@
 package controller.admin;
 
 import DAO.DAO;
-import io.github.cdimascio.dotenv.Dotenv;
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import modal.FoodItem;
-import modal.Movies;
+import java.io.IOException;
+import java.io.PrintWriter;
 import modal.Users;
 
 /**
  *
- * @author ACER
+ * @author LÊ PHƯƠNG MAI
  */
-@WebServlet(name = "listFoodServlet", urlPatterns = {"/listFood"})
-public class listFoodServlet extends HttpServlet {
+@WebServlet(name = "updateDisplayFood", urlPatterns = {"/updateDisplayFood"})
+public class updateDisplayFood extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +38,10 @@ public class listFoodServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet listFoodServlet</title>");
+            out.println("<title>Servlet updateDisplayFood</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet listFoodServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet updateDisplayFood at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -69,28 +63,15 @@ public class listFoodServlet extends HttpServlet {
         if (u == null || u.getRoleID().getRoleID() != 1) {
             response.sendRedirect("admin");
         } else {
+
+            String foodId = request.getParameter("foodId");
+            String display = request.getParameter("display");
+
             DAO dao = new DAO();
-
-            String indexPage = request.getParameter("index");
-            if (indexPage == null) {
-                indexPage = "1";
-            }
-            int index = Integer.parseInt(indexPage);
-            int pageSize = 10;
-
-
-
-            List<FoodItem> listFood = dao.getFoodByPage(index, pageSize);
-            String realPath = request.getContextPath() + "/assets/images/food/";
-            for (FoodItem foodItem : listFood) {
-                foodItem.setImgFoodItems(realPath.concat(foodItem.getImgFoodItems()));
-            }
-
-
-            request.setAttribute("tag", index);
-            request.setAttribute("listFood", listFood);
-
-            request.getRequestDispatcher("/WEB-INF/views/addOther/listFood.jsp").forward(request, response);
+            int food = Integer.parseInt(foodId);
+            int dis = Integer.parseInt(display);
+            dao.updateDisplayFoodByFoodID(food, dis);
+            response.sendRedirect("listFood");
         }
     }
 
@@ -105,8 +86,7 @@ public class listFoodServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DAO dao = new DAO();
-        response.sendRedirect("foodList");
+        processRequest(request, response);
     }
 
     /**

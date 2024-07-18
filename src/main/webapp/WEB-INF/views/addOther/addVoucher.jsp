@@ -215,7 +215,7 @@
                                 <span class="nav-text">Add Other</span>
                             </a>
                             <ul aria-expanded="false">
-                                <li><a href="addFood">Add Food</a></li>
+                                <li><a href="listFood">Add Food</a></li>
                                 <li><a href="addVoucher">Add Voucher</a></li>
                             </ul>
                         </li>

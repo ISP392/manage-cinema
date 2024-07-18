@@ -215,7 +215,7 @@
                                 <span class="nav-text">Add Other</span>
                             </a>
                             <ul aria-expanded="false">
-                                <li><a href="addFood">Add Food</a></li>
+                                <li><a href="listFood">Add Food</a></li>
                                 <li><a href="addVoucher">Add Voucher</a></li>
                             </ul>
                         </li>
@@ -277,6 +277,19 @@
                                             </div>
                                         </div>
 
+<!--                                        <label class="form-label">Quantity</label>
+                                        <div class="card h-auto">
+                                            <div class="card-body pt-3">
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="quantity"
+                                                    name="quantity"
+                                                    required
+                                                    />
+                                            </div>
+                                        </div>-->
+                                        
                                         <div class="filter cm-content-box box-primary">
                                             <div class="content-title">
                                                 <div class="cpa">img FoodItems</div>

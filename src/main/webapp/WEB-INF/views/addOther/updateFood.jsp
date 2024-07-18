@@ -1,77 +1,51 @@
 <%-- 
-    Document   : listFood
-    Created on : Jun 23, 2024, 11:42:50 PM
+    Document   : addFood
+    Created on : Jun 20, 2024, 10:48:41 PM
     Author     : ACER
 --%>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <title>Admin Dashboard</title>
-        <link href="./assets/css/dashboard-admin.css" rel="stylesheet"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    </head>
-    <style>
-        .action-rows{
-            width: 120px;
-        }
-        
-        /* Modal styles */
-        .modalImg {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            padding-top: 60px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.9);
-        }
+        <link href="./assets/css/dashboard-admin.css" rel="stylesheet" />
 
-        .modalImg-content {
-            margin: auto;
-            display: block;
-            width: 80%;
-            max-width: 700px;
-        }
-
-        .closeImg {
-            position: absolute;
-            top: 15px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .closeImg:hover,
-        .closeImg:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        @media only screen and (max-width: 700px){
-            .modalImg-content {
-                width: 100%;
+        <style>
+            .genre-buttons {
+                display: flex;
+                flex-wrap: wrap;
             }
-        }
-    </style>
+
+            .genre-button {
+                background-color: #ccc;
+                border-radius: 1rem;
+                border: none;
+                color: black;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            /* Hiệu ứng khi nút được nhấn */
+            .genre-button.active {
+                background-color: #4caf50;
+                color: white;
+            }
+        </style>
+    </head>
+
     <body>
-         <fmt:setLocale value = "vi_VN"/>
         <!--*******************
-            Preloader start
-        ********************-->
+                Preloader start
+            ********************-->
         <div id="preloader">
             <div class="waviy">
                 <span style="--i: 1">L</span>
@@ -87,16 +61,16 @@
             </div>
         </div>
         <!--*******************
-            Preloader end
-        ********************-->
+                Preloader end
+            ********************-->
 
         <!--**********************************
-            Main wrapper start
-        ***********************************-->
+                Main wrapper start
+            ***********************************-->
         <div id="main-wrapper">
             <!--**********************************
-                  Nav header start
-              ***********************************-->
+                        Nav header start
+                    ***********************************-->
             <div class="nav-header">
                 <a href="home_admin" class="brand-logo">
                     <svg class="logo-abbr" width="53" height="53" viewBox="0 0 53 53">
@@ -137,17 +111,17 @@
                 </div>
             </div>
             <!--**********************************
-                  Nav header end
-              ***********************************-->
+                        Nav header end
+                    ***********************************-->
             <!--**********************************
-                  Header start
-              ***********************************-->
+                        Header start
+                    ***********************************-->
             <div class="header">
                 <div class="header-content">
                     <nav class="navbar navbar-expand">
                         <div class="collapse navbar-collapse">
                             <div class="header-left">
-                                <div class="dashboard_bar">Dashboard</div>
+                                <div class="dashboard_bar">Update Food</div>
                             </div>
                             <ul class="navbar-nav header-right" style="margin-left: 15px">
                                 <li class="nav-item dropdown notification_dropdown">
@@ -163,14 +137,15 @@
                         </div>
                     </nav>
                 </div>
+                <h2 style="color:red;margin-top:-25px; padding-left: 45px">${message}</h2>
             </div>
             <!--**********************************
-                  Header end ti-comment-alt
-              ***********************************-->
+                        Header end ti-comment-alt
+                    ***********************************-->
 
             <!--**********************************
-                  Sidebar start
-              ***********************************-->
+                        Sidebar start
+                    ***********************************-->
             <div class="dlabnav">
                 <div class="dlabnav-scroll">
                     <ul class="metismenu" id="menu">
@@ -182,8 +157,8 @@
                                 data-bs-toggle="dropdown"
                                 >
                                 <div class="header-info ms-3">
-                                    <span class="font-w600">Hi, <b>baothiquoc</b></span>
-                                    <small class="text-end font-w400">baothiquoc@gmail.com</small>
+                                    <span class="font-w600">Hi, <b>${admin.displayName}</b></span>
+                                    <small class="text-end font-w400">${admin.email}</small>
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
@@ -228,7 +203,6 @@
                                 <li><a href="list_movie">Movie</a></li>
                                 <li><a href="menu.html">Slot</a></li>
                                 <li><a href="manager_user">Staff</a></li>
-                                <li><a href="manage-staff-status">Staff status</a></li>
                             </ul>
                         </li>
                         <li>
@@ -241,171 +215,186 @@
                                 <span class="nav-text">Add Other</span>
                             </a>
                             <ul aria-expanded="false">
-                                <li><a href="listFood">Food</a></li>
-                                <li><a href="menu.html">Voucher</a></li>
+                                <li><a href="listFood">Add Food</a></li>
+                                <li><a href="addVoucher">Add Voucher</a></li>
                             </ul>
                         </li>
-                        
                     </ul>
                 </div>
             </div>
             <!--**********************************
-                  Sidebar end
-              ***********************************-->
+                        Sidebar end
+                    ***********************************-->
 
             <!--**********************************
-                  Content body start
-              ***********************************-->
+                        Content body start
+                    ***********************************-->
             <div class="content-body">
                 <!-- row -->
                 <div class="container-fluid">
                     <!-- Row -->
-                    <div class="row">
-                        <div class="col-xl-12">
-
-                            <div class="mb-4">
-                                <a href="addFood" class="btn btn-primary">Add Food</a>
-                            </div>
-
-                            <div class="filter cm-content-box box-primary">
-                                <div class="content-title">
-                                    <div class="cpa">
-                                        <i class="fa-solid fa-file-lines me-1"></i>List Food Iterms
-                                    </div>
-                                </div>
-                                <div class="cm-content-body form excerpt">
-                                    <div class="card-body pt-2">
-                                        <div class="table-responsive">
-
-                                            <table class="table table-responsive-sm mb-0">
-
-                                                <thead>
-                                                    <tr>
-                                                        
-                                                        <th><strong>#</strong></th>
-                                                        <th><strong>Food Name</strong></th>
-                                                        <th><strong>Description</strong></th>
-                                                        <th><strong>Price</strong></th>
-                                                        <th><strong>Image</strong></th>
-                                                        
-                                                        <th class="action-rows"><strong>Actions</strong></th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody id="movieList" >
-                                                    <c:if test="${not empty errorMessage}">
-                                                    <p style="color:red">${errorMessage}</p>
-                                                </c:if>
-
-                                                <c:set var="itemsPerPage" value="10" />
-                                                <c:set var="currentPage" value="${tag}" />
-
-
-                                                <c:forEach  var="food" items="${listFood}" >
-                                                    <c:set var="foodNumber" value="${(currentPage - 1) * itemsPerPage}" />
-                                                    <tr>
-
-                                                        <td>${food.foodItemID}</td>
-                                                        <td>${food.foodName.toUpperCase()}</td>
-                                                        <td>${food.description}</td>
-                                                        <td><fmt:formatNumber value = "${food.price}" type = "currency"/></td>
-                                                        <td><img style="height: 30px" src="${food.imgFoodItems}" alt="Food Image" onclick="openModal(this.src)" /></td>
-
-                                                        <td class="action-rows">
-                                                            <a href="update_food?foodId=${food.foodItemID}" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
-                                                            <c:if test="${food.display==1}">
-                                                                <a href="updateDisplayFood?foodId=${food.foodItemID}&display=0" class="btn btn-danger shadow btn-xs sharp rounded-circle">
-                                                                    <i class="fa fa-eye"></i>
-                                                                </a>
-                                                            </c:if>
-
-                                                            <c:if test="${food.display==0}">
-
-                                                                <a  href="updateDisplayFood?foodId=${food.foodItemID}&display=1" class="btn btn-danger shadow btn-xs sharp rounded-circle">
-                                                                    <i class="fa fa-eye-slash"></i>
-                                                                </a>
-                                                            </c:if>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-
-                                                </tbody>
-                                            </table>
-                                            <div id="myModalImg" class="modalImg">
-                                                <span class="closeImg" onclick="closeModal()">&times;</span>
-                                                <img class="modalImg-content" id="img01">
+                    <form action="update_food" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="foodId" value="${requestScope.food.foodItemID}" />
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Food Name</label>
+                                        <div class="card h-auto">
+                                            <div class="card-body pt-3">
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="Food Name"
+                                                    name="foodName"
+                                                    value="${requestScope.food.foodName}"
+                                                    required
+                                                    />
                                             </div>
+                                        </div>
+                                        </div>
 
-                                            <div class="d-flex align-items-center justify-content-xl-between flex-wrap justify-content-center mt-3">
-                                                <small class="mb-xl-0 mb-2">
+                                        <label class="form-label">Description</label>
+                                        <div class="card h-auto">
+                                            <div class="card-body pt-3">
+                                                <textarea
+                                                    id="description"
+                                                    style="margin-top: 10px"
+                                                    class="form-control"
+                                                    name="description"
+                                                    >${requestScope.food.description}</textarea>
+                                            </div>
+                                        </div>
+                                        <label class="form-label">Price</label>
+                                        <div class="card h-auto">
+                                            <div class="card-body pt-3">
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="Price"
+                                                    name="price"
+                                                    required
+                                                    value="${requestScope.food.price}"
+                                                    />
+                                            </div>
+                                        </div>
 
-                                                </small>
-
-                                                <ul class="pagination">
-
-                                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                                        <a class="page-link" href="?index=${currentPage - 1}">&lsaquo;</a>
-                                                    </li>
-                                                    <c:forEach begin="1" end="${endPage}" var="i">
-                                                        <li class="page-item ${currentPage == i ? 'active' : ''}">
-                                                            <a class="page-link" href="?index=${i}">${i}</a>
-                                                        </li>
-                                                    </c:forEach>
-                                                    <li class="page-item ${currentPage == endPage ? 'disabled' : ''}">
-                                                        <a class="page-link" href="?index=${currentPage + 1}">&rsaquo;</a>
-                                                    </li>
-
-                                                </ul>
-
+<!--                                        <label class="form-label">Quantity</label>
+                                        <div class="card h-auto">
+                                            <div class="card-body pt-3">
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="quantity"
+                                                    name="quantity"
+                                                    value="${requestScope.food.quantity}"
+                                                    required
+                                                    />
+                                            </div>
+                                        </div>-->
+                                        
+                                        <div class="filter cm-content-box box-primary">
+                                            <div class="content-title">
+                                                <div class="cpa">Image</div>
+                                                <div class="tools">
+                                                    <a
+                                                        href="javascript:void(0);"
+                                                        class="expand SlideToolHeader"
+                                                        ><i class="fal fa-angle-down"></i
+                                                        ></a>
+                                                </div>
+                                            </div>
+                                            <div class="cm-content-body publish-content form excerpt">
+                                                <div class="card-body">
+                                                    <div class="avatar-upload d-flex align-items-center">
+                                                        <div class="position-relative">
+                                                            <div class="avatar-preview">
+                                                                <div
+                                                                    id="imagePreview"
+                                                                    style="
+                                                                    background-image: url('${requestScope.food.imgFoodItems}');
+                                                                    "
+                                                                    ></div>
+                                                            </div>
+                                                            <div
+                                                                class="change-btn d-flex align-items-center flex-wrap"
+                                                                >
+                                                                <input
+                                                                    type="file"
+                                                                    class="form-control d-none"
+                                                                    accept=".png, .jpg, .jpeg"
+                                                                    name="imgFoodItems"
+                                                                    id="imageUpload"
+                                                                    />
+                                                                <label
+                                                                    for="imageUpload"
+                                                                    class="btn btn-light ms-0"
+                                                                    >Select Image</label
+                                                                >
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!--**********************************
-                          Content body end
-                      ***********************************-->
+                        <button type="submit" class="btn btn-primary mb-3 open">
+                            Update Food
+                        </button>
+                    </form>
                 </div>
-                <!--**********************************
-                    Main wrapper end
-                ***********************************-->
+            </div>
+            <!--**********************************
+                        Content body end
+                    ***********************************-->
+        </div>
+        <!--**********************************
+                Main wrapper end
+            ***********************************-->
 
-                <!--**********************************
-                    Scripts
-                ***********************************-->
-                <!-- Required vendors -->
-                <script src="./assets/JS/vendor/global/global.min.js"></script>
+        <!--**********************************
+                Scripts
+            ***********************************-->
+        <!-- Required vendors -->
+        <script src="./assets/JS/vendor/global/global.min.js"></script>
+        <script src="./assets/JS/vendor/ckeditor/ckeditor.js"></script>
 
-                <!-- Apex Chart -->
-                <script src="./assets/JS/vendor/apexchart/apexchart.js"></script>
+        <!-- Apex Chart -->
+        <script src="./assets/JS/vendor/apexchart/apexchart.js"></script>
 
-                <!-- Dashboard 1 -->
-                <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
+        <!-- Dashboard 1 -->
+        <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
 
-                <script src="./assets/JS/js/custom.min.js"></script>
-               
-               
-    
-    
-
-            <script>
-                // Function to open the modal
-                function openModal(src) {
-                    var modal = document.getElementById("myModalImg");
-                    var modalImg = document.getElementById("img01");
-                    modal.style.display = "block";
-                    modal.style.zIndex = '1000';
-                    modalImg.src = src;
+        <script src="./assets/JS/js/custom.min.js"></script>
+        <script>
+            
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#imagePreview").css(
+                                "background-image",
+                                "url(" + e.target.result + ")"
+                                );
+                        $("#imagePreview").hide();
+                        $("#imagePreview").fadeIn(650);
+                    };
+                    reader.readAsDataURL(input.files[0]);
                 }
+            }
+            $("#imageUpload").on("change", function () {
+                readURL(this);
+            });
+            $(".remove-img").on("click", function () {
+                var imageUrl = "images/no-img-avatar.png";
+                $(".avatar-preview, #imagePreview").removeAttr("style");
+                $("#imagePreview").css("background-image", "url(" + imageUrl + ")");
+            });
+        </script>
+    </body>
+</html>
 
-                // Function to close the modal
-                function closeModal() {
-                    var modal = document.getElementById("myModalImg");
-                    modal.style.display = "none";
-                }
-            </script>
-                </body>
-                </html>
