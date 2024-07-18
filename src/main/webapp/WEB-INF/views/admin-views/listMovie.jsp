@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: baoquoc
-  Date: 12/06/2024
-  Time: 13:50
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -183,6 +176,7 @@
                                 <li><a href="view-slot?date=<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu&theaterNumber=1">Slot</a></li>
                                 <li><a href="manager_user">Staff</a></li>
                                 <li><a href="manage-staff-status">Staff status</a></li>
+                                <li><a href="staff-schedule">Staff Schedule</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -209,7 +203,7 @@
                             <div class="filter cm-content-box box-primary">
                                 <div class="content-title">
                                     <div class="cpa">
-                                        <i class="fa-solid fa-file-lines me-1"></i>List Movies
+                                        <i class="fa fa-file-lines"></i> List Movies
 
                                     </div>
 

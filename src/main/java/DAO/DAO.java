@@ -396,11 +396,7 @@ public class DAO extends DBContext {
 
     public Shift getShiftForUser(String phone) {
         Shift shift = null;
-        String query = "SELECT Shift.*, staffstatus.phone AS staffPhone, staffstatus.status, staffstatus.address, staffstatus.dob, staffstatus.staffName, staffstatus.staffEmail "
-                + "FROM Shift "
-                + "JOIN staffstatus ON Shift.phone = staffstatus.phone "
-                + "WHERE Shift.phone = ? "
-                + "ORDER BY startTime DESC LIMIT 1";
+        String query = "SELECT Shift.*,ss.status,ss.address,ss.dob,ss.staffName, ss.staffEmail, Users.phone AS staffPhone FROM Shift JOIN Users ON Shift.phone = Users.userID join staffstatus ss on Users.phone = ss.phone WHERE Shift.phone = ? ORDER BY startTime DESC LIMIT 1";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, phone);
