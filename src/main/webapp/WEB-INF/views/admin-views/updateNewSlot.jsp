@@ -200,7 +200,6 @@
                                 <li><a href="list_movie">Movie</a></li>
                                 <li><a href="menu.html">Slot</a></li>
                                 <li><a href="email-template.html">Staff</a></li>
-                                <li><a href="manage-staff-status">Staff status</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -217,7 +216,7 @@
                 <!-- row -->
                 <div class="container-fluid">
                     <!-- Row -->
-                    <form action="addNewSlot" method="post" onsubmit="return validateDateTime();">
+                    <form action="updateNewSlot" method="post" onsubmit="return validateDateTime();">
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="row">
@@ -226,16 +225,17 @@
 
 
                                             <h3 id="errorMessage" style="color:red">${message}</h3>
+                                            <h3 id="errorMessage" style="color:red">${messageError}</h3>
 
-
-
+                                            <input type="text"  value="${sid}" name="sid"  hidden="">
 
 
                                             <div class="row align-items-center">
                                                 <div class="col-md-6 ">
                                                     <label for="theaterName">Tên phim:</label>
                                                     <select id="theaterName" name="movieName" class="form-control" onchange="updateDuration()">
-                                                        <option value="" disabled selected>Chọn phim</option>
+                                                        <option  value="${movieName}" >${movieName}</option>
+
                                                         <c:forEach items="${listAllMovies}" var="l">
                                                             <option value="${l.title}" data-duration="${l.duration}">${l.title}</option>
                                                         </c:forEach>
@@ -243,7 +243,7 @@
                                                 </div>
                                                 <div class="col-md-6 text-right">
                                                     <label for="duration">Thời gian phim:</label>
-                                                    <input type="text" id="duration" name="duration" class="form-control" readonly>
+                                                    <input type="text" id="duration" value="${duration}" name="duration" class="form-control" readonly>
                                                 </div>
                                             </div>
 
@@ -259,7 +259,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="dateInput" > Ngày chiếu</label>
-                                            <input type="date" id="dateInput" class="form-control" 
+                                            <input type="date" id="dateInput" value="${date}" class="form-control" 
                                                    name="dateInput" />
                                         </div>
                                         <label   for="theaterNumber">Rạp chiếu</label>
@@ -278,20 +278,22 @@
 
                                         <div class="mb-3">
                                             <label  for="startTimeInput">Giờ bắt đầu chiếu: (nên chọn giờ chẵn)</label><br>
-                                            <input class="form-control" type="time" id="startTimeInput" required name="startTimeInput">
+                                            <input class="form-control" value="${formattedTimeStart}" type="time" id="startTimeInput" required name="startTimeInput">
                                         </div>   
 
 
                                         <div class="mb-3">
                                             <label for="endTimeInput">Giờ kết thúc chiếu:</label><br>
-                                            <input class="form-control" style="appearance: none;" type="time" readonly id="endTimeInput" required name="endTimeInput">
+                                            <input class="form-control" value="${formattedTimeEnd}" style="appearance: none;" type="time" readonly id="endTimeInput" required name="endTimeInput">
                                         </div>  
 
                                         <button type="submit" class="btn btn-primary mb-3 open">
-                                            Add Slot
+                                            Update Slot
+                                        </button>
+                                        <button type="button" class="btn btn-primary mb-3 open" style="background-color: #ee2279; border: #ee2279" onclick="window.location.href = 'home_admin'">
+                                            Cancel
                                         </button>
                                         </form>
-
 
 
                                     </div>
@@ -322,61 +324,61 @@
 
 
                             <script>
-                                                        function updateDuration() {
-                                                            var theaterSelect = document.getElementById("theaterName");
-                                                            var durationInput = document.getElementById("duration");
-                                                            var selectedOption = theaterSelect.options[theaterSelect.selectedIndex];
-                                                            var duration = selectedOption.getAttribute("data-duration");
+                                            function updateDuration() {
+                                                var theaterSelect = document.getElementById("theaterName");
+                                                var durationInput = document.getElementById("duration");
+                                                var selectedOption = theaterSelect.options[theaterSelect.selectedIndex];
+                                                var duration = selectedOption.getAttribute("data-duration");
 
-                                                            // Cập nhật giá trị của input thời gian
-                                                            if (duration) {
-                                                                durationInput.value = duration;
-                                                            } else {
-                                                                durationInput.value = "";
-                                                            }
-                                                        }
+                                                // Cập nhật giá trị của input thời gian
+                                                if (duration) {
+                                                    durationInput.value = duration;
+                                                } else {
+                                                    durationInput.value = "";
+                                                }
+                                            }
 
-                                                        function validateDateTime() {
+                                            function validateDateTime() {
 
-                                                            var dateInput = document.getElementById('dateInput').value;
-                                                            var startTimeInput = document.getElementById('startTimeInput').value;
-                                                            var durationInput = document.getElementById('duration').value;
+                                                var dateInput = document.getElementById('dateInput').value;
+                                                var startTimeInput = document.getElementById('startTimeInput').value;
+                                                var durationInput = document.getElementById('duration').value;
 
-                                                            var date = new Date(dateInput);
-                                                            var startTime = new Date(dateInput + ' ' + startTimeInput);
+                                                var date = new Date(dateInput);
+                                                var startTime = new Date(dateInput + ' ' + startTimeInput);
 
-                                                            // Round duration to nearest 10 minutes
-                                                            var duration = Math.ceil(durationInput / 10) * 10 + 10;
+                                                // Round duration to nearest 10 minutes
+                                                var duration = Math.ceil(durationInput / 10) * 10 + 10;
 
 
-                                                            // Calculate end time
-                                                            var endTime = new Date(startTime.getTime() + duration * 60000);
+                                                // Calculate end time
+                                                var endTime = new Date(startTime.getTime() + duration * 60000);
 
-                                                            // Format end time as HH:mm
-                                                            var endTimeString = endTime.getHours().toString().padStart(2, '0') + ':' + endTime.getMinutes().toString().padStart(2, '0');
+                                                // Format end time as HH:mm
+                                                var endTimeString = endTime.getHours().toString().padStart(2, '0') + ':' + endTime.getMinutes().toString().padStart(2, '0');
 
-                                                            // Fill end time into endTimeInput field
-                                                            document.getElementById('endTimeInput').value = endTimeString;
+                                                // Fill end time into endTimeInput field
+                                                document.getElementById('endTimeInput').value = endTimeString;
 
-                                                            // Check if date is valid and in the future
-                                                            if (isNaN(date.getTime()) || date <= new Date()) {
-                                                                document.getElementById('errorMessage').innerText = 'Please enter a valid date in the future.';
-                                                                return false;
-                                                            }
+                                                // Check if date is valid and in the future
+                                                if (isNaN(date.getTime()) || date <= new Date()) {
+                                                    document.getElementById('errorMessage').innerText = 'Please enter a valid date in the future.';
+                                                    return false;
+                                                }
 
-                                                            // Check if start time is earlier than end time
-                                                            if (startTime > endTime) {
-                                                                document.getElementById('errorMessage').innerText = 'Start time must be earlier than end time.';
-                                                                return false;
-                                                            }
+                                                // Check if start time is earlier than end time
+                                                if (startTime > endTime) {
+                                                    document.getElementById('errorMessage').innerText = 'Start time must be earlier than end time.';
+                                                    return false;
+                                                }
 
-                                                            // If all checks pass, return true to allow the form to be submitted
-                                                            return true;
-                                                        }
+                                                // If all checks pass, return true to allow the form to be submitted
+                                                return true;
+                                            }
 
-                                                        // Add event listener for start time and duration input changes
-                                                        document.getElementById('startTimeInput').addEventListener('change', validateDateTime);
-                                                        document.getElementById('duration').addEventListener('change', validateDateTime);
+                                            // Add event listener for start time and duration input changes
+                                            document.getElementById('startTimeInput').addEventListener('change', validateDateTime);
+                                            document.getElementById('duration').addEventListener('change', validateDateTime);
 
                             </script>
 
