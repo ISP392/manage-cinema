@@ -1,7 +1,55 @@
-<%-- Document : staffStatus Created on : Jul 16, 2024, 2:30:07 PM Author : HP --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
+
+<%@ page import="java.util.Calendar"%>
+<%@ page import="java.text.SimpleDateFormat"%>
+<%@ page import="java.util.Date"%>
+<%@ page import="java.text.ParseException" %>
+
+<%
+    // Lấy giá trị date từ URL, nếu không có giá trị thì sử dụng ngày hiện tại
+    String dateParam = request.getParameter("date");
+    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+    Date today;
+    Calendar cal = Calendar.getInstance();
+
+    if (dateParam != null && !dateParam.isEmpty()) {
+        try {
+            today = sdf1.parse(dateParam);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        cal.setTime(today);
+    } else {
+        today = cal.getTime();
+    }
+
+    String todayStr = sdf1.format(today);
+
+    // Lấy năm hiện tại từ ngày
+    int currentYear = cal.get(Calendar.YEAR);
+    int defaultYear = cal.get(Calendar.YEAR);
+
+    // Lấy tuần hiện tại từ ngày
+    int currentWeek = cal.get(Calendar.WEEK_OF_YEAR);
+
+    // Thiết lập ngày bắt đầu của tuần
+    cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+    Date monday = cal.getTime();
+
+    // Lưu trữ các ngày của tuần hiện tại
+    SimpleDateFormat displayFormat = new SimpleDateFormat("MM/dd");
+    SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    Date[] weekDays = new Date[7];
+    for (int i = 0; i < 7; i++) {
+        weekDays[i] = cal.getTime();
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,10 +63,102 @@
 
     </head>
     <style>
-        .action-rows {
-            width: 120px;
-        }
-    </style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+    .container-fluid {
+        padding: 20px;
+        max-width: 90%;
+        margin: auto;
+        background: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+    h1 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    label {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        margin-right: 10px;
+    }
+    select {
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    select:focus {
+        border-color: #007BFF;
+        outline: none;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: center;
+    }
+    th {
+        background-color: #007BFF;
+        color: white;
+        font-weight: bold;
+    }
+    td {
+        background-color: #fff;
+    }
+    
+    .slot {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-color: #D5F8F9;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 10px;
+        height: auto;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .slot div {
+        margin-bottom: 5px;
+    }
+    .slot a {
+        color: #007BFF;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    .slot a:hover {
+        text-decoration: underline;
+    }
+    .selected {
+        background-color: #007BFF;
+        color: white;
+    }
+    .button {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+    }
+    .button:hover {
+        background-color: #0056b3;
+    }
+</style>
 
     <body>
         <!--*******************
@@ -167,80 +307,193 @@ Main wrapper start
             <div class="content-body">
                 <!-- row -->
                 <div class="container-fluid">
-                    <!-- Row -->
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <c:if test="${param.error != null}">
-                                <div class="alert alert-danger" role="alart">
-                                    ${param.error}
-                                </div>
-                            </c:if>
-                            <c:if test="${param.success != null}">
-                                <div class="alert alert-success" role="alart">
-                                    ${param.success}
-                                </div>
-                            </c:if>
-                            <div class="filter cm-content-box box-primary">
-                                <div class="content-title">
-                                    <div class="cpa">
-                                        <i class="fa fa-file-lines"></i> List staff status
+                    <h1>Schedule for Cinemas</h1>
 
-                                    </div>
-                                </div>
-                                <div class="cm-content-body form excerpt">
-                                    <div class="card-body pt-2">
-                                        <div class="table-responsive">
-                                            <table id="staffTable" class="table table-bordered table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Phone</th>
-                                                        <th>Status</th>
-                                                        <th>Address</th>
-                                                        <th>DOB</th>
-                                                        <th>Name</th>
-                                                        <th>Email</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <c:forEach var="staff" items="${staffStatus}"
-                                                               varStatus="status">
-                                                        <tr>
-                                                            <td>${status.index + 1}</td>
-                                                            <td>${staff.phone}</td>
-                                                            <td>${staff.status}</td>
-                                                            <td>${staff.address}</td>
-                                                            <td>${staff.dob}</td>
-                                                            <td>${staff.staffName}</td>
-                                                            <td>${staff.staffEmail}</td>
-                                                            <td>
-                                                                <c:if test="${staff.status == 'pending'}">
-                                                                    <a onclick="return confirm('Are you sure to approve this staff?')"
-                                                                       href="manage-staff-status?action=approve&phone=${staff.phone}"
-                                                                       class="btn btn-success btn-sm">
-                                                                        <i class="fa fa-check"></i> Approve
-                                                                    </a>
-                                                                    <a onclick="return confirm('Are you sure to reject this staff?')"
-                                                                       href="manage-staff-status?action=reject&phone=${staff.phone}"
-                                                                       class="btn btn-danger btn-sm">
-                                                                        <i class="fa fa-times"></i> Reject
-                                                                    </a>
-                                                                </c:if>
-                                                            </td>
-                                                        </tr>
-                                                    </c:forEach>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div>
+
+                        <label for="cinemaSelect">Cinema:</label>
+                        <select id="cinemaSelect" name="cinemaName" onchange="navigateToCinema()">
+                            <c:forEach items="${listCinemas}" var="cinema">
+                                <option value="${cinema.name}" <c:if test="${cinema.name == param.cinemaName}">selected</c:if>>${cinema.name}</option>
+                            </c:forEach>
+                        </select>
                     </div>
-                    <!--**********************************
-          Content body end
-      ***********************************-->
+                    <div>
+                        <label for="theaterSelect">Theater Number:</label>
+                        <select id="theaterSelect" name="theaterNumber" onchange="navigateToTheater()">
+                            <c:forEach var="i" begin="1" end="4">
+                                <option value="${i}" <c:if test="${i == param.theaterNumber}">selected</c:if>>${i}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="yearSelect">Year:</label>
+                        <select id="yearSelect" name="year" onchange="navigateToYear()">
+                            <%
+                                for (int i = 0; i < 3; i++) {
+                                    int year = defaultYear - 1 + i;
+                                    out.println("<option value='" + year + "'" + (currentYear == year ? " selected" : "") + ">" + year + "</option>");
+                                }
+                            %>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <label for="weekSelect">Week:</label>
+                        <select id="weekSelect" name="week" onchange="navigateToWeek()">
+                            <%
+                                cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                                SimpleDateFormat hiddenFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                for (int i = 1; i <= 52; i++) {
+                                    cal.set(Calendar.WEEK_OF_YEAR, i);
+                                    String startDisplay = displayFormat.format(cal.getTime());
+                                    cal.add(Calendar.DAY_OF_MONTH, 6);
+                                    String endDisplay = displayFormat.format(cal.getTime());
+                                    out.println("<option value='" + i + "'" + (currentWeek == i ? " selected" : "") + ">" + startDisplay + " To " + endDisplay + "</option>");
+                                    cal.add(Calendar.DAY_OF_MONTH, -6); // Reset to start of the week
+                                }
+                            %>
+                        </select>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:200px">Time Slots</th>
+                                <th>Monday</th>
+                                <th>Tuesday</th>
+                                <th>Wednesday</th>
+                                <th>Thursday</th>
+                                <th>Friday</th>
+                                <th>Saturday</th>
+                                <th>Sunday</th>
+                            </tr>
+                            <%-- date for each day of week --%>
+                            <tr>
+                                <th style="width: 200px;">Date</th>
+                                    <% for (int i = 0; i < 7; i++) { %>
+                                <th><%= displayFormat.format(weekDays[i]) %></th>
+                                    <%-- Hidden input để lưu trữ ngày đầy đủ --%>
+                        <input type="hidden" name="weekStartDate" value="<%= fullDateFormat.format(weekDays[i]) %>">
+                        <% } %>
+                        </tr>
+                        </thead>
+                        <!-- <tbody>
+                        <c:forEach var="day" items="${weekDays}">
+                            <c:set var="formattedDate">
+                                <fmt:formatDate value="${day}" pattern="MM/dd"/>
+                            </c:set>
+                            <tr>
+                            <c:if test="${showtimeMap[formattedDate] != null}">
+                                <c:forEach var="showtime" items="${showtimeMap[formattedDate]}">
+                                    <td>${showtime.theaterID.cinemaID.name}</td>
+                                    <td>${formattedDate}</td>
+                                </c:forEach>
+                                    <td>yes</td>
+                            </c:if>
+                            <c:if test="${showtimeMap[formattedDate] == null}">
+                                <tr>
+                                    <td>no123</td>
+                                    <td>${formattedDate}</td>
+                                </tr>
+                            </c:if>
+                        </tr>
+                        
+                        </c:forEach>
+                        </tbody> -->
+                        <tbody>
+                            <tr>
+                                <td><a href="addNewSlot" >Add Slot</a></td>
+
+                                <c:forEach var="day" items="${weekDays}">
+                                    <c:set var="formattedDate">
+                                        <fmt:formatDate value="${day}" pattern="MM/dd"/>
+                                    </c:set>
+                                    <c:choose>
+                                        <c:when test="${showtimeMap[formattedDate] != null}">
+                                            <td style="width: 200px; vertical-align: top;">
+                                                <c:forEach var="showtime" items="${showtimeMap[formattedDate]}" varStatus="status">
+
+                                                    <div class="slot">   
+                                                        <div>${showtime.theaterID.cinemaID.name}</div>
+                                                        <div style="font-size: 20px; font-weight: bold; margin-top: 10px;">
+                                                            <c:set var="parsedDate" value="${fn:substring(showtime.startTime, 0, 19)}" />
+                                                            <c:set var="parsedDate2" value="${fn:substring(showtime.endTime, 0, 19)}" />
+                                                            <fmt:parseDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm:ss" var="dateObj" />
+                                                            <fmt:parseDate value="${parsedDate2}" pattern="yyyy-MM-dd HH:mm:ss" var="dateObj2" />
+                                                            <fmt:formatDate value="${dateObj}" pattern="HH:mm" /> ~ <fmt:formatDate value="${dateObj2}" pattern="HH:mm" />
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <a href="updateNewSlot?id=${showtime.screeningID}">Update Slot</a>
+
+                                                </c:forEach>      
+
+                                            </td>
+
+                                        </c:when>
+                                        <c:otherwise>
+                                            <td>-</td>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <script>
+                        function navigateToCinema() {
+                            var date = '<%= todayStr %>';
+                            var cinemaName = document.getElementById("cinemaSelect").value;
+                            var theaterNumber = document.getElementById("theaterSelect").value;
+                            var url = "view-slot?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName) + "&theaterNumber=" + theaterNumber;
+                            window.location.href = url;
+                        }
+
+                        function navigateToTheater() {
+                            var date = '<%= todayStr %>';
+                            var cinemaName = document.getElementById("cinemaSelect").value;
+                            var theaterNumber = document.getElementById("theaterSelect").value;
+                            var url = "view-slot?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName) + "&theaterNumber=" + theaterNumber;
+                            window.location.href = url;
+                        }
+
+                        function navigateToYear() {
+                            var cinemaName = document.getElementById("cinemaSelect").value;
+                            var theaterNumber = document.getElementById("theaterSelect").value;
+                            var year = document.getElementById("yearSelect").value;
+                            var week = document.getElementById("weekSelect").value;
+
+                            var cal = new Date();
+                            cal.setFullYear(year);
+                            cal.setMonth(0); // January
+                            cal.setDate(1);
+                            cal.setDate(cal.getDate() + (week - 1) * 7);
+
+                            var date = cal.toISOString().split('T')[0];
+                            var url = "view-slot?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName) + "&theaterNumber=" + theaterNumber;
+                            window.location.href = url;
+                        }
+
+                        function navigateToWeek() {
+                            var cinemaName = document.getElementById("cinemaSelect").value;
+                            var theaterNumber = document.getElementById("theaterSelect").value;
+                            var year = document.getElementById("yearSelect").value;
+                            var week = document.getElementById("weekSelect").value;
+
+                            var cal = new Date();
+                            cal.setFullYear(year);
+                            cal.setMonth(0); // January
+                            cal.setDate(1);
+                            cal.setDate(cal.getDate() + (week - 1) * 7 + 1);
+
+                            var date = cal.toISOString().split('T')[0];
+                            var url = "view-slot?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName) + "&theaterNumber=" + theaterNumber;
+                            window.location.href = url;
+                        }
+                    </script>
                 </div>
                 <!--**********************************
     Main wrapper end
@@ -259,62 +512,7 @@ Main wrapper start
                 <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
 
                 <script src="./assets/JS/js/custom.min.js"></script>
-
-
-                <script>
-                $(document).ready(function () {
-                    $("#searchInput").on("keyup", function () {
-                        var query = $(this).val();
-                        console.log("Search query: ", query); // Log để kiểm tra query
-                        $.ajax({
-                            url: "/manage-cinema/searchMovies", // Đường dẫn đầy đủ đến servlet tìm kiếm
-                            type: "GET",
-                            data: {searchQuery: query},
-                            success: function (response) {
-                                try {
-                                    console.log("Response: ", response); // Log phản hồi để kiểm tra
-
-                                    // Nếu phản hồi không phải là chuỗi JSON hợp lệ, chuyển đổi nó
-                                    if (typeof response !== 'string') {
-                                        response = JSON.stringify(response);
-                                    }
-
-                                    var movies = JSON.parse(response);
-                                    var movieListHtml = "";
-                                    $.each(movies, function (index, movie) {
-                                        movieListHtml += "<tr>";
-                                        movieListHtml += "<td>" + (index + 1) + "</td>";
-                                        movieListHtml += "<td>" + movie.title.toUpperCase() + "</td>";
-                                        movieListHtml += "<td>" + movie.releaseDate + "</td>";
-                                        movieListHtml += "<td>" + movie.status + "</td>";
-                                        movieListHtml += "<td class='action-rows'>";
-                                        movieListHtml += "<a href='update_movie?movieID=" + movie.movieID + "' class='btn btn-primary shadow btn-xs sharp rounded-circle me-1'><i class='fa fa-pencil'></i></a>";
-                                        if (movie.display == 1) {
-                                            movieListHtml += "<a href='updateDisplayMovie?movieID=" + movie.movieID + "&display=0' class='btn btn-danger shadow btn-xs sharp rounded-circle'><i class='fa fa-eye'></i></a>";
-                                            movieListHtml += "<a href='addNewSlot?movieID=" + movie.movieID + "&display=1' class='btn btn-primary shadow btn-xs sharp rounded-circle'><i class='fa fa-plus'></i></a>";
-                                        } else {
-                                            movieListHtml += "<a href='updateDisplayMovie?movieID=" + movie.movieID + "&display=1' class='btn btn-danger shadow btn-xs sharp rounded-circle'><i class='fa fa-eye-slash'></i></a>";
-                                        }
-                                        movieListHtml += "</td>";
-                                        movieListHtml += "</tr>";
-                                    });
-                                    console.log("Generated HTML: ", movieListHtml); // Log HTML được tạo ra
-                                    $("#movieList").html(movieListHtml); // Cập nhật DOM
-                                } catch (e) {
-                                    console.error("Error parsing JSON response: ", e);
-                                    console.log("Response: ", response);
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.error("AJAX Error: ", error);
-                                console.log("Response: ", xhr.responseText);
-                            }
-                        });
-                    });
-                });
-
-
-                </script>
+                
                 </body>
 
                 </html>

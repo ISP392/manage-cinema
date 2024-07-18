@@ -151,7 +151,7 @@
                                         <div>Seconds</div>
                                     </div>
                                 </div>
-                                <a href="#" onclick="window.history.back(); return false;" class="back-button">Go
+                                <a href="#" onclick="confirmBack(); return false;" class="back-button">Go
                                     Back</a>
                                 <button type="submit" class="payment-button">Thanh Toán</button>
                             </div>
