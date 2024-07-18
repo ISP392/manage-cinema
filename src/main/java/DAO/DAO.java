@@ -12,8 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import modal.*;
 import util.Encrypt;
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
+import java.time.Duration;
+import java.time.LocalDate;
 
 /**
  * @author MISS NGA
@@ -1060,6 +1064,27 @@ public class DAO extends DBContext {
         return list;
     }
 
+    public List<ScreeningTimes> getAllFlimDay(String movieDate, int theaterId) {
+        List<ScreeningTimes> list = new ArrayList<>();
+        String sql = "select * from project_cinema_update.ScreeningTimes st join project_cinema_update.Theaters t on st.theaterID = t.theaterID join  project_cinema_update.Movies m on m.movieID = st.movieID\n"
+                + " where date(st.startTime) = ? and t.theaterNumber = ? order by date(st.startTime) desc";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, movieDate);
+            ps.setInt(2, theaterId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+
+                ScreeningTimes st = new ScreeningTimes(rs.getInt("screeningID"), rs.getInt(2), rs.getInt(3), rs.getTimestamp("startTime"),
+                        rs.getTimestamp("endTime"));
+                list.add(st);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
     // get all cinemas with movieID, date, direction
     public List<Cinemas> getAllCinemas(int movieID, Date movieDate, int direction) {
         List<Cinemas> list = new ArrayList<>();
@@ -1737,7 +1762,11 @@ public class DAO extends DBContext {
 
     public static void main(String[] args) {
         // test insert seat
+
         DAO dao = new DAO();
-        System.out.println(dao.getAllCinemas());
+        List<ScreeningTimes> list = dao.getAllFlimDay("2024-07-20", 1);
+        System.out.println(list);
+
+        // Tính khoảng thời gian giữa thời gian kết thúc của phần tử đầu tiên và thời gian bắt đầu của phần tử cuối cùng
     }
 }

@@ -15,12 +15,15 @@ import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import modal.Movies;
 import modal.Users;
 import modal.Cinemas;
+import modal.ScreeningTimes;
 import util.CinemaConfig;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -142,7 +145,7 @@ public class addNewSlot extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String movieName = request.getParameter("movieName");
-        System.out.println(movieName);
+
         String cinema = request.getParameter("cinemaSelect");
 
         String movieDateStr = request.getParameter("dateInput");
@@ -150,7 +153,6 @@ public class addNewSlot extends HttpServlet {
         String startTime = request.getParameter("startTimeInput");
         String endTime = request.getParameter("endTimeInput");
 
-        // Khởi tạo đối tượng CinemaConfig để lấy thông tin về cinema
         CinemaConfig cinemaConfig = new CinemaConfig();
         // Lấy ID của địa điểm cinema từ tên cinema và lưu vào biến "locationID"
         int locationID = cinemaConfig.getLocationIdByCinemaName(cinema);
@@ -164,8 +166,27 @@ public class addNewSlot extends HttpServlet {
         // Lưu số cột của rạp chiếu vào biến "columns"
 
         DAO dao = new DAO();
+        java.sql.Timestamp startTimeEarlySlot = null;
+        java.sql.Timestamp endTimeEarlySlot = null;
+        java.sql.Timestamp startTimeLastestSlot = null;
+        List<ScreeningTimes> list = dao.getAllFlimDay(movieDateStr, Integer.parseInt(theaterNumber));
+
+        if (!list.isEmpty()) {
+            startTimeEarlySlot = list.get(0).getStartTime();
+            endTimeEarlySlot = list.get(0).getEndTime();
+            System.out.println(list.size());
+
+            if (list.size() == 1) {
+                startTimeLastestSlot = list.get(0).getStartTime();
+            } else if (list.size() > 1) {
+                startTimeLastestSlot = list.get(1).getStartTime();
+            }
+
+            System.out.println(startTimeEarlySlot);
+        }
+
         Movies movies = dao.getMovieByName(movieName);
-        System.out.println(movies);
+
         int movieID = movies.getMovieID();
         // Định dạng chuỗi ngày tháng
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -183,7 +204,7 @@ public class addNewSlot extends HttpServlet {
 
         // Lấy thời gian kết thúc của suất chiếu gần nhất trong rạp chiếu
         java.sql.Timestamp endTimeLastestSlot = dao.getLastestEndTimeOfTheater(cinema, movieDateSql, Integer.parseInt(theaterNumber));
-
+        System.out.println(endTimeLastestSlot);
         // Giả định rằng movieDateStr là chuỗi ngày tháng dạng "yyyy-MM-dd"
         String startTimeStr = movieDateStr + " " + startTime + ":00";
         String endTimeStr = movieDateStr + " " + endTime + ":00";
@@ -202,27 +223,96 @@ public class addNewSlot extends HttpServlet {
         Movies movie = dao.getMovieByID(movieID);
         // Check start time of new slot have to later than end time of lastest slot
         // Kiểm tra xem thời gian bắt đầu của suất chiếu mới có sau thời gian kết thúc của suất chiếu gần nhất hay không
-        if (endTimeLastestSlot != null && endTimeLastestSlot.after(startTimeTimestamp)) {
-            request.setAttribute("message", "Start time of new slot have to later than end time of lastest slot is " + endTimeLastestSlot);
-            request.setAttribute("movie", movie);
-            List<Movies> listAllMovies = dao.getMovie();
-            request.setAttribute("listAllMovies", listAllMovies);
-            request.getRequestDispatcher("WEB-INF/views/admin-views/addslotmovies.jsp").forward(request, response);
-
-        } else {
-            //insert new cinemas
+        if (startTimeEarlySlot == null) {
             dao.insertNewCinemas(cinema, Date.valueOf(movieDateStr), locationID);
             //get id of cinemas recently inserted
             Cinemas c = dao.getCinemasRecentlyAdded();
-
+            System.out.println("1");
             // //insert new theaters
             dao.insertTheaters(c.getCinemaID(), Integer.parseInt(theaterNumber), rows, columns);
             // //get id of theaters recently inserted
             int theaterID = dao.getTheaterIDRecentlyAdded();
-            System.out.println( movieID);
+
             // //insert screeningTimes
             dao.insertScreeningTimes(theaterID, movieID, startTimeTimestamp, endTimeTimestamp);
             response.sendRedirect("home_admin");
+        } else {
+            if (list.size() == 1) {
+                if (endTimeLastestSlot.after(startTimeTimestamp)) {
+                    System.out.println("2");
+                    request.setAttribute("message", "Start time of new slot have to later than end time of lastest slot is " + endTimeLastestSlot);
+                    request.setAttribute("movie", movie);
+                    List<Movies> listAllMovies = dao.getMovie();
+                    request.setAttribute("listAllMovies", listAllMovies);
+                    List<Cinemas> cinemases = dao.getAllCinemas();
+                    request.setAttribute("cinemases", cinemases);
+                    request.getRequestDispatcher("WEB-INF/views/admin-views/addslotmovies.jsp").forward(request, response);
+
+                } else {
+                    dao.insertNewCinemas(cinema, Date.valueOf(movieDateStr), locationID);
+                    //get id of cinemas recently inserted
+                    Cinemas c = dao.getCinemasRecentlyAdded();
+
+                    // //insert new theaters
+                    dao.insertTheaters(c.getCinemaID(), Integer.parseInt(theaterNumber), rows, columns);
+                    // //get id of theaters recently inserted
+                    int theaterID = dao.getTheaterIDRecentlyAdded();
+
+                    // //insert screeningTimes
+                    dao.insertScreeningTimes(theaterID, movieID, startTimeTimestamp, endTimeTimestamp);
+                    response.sendRedirect("home_admin");
+                }
+            } else {
+                if (!(endTimeLastestSlot.before(startTimeTimestamp) && startTimeEarlySlot.after(startTimeTimestamp))) {
+                    String durationStart = movieDateStr + " " + startTime + ":00.0";
+                    String durationEnd = movieDateStr + " " + endTime + ":00.0";
+
+                    java.sql.Timestamp startTimestamp = java.sql.Timestamp.valueOf(durationStart);
+                    java.sql.Timestamp endTimestamp = java.sql.Timestamp.valueOf(durationEnd);
+                    System.out.println(endTimeEarlySlot);
+                    System.out.println(startTimestamp);
+                    System.out.println(startTimeLastestSlot);
+                    System.out.println(endTimestamp);
+                    System.out.println("123" + endTimeEarlySlot.after(startTimestamp));
+                    System.out.println("234" + startTimeLastestSlot.before(endTimestamp));
+                    if (!(startTimestamp.after(endTimeEarlySlot) && endTimestamp.before(startTimeLastestSlot))) {
+                        System.out.println("5");
+                        request.setAttribute("message", "Start time of new slot have to later than end time of lastest slot is " + endTimeLastestSlot);
+                        request.setAttribute("movie", movie);
+                        List<Movies> listAllMovies = dao.getMovie();
+                        request.setAttribute("listAllMovies", listAllMovies);
+                        List<Cinemas> cinemases = dao.getAllCinemas();
+                        request.setAttribute("cinemases", cinemases);
+                        request.getRequestDispatcher("WEB-INF/views/admin-views/addslotmovies.jsp").forward(request, response);
+                    } else {
+                        System.out.println("3");
+                        dao.insertNewCinemas(cinema, Date.valueOf(movieDateStr), locationID);
+                        //get id of cinemas recently inserted
+                        Cinemas c = dao.getCinemasRecentlyAdded();
+
+                        // //insert new theaters
+                        dao.insertTheaters(c.getCinemaID(), Integer.parseInt(theaterNumber), rows, columns);
+                        // //get id of theaters recently inserted
+                        int theaterID = dao.getTheaterIDRecentlyAdded();
+
+                        // //insert screeningTimes
+                        dao.insertScreeningTimes(theaterID, movieID, startTimeTimestamp, endTimeTimestamp);
+                        response.sendRedirect("home_admin");
+                    }
+
+                } else {
+                    System.out.println("4");
+                    //insert new cinemas
+                    request.setAttribute("message", "Start time of new slot have to later than end time of lastest slot is " + endTimeLastestSlot);
+                    request.setAttribute("movie", movie);
+                    List<Movies> listAllMovies = dao.getMovie();
+                    request.setAttribute("listAllMovies", listAllMovies);
+                    List<Cinemas> cinemases = dao.getAllCinemas();
+                    request.setAttribute("cinemases", cinemases);
+                    request.getRequestDispatcher("WEB-INF/views/admin-views/addslotmovies.jsp").forward(request, response);
+                }
+            }
+
         }
 
     }

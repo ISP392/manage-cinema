@@ -49,7 +49,7 @@ public class ScreeningTimes {
 
     @Override
     public String toString() {
-        return "ScreeningTimes{" + "screeningID=" + screeningID + ", theaterID=" + theaterID + ", movieID=" + movieID + ", startTime=" + startTime + ", endTime=" + endTime + '}';
+        return "ScreeningTimes{" + "screeningID=" + screeningID + ", theaterID=" + theaterId + ", movieID=" + movieId + ", startTime=" + startTime + ", endTime=" + endTime + '}';
     }
 
     public ScreeningTimes(int screeningID, int theaterId, int movieId, Timestamp startTime, Timestamp endTime) {

@@ -253,7 +253,6 @@ public class updateNewSlot extends HttpServlet {
             dao.updateScreeningTimes(theaterID, movieID, startTimeTimestamp, endTimeTimestamp, sid);
             response.sendRedirect("home_admin");
         }
-
     }
 
     /**
