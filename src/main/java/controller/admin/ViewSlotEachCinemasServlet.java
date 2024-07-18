@@ -28,17 +28,17 @@ import modal.Users;
  *
  * @author baoquoc
  */
-@WebServlet(name = "ViewSlotEachCinemasServlet", urlPatterns = { "/view-slot" })
+@WebServlet(name = "ViewSlotEachCinemasServlet", urlPatterns = {"/view-slot"})
 public class ViewSlotEachCinemasServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -60,10 +60,10 @@ public class ViewSlotEachCinemasServlet extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -73,6 +73,7 @@ public class ViewSlotEachCinemasServlet extends HttpServlet {
             response.sendRedirect("admin");
         } else {
             DAO dao = new DAO();
+//            List<ScreeningTimes> screeningTimeses = dao.getAllScreening();
             Timestamp startTime = new Timestamp(System.currentTimeMillis());
             String dateParam = request.getParameter("date");
             Date[] dates = getWeekRange(dateParam);
@@ -106,8 +107,8 @@ public class ViewSlotEachCinemasServlet extends HttpServlet {
                     showtimeMap.put(dateKey, new ArrayList<>(screeningTimes));
                 }
             }
-
-
+        //    System.out.println(showtimeMap);
+//            request.setAttribute("screeningTimeses", screeningTimeses);
             request.setAttribute("showtimeMap", showtimeMap);
             request.setAttribute("listCinemas", listCinemas);
             request.setAttribute("cinemaName", cinemaName);
@@ -134,10 +135,10 @@ public class ViewSlotEachCinemasServlet extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
