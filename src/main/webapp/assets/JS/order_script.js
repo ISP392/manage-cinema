@@ -142,7 +142,7 @@ function startCountdown(duration) {
 }
 
 window.onload = function () {
-    var initialTime = 1 * 10; // 10 seconds
+    var initialTime = 5 * 60; // 10 seconds
     var startTime = localStorage.getItem('startTime');
     var timeLeft;
 
