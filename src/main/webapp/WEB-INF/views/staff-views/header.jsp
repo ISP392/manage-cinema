@@ -84,16 +84,16 @@
             <img src="<c:url value='./assets/images/logo_mini.png' />" alt="Logo"> <!-- Đường dẫn tới logo -->
         </div>
         <div class="nav-links">
-            <a href="homeStaff"><i class="fas fa-home"></i> Home</a>
-            <a href="nowShowing"><i class="fas fa-ticket-alt"></i> Bán vé</a>
-            <a href="viewReport"><i class="fas fa-chart-line"></i> Doanh thu</a>
-            <a href="checkTicket"><i class="fas fa-qrcode"></i> Check vé</a>
-            <a href="report"><i class="fas fa-file-alt"></i>Báo cáo</a>
+            <a href="homeStaff?userID=${userID}"><i class="fas fa-home"></i> Home</a>
+            <a href="nowShowing?userID=${userID}"><i class="fas fa-ticket-alt"></i> Bán vé</a>
+            <a href="viewReport?userID=${userID}"><i class="fas fa-chart-line"></i> Doanh thu</a>
+            <a href="checkTicket?userID=${userID}"><i class="fas fa-qrcode"></i> Check vé</a>
+            <a href="report?userID=${userID}"><i class="fas fa-file-alt"></i>Báo cáo</a>
             <a href="logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
         </div>
         <div class="account-info">
             <c:if test="${sessionScope.account != null}">
-            <a href="information"><i class="fas fa-user"></i> ${sessionScope.account.getDisplayName().toUpperCase()}</a><!-- Hiển thị tài khoản đang đăng nhập -->
+            <i class="fas fa-user"></i> ${sessionScope.account.getDisplayName().toUpperCase()}<!-- Hiển thị tài khoản đang đăng nhập -->
         </c:if>
         </div>
     </div>
