@@ -133,14 +133,17 @@
                                                                                         </c:forEach>
                                                                                     </p>
                                                                                     <p>
-                                                                                        <c:if test="${ticket.orderID.orderFood.size() > 0}">
-                                                                                            <span>Combo:</span> <span id="selectedSeats">
-                                                                                                <c:forEach items="${ticket.orderID.orderFood}" var="food">
-                                                                                                    <c:set var="total" value="${total + (food.quantity * food.foods.price)}" />
-                                                                                                    ${food.foods.foodName} - ${food.quantity} - <img src="./assets/images/food/${food.foods.imgFoodItems}" width="50px" height="height" alt="alt"/>- ${food.foods.price} đồng
-                                                                                                </c:forEach>
-                                                                                            </span>
-                                                                                        </c:if>
+                                                                                       <c:if test="${ticket.getOrderID().getOrderFood().size() > 0}">
+                                                                                        <p><span>Combo:</span></p>
+                                                                                        <c:forEach items="${ticket.getOrderID().getOrderFood()}" var="food">
+                                                                                            <div class="combo-item">
+                                                                                                <div class="combo-text">
+                                                                                                    ${food.getFoods().getFoodName()} - ${food.getQuantity()} - ${food.getFoods().getPrice()} đồng
+                                                                                                </div>
+                                                                                                <img src="./assets/images/food/${food.getFoods().getImgFoodItems()}" width="50px" height="50px" alt="Combo Image"/>
+                                                                                            </div>
+                                                                                        </c:forEach>
+                                                                                    </c:if>
 
                                                                                     </p>
                                                                                 </li>
