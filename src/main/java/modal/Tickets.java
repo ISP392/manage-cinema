@@ -20,6 +20,7 @@ public class Tickets {
     private Seats seatID;
     private Orders orderID;
     private List<Seats> seats;
+    private List<Integer> ticketIDs;
 
     public Tickets(int ticketID, Users userID, Movies movieID, Cinemas cinemaID, String price, Timestamp purchaseDate, Seats seatID, Orders orderID) {
         this.ticketID = ticketID;
@@ -31,6 +32,7 @@ public class Tickets {
         this.seatID = seatID;
         this.orderID = orderID;
         this.seats = new ArrayList<>();
+        this.ticketIDs = new ArrayList<>();
     }
 
     public int getTicketID() {
@@ -104,7 +106,14 @@ public class Tickets {
     public void setSeats(List<Seats> seats) {
         this.seats = seats;
     }
-    
+
+    public List<Integer> getTicketIDs() {
+        return ticketIDs;
+    }
+
+    public void setTicketIDs(List<Integer> ticketIDs) {
+        this.ticketIDs = ticketIDs;
+    }
     @Override
     public String toString() {
         return "Tickets{" + "ticketID=" + ticketID + ", userID=" + userID + ", movieID=" + movieID + ", cinemaID=" + cinemaID + ", price=" + price + ", purchaseDate=" + purchaseDate + ", seatID=" + seatID + ", orderID=" + orderID + '}';

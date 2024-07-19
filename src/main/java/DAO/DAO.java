@@ -870,33 +870,27 @@ public class DAO extends DBContext {
             ps.setInt(2, (index - 1) * 5);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Role r = new Role(rs.getInt("roleID"), rs.getString("roleName"));
-                Users u = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("username"),
-                        rs.getString("password"), rs.getString("email"), r, rs.getInt("point"),
-                        rs.getString("providerID"));
-                Location l = new Location(rs.getInt("locationID"), rs.getString("locationName"));
-                Cinemas c = new Cinemas(rs.getInt("cinemaID"), rs.getString("cinemaName"), rs.getDate("movieDate"), l);
-                Movies m = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"),
-                        rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"),
-                        rs.getInt("display"));
-                Theaters th = new Theaters(rs.getInt("theaterID"), c, rs.getInt("theaterNumber"));
-                ScreeningTimes st = new ScreeningTimes(rs.getInt("screeningID"), th, m, rs.getTimestamp("startTime"),
-                        rs.getTimestamp("endTime"));
-                Seats s = new Seats(rs.getInt("seatID"), st, rs.getString("seatNumber"), rs.getString("seatStatus"));
-                Orders o = new Orders(rs.getInt("orderID"), u, m, rs.getInt("quantity"), rs.getString("allPrice"));
-                Tickets t = new Tickets(rs.getInt("ticketID"), u, m, c, rs.getString("price"),
-                        rs.getTimestamp("purchaseDate"), s, o);
+                Role role = new Role(rs.getInt("roleID"), rs.getString("roleName"));
+                Users user = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("username"), rs.getString("password"), rs.getString("email"), role, rs.getInt("point"), rs.getString("providerID"));
+                Location location = new Location(rs.getInt("locationID"), rs.getString("locationName"));
+                Cinemas cinema = new Cinemas(rs.getInt("cinemaID"), rs.getString("cinemaName"), rs.getDate("movieDate"), location);
+                Movies movie = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"));
+                Theaters theater = new Theaters(rs.getInt("theaterID"), cinema, rs.getInt("theaterNumber"));
+                ScreeningTimes screeningTime = new ScreeningTimes(rs.getInt("screeningID"), theater, movie, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"));
+                Seats seat = new Seats(rs.getInt("seatID"), screeningTime, rs.getString("seatNumber"), rs.getString("seatStatus"));
+                Orders order = new Orders(rs.getInt("orderID"), user, movie, rs.getInt("quantity"), rs.getString("allPrice"));
+                Tickets ticket = new Tickets(rs.getInt("ticketID"), user, movie, cinema, rs.getString("price"), rs.getTimestamp("purchaseDate"), seat, order);
 
-                ticketIDs.add(t.getTicketID());
+                ticketIDs.add(ticket.getTicketID());
 
-                List<OrderFoodItem> orderFoods = this.selectAllOrderFoodItems(t.getOrderID().getOrderID());
+                List<OrderFoodItem> orderFoods = selectAllOrderFoodItems(ticket.getOrderID().getOrderID());
                 for (OrderFoodItem orderFood : orderFoods) {
-                    orderFood.setFoods(this.getFoodItemById(orderFood.getFoodItemID()));
+                    orderFood.setFoods(getFoodItemById(orderFood.getFoodItemID()));
                 }
-                t.getOrderID().setOrderFood(orderFoods);
-                list.add(t);
+                ticket.getOrderID().setOrderFood(orderFoods);
+                list.add(ticket);
             }
-            // Lấy danh sách Seats từ danh sách ticketID
+            // Fetch seats for the list of ticket IDs
             List<Seats> allSeats = selectSeatsByTicketID(ticketIDs);
             for (Tickets ticket : list) {
                 List<Seats> seatsForTicket = new ArrayList<>();
@@ -906,6 +900,7 @@ public class DAO extends DBContext {
                     }
                 }
                 ticket.setSeats(seatsForTicket);
+                ticket.setTicketIDs(ticketIDs);
             }
         } catch (SQLException e) {
             System.out.println(e);

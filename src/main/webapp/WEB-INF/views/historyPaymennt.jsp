@@ -119,7 +119,11 @@
                                                                             <ul>
                                                                                 <li class="item" style="width: 210px; word-break: break-word;margin-right: 0;width: 300px">
                                                                                     <c:set var="total" value="${ticket.orderID.allPrice}" />
-                                                                                    <p><span>Mã vé:</span> ${ticket.getTicketID()}</p>
+                                                                                    <p><span>Mã vé:</span>
+                                                                                        <c:forEach items="${ticket.getTicketIDs()}" var="ticketID">
+                                                                                            ${ticketID} 
+                                                                                        </c:forEach>
+                                                                                    </p>
                                                                                     <p><span>Rạp:</span> ${ticket.getCinemaID().getName()}</p>
                                                                                     <p><span>Suất chiếu:</span> <fmt:formatDate value="${ticket.getSeatID().getScreeningID().getStartTime()}" pattern="HH:mm"/>, <fmt:formatDate value="${ticket.getSeatID().getScreeningID().getStartTime()}" pattern="yyyy-MM-dd" /></p>
                                                                                     <p><span>Phòng Cinema: </span>Cinemas ${ticket.getSeatID().getScreeningID().getTheaterID().getTheaterNumber()}</p>
