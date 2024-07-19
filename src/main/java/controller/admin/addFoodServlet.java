@@ -99,6 +99,7 @@ public class addFoodServlet extends HttpServlet {
         String foodName = getPartValue(request.getPart("foodName"));
         String description = getPartValue(request.getPart("description"));
         int price = Integer.parseInt(request.getParameter("price"));
+        //int quantity = Integer.parseInt(request.getParameter("quantity"));
 
         Dotenv dotenv = Dotenv.load();
         String realPath = dotenv.get("URL_UPLOAD_IMAGE");
@@ -124,8 +125,8 @@ public class addFoodServlet extends HttpServlet {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            dao.insertAddFood(foodName, description, price, uniqueFileName);
-            response.sendRedirect("addFood");
+            dao.insertAddFood(foodName, description, price, uniqueFileName, 0);
+            response.sendRedirect("listFood");
 
         } catch (IOException | ServletException e) {
             e.printStackTrace();
