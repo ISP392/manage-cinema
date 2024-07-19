@@ -1882,16 +1882,52 @@ public class DAO extends DBContext {
     }
     
 
+    public List<Shift> getAllReportShifts() {
+    List<Shift> shifts = new ArrayList<>();
+    try {
+        String sql = "SELECT s.startTime, s.endTime, s.startAmount, s.endAmount, s.tranferPayment, u.displayName " +
+                     "FROM Shift s JOIN Users u ON s.phone = u.userID " +
+                     "WHERE DATE(s.startTime) = CURDATE()";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Shift shift = new Shift();
+            shift.setDisplayName(rs.getString("displayName"));
+            shift.setStartTime(rs.getTimestamp("startTime"));
+            shift.setEndTime(rs.getTimestamp("endTime"));
+            shift.setStartAmount(rs.getDouble("startAmount"));
+            shift.setEndAmount(rs.getDouble("endAmount"));
+            shift.setTransferPayments(rs.getDouble("tranferPayment"));
+
+            // Tính toán revenue
+            double revenue = rs.getDouble("endAmount") - rs.getDouble("startAmount") + rs.getDouble("tranferPayment");
+            shift.setRevenue(revenue);
+
+            shifts.add(shift);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return shifts;
+}
+
+    
     public static void main(String[] args) {
         // test insert seat
 
         DAO dao = new DAO();
-        List<ScreeningTimes> list = dao.getAllFlimDay("2024-07-20", 1);
-        System.out.println(list);
-
-        // Tính khoảng thời gian giữa thời gian kết thúc của phần tử đầu tiên và thời gian bắt đầu của phần tử cuối cùng
+        List<Shift> shifts = dao.getAllReportShifts();
+        
+        for (Shift shift : shifts) {
+            System.out.println("Shift ID: " + shift.getShiftID());
+            System.out.println("Display Name: " + shift.getDisplayName());
+            System.out.println("Start Time: " + shift.getStartTime());
+            System.out.println("End Time: " + shift.getEndTime());
+            System.out.println("Start Amount: " + shift.getStartAmount());
+            System.out.println("End Amount: " + shift.getEndAmount());
+            System.out.println("Transfer Payments: " + shift.getTransferPayments());
+            System.out.println("Revenue: " + shift.getRevenue());
+            System.out.println("-----------------------------");
+        }  
     }
-
-    
-
 }
