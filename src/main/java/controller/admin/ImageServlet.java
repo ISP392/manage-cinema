@@ -2,9 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.movie;
+package controller.admin;
 
-import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,16 +11,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import modal.Events;
-import modal.Movies;
 
 /**
  *
  * @author LÊ PHƯƠNG MAI
  */
-@WebServlet(name = "CommingSoonServlet", urlPatterns = {"/commingSoon"})
-public class CommingSoonServlet extends HttpServlet {
+@WebServlet(name = "ImageServlet", urlPatterns = {"/ImageServlet"})
+public class ImageServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +36,10 @@ public class CommingSoonServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CommingSoonServlet</title>");            
+            out.println("<title>Servlet ImageServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CommingSoonServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ImageServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,12 +57,7 @@ public class CommingSoonServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DAO dao = new DAO();
-        List<Movies> moviesCommingSoon = dao.getAllMovieCommingSoon();
-        List<Events> event = dao.getAllEvent();
-        request.setAttribute("event", event);
-        request.setAttribute("moviesCommingSoon", moviesCommingSoon);
-        request.getRequestDispatcher("/WEB-INF/views/commingSoon.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**

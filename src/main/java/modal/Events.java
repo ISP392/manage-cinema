@@ -10,7 +10,8 @@ import java.sql.Date;
  *
  * @author ACER
  */
-public class Event {
+public class Events {
+
     private int eventID;
     private String eventImg;
     private String eventName;
@@ -18,10 +19,10 @@ public class Event {
     private Date startTime;
     private Date endTime;
 
-    public Event() {
+    public Events() {
     }
 
-    public Event(int eventID, String eventImg, String eventName, String eventDescription, Date startTime, Date endTime) {
+    public Events(int eventID, String eventImg, String eventName, String eventDescription, Date startTime, Date endTime) {
         this.eventID = eventID;
         this.eventImg = eventImg;
         this.eventName = eventName;
@@ -30,7 +31,6 @@ public class Event {
         this.endTime = endTime;
     }
 
-    
     public int getEventID() {
         return eventID;
     }
@@ -78,7 +78,5 @@ public class Event {
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
-    
-    
-    
+
 }

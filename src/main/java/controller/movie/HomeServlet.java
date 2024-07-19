@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
+import modal.Events;
 
 import modal.Movies;
 
@@ -31,7 +32,10 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         DAO d = new DAO();
         List<Movies> movies = d.getMovie(true);
+        List<Events> event = d.getAllEvent();
         request.setAttribute("movies", movies);
+        request.setAttribute("event", event);
+//        request.getRequestDispatcher("/WEB-INF/views/nowShowing.jsp").forward(request, response);
         // remove session orderDetail
         request.getSession().removeAttribute("orderDetail");
 

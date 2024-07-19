@@ -12,16 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import modal.Events;
-import modal.Movies;
 
 /**
  *
  * @author LÊ PHƯƠNG MAI
  */
-@WebServlet(name = "CommingSoonServlet", urlPatterns = {"/commingSoon"})
-public class CommingSoonServlet extends HttpServlet {
+@WebServlet(name = "deleteEvent", urlPatterns = {"/deleteEvent"})
+public class deleteEvent extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +37,10 @@ public class CommingSoonServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CommingSoonServlet</title>");            
+            out.println("<title>Servlet deleteEvent</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CommingSoonServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet deleteEvent at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,12 +58,10 @@ public class CommingSoonServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int eventID = Integer.parseInt(request.getParameter("eventID"));
         DAO dao = new DAO();
-        List<Movies> moviesCommingSoon = dao.getAllMovieCommingSoon();
-        List<Events> event = dao.getAllEvent();
-        request.setAttribute("event", event);
-        request.setAttribute("moviesCommingSoon", moviesCommingSoon);
-        request.getRequestDispatcher("/WEB-INF/views/commingSoon.jsp").forward(request, response);
+        dao.deleteEvent(eventID);
+        response.sendRedirect("listEvent");
     }
 
     /**
