@@ -108,6 +108,7 @@
             border: 1px solid #ddd;
             padding: 12px;
             text-align: center;
+            width: 200px;
         }
         th {
             background-color: #007BFF;
@@ -361,47 +362,48 @@ Main wrapper start
                             </tr>
                             <tr>
                                 <th style="width: 200px;">Date</th>
-                                    <% for (int i = 0; i < 7; i++) { %>
-                                <th><%= displayFormat.format(weekDays[i]) %></th>
-                                    <%-- Hidden input to store the full date --%>
-                        <input type="hidden" name="weekStartDate" value="<%= fullDateFormat.format(weekDays[i]) %>">
-                        <% } %>
-                        </tr>
+                                <% for (int i = 0; i < 7; i++) { %>
+                                    <th><%= displayFormat.format(weekDays[i]) %></th>
+                                    <input type="hidden" name="weekStartDate" value="<%= fullDateFormat.format(weekDays[i]) %>">
+                                <% } %>
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>00:00 ~ 06:00</td>
-                                <% for (int i = 0; i < 7; i++) { %>
-                                <td>
-                                </td>
-                                <% } %>
-                            </tr>
-                            <tr>
-                                <td>06:00 ~ 12:00</td>
-                                <% for (int i = 0; i < 7; i++) { %>
-                                <td>
-                                </td>
-                                <% } %>
-                            </tr>
-                            <tr>
-                                <td>12:00 ~ 18:00</td>
-                                <% for (int i = 0; i < 7; i++) { %>
-                                <td>
-                                </td>
-                                <% } %>
-                            </tr>
-                            <tr>
-                                <td>18:00 ~ 23:59</td>
-                                <% for (int i = 0; i < 7; i++) { %>
-                                <td>
-                                </td>
-                                <% } %>
-                            </tr>
+                            <%
+                                String[][] timeSlots = {
+                                    {"00:00:00", "00:00 ~ 06:00"},
+                                    {"06:00:00", "06:00 ~ 12:00"},
+                                    {"12:00:00", "12:00 ~ 18:00"},
+                                    {"18:00:00", "18:00 ~ 23:59"}
+                                };
+                    
+                                for (int row = 0; row < timeSlots.length; row++) {
+                            %>
+                                <tr>
+                                    <td><%= timeSlots[row][1] %></td>
+                                    <% for (int col = 0; col < 7; col++) { 
+                                        String hiddenValue = fullDateFormat.format(weekDays[col]) + " " + timeSlots[row][0];
+                                    %>
+                                    <td>
+                                        <input type="hidden" name="date" value="<%= hiddenValue %>">
+                                        <!-- Sử dụng c:set để thiết lập biến JSTL cho hiddenValue -->
+                                        <c:set var="hiddenValueStr" value="<%= hiddenValue %>" />
+                                        
+                                        <c:forEach var="entry" items="${mapShift}">
+                                            <c:forEach var="shift" items="${entry.value}">
+                                                <c:set var="formattedStartTime" value="${fn:substringBefore(shift.startTime, '.0')}" />
+                                                <c:set var="formattedStartTimeStr" value="${fn:trim(formattedStartTime)}" />
+                                                <c:if test="${formattedStartTimeStr eq hiddenValueStr}">
+                                                    <div style="padding: 10px; border: 1px solid #ddd; margin: 5px; background-color: #f9f9f9;border-radius: 10px; font-weight: bold; font-size: 15px; color:black;">${shift.getPhone().getDisplayName()}</div>
+                                                </c:if>
+                                            </c:forEach>
+                                        </c:forEach>
+                                    </td>
+                                    <% } %>
+                                </tr>
+                            <% } %>
                         </tbody>
                     </table>
-
-
-
                     <script>
                         function navigateToCinema() {
                             var date = '<%= todayStr %>';
