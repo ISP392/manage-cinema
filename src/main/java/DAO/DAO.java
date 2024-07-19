@@ -1773,7 +1773,7 @@ public class DAO extends DBContext {
     //get all shift time of staff each day
     public List<ShiftCurrent> getAllShiftTimeOfStaffEachDay(Date thisDate, String cinemasName) {
         List<ShiftCurrent> list = new ArrayList<>();
-        String sql = "SELECT sh.startTime as startDate, u.displayName, sh.phone FROM Shift sh JOIN Users u ON u.userID = sh.phone JOIN staffstatus ss ON ss.phone = u.phone JOIN Cinemas c ON c.cinemaID = ss.cinemaID where CAST(sh.startTime AS date) = ? and c.name = ?";
+        String sql = "SELECT sh.startTime as startDate,sh.endTime as endDate, u.displayName, sh.phone FROM Shift sh JOIN Users u ON u.userID = sh.phone JOIN staffstatus ss ON ss.phone = u.phone JOIN Cinemas c ON c.cinemaID = ss.cinemaID where CAST(sh.startTime AS date) = ? and c.name = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setDate(1, thisDate);
@@ -1783,6 +1783,7 @@ public class DAO extends DBContext {
                 Users u = new Users();
                 u.setDisplayName(rs.getString("displayName"));
                 ShiftCurrent sc = new ShiftCurrent(rs.getTimestamp("startDate"), u);
+                sc.setEndTime(rs.getTimestamp("endDate"));
                 list.add(sc);
             }
             return list;
@@ -2178,6 +2179,42 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
+
+    //get all staff of cinema by cinema name
+    public List<Users> getAllStaffByCinemaName(String cinemaName) {
+        String sql = "select distinct u.displayName, u.userID from Users u join staffstatus ss on ss.phone = u.phone join Shift s on s.phone = u.userID join Cinemas c on c.cinemaID = ss.cinemaID where c.name = ?";
+        List<Users> list = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, cinemaName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Users u = new Users();
+                u.setDisplayName(rs.getString("displayName"));
+                u.setUserID(rs.getInt("userID"));
+                list.add(u);
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    //insert shift for staff
+    public void insertShift(int userID, Timestamp startTime, Timestamp endTime){
+        String sql = "INSERT INTO Shift (phone, startTime, endTime) VALUES (?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userID);
+            ps.setTimestamp(2, startTime);
+            ps.setTimestamp(3, endTime);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
 
     public List<Shift> getAllReportShifts() {
         List<Shift> shifts = new ArrayList<>();

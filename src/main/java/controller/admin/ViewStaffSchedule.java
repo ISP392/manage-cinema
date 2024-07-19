@@ -85,6 +85,7 @@ public class ViewStaffSchedule extends HttpServlet {
             Date endHidden = dates[1]; // Ví dụ: 2024-07-07
             
             String cinemaName = request.getParameter("cinemaName");
+            List<Users> listStaff = dao.getAllStaffByCinemaName(cinemaName);
 
             List<java.util.Date> weekDays = new ArrayList<>();
             Calendar cal = Calendar.getInstance();
@@ -101,7 +102,6 @@ public class ViewStaffSchedule extends HttpServlet {
             Map<String, List<ShiftCurrent>> mapShift = new HashMap<>();
             for(ShiftCurrent shift : listShiftAllWeek){
                 Timestamp thisDate = shift.getStartTime();
-                String dateKey = sdf.format(thisDate);
                 //change format thisDate to yyyy-MM-dd
                 String key = sdf2.format(thisDate);
                 List<ShiftCurrent> eachShiftPerDay = dao.getAllShiftTimeOfStaffEachDay(Date.valueOf(key), cinemaName);
@@ -112,6 +112,8 @@ public class ViewStaffSchedule extends HttpServlet {
                 }
             }
             request.setAttribute("mapShift", mapShift);
+            request.setAttribute("cinemaName", cinemaName);
+            request.setAttribute("listStaff", listStaff);
 
              request.setAttribute("listCinemas", listCinemas);
              request.getRequestDispatcher("/WEB-INF/views/admin-views/staffSchedule.jsp").forward(request, response);

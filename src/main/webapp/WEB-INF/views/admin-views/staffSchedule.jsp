@@ -26,6 +26,12 @@
     } else {
         today = cal.getTime();
     }
+    // Thêm một ngày để tính ngày mai
+    cal.add(Calendar.DAY_OF_MONTH, 1);
+    Date tomorrow = cal.getTime();
+    cal.add(Calendar.DAY_OF_MONTH, -1);  // Reset lại ngày về hôm nay sau khi tính ngày mai
+
+
 
     String todayStr = sdf1.format(today);
 
@@ -158,6 +164,55 @@
         }
         .button:hover {
             background-color: #0056b3;
+        }
+        .link-active {
+            color: #007BFF;
+            font-weight: bold;
+        }
+        .link-active:hover {
+            text-decoration: underline;
+        }
+        .link-disabled {
+            color: gray;
+            pointer-events: none;
+            font-weight: bold;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 
@@ -299,12 +354,12 @@ Main wrapper start
                 </div>
             </div>
             <!--**********************************
-  Sidebar end
-***********************************-->
+            Sidebar end
+            ***********************************-->
 
             <!--**********************************
-  Content body start
-***********************************-->
+            Content body start
+            ***********************************-->
             <div class="content-body">
                 <!-- row -->
                 <div class="container-fluid">
@@ -362,11 +417,11 @@ Main wrapper start
                             </tr>
                             <tr>
                                 <th style="width: 200px;">Date</th>
-                                <% for (int i = 0; i < 7; i++) { %>
-                                    <th><%= displayFormat.format(weekDays[i]) %></th>
-                                    <input type="hidden" name="weekStartDate" value="<%= fullDateFormat.format(weekDays[i]) %>">
-                                <% } %>
-                            </tr>
+                                    <% for (int i = 0; i < 7; i++) { %>
+                                <th><%= displayFormat.format(weekDays[i]) %></th>
+                        <input type="hidden" name="weekStartDate" value="<%= fullDateFormat.format(weekDays[i]) %>">
+                        <% } %>
+                        </tr>
                         </thead>
                         <tbody>
                             <%
@@ -376,34 +431,90 @@ Main wrapper start
                                     {"12:00:00", "12:00 ~ 18:00"},
                                     {"18:00:00", "18:00 ~ 23:59"}
                                 };
-                    
+                                String [][] timeEndSlots = {
+                                    {"06:00:00", "06:00 ~ 12:00"},
+                                    {"12:00:00", "12:00 ~ 18:00"},
+                                    {"18:00:00", "18:00 ~ 23:59"},
+                                    {"23:59:59", "23:59 ~ 00:00"}
+                                };
+                            
                                 for (int row = 0; row < timeSlots.length; row++) {
                             %>
-                                <tr>
-                                    <td><%= timeSlots[row][1] %></td>
-                                    <% for (int col = 0; col < 7; col++) { 
-                                        String hiddenValue = fullDateFormat.format(weekDays[col]) + " " + timeSlots[row][0];
-                                    %>
-                                    <td>
-                                        <input type="hidden" name="date" value="<%= hiddenValue %>">
-                                        <!-- Sử dụng c:set để thiết lập biến JSTL cho hiddenValue -->
-                                        <c:set var="hiddenValueStr" value="<%= hiddenValue %>" />
-                                        
-                                        <c:forEach var="entry" items="${mapShift}">
-                                            <c:forEach var="shift" items="${entry.value}">
-                                                <c:set var="formattedStartTime" value="${fn:substringBefore(shift.startTime, '.0')}" />
-                                                <c:set var="formattedStartTimeStr" value="${fn:trim(formattedStartTime)}" />
-                                                <c:if test="${formattedStartTimeStr eq hiddenValueStr}">
-                                                    <div style="padding: 10px; border: 1px solid #ddd; margin: 5px; background-color: #f9f9f9;border-radius: 10px; font-weight: bold; font-size: 15px; color:black;">${shift.getPhone().getDisplayName()}</div>
-                                                </c:if>
-                                            </c:forEach>
+                            <tr>
+                                <td style="font-size:20px; font-weight: bold"><%= timeSlots[row][1] %></td>
+                                <% for (int col = 0; col < 7; col++) { 
+                                    String hiddenValue = fullDateFormat.format(weekDays[col]) + " " + timeSlots[row][0];
+                                    String hiddenValueEnd = fullDateFormat.format(weekDays[col]) + " " + timeEndSlots[row][0];
+                                    boolean isPastDate = weekDays[col].before(tomorrow);
+                                %>
+                                <td>
+                                    <input type="hidden" name="date" value="<%= hiddenValue %>">
+                                    <!-- Sử dụng c:set để thiết lập biến JSTL cho hiddenValue -->
+                                    <c:set var="hiddenValueStr" value="<%= hiddenValue %>" />
+                                    <c:set var="hiddenValueEndStr" value="<%= hiddenValueEnd %>" />
+
+                                    <!-- Biến cờ để kiểm tra nếu có shift nào khớp -->
+                                    <c:set var="hasShift" value="false" />
+
+                                    <c:forEach var="entry" items="${mapShift}">
+                                        <c:forEach var="shift" items="${entry.value}">
+                                            <c:set var="formattedStartTime" value="${fn:substringBefore(shift.startTime, '.0')}" />
+                                            <c:set var="formattedStartTimeStr" value="${fn:trim(formattedStartTime)}" />
+                                            <c:if test="${formattedStartTimeStr eq hiddenValueStr}">
+                                                <c:set var="hasShift" value="true" />
+                                                <div style="padding: 10px; border: 1px solid #ddd; margin: 5px; background-color: #f9f9f9; border-radius: 10px; font-weight: bold; font-size: 15px; color:black;">
+                                                    ${shift.getPhone().getDisplayName()}
+
+                                                </div>
+                                            </c:if>
                                         </c:forEach>
-                                    </td>
-                                    <% } %>
-                                </tr>
+                                    </c:forEach>
+
+                                    <!-- Kiểm tra nếu không có shift nào khớp -->
+                                    <c:if test="${not hasShift}">
+                                        <% if (!isPastDate) { %>
+                                        <!-- input hidden to store cinemaName, startTime -->
+                                        <input type="hidden" id="cinemaName" name="cinemaName" value="${cinemaName}">
+                                        <input type="hidden" id="startTime" name="startTime" value="${hiddenValueStr}">
+                                        <input type="hidden" id="endTime" name="endTime" value="${hiddenValueEndStr}">
+                                        <a href="#" class="link-active">Add New Schedule</a>
+                                        <% } else { %>
+                                        <a href="#" class="link-disabled">Add New Schedule</a>
+                                        <% } %>
+                                    </c:if>
+                                </td>
+
+                                <% } %>
+                            </tr>
                             <% } %>
                         </tbody>
                     </table>
+
+
+                    <div id="scheduleModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <h2>Add New Schedule</h2>
+                            <form id="scheduleForm" action="add_shift">
+                                <label for="cinemaName">Cinema Name:</label>
+                                <input type="text" id="modalCinemaName" name="cinemaName" readonly><br><br>
+                                <label for="startTime">Start Time:</label>
+                                <input type="text" id="modalStartTime" name="startTime" ><br><br>
+                                <label for="endTime">End Time:</label>
+                                <input type="text" id="modalEndTime" name="endTime" ><br><br>
+                                <select id="staffSelect" name="userID">
+                                    <c:forEach items="${listStaff}" var="staff">
+                                        <option value="${staff.getUserID()}">${staff.getDisplayName()}</option>
+                                    </c:forEach>
+                                </select><br><br>
+                                <!-- Add more form fields as necessary -->
+                                <button type="submit" class="button">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+
+
+
                     <script>
                         function navigateToCinema() {
                             var date = '<%= todayStr %>';
@@ -450,11 +561,50 @@ Main wrapper start
                             var url = "staff-schedule?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName);
                             window.location.href = url;
                         }
+
+
+
                     </script>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            var modal = document.getElementById("scheduleModal");
+                            var span = document.getElementsByClassName("close")[0];
+
+                            document.querySelectorAll('.link-active').forEach(function (element) {
+                                element.addEventListener('click', function (event) {
+                                    event.preventDefault();
+                                    //get cinema name
+                                    var cinemaName = document.getElementById("cinemaName").value;
+                                    //get start time
+                                    var startTime = document.getElementById("startTime").value;
+                                    //get end time
+                                    var endTime = document.getElementById("endTime").value;
+                                    document.getElementById("modalCinemaName").value = cinemaName;
+                                    document.getElementById("modalStartTime").value = startTime;
+                                    document.getElementById("modalEndTime").value = endTime;
+
+                                    modal.style.display = "block";
+                                });
+                            });
+
+                            span.onclick = function () {
+                                modal.style.display = "none";
+                            }
+
+                            window.onclick = function (event) {
+                                if (event.target == modal) {
+                                    modal.style.display = "none";
+                                }
+                            }
+                        });
+                    </script>
+
+
                 </div>
                 <!--**********************************
-    Main wrapper end
-***********************************-->
+                    Main wrapper end
+                ***********************************-->
 
                 <!--**********************************
     Scripts
