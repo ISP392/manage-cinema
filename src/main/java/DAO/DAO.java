@@ -1953,7 +1953,7 @@ public class DAO extends DBContext {
         e.printStackTrace();
     }
     return foodItems;
-
+    }
     // insertOrderWithVoucherIDNull
     public void insertOrderWithVoucherIDNull(int userID, int movieID, int quantity, String allPrice) {
         String sql = "INSERT INTO Orders (userID, movieID, quantity, allPrice) VALUES (?, ?, ?, ?)";
