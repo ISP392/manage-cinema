@@ -50,42 +50,42 @@
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="form3Example1cg"
                                 >Họ và Tên</label>
-                                            <input type="text" id="name" name="name" placeholder="Your Name" class="input-register"/>
+                                            <input type="text" id="name" name="name" placeholder="Your Name" class="input-register" required=" "/>
 
                             </div>
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="form3Example3cg"
                                 >Email</label
                                 >
-                                           <input type="text" id="email" name="email" placeholder="Your Email" class="input-register"/>
+                                           <input type="text" id="email" name="email" placeholder="Your Email" class="input-register" required=" "/>
 
                             </div>
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="form3Example3cg"
                                 >Sđt</label
                                 >
-                                            <input type="text" id="phone" name="phone" placeholder="Phone number" class="input-register"/>
+                                            <input type="text" id="phone" name="phone" placeholder="Phone number" class="input-register" required=" "/>
 
                             </div>
                             <div class="form-outline mb-4">
                                 <label class="form-label">Ngày sinh</label>
-                                          <input type="date" id="dob" name="dob" placeholder="Your Date of Birth" class="input-register"/>
+                                          <input type="date" id="dob" name="dob" placeholder="Your Date of Birth" class="input-register" required=" "/>
 
                             </div>
                             <div class="form-outline mb-4">
                                 <label class="form-label">Địa chỉ</label>
-                                            <input type="text" id="address" name="address" placeholder="Your Address" class="input-register"/>
+                                            <input type="text" id="address" name="address" placeholder="Your Address" class="input-register" required=" "/>
 
                             </div>
                                 <div class="form-outline mb-4">
-                                <label class="form-label">Vị trí muốn ứng tuyển</label>
-                                            <input type="text" id="position" name="position" placeholder="Position You Apply For" class="input-register"/>
+                                <label class="form-label">Vị trí ứng tuyển</label>
+                                <input type="text" id="position" name="position" placeholder="Position You Apply For" class="input-register" value="Staff" readonly="" required=" "/>
 
                             </div>
                                 
                                 <div class="form-outline mb-4">
                                 <label class="form-label">CV</label>
-                                <input type="file" id="cv" name="cv" placeholder="file pdf" class="input-register"/>
+                                <input type="file" id="cv" name="cv" placeholder="file pdf" class="input-register" required=" "/>
                             </div>
                             <div class="d-flex justify-content-center">
                                 <button
@@ -154,14 +154,20 @@
             const address = document.getElementById('address').value;
             const position = document.getElementById('position').value;
             const cv = document.getElementById('cv').value;
+            
+           // Kiểm tra ngày sinh phải trước ngày hôm nay
+        const dobDate = new Date(dob);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Đặt thời gian của ngày hôm nay về 0 giờ để so sánh chính xác
 
-            if (!name || !email || !phone || !dob || !address || !position || !cv) {
-                alert('Vui lòng điền đầy đủ thông tin.');
-                                event.preventDefault(); // Ngăn chặn việc gửi biểu mẫu
+        if (dobDate >= today) {
+            alert('Ngày sinh không hợp lệ.');
+            event.preventDefault(); // Ngăn chặn việc gửi biểu mẫu
+            return false;
+            
+        }
 
-                return false;
-            }
-            return true;
+        return true;
         }
     </script>
 </html>

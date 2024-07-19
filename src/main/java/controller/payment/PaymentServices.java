@@ -32,6 +32,7 @@ public class PaymentServices {
     static Dotenv dotenv = Dotenv.load();
     private static final String CLIENT_ID = dotenv.get("CLIENT_ID");
     private static final String CLIENT_SECRET = dotenv.get("CLIENT_SECRET");
+    private static final String LOCALHOST = dotenv.get("LOCALHOST");
     private static final String MODE = "sandbox";
 
     public Payment executePayment(String paymentId, String payerId) throws PayPalRESTException {
@@ -117,8 +118,8 @@ public class PaymentServices {
 
     private RedirectUrls gRedirectUrls() {
         RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl("http://localhost:8080/manage-cinema/home");
-        redirectUrls.setReturnUrl("http://localhost:8080/manage-cinema/review_payment");
+        redirectUrls.setCancelUrl(LOCALHOST+"/manage-cinema/home");
+        redirectUrls.setReturnUrl(LOCALHOST+"/manage-cinema/review_payment");
 
         return redirectUrls;
     }

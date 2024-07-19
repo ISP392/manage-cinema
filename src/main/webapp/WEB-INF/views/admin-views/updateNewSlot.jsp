@@ -1,5 +1,4 @@
-<%-- Document : addVoucher Created on : Jun 21, 2024, 10:10:37 AM Author : ACER --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <%@page contentType="text/html" pageEncoding="UTF-8" %>
         <!DOCTYPE html>
         <html lang="en">
@@ -8,8 +7,8 @@
             <meta charset="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+            <title>Admin Dashboard</title>
             <link href="./assets/css/dashboard-admin.css" rel="stylesheet" />
-
             <style>
                 .genre-buttons {
                     display: flex;
@@ -35,6 +34,11 @@
                 .genre-button.active {
                     background-color: #4caf50;
                     color: white;
+                }
+
+                .form-group {
+                    width: calc(50% - 10px);
+                    /* Để các form group hiển thị theo 2 cột */
                 }
             </style>
         </head>
@@ -108,7 +112,7 @@
                         <nav class="navbar navbar-expand">
                             <div class="collapse navbar-collapse">
                                 <div class="header-left">
-                                    <div class="dashboard_bar">Add Voucher</div>
+                                    <div class="dashboard_bar">Dashboard</div>
                                 </div>
                                 <ul class="navbar-nav header-right" style="margin-left: 15px">
                                     <li class="nav-item dropdown notification_dropdown">
@@ -121,7 +125,6 @@
                             </div>
                         </nav>
                     </div>
-                    <h2 style="color:red;margin-top:-25px; padding-left: 45px">${message}</h2>
                 </div>
                 <!--**********************************
                         Header end ti-comment-alt
@@ -167,17 +170,7 @@
                                 <ul aria-expanded="false">
                                     <li><a href="list_movie">Movie</a></li>
                                     <li><a href="view-slot?date=<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())%>&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu&theaterNumber=1">Slot</a></li>
-                                    <li><a href="manager_user">Staff</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
-                                    <i class="fa fa-gear fw-bold"></i>
-                                    <span class="nav-text">Add Other</span>
-                                </a>
-                                <ul aria-expanded="false">
-                                    <li><a href="addFood">Add Food</a></li>
-                                    <li><a href="addVoucher">Add Voucher</a></li>
+                                    <li><a href="email-template.html">Staff</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -194,112 +187,109 @@
                     <!-- row -->
                     <div class="container-fluid">
                         <!-- Row -->
-                        <form action="addVoucher" method="post" enctype="multipart/form-data">
+                        <form action="updateNewSlot" method="post" onsubmit="return validateDateTime();">
                             <div class="row">
                                 <div class="col-xl-12">
                                     <div class="row">
                                         <div class="col-xl-12">
                                             <div class="mb-3">
-                                                <label class="form-label">Voucher Name</label>
-                                                <div class="card h-auto">
-                                                    <div class="card-body pt-3">
-                                                        <input type="text" class="form-control"
-                                                            placeholder="Voucher Name" name="voucherName" required />
+
+
+                                                <h3 id="errorMessage" style="color:red">${message}</h3>
+                                                <h3 id="errorMessage" style="color:red">${messageError}</h3>
+
+                                                <input type="text" value="${sid}" name="sid" hidden="">
+
+
+                                                <div class="row align-items-center">
+                                                    <div class="col-md-6 ">
+                                                        <label for="theaterName">Tên phim:</label>
+                                                        <select id="theaterName" name="movieName" class="form-control"
+                                                            onchange="updateDuration()">
+                                                            <option value="${movieName}">${movieName}</option>
+
+                                                            <c:forEach items="${listAllMovies}" var="l">
+                                                                <option value="${l.title}"
+                                                                    data-duration="${l.duration}">${l.title}</option>
+                                                            </c:forEach>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 text-right">
+                                                        <label for="duration">Thời gian phim:</label>
+                                                        <input type="text" id="duration" value="${duration}"
+                                                            name="duration" class="form-control" readonly>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <label class="form-label">Voucher Description</label>
+                                                <label for="cinemaSelect" style="margin-top: 15px"> Rạp chiếu phim:
+                                                </label> <br>
+
+                                                <select id="cinemaSelect" name="cinemaSelect" class="form-control">
+                                                    <c:forEach items="${cinemases}" var="l">
+                                                        <option value="${l.name}">${l.name}</option>
+                                                    </c:forEach>
+
+
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="dateInput"> Ngày chiếu</label>
+                                                <input type="date" id="dateInput" value="${date}" class="form-control"
+                                                    name="dateInput" />
+                                            </div>
+                                            <label for="theaterNumber">Rạp chiếu</label>
                                             <div class="card h-auto">
-                                                <div class="card-body pt-3">
-                                                    <textarea id="description" style="margin-top: 10px"
-                                                        class="form-control" name="description"></textarea>
-                                                </div>
-                                            </div>
-                                            <label class="form-label">Discount Amount</label>
-                                            <div class="card h-auto">
-                                                <div class="card-body pt-3">
-                                                    <input type="text" class="form-control" placeholder="discount"
-                                                        name="discountAmount" required />
-                                                </div>
-                                            </div>
-                                            <div class="filter cm-content-box box-primary">
-                                                <div class="content-title">
-                                                    <div class="cpa">Start Date</div>
-                                                    <div class="tools">
-                                                        <a href="javascript:void(0);" class="expand SlideToolHeader"><i
-                                                                class="fal fa-angle-down"></i></a>
-                                                    </div>
-                                                </div>
-                                                <div class="cm-content-body form excerpt">
-                                                    <div class="card-body">
-                                                        <h6></h6>
-                                                        <div class="row">
-                                                            <div class="col-xl-6 col-sm-6">
-                                                                <div class="mb-3">
-                                                                    <input type="date" id="startDate" name="startDate"
-                                                                        class="form-control" required />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            <div class="filter cm-content-box box-primary">
-                                                <div class="content-title">
-                                                    <div class="cpa">End Date</div>
-                                                    <div class="tools">
-                                                        <a href="javascript:void(0);" class="expand SlideToolHeader"><i
-                                                                class="fal fa-angle-down"></i></a>
-                                                    </div>
-                                                </div>
-                                                <div class="cm-content-body form excerpt">
-                                                    <div class="card-body">
-                                                        <h6></h6>
-                                                        <div class="row">
-                                                            <div class="col-xl-6 col-sm-6">
-                                                                <div class="mb-3">
-                                                                    <input type="date" id="endDate" name="endDate"
-                                                                        class="form-control" required />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <select id="theaterNumber" name="theaterNumber" class="form-control">
+                                                    <option value="1">Phòng 1</option>
+                                                    <option value="2">Phòng 2</option>
+                                                    <option value="3">Phòng 3</option>
+                                                    <option value="4">Phòng 4</option>
+
+                                                </select>
+
                                             </div>
 
 
-                                            <label class="form-label">Quantity</label>
-                                            <div class="card h-auto">
-                                                <div class="card-body pt-3">
-                                                    <input type="text" class="form-control" placeholder="quantity"
-                                                        name="quantity" required />
-                                                </div>
+                                            <div class="mb-3">
+                                                <label for="startTimeInput">Giờ bắt đầu chiếu: (nên chọn giờ
+                                                    chẵn)</label><br>
+                                                <input class="form-control" value="${formattedTimeStart}" type="time"
+                                                    id="startTimeInput" required name="startTimeInput">
                                             </div>
 
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary mb-3 open">
-                                Add Voucher
-                            </button>
+                                            <div class="mb-3">
+                                                <label for="endTimeInput">Giờ kết thúc chiếu:</label><br>
+                                                <input class="form-control" value="${formattedTimeEnd}"
+                                                    style="appearance: none;" type="time" readonly id="endTimeInput"
+                                                    required name="endTimeInput">
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary mb-3 open">
+                                                Update Slot
+                                            </button>
+                                            <button type="button" class="btn btn-primary mb-3 open"
+                                                style="background-color: #ee2279; border: #ee2279"
+                                                onclick="window.location.href = 'home_admin'">
+                                                Cancel
+                                            </button>
                         </form>
+
+
                     </div>
                 </div>
                 <!--**********************************
-                        Content body end
-                    ***********************************-->
+                                            Content body end
+                                        ***********************************-->
             </div>
             <!--**********************************
-                Main wrapper end
-            ***********************************-->
+                                    Main wrapper end
+                                ***********************************-->
 
             <!--**********************************
-                Scripts
-            ***********************************-->
+                                    Scripts
+                                ***********************************-->
             <!-- Required vendors -->
             <script src="./assets/JS/vendor/global/global.min.js"></script>
             <script src="./assets/JS/vendor/ckeditor/ckeditor.js"></script>
@@ -311,31 +301,68 @@
             <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
 
             <script src="./assets/JS/js/custom.min.js"></script>
-            <script>
 
-                function readURL(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-                        reader.onload = function (e) {
-                            $("#imagePreview").css(
-                                "background-image",
-                                "url(" + e.target.result + ")"
-                            );
-                            $("#imagePreview").hide();
-                            $("#imagePreview").fadeIn(650);
-                        };
-                        reader.readAsDataURL(input.files[0]);
+
+
+            <script>
+                function updateDuration() {
+                    var theaterSelect = document.getElementById("theaterName");
+                    var durationInput = document.getElementById("duration");
+                    var selectedOption = theaterSelect.options[theaterSelect.selectedIndex];
+                    var duration = selectedOption.getAttribute("data-duration");
+
+                    // Cập nhật giá trị của input thời gian
+                    if (duration) {
+                        durationInput.value = duration;
+                    } else {
+                        durationInput.value = "";
                     }
                 }
-                $("#imageUpload").on("change", function () {
-                    readURL(this);
-                });
-                $(".remove-img").on("click", function () {
-                    var imageUrl = "images/no-img-avatar.png";
-                    $(".avatar-preview, #imagePreview").removeAttr("style");
-                    $("#imagePreview").css("background-image", "url(" + imageUrl + ")");
-                });
+
+                function validateDateTime() {
+
+                    var dateInput = document.getElementById('dateInput').value;
+                    var startTimeInput = document.getElementById('startTimeInput').value;
+                    var durationInput = document.getElementById('duration').value;
+
+                    var date = new Date(dateInput);
+                    var startTime = new Date(dateInput + ' ' + startTimeInput);
+
+                    // Round duration to nearest 10 minutes
+                    var duration = Math.ceil(durationInput / 10) * 10 + 10;
+
+
+                    // Calculate end time
+                    var endTime = new Date(startTime.getTime() + duration * 60000);
+
+                    // Format end time as HH:mm
+                    var endTimeString = endTime.getHours().toString().padStart(2, '0') + ':' + endTime.getMinutes().toString().padStart(2, '0');
+
+                    // Fill end time into endTimeInput field
+                    document.getElementById('endTimeInput').value = endTimeString;
+
+                    // Check if date is valid and in the future
+                    if (isNaN(date.getTime()) || date <= new Date()) {
+                        document.getElementById('errorMessage').innerText = 'Please enter a valid date in the future.';
+                        return false;
+                    }
+
+                    // Check if start time is earlier than end time
+                    if (startTime > endTime) {
+                        document.getElementById('errorMessage').innerText = 'Start time must be earlier than end time.';
+                        return false;
+                    }
+
+                    // If all checks pass, return true to allow the form to be submitted
+                    return true;
+                }
+
+                // Add event listener for start time and duration input changes
+                document.getElementById('startTimeInput').addEventListener('change', validateDateTime);
+                document.getElementById('duration').addEventListener('change', validateDateTime);
+
             </script>
+
         </body>
 
         </html>

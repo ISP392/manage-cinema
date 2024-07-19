@@ -2,6 +2,8 @@
 
 Manage Cinema is a comprehensive system designed to manage all cinemas within a network. It allows customers to view movie listings and book tickets online. The system also provides an admin role to manage staff, staff shifts, movies, movie slots, and more. Additionally, staff can perform tasks such as booking tickets for customers and guests.
 
+### Demo: https://youtu.be/6QzB8HLWT0c
+
 ## Features
 
 ### Customer Features
