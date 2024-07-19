@@ -1778,6 +1778,50 @@ public class DAO extends DBContext {
         return list;
     }
 
+    //get all day has shift of staff in one week
+    public List<ShiftCurrent> getAllDayHasShiftAWeek(Date startDate, Date endDate, String cinemasName) {
+        List<ShiftCurrent> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT CAST(sh.startTime AS date) as startDate FROM Shift sh JOIN Users u ON u.userID = sh.phone JOIN staffstatus ss ON ss.phone = u.phone JOIN Cinemas c ON c.cinemaID = ss.cinemaID where CAST(sh.startTime AS date) between ? and ? and c.name = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setDate(1, startDate);
+            ps.setDate(2, endDate);
+            ps.setString(3, cinemasName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ShiftCurrent sc = new ShiftCurrent();
+                sc.setStartTime(rs.getTimestamp("startDate"));
+                list.add(sc);
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    //get all shift time of staff each day
+    public List<ShiftCurrent> getAllShiftTimeOfStaffEachDay(Date thisDate, String cinemasName) {
+        List<ShiftCurrent> list = new ArrayList<>();
+        String sql = "SELECT sh.startTime as startDate, u.displayName, sh.phone FROM Shift sh JOIN Users u ON u.userID = sh.phone JOIN staffstatus ss ON ss.phone = u.phone JOIN Cinemas c ON c.cinemaID = ss.cinemaID where CAST(sh.startTime AS date) = ? and c.name = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setDate(1, thisDate);
+            ps.setString(2, cinemasName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Users u = new Users();
+                u.setDisplayName(rs.getString("displayName"));
+                ShiftCurrent sc = new ShiftCurrent(rs.getTimestamp("startDate"), u);
+                list.add(sc);
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
     // get all Screening time in each day
     public List<ScreeningTimes> getAllScreeningTimesEachDay(Date movieDate, String cinemaName) {
         List<ScreeningTimes> list = new ArrayList<>();
@@ -2165,6 +2209,7 @@ public class DAO extends DBContext {
         }
     }
 
-    
+  
+
 
 }
