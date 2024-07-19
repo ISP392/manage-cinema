@@ -40,8 +40,8 @@
         <div class="container event-detail-container">
             <div>
                 <div class="event-title">${event.getEventName()}</div>
-<!--                <img src="${pageContext.request.contextPath}/${event.getEventImg()}" class="event-image" alt="Event Image" style="width: 50cm">-->
-                 <img src="./assets/images/${event.getEventImg()}" class="event-image" alt="Event Image" style="width: 50cm">
+                <img src="${pageContext.request.contextPath}/${event.getEventImg()}" class="event-image" alt="Event Image" style="width: 50cm">
+<!--                 <img src="./assets/images/${event.getEventImg()}" class="event-image" alt="Event Image" style="width: 50cm">-->
             </div>
             <div class="event-details">
                 <div class="event-description">${event.getEventDescription()}</div>
