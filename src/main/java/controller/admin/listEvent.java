@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.movie;
+package controller.admin;
 
 import DAO.DAO;
 import java.io.IOException;
@@ -12,16 +12,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import modal.Events;
 import modal.Movies;
+import modal.Users;
 
 /**
  *
  * @author LÊ PHƯƠNG MAI
  */
-@WebServlet(name = "CommingSoonServlet", urlPatterns = {"/commingSoon"})
-public class CommingSoonServlet extends HttpServlet {
+@WebServlet(name = "listEvent", urlPatterns = {"/listEvent"})
+public class listEvent extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +43,10 @@ public class CommingSoonServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CommingSoonServlet</title>");            
+            out.println("<title>Servlet listEvent</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CommingSoonServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet listEvent at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,12 +64,30 @@ public class CommingSoonServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DAO dao = new DAO();
-        List<Movies> moviesCommingSoon = dao.getAllMovieCommingSoon();
-        List<Events> event = dao.getAllEvent();
-        request.setAttribute("event", event);
-        request.setAttribute("moviesCommingSoon", moviesCommingSoon);
-        request.getRequestDispatcher("/WEB-INF/views/commingSoon.jsp").forward(request, response);
+        Users u = (Users) request.getSession().getAttribute("admin");
+        if (u == null || u.getRoleID().getRoleID() != 1) {
+            response.sendRedirect("admin");
+        } else {
+            DAO dao = new DAO();
+
+            String indexPage = request.getParameter("index");
+            if (indexPage == null) {
+                indexPage = "1";
+            }
+            int index = Integer.parseInt(indexPage);
+            int pageSize = 10;
+
+            int totalEvents = dao.getEventCount();
+            int endPage = (int) Math.ceil((double) totalEvents / pageSize);
+
+            List<Events> listEvents = dao.getEventByPage(index, pageSize);
+
+            request.setAttribute("endPage", endPage);
+            request.setAttribute("tag", index);
+            request.setAttribute("listEvents", listEvents);
+
+            request.getRequestDispatcher("/WEB-INF/views/admin-views/listEvent.jsp").forward(request, response);
+        }
     }
 
     /**
