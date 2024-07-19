@@ -13,8 +13,8 @@ import java.util.List;
 import modal.*;
 import util.Encrypt;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.sql.Date;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -1050,7 +1050,6 @@ public class DAO extends DBContext {
     // paging list tickets by userID
     public List<Tickets> pagingTickets(int userID, int index) {
         List<Tickets> list = new ArrayList<>();
-        List<Integer> ticketIDs = new ArrayList<>();
         String sql = "SELECT t.ticketID, u.userID, u.displayName, u.username, u.password, u.email, u.providerID, u.point, "
                 + "r.roleID, r.name AS roleName, "
                 + "m.movieID, m.title, m.description, m.releaseDate, m.posterImage, m.duration, m.display, "
@@ -1071,13 +1070,19 @@ public class DAO extends DBContext {
                 + "JOIN ScreeningTimes st ON s.screeningID = st.screeningID "
                 + "JOIN Theaters th ON st.theaterID = th.theaterID "
                 + "JOIN Orders o ON t.orderID = o.orderID "
-                + "WHERE t.userID = ? LIMIT ?, 5";
+                + "WHERE t.userID = ? ";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, userID);
-            ps.setInt(2, (index - 1) * 5);
             ResultSet rs = ps.executeQuery();
+
+            Map<Integer, Tickets> orderMap = new HashMap<>();
+            Map<Integer, List<Integer>> orderTicketMap = new HashMap<>();
+            Map<Integer, List<Seats>> orderSeatMap = new HashMap<>();
+
             while (rs.next()) {
+                int orderID = rs.getInt("orderID");
+
                 Role role = new Role(rs.getInt("roleID"), rs.getString("roleName"));
                 Users user = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("username"), rs.getString("password"), rs.getString("email"), role, rs.getInt("point"), rs.getString("providerID"));
                 Location location = new Location(rs.getInt("locationID"), rs.getString("locationName"));
@@ -1086,29 +1091,33 @@ public class DAO extends DBContext {
                 Theaters theater = new Theaters(rs.getInt("theaterID"), cinema, rs.getInt("theaterNumber"));
                 ScreeningTimes screeningTime = new ScreeningTimes(rs.getInt("screeningID"), theater, movie, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"));
                 Seats seat = new Seats(rs.getInt("seatID"), screeningTime, rs.getString("seatNumber"), rs.getString("seatStatus"));
-                Orders order = new Orders(rs.getInt("orderID"), user, movie, rs.getInt("quantity"), rs.getString("allPrice"));
-                Tickets ticket = new Tickets(rs.getInt("ticketID"), user, movie, cinema, rs.getString("price"), rs.getTimestamp("purchaseDate"), seat, order);
+                Orders order = new Orders(orderID, user, movie, rs.getInt("quantity"), rs.getString("allPrice"));
 
-                ticketIDs.add(ticket.getTicketID());
+                if (!orderMap.containsKey(orderID)) {
+                    Tickets ticket = new Tickets(rs.getInt("ticketID"), user, movie, cinema, rs.getString("price"), rs.getTimestamp("purchaseDate"), seat, order);
+                    orderMap.put(orderID, ticket);
+                    orderTicketMap.put(orderID, new ArrayList<>(Collections.singletonList(rs.getInt("ticketID"))));
+                    orderSeatMap.put(orderID, new ArrayList<>(Collections.singletonList(seat)));
+                    list.add(ticket);
+                } else {
+                    Tickets existingTicket = orderMap.get(orderID);
+                    orderSeatMap.get(orderID).add(seat);
+                    existingTicket.getSeats().add(seat);
+                    orderTicketMap.get(orderID).add(rs.getInt("ticketID"));
+                }
+            }
+
+            for (Map.Entry<Integer, Tickets> entry : orderMap.entrySet()) {
+                int orderID = entry.getKey();
+                Tickets ticket = entry.getValue();
+                ticket.setTicketIDs(orderTicketMap.get(orderID));
+                ticket.setSeats(orderSeatMap.get(orderID));
 
                 List<OrderFoodItem> orderFoods = selectAllOrderFoodItems(ticket.getOrderID().getOrderID());
                 for (OrderFoodItem orderFood : orderFoods) {
                     orderFood.setFoods(getFoodItemById(orderFood.getFoodItemID()));
                 }
                 ticket.getOrderID().setOrderFood(orderFoods);
-                list.add(ticket);
-            }
-            // Fetch seats for the list of ticket IDs
-            List<Seats> allSeats = selectSeatsByTicketID(ticketIDs);
-            for (Tickets ticket : list) {
-                List<Seats> seatsForTicket = new ArrayList<>();
-                for (Seats seat : allSeats) {
-                    if (seat.getScreeningID().getScreeningID() == ticket.getSeatID().getScreeningID().getScreeningID()) {
-                        seatsForTicket.add(seat);
-                    }
-                }
-                ticket.setSeats(seatsForTicket);
-                ticket.setTicketIDs(ticketIDs);
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -2120,8 +2129,6 @@ public class DAO extends DBContext {
         }
         return foodItems;
     }
-    return foodItems;
-    }
 
     // insertOrderWithVoucherIDNull
     public void insertOrderWithVoucherIDNull(int userID, int movieID, int quantity, String allPrice) {
@@ -2174,7 +2181,7 @@ public class DAO extends DBContext {
 
     // insert food item with orderID, foodName, quantity
     public void insertFoodItem(int orderID, int foodItemID, int quantity) {
-        String sql = "INSERT INTO OrderFoodItems (orderID, foodItemID, quantity) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO OrderDetails (orderID, foodItemID, quantity) VALUES (?, ?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, orderID);
@@ -2212,49 +2219,32 @@ public class DAO extends DBContext {
     }
 
     public List<Shift> getAllReportShifts() {
-    List<Shift> shifts = new ArrayList<>();
-    try {
-        String sql = "SELECT s.startTime, s.endTime, s.startAmount, s.endAmount, s.tranferPayment, u.displayName " +
-                     "FROM Shift s JOIN Users u ON s.phone = u.userID " +
-                     "WHERE DATE(s.startTime) = CURDATE()";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Shift shift = new Shift();
-            shift.setDisplayName(rs.getString("displayName"));
-            shift.setStartTime(rs.getTimestamp("startTime"));
-            shift.setEndTime(rs.getTimestamp("endTime"));
-            shift.setStartAmount(rs.getDouble("startAmount"));
-            shift.setEndAmount(rs.getDouble("endAmount"));
-            shift.setTransferPayments(rs.getDouble("tranferPayment"));
+        List<Shift> shifts = new ArrayList<>();
+        try {
+            String sql = "SELECT s.startTime, s.endTime, s.startAmount, s.endAmount, s.tranferPayment, u.displayName "
+                    + "FROM Shift s JOIN Users u ON s.phone = u.userID "
+                    + "WHERE DATE(s.startTime) = CURDATE()";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Shift shift = new Shift();
+                shift.setDisplayName(rs.getString("displayName"));
+                shift.setStartTime(rs.getTimestamp("startTime"));
+                shift.setEndTime(rs.getTimestamp("endTime"));
+                shift.setStartAmount(rs.getDouble("startAmount"));
+                shift.setEndAmount(rs.getDouble("endAmount"));
+                shift.setTransferPayments(rs.getDouble("tranferPayment"));
 
-            // Tính toán revenue
-            double revenue = rs.getDouble("endAmount") - rs.getDouble("startAmount") + rs.getDouble("tranferPayment");
-            shift.setRevenue(revenue);
+                // Tính toán revenue
+                double revenue = rs.getDouble("endAmount") - rs.getDouble("startAmount") + rs.getDouble("tranferPayment");
+                shift.setRevenue(revenue);
 
-            shifts.add(shift);
+                shifts.add(shift);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return shifts;
     }
-    return shifts;
-}
 
-    
-    public static void main(String[] args) {
-        DAO dao = new DAO();
-        List<Shift> shifts = dao.getAllReportShifts();
-        
-        for (Shift shift : shifts) {
-            System.out.println("Shift ID: " + shift.getShiftID());
-            System.out.println("Display Name: " + shift.getDisplayName());
-            System.out.println("Start Time: " + shift.getStartTime());
-            System.out.println("End Time: " + shift.getEndTime());
-            System.out.println("Start Amount: " + shift.getStartAmount());
-            System.out.println("End Amount: " + shift.getEndAmount());
-            System.out.println("Transfer Payments: " + shift.getTransferPayments());
-            System.out.println("Revenue: " + shift.getRevenue());
-            System.out.println("-----------------------------");
-        }  
-    }
 }
