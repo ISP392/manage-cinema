@@ -24,6 +24,37 @@ import java.util.stream.Collectors;
  */
 public class DAO extends DBContext {
 
+    public void updateEvent(int eventID, String eventName, String eventDescription, Date startTime, Date endTime, String eventImg) {
+        String sql = "UPDATE Events SET eventName = ?, eventDescription = ?, startTime = ?, endTime = ?, eventImg = ? WHERE eventID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, eventName);
+            ps.setString(2, eventDescription);
+            ps.setDate(3, new java.sql.Date(startTime.getTime()));
+            ps.setDate(4, new java.sql.Date(endTime.getTime()));
+            ps.setString(5, eventImg);
+            ps.setInt(6, eventID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insertAddEvent(String eventName, String eventDescription, Date startTime, Date endTime, String eventImg) {
+        String sql = "INSERT INTO Events (eventImg, eventName, eventDescription, startTime, endTime) VALUES (?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, eventImg);
+            ps.setString(2, eventName);
+            ps.setString(3, eventDescription);
+            ps.setDate(4, new java.sql.Date(startTime.getTime())); // Assuming startTime is a java.util.Date
+            ps.setDate(5, new java.sql.Date(endTime.getTime()));
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
     public List<FoodItem> getFoodByPage(int page, int pageSize) {
         List<FoodItem> list = new ArrayList<>();
         String sql = "SELECT * FROM FoodItems ORDER BY foodItemID ASC LIMIT ? OFFSET ?";
@@ -36,7 +67,7 @@ public class DAO extends DBContext {
                 FoodItem f = new FoodItem(rs.getInt("FoodItemID"),
                         rs.getString("foodName"),
                         rs.getString("description"),
-                        rs.getInt("price"), 
+                        rs.getInt("price"),
                         rs.getString("imgFoodItems"),
                         rs.getInt("display"),
                         rs.getInt("quantity")
@@ -48,7 +79,7 @@ public class DAO extends DBContext {
         }
         return list;
     }
-    
+
     public boolean checkEPstaff(String email, String phone) {
         String sql = "SELECT * FROM staffstatus WHERE staffEmail = ? or phone = ?";
 
@@ -167,7 +198,6 @@ public class DAO extends DBContext {
         }
     }
 
-    
     public void insertAddVoucher(String voucherName, String voucherdescription, float discountAmount, Date startDate,
             Date endDate, int quantity) {
         String sql = "INSERT INTO Voucher (voucherName, voucherdescription, discountAmount, startDate, endDate, quantity) VALUES (?, ?, ?, ?, ?, ?)";
@@ -183,6 +213,31 @@ public class DAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
+    }
+
+    public Events getEventById(int eventID) {
+
+        String sql = "SELECT * FROM Events WHERE eventID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, eventID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Events event = new Events(
+                        rs.getInt("eventID"),
+                        rs.getString("eventImg"),
+                        rs.getString("eventName"),
+                        rs.getString("eventDescription"),
+                        rs.getDate("startTime"),
+                        rs.getDate("endTime")
+                );
+                return event;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public Movies getMovieByIDForAddSlot(int movieID) {
@@ -222,7 +277,6 @@ public class DAO extends DBContext {
         }
     }
 
-    
     public void updateDisplayFoodByFoodID(int foodID, int display) {
         String sql = "update FoodItems set display = ? where foodItemId = ?";
         try {
@@ -262,6 +316,26 @@ public class DAO extends DBContext {
         return list;
     }
 
+    public List<Events> getEventByPage(int page, int pageSize) {
+        String sql = "SELECT * FROM  Events ORDER BY startTime DESC LIMIT ? OFFSET ?";
+        List<Events> list = new ArrayList<>();
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, pageSize);
+            ps.setInt(2, (page - 1) * pageSize);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Events ev = new Events(rs.getInt("eventID"), rs.getString("eventImg"), rs.getString("eventName"), rs.getString("eventDescription"), rs.getDate("startTime"), rs.getDate("endTime"));
+                    list.add(ev);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+
     public int getMovieCount() {
         String sql = "SELECT COUNT(*) FROM Movies";
         try {
@@ -274,6 +348,36 @@ public class DAO extends DBContext {
             e.printStackTrace();
         }
         return 0;
+    }
+
+
+    public int getEventCount() {
+        String sql = "SELECT count(*) FROM Events";
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return 0;
+    }
+
+    public List<Events> getAllEvent() {
+        String sql = "select * from Events ";
+        List<Events> list = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Events e = new Events(rs.getInt("eventID"), rs.getString("eventImg"), rs.getString("eventName"), rs.getString("eventDescription"), rs.getDate("startTime"), rs.getDate("endTime"));
+                list.add(e);
+            }
+            return list;
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        return null;
     }
 
     public List<Movies> getAllMovieCommingSoon() {
@@ -902,10 +1006,21 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
-    
-    
 
-    // delete movie genre by movieID
+    public void deleteEvent(int eventID) {
+        String sql = "DELETE FROM Events WHERE eventID = ? ";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, eventID);
+            ps.execute();
+        } catch (SQLException e) {
+            System.out.println(e);
+
+        }
+
+    }
+
+    //delete movie genre by movieID
     public void deleteMovieGenreByMovieID(int movieID) {
         String sql = "DELETE FROM MovieGenres WHERE movieID = ?";
         try {
@@ -917,6 +1032,7 @@ public class DAO extends DBContext {
         }
     }
 
+    //count paging tickets by userID
     // count paging tickets by userID
     public int countPagingTickets(int userID) {
         String sql = "select count(*) from Tickets where userID = ?";
@@ -1013,6 +1129,7 @@ public class DAO extends DBContext {
 
     
 
+    //get list screening time
     public List<Seats> selectSeatsByTicketID(List<Integer> ticketIDs) {
         List<Seats> seats = new ArrayList<>();
         if (ticketIDs.isEmpty()) {
@@ -1263,6 +1380,7 @@ public class DAO extends DBContext {
         return list;
     }
 
+    //get all cinemas by locationID
     // get all cinemas by locationID
     public List<Cinemas> getAllCinemasByLocationID(int locationID) {
         List<Cinemas> list = new ArrayList<>();
@@ -1572,6 +1690,7 @@ public class DAO extends DBContext {
         return list;
     }
 
+    //get list movie by movie date and cinema name
     // get list movie by movie date and cinema name
     public List<Movies> getMovieByMovieDateAndCinemaName(Date sqlDate, String cinemaName) {
         String sql = "select DISTINCT m.title, m.movieID, m.posterImage from Location l join Cinemas c on l.locationID = c.locationID join Theaters t on t.cinemaID = c.cinemaID join ScreeningTimes st on st.theaterID = t.theaterID join Movies m on m.movieID = st.movieID where c.movieDate = ? and m.releaseDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE() and c.name = ?";
@@ -1596,6 +1715,7 @@ public class DAO extends DBContext {
         String sql = "SELECT * FROM FoodItems where display = '1'";
         try (
                 PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
                 FoodItem foodItem = new FoodItem();
                 foodItem.setFoodItemID(rs.getInt("foodItemID"));
@@ -1612,7 +1732,16 @@ public class DAO extends DBContext {
         }
         return foodItems;
     }
-    
+
+    public static void main(String[] args) {
+        //test getScreeningTimeByMovieDateAndCinemaName
+        DAO dao = new DAO();
+        List<Events> ev = dao.getEventByPage(1, 10);
+        for (Events e : ev) {
+            System.out.println(e.getEventName());
+        }
+    }
+
     // get all cinemas
     public List<Cinemas> getAllCinemas() {
         List<Cinemas> list = new ArrayList<>();
@@ -1654,6 +1783,50 @@ public class DAO extends DBContext {
                 Cinemas c = new Cinemas();
                 c.setMovieDate(rs.getDate("movieDate"));
                 list.add(c);
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    //get all day has shift of staff in one week
+    public List<ShiftCurrent> getAllDayHasShiftAWeek(Date startDate, Date endDate, String cinemasName) {
+        List<ShiftCurrent> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT CAST(sh.startTime AS date) as startDate FROM Shift sh JOIN Users u ON u.userID = sh.phone JOIN staffstatus ss ON ss.phone = u.phone JOIN Cinemas c ON c.cinemaID = ss.cinemaID where CAST(sh.startTime AS date) between ? and ? and c.name = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setDate(1, startDate);
+            ps.setDate(2, endDate);
+            ps.setString(3, cinemasName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ShiftCurrent sc = new ShiftCurrent();
+                sc.setStartTime(rs.getTimestamp("startDate"));
+                list.add(sc);
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    //get all shift time of staff each day
+    public List<ShiftCurrent> getAllShiftTimeOfStaffEachDay(Date thisDate, String cinemasName) {
+        List<ShiftCurrent> list = new ArrayList<>();
+        String sql = "SELECT sh.startTime as startDate, u.displayName, sh.phone FROM Shift sh JOIN Users u ON u.userID = sh.phone JOIN staffstatus ss ON ss.phone = u.phone JOIN Cinemas c ON c.cinemaID = ss.cinemaID where CAST(sh.startTime AS date) = ? and c.name = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setDate(1, thisDate);
+            ps.setString(2, cinemasName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Users u = new Users();
+                u.setDisplayName(rs.getString("displayName"));
+                ShiftCurrent sc = new ShiftCurrent(rs.getTimestamp("startDate"), u);
+                list.add(sc);
             }
             return list;
         } catch (SQLException e) {
@@ -1898,16 +2071,6 @@ public class DAO extends DBContext {
 
     // get info list ticket for bill by orderID
     public List<TicketInfo> getTicketInfoByOrderId(String orderId) {
-    List<TicketInfo> ticketInfos = new ArrayList<>();
-    String sql = "SELECT DISTINCT m.title, st.startTime, st.endTime, t.ticketID, c.name AS nameCinema, s.seatNumber, t.price AS priceTicket, th.theaterNumber " +
-                       "FROM Tickets t " +
-                       "JOIN Seats s ON t.seatID = s.seatID " +
-                       "JOIN Movies m ON t.movieID = m.movieID " +
-                       "JOIN Cinemas c ON t.cinemaID = c.cinemaID " +
-                       "JOIN Theaters th ON t.cinemaID = th.cinemaID " +
-                       "JOIN ScreeningTimes st ON s.screeningID = st.screeningID " +
-                       "WHERE t.orderID = ?";
-
         List<TicketInfo> ticketInfos = new ArrayList<>();
         String sql = "SELECT DISTINCT m.title, st.startTime, st.endTime, t.ticketID, c.name AS nameCinema, s.seatNumber, t.price AS priceTicket, th.theaterNumber "
                 + "FROM Tickets t "
@@ -2057,27 +2220,6 @@ public class DAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-    }
-
-    public static void main(String[] args) {
-        DAO dao = new DAO();
-
-        // Kiểm tra phương thức pagingTickets
-        int userID = 42; // Thay thế bằng userID thực tế
-        int index = 1;  // Thay thế bằng index thực tế
-        List<Tickets> tickets = dao.pagingTickets(userID, index);
-
-        System.out.println("Tickets:");
-        for (Tickets ticket : tickets) {
-            System.out.println("Ticket ID: " + ticket.getTicketID());
-            System.out.println("Movie: " + ticket.getMovieID().getTitle());
-            System.out.println("Seats:");
-            for (Seats seat : ticket.getSeats()) {
-                System.out.println("  Seat Number: " + seat.getSeatNumber());
-            }
-            System.out.println();
-        }
-
     }
 
 }
