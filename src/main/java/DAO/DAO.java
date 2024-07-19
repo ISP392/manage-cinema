@@ -1070,7 +1070,7 @@ public class DAO extends DBContext {
                 + "JOIN ScreeningTimes st ON s.screeningID = st.screeningID "
                 + "JOIN Theaters th ON st.theaterID = th.theaterID "
                 + "JOIN Orders o ON t.orderID = o.orderID "
-                + "WHERE t.userID = ? ";
+                + "WHERE t.userID = ? ORDER BY t.purchaseDate DESC";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, userID);
@@ -1123,36 +1123,6 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
         return list;
-    }
-
-    //get list screening time
-    public List<Seats> selectSeatsByTicketID(List<Integer> ticketIDs) {
-        List<Seats> seats = new ArrayList<>();
-        if (ticketIDs.isEmpty()) {
-            return seats;
-        }
-
-        String sql = "SELECT s.seatID, s.seatNumber, s.seatStatus, st.screeningID, st.startTime, st.endTime, th.theaterID, th.theaterNumber, m.movieID, m.title, m.description, m.releaseDate, m.posterImage, m.duration, m.display "
-                + "FROM Seats s "
-                + "JOIN ScreeningTimes st ON s.screeningID = st.screeningID "
-                + "JOIN Theaters th ON st.theaterID = th.theaterID "
-                + "JOIN Movies m ON st.movieID = m.movieID "
-                + "WHERE s.seatID IN (SELECT seatID FROM Tickets WHERE ticketID IN (" + ticketIDs.stream().map(String::valueOf).collect(Collectors.joining(",")) + "))";
-
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Theaters theater = new Theaters(rs.getInt("theaterID"), null, rs.getInt("theaterNumber"));
-                Movies movie = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"));
-                ScreeningTimes screening = new ScreeningTimes(rs.getInt("screeningID"), theater, movie, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"));
-                Seats seat = new Seats(rs.getInt("seatID"), screening, rs.getString("seatNumber"), rs.getString("seatStatus"));
-                seats.add(seat);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        return seats;
     }
 
     public List<OrderFoodItem> selectAllOrderFoodItems(int orderId) {
@@ -1727,15 +1697,6 @@ public class DAO extends DBContext {
             e.printStackTrace();
         }
         return foodItems;
-    }
-
-    public static void main(String[] args) {
-        //test getScreeningTimeByMovieDateAndCinemaName
-        DAO dao = new DAO();
-        List<Events> ev = dao.getEventByPage(1, 10);
-        for (Events e : ev) {
-            System.out.println(e.getEventName());
-        }
     }
 
     // get all cinemas
