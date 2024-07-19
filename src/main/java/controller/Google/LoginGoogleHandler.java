@@ -49,10 +49,7 @@ public class LoginGoogleHandler extends HttpServlet {
                 return;
             }
 
-            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-            Shift shift = d.getShiftForUser(status.getPhone());
-
-            if (shift == null || currentTime.before(shift.getStartTime()) || currentTime.after(shift.getEndTime())) {
+            if (!d.isUserInCurrentShift(status.getPhone())) {
                 request.getSession().setAttribute("error", "You are not in your shift time!");
                 response.sendRedirect("signin");
                 return;

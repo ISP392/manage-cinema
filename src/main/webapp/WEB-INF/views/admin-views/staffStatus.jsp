@@ -200,6 +200,7 @@ Main wrapper start
                                                         <th>DOB</th>
                                                         <th>Name</th>
                                                         <th>Email</th>
+                                                        <th>Cinema</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -214,6 +215,7 @@ Main wrapper start
                                                             <td>${staff.dob}</td>
                                                             <td>${staff.staffName}</td>
                                                             <td>${staff.staffEmail}</td>
+                                                           
                                                             <td>
                                                                 <c:if test="${staff.status == 'pending'}">
                                                                     <a onclick="return confirm('Are you sure to approve this staff?')"

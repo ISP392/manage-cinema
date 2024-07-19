@@ -14,6 +14,15 @@ public class StaffStatus {
     private Date dob;
     private String staffName;
     private String staffEmail;
+    private int cinemaId;
+
+    public int getCinemaId() {
+        return cinemaId;
+    }
+
+    public void setCinemaId(int cinemaId) {
+        this.cinemaId = cinemaId;
+    }
 
     public StaffStatus() {
     }
@@ -73,6 +82,6 @@ public class StaffStatus {
 
     public void setStaffEmail(String staffEmail) {
         this.staffEmail = staffEmail;
-    }
+    } 
 }
 
