@@ -158,30 +158,44 @@
                                     <i class="flaticon-025-dashboard"></i>
                                     <span class="">Dashboard</span>
                                 </a>
-                            </li>
-                            <li>
-                                <a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
-                                    <i class="fa fa-gear fw-bold"></i>
-                                    <span class="nav-text">CMS</span>
-                                </a>
-                                <ul aria-expanded="false">
-                                    <li><a href="list_movie">Movie</a></li>
-                                    <li><a href="view-slot?date=<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())%>&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu&theaterNumber=1">Slot</a></li>
-                                    <li><a href="manager_user">Staff</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
-                                    <i class="fa fa-gear fw-bold"></i>
-                                    <span class="nav-text">Add Other</span>
-                                </a>
-                                <ul aria-expanded="false">
-                                    <li><a href="addFood">Add Food</a></li>
-                                    <li><a href="addVoucher">Add Voucher</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="" href="home_admin">
+                                <i class="flaticon-025-dashboard"></i>
+                                <span class="">Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="has-arrow ai-icon"
+                                href="javascript:void(0)"
+                                aria-expanded="false"
+                                >
+                                <i class="fa fa-gear fw-bold"></i>
+                                <span class="nav-text">CMS</span>
+                            </a>
+                            <ul aria-expanded="false">
+                                <li><a href="list_movie">Movie</a></li>
+                                <li><a href="menu.html">Slot</a></li>
+                                <li><a href="manager_user">Staff</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a
+                                class="has-arrow ai-icon"
+                                href="javascript:void(0)"
+                                aria-expanded="false"
+                                >
+                                <i class="fa fa-gear fw-bold"></i>
+                                <span class="nav-text">Add Other</span>
+                            </a>
+                            <ul aria-expanded="false">
+                                <li><a href="listFood">Add Food</a></li>
+                                <li><a href="addVoucher">Add Voucher</a></li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
                 <!--**********************************
                         Sidebar end
@@ -224,6 +238,29 @@
                                                 </div>
                                             </div>
 
+
+<!--                                        <label class="form-label">Quantity</label>
+                                        <div class="card h-auto">
+                                            <div class="card-body pt-3">
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="quantity"
+                                                    name="quantity"
+                                                    required
+                                                    />
+                                            </div>
+                                        </div>-->
+                                        
+                                        <div class="filter cm-content-box box-primary">
+                                            <div class="content-title">
+                                                <div class="cpa">img FoodItems</div>
+                                                <div class="tools">
+                                                    <a
+                                                        href="javascript:void(0);"
+                                                        class="expand SlideToolHeader"
+                                                        ><i class="fal fa-angle-down"></i
+                                                        ></a>
                                             <div class="filter cm-content-box box-primary">
                                                 <div class="content-title">
                                                     <div class="cpa">img FoodItems</div>
