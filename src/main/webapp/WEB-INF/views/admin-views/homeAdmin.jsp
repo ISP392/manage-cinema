@@ -173,9 +173,11 @@
                             </a>
                             <ul aria-expanded="false">
                                 <li><a href="list_movie">Movie</a></li>
-                                <li><a href="menu.html">Slot</a></li>
+                                <li><a href="view-slot?date=<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu&theaterNumber=1">Slot</a></li>
                                 <li><a href="manager_user">Staff</a></li>
                                 <li><a href="listEvent">Event</a></li>
+                                <li><a href="manage-staff-status">Staff status</a></li>
+                                <li><a href="staff-schedule">Staff Schedule</a></li>
                             </ul>
                         </li>
                         <li>
@@ -191,6 +193,7 @@
                                 <li><a href="addVoucher">Add Voucher</a></li>
                                 <li><a href="addFood">Add Food</a></li>
                                 <li><a href="addEvent">Add Event</a></li>
+                                <li><a href="listFood">Add Food</a></li>
                             </ul>
                         </li>
                     </ul>

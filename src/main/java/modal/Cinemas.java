@@ -31,6 +31,13 @@ public class Cinemas {
         this.locationID = locationID;
     }
 
+    public Cinemas(String name, Date movieDate) {
+        this.name = name;
+        this.movieDate = movieDate;
+    }
+    
+    
+
     public Cinemas(String name) {
         this.name = name;
     }
@@ -68,6 +75,4 @@ public class Cinemas {
     public void setLocationID(Location locationID) {
         this.locationID = locationID;
     }
-    
-    
 }

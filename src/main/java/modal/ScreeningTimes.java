@@ -7,19 +7,57 @@ package modal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-
 /**
  *
  * @author MISS NGA
  */
 public class ScreeningTimes {
+
     private int screeningID;
+    private int theaterId;
+    private int movieId;
     private Theaters theaterID;
     private Movies movieID;
     private Timestamp startTime;
     private Timestamp endTime;
 
     public ScreeningTimes() {
+    }
+
+    public int getTheaterId() {
+        return theaterId;
+    }
+
+    public ScreeningTimes(Theaters theaterID, Movies movieID, Timestamp startTime, Timestamp endTime) {
+        this.theaterID = theaterID;
+        this.movieID = movieID;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public void setTheaterId(int theaterId) {
+        this.theaterId = theaterId;
+    }
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
+
+    @Override
+    public String toString() {
+        return "ScreeningTimes{" + "screeningID=" + screeningID + ", theaterID=" + theaterId + ", movieID=" + movieId + ", startTime=" + startTime + ", endTime=" + endTime + '}';
+    }
+
+    public ScreeningTimes(int screeningID, int theaterId, int movieId, Timestamp startTime, Timestamp endTime) {
+        this.screeningID = screeningID;
+        this.theaterId = theaterId;
+        this.movieId = movieId;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public ScreeningTimes(int screeningID, Theaters theaterID, Movies movieID, Timestamp startTime, Timestamp endTime) {
@@ -30,13 +68,18 @@ public class ScreeningTimes {
         this.endTime = endTime;
     }
 
-
     public ScreeningTimes(int screeningID, Movies movieID, Timestamp startTime, Timestamp endTime, Theaters theaterID) {
         this.screeningID = screeningID;
         this.movieID = movieID;
         this.startTime = startTime;
         this.endTime = endTime;
         this.theaterID = theaterID;
+    }
+
+    public ScreeningTimes(Theaters theaterID, Timestamp startTimes, Timestamp endTime) {
+        this.theaterID = theaterID;
+        this.startTime = startTimes;
+        this.endTime = endTime;
     }
 
     public int getScreeningID() {
@@ -78,5 +121,5 @@ public class ScreeningTimes {
     public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
     }
-  
+
 }

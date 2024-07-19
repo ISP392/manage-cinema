@@ -4,6 +4,8 @@
  */
 package modal;
 
+import java.util.List;
+
 /**
  *
  * @author MISS NGA
@@ -14,6 +16,8 @@ public class Orders {
     private Movies movieID;
     private int quantity;
     private String allPrice;
+    List<OrderFoodItem> orderFood;
+    private TicketInfo ticketInfo;
 
     public Orders() {
     }
@@ -64,6 +68,22 @@ public class Orders {
 
     public void setAllPrice(String allPrice) {
         this.allPrice = allPrice;
+    }
+
+    public List<OrderFoodItem> getOrderFood() {
+        return orderFood;
+    }
+
+    public void setOrderFood(List<OrderFoodItem> orderFood) {
+        this.orderFood = orderFood;
+    }
+
+    public TicketInfo getTicketInfo() {
+        return ticketInfo;
+    }
+
+    public void setTicketInfo(TicketInfo ticketInfo) {
+        this.ticketInfo = ticketInfo;
     }
     
     

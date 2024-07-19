@@ -1,21 +1,14 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: baoquoc
-  Date: 12/06/2024
-  Time: 13:50
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8"/>
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
         <title>Admin Dashboard</title>
         <link href="./assets/css/dashboard-admin.css" rel="stylesheet"/>
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
     <style>
         .action-rows{
@@ -180,8 +173,10 @@
                             </a>
                             <ul aria-expanded="false">
                                 <li><a href="list_movie">Movie</a></li>
-                                <li><a href="menu.html">Slot</a></li>
+                                <li><a href="view-slot?date=<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu&theaterNumber=1">Slot</a></li>
                                 <li><a href="manager_user">Staff</a></li>
+                                <li><a href="manage-staff-status">Staff status</a></li>
+                                <li><a href="staff-schedule">Staff Schedule</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -208,9 +203,13 @@
                             <div class="filter cm-content-box box-primary">
                                 <div class="content-title">
                                     <div class="cpa">
-                                        <i class="fa-solid fa-file-lines me-1"></i>List Movies
+                                        <i class="fa fa-file-lines"></i> List Movies
+
                                     </div>
             
+
+                                    <input type="text" id="searchInput" placeholder="Search for movies..." class="form-control mb-3" style="margin-left:10cm; height: 1.5cm; width: 8cm;" >
+
                                     <div class="tools">
                                         <a href="javascript:void(0);" class="expand SlideToolHeader"><i class="fal fa-angle-down"></i></a>
                                     </div>
@@ -237,7 +236,7 @@
                                                     </tr>
                                                 </thead>
 
-                                                <tbody>
+                                                <tbody id="movieList" >
                                                     <c:if test="${not empty errorMessage}">
                                                     <p style="color:red">${errorMessage}</p>
                                                 </c:if>
@@ -263,9 +262,6 @@
                                                                     <i class="fa fa-eye"></i>
                                                                 </a>
 
-                                                                <a href="addNewSlot?movieID=${movie.getMovieID()}&display=1" class="btn btn-primary shadow btn-xs sharp rounded-circle " >
-                                                                    <i class="fa fa-plus"></i>
-                                                                </a>
                                                             </c:if>
 
                                                             <c:if test="${movie.getDisplay()==0}">
@@ -334,6 +330,60 @@
                 <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
 
                 <script src="./assets/JS/js/custom.min.js"></script>
+
+                <script>
+                    $(document).ready(function () {
+                        $("#searchInput").on("keyup", function () {
+                            var query = $(this).val();
+                            console.log("Search query: ", query); // Log để kiểm tra query
+                            $.ajax({
+                                url: "/manage-cinema/searchMovies", // Đường dẫn đầy đủ đến servlet tìm kiếm
+                                type: "GET",
+                                data: {searchQuery: query},
+                                success: function (response) {
+                                    try {
+                                        console.log("Response: ", response); // Log phản hồi để kiểm tra
+
+                                        // Nếu phản hồi không phải là chuỗi JSON hợp lệ, chuyển đổi nó
+                                        if (typeof response !== 'string') {
+                                            response = JSON.stringify(response);
+                                        }
+
+                                        var movies = JSON.parse(response);
+                                        var movieListHtml = "";
+                                        $.each(movies, function (index, movie) {
+                                            movieListHtml += "<tr>";
+                                            movieListHtml += "<td>" + (index + 1) + "</td>";
+                                            movieListHtml += "<td>" + movie.title.toUpperCase() + "</td>";
+                                            movieListHtml += "<td>" + movie.releaseDate + "</td>";
+                                            movieListHtml += "<td>" + movie.status + "</td>";
+                                            movieListHtml += "<td class='action-rows'>";
+                                            movieListHtml += "<a href='update_movie?movieID=" + movie.movieID + "' class='btn btn-primary shadow btn-xs sharp rounded-circle me-1'><i class='fa fa-pencil'></i></a>";
+                                            if (movie.display == 1) {
+                                                movieListHtml += "<a href='updateDisplayMovie?movieID=" + movie.movieID + "&display=0' class='btn btn-danger shadow btn-xs sharp rounded-circle'><i class='fa fa-eye'></i></a>";
+                                            } else {
+                                                movieListHtml += "<a href='updateDisplayMovie?movieID=" + movie.movieID + "&display=1' class='btn btn-danger shadow btn-xs sharp rounded-circle'><i class='fa fa-eye-slash'></i></a>";
+                                            }
+                                            movieListHtml += "</td>";
+                                            movieListHtml += "</tr>";
+                                        });
+                                        console.log("Generated HTML: ", movieListHtml); // Log HTML được tạo ra
+                                        $("#movieList").html(movieListHtml); // Cập nhật DOM
+                                    } catch (e) {
+                                        console.error("Error parsing JSON response: ", e);
+                                        console.log("Response: ", response);
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error("AJAX Error: ", error);
+                                    console.log("Response: ", xhr.responseText);
+                                }
+                            });
+                        });
+                    });
+
+
+                </script>
                 </body>
                 </html>
 

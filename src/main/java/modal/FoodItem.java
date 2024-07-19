@@ -14,16 +14,28 @@ public class FoodItem {
     private String description;
     private int price;
     private String imgFoodItems;
+    private int quantity;
+    private int display;
 
+    public int getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(int display) {
+        this.display = display;
+    }
+    
     public FoodItem() {
     }
 
-    public FoodItem(int foodItemID, String foodName, String description, int price, String imgFoodItems) {
+    public FoodItem(int foodItemID, String foodName, String description, int price, String imgFoodItems, int display, int quantity) {
         this.foodItemID = foodItemID;
         this.foodName = foodName;
         this.description = description;
         this.price = price;
         this.imgFoodItems = imgFoodItems;
+        this.display = display;
+        this.quantity = quantity;
     }
 
     public int getFoodItemID() {
@@ -64,6 +76,14 @@ public class FoodItem {
 
     public void setImgFoodItems(String imgFoodItems) {
         this.imgFoodItems = imgFoodItems;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
     
     

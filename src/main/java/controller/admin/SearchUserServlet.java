@@ -58,24 +58,42 @@ public class SearchUserServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
+    private static final long serialVersionUID = 1L;
+    private static final int RECORDS_PER_PAGE = 5;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String userId = request.getParameter("userId");
-        int id = Integer.parseInt(userId);
-        DAO dao = new DAO();
-        List<Users> listUser = dao.getUserById(id);
+        String userIdParam = request.getParameter("userId");
+        int page = 1;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        int offset = (page - 1) * RECORDS_PER_PAGE;
 
-        int roleId = 0;
-        for (Users users : listUser) {
-         //   System.out.println("Role " + users.getRoleID().getRoleID());
-            roleId = users.getRoleID().getRoleID();
+        DAO dao = new DAO();
+        List<Users> listUser;
+        int noOfRecords = 0;
+
+        if (userIdParam != null && !userIdParam.isEmpty()) {
+            int userId = Integer.parseInt(userIdParam);
+            listUser = dao.getUserById(userId);
+            noOfRecords = listUser.size();
+        } else {
+            listUser = dao.getUsers(offset, RECORDS_PER_PAGE);
+            noOfRecords = dao.getNoOfRecords();
         }
-        if (listUser.size() > 0) {
-            request.setAttribute("roleId", roleId);
+
+        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / RECORDS_PER_PAGE);
+        if (listUser.isEmpty()) {
+            request.setAttribute("errorMessage", "User ID not found.");
+        } else {
             request.setAttribute("listUser", listUser);
-            request.getRequestDispatcher("/WEB-INF/views/admin-views/managerAccountUsers.jsp").forward(request, response);
         }
+        request.setAttribute("noOfPages", noOfPages);
+        request.setAttribute("currentPage", page);
+
+        request.getRequestDispatcher("/WEB-INF/views/admin-views/managerAccountUsers.jsp").forward(request, response);
+
     }
 
     /**

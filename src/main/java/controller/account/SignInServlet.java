@@ -17,6 +17,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import modal.Shift;
+import modal.StaffStatus;
 import modal.Users;
 
 /**
@@ -29,10 +32,10 @@ public class SignInServlet extends HttpServlet {
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -51,15 +54,13 @@ public class SignInServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -80,10 +81,10 @@ public class SignInServlet extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -97,9 +98,33 @@ public class SignInServlet extends HttpServlet {
             response.sendRedirect("signin");
         } else {
             HttpSession session = request.getSession();
-            session.setAttribute("account", user);
-            response.sendRedirect("nowShowing");
+            int roleID = user.getRoleID().getRoleID();
 
+            if (roleID == 2) {
+                session.setAttribute("account", user);
+                response.sendRedirect("home");
+            } else if (roleID == 3) {
+                StaffStatus status = user.getPhone();
+                status.setPhone(String.valueOf(user.getUserID()));
+                if (status == null || !"approve".equals(status.getStatus())) {
+                    request.getSession().setAttribute("error", "Your account is not approved!");
+                    response.sendRedirect("signin");
+                    return;
+                }
+
+                // Kiểm tra xem người dùng có đang trong ca làm việc không
+                if (!d.isUserInCurrentShift(status.getPhone())) {
+                    request.getSession().setAttribute("error", "You are not in your shift time!");
+                    response.sendRedirect("signin");
+                } else {
+                    session.setAttribute("account", user);
+                    response.sendRedirect("homeStaff");
+                }
+            } else {
+                // If the role is not 2 or 3, redirect back to signin with an error
+                request.getSession().setAttribute("error", "Invalid user role!");
+                response.sendRedirect("signin");
+            }
         }
     }
 
