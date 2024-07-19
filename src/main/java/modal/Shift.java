@@ -17,6 +17,11 @@ public class Shift {
     private Timestamp endTime;
     private double startAmount;
     private double endAmount;
+    private double transferPayments;
+    private int userID;
+    private double revenue;
+    private String displayName;
+    
 
     public Shift() {
     }
@@ -29,6 +34,23 @@ public class Shift {
         this.startAmount = startAmount;
         this.endAmount = endAmount;
     }
+
+    public Shift(int shiftID, StaffStatus phone, Timestamp startTime, Timestamp endTime, double startAmount, double endAmount, double transferPayments, int userID, double revenue, String displayName) {
+        this.shiftID = shiftID;
+        this.phone = phone;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startAmount = startAmount;
+        this.endAmount = endAmount;
+        this.transferPayments = transferPayments;
+        this.userID = userID;
+        this.revenue = revenue;
+        this.displayName = displayName;
+    }
+
+    
+    
+    
 
     public int getShiftID() {
         return shiftID;
@@ -78,5 +100,38 @@ public class Shift {
         this.endAmount = endAmount;
     }
 
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public double getTransferPayments() {
+        return transferPayments;
+    }
+
+    public void setTransferPayments(double transferPayments) {
+        this.transferPayments = transferPayments;
+    }
+
+    public double getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(double revenue) {
+        this.revenue = revenue;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    
     
 }
