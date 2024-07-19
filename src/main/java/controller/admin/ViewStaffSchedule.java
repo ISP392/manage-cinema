@@ -4,6 +4,7 @@
  */
 package controller.admin;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import modal.Cinemas;
+import modal.Users;
 
 /**
  *
@@ -57,7 +61,16 @@ public class ViewStaffSchedule extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Users u = (Users) request.getSession().getAttribute("admin");
+        if (u == null || u.getRoleID().getRoleID() != 1) {
+            response.sendRedirect("admin");
+        } else {
+            DAO dao = new DAO();
+            
+            List<Cinemas> listCinemas = dao.getAllCinemas();
+            request.setAttribute("listCinemas", listCinemas);
             request.getRequestDispatcher("/WEB-INF/views/admin-views/staffSchedule.jsp").forward(request, response);
+        }
     }
 
     /**

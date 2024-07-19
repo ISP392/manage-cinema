@@ -63,102 +63,102 @@
 
     </head>
     <style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-    }
-    .container-fluid {
-        padding: 20px;
-        max-width: 90%;
-        margin: auto;
-        background: #fff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
-    h1 {
-        font-size: 24px;
-        color: #333;
-        margin-bottom: 20px;
-    }
-    label {
-        font-size: 16px;
-        font-weight: bold;
-        color: #333;
-        margin-right: 10px;
-    }
-    select {
-        padding: 10px;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        font-size: 16px;
-        margin-bottom: 20px;
-    }
-    select:focus {
-        border-color: #007BFF;
-        outline: none;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 12px;
-        text-align: center;
-    }
-    th {
-        background-color: #007BFF;
-        color: white;
-        font-weight: bold;
-    }
-    td {
-        background-color: #fff;
-    }
-    
-    .slot {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        background-color: #D5F8F9;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 10px;
-        height: auto;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .slot div {
-        margin-bottom: 5px;
-    }
-    .slot a {
-        color: #007BFF;
-        text-decoration: none;
-        font-weight: bold;
-    }
-    .slot a:hover {
-        text-decoration: underline;
-    }
-    .selected {
-        background-color: #007BFF;
-        color: white;
-    }
-    .button {
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        font-size: 16px;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-    }
-    .button:hover {
-        background-color: #0056b3;
-    }
-</style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container-fluid {
+            padding: 20px;
+            max-width: 90%;
+            margin: auto;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-right: 10px;
+        }
+        select {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        select:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+            font-weight: bold;
+        }
+        td {
+            background-color: #fff;
+        }
+
+        .slot {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #D5F8F9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .slot div {
+            margin-bottom: 5px;
+        }
+        .slot a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .slot a:hover {
+            text-decoration: underline;
+        }
+        .selected {
+            background-color: #007BFF;
+            color: white;
+        }
+        .button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 
     <body>
         <!--*******************
@@ -291,7 +291,7 @@ Main wrapper start
                                 <li><a href="view-slot?date=<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())%>&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu&theaterNumber=1">Slot</a></li>
                                 <li><a href="manager_user">Staff</a></li>
                                 <li><a href="manage-staff-status">Staff status</a></li>
-                                <li><a href="staff-schedule">Staff Schedule</a></li>
+                                <li><a href="staff-schedule?date=<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())%>&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu">Staff Schedule</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -315,14 +315,6 @@ Main wrapper start
                         <select id="cinemaSelect" name="cinemaName" onchange="navigateToCinema()">
                             <c:forEach items="${listCinemas}" var="cinema">
                                 <option value="${cinema.name}" <c:if test="${cinema.name == param.cinemaName}">selected</c:if>>${cinema.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="theaterSelect">Theater Number:</label>
-                        <select id="theaterSelect" name="theaterNumber" onchange="navigateToTheater()">
-                            <c:forEach var="i" begin="1" end="4">
-                                <option value="${i}" <c:if test="${i == param.theaterNumber}">selected</c:if>>${i}</option>
                             </c:forEach>
                         </select>
                     </div>
@@ -367,102 +359,66 @@ Main wrapper start
                                 <th>Saturday</th>
                                 <th>Sunday</th>
                             </tr>
-                            <%-- date for each day of week --%>
                             <tr>
                                 <th style="width: 200px;">Date</th>
                                     <% for (int i = 0; i < 7; i++) { %>
                                 <th><%= displayFormat.format(weekDays[i]) %></th>
-                                    <%-- Hidden input để lưu trữ ngày đầy đủ --%>
+                                    <%-- Hidden input to store the full date --%>
                         <input type="hidden" name="weekStartDate" value="<%= fullDateFormat.format(weekDays[i]) %>">
                         <% } %>
                         </tr>
                         </thead>
-                        <!-- <tbody>
-                        <c:forEach var="day" items="${weekDays}">
-                            <c:set var="formattedDate">
-                                <fmt:formatDate value="${day}" pattern="MM/dd"/>
-                            </c:set>
-                            <tr>
-                            <c:if test="${showtimeMap[formattedDate] != null}">
-                                <c:forEach var="showtime" items="${showtimeMap[formattedDate]}">
-                                    <td>${showtime.theaterID.cinemaID.name}</td>
-                                    <td>${formattedDate}</td>
-                                </c:forEach>
-                                    <td>yes</td>
-                            </c:if>
-                            <c:if test="${showtimeMap[formattedDate] == null}">
-                                <tr>
-                                    <td>no123</td>
-                                    <td>${formattedDate}</td>
-                                </tr>
-                            </c:if>
-                        </tr>
-                        
-                        </c:forEach>
-                        </tbody> -->
                         <tbody>
                             <tr>
-                                <td><a href="addNewSlot" >Add Slot</a></td>
-
-                                <c:forEach var="day" items="${weekDays}">
-                                    <c:set var="formattedDate">
-                                        <fmt:formatDate value="${day}" pattern="MM/dd"/>
-                                    </c:set>
-                                    <c:choose>
-                                        <c:when test="${showtimeMap[formattedDate] != null}">
-                                            <td style="width: 200px; vertical-align: top;">
-                                                <c:forEach var="showtime" items="${showtimeMap[formattedDate]}" varStatus="status">
-
-                                                    <div class="slot">   
-                                                        <div>${showtime.theaterID.cinemaID.name}</div>
-                                                        <div style="font-size: 20px; font-weight: bold; margin-top: 10px;">
-                                                            <c:set var="parsedDate" value="${fn:substring(showtime.startTime, 0, 19)}" />
-                                                            <c:set var="parsedDate2" value="${fn:substring(showtime.endTime, 0, 19)}" />
-                                                            <fmt:parseDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm:ss" var="dateObj" />
-                                                            <fmt:parseDate value="${parsedDate2}" pattern="yyyy-MM-dd HH:mm:ss" var="dateObj2" />
-                                                            <fmt:formatDate value="${dateObj}" pattern="HH:mm" /> ~ <fmt:formatDate value="${dateObj2}" pattern="HH:mm" />
-                                                        </div>
-
-                                                    </div>
-
-
-                                                    <a href="updateNewSlot?id=${showtime.screeningID}">Update Slot</a>
-
-                                                </c:forEach>      
-
-                                            </td>
-
-                                        </c:when>
-                                        <c:otherwise>
-                                            <td>-</td>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
-
+                                <td>00:00 ~ 06:00</td>
+                                <% for (int i = 0; i < 7; i++) { %>
+                                <td>
+                                </td>
+                                <% } %>
+                            </tr>
+                            <tr>
+                                <td>06:00 ~ 12:00</td>
+                                <% for (int i = 0; i < 7; i++) { %>
+                                <td>
+                                </td>
+                                <% } %>
+                            </tr>
+                            <tr>
+                                <td>12:00 ~ 18:00</td>
+                                <% for (int i = 0; i < 7; i++) { %>
+                                <td>
+                                </td>
+                                <% } %>
+                            </tr>
+                            <tr>
+                                <td>18:00 ~ 23:59</td>
+                                <% for (int i = 0; i < 7; i++) { %>
+                                <td>
+                                </td>
+                                <% } %>
                             </tr>
                         </tbody>
                     </table>
+
+
 
                     <script>
                         function navigateToCinema() {
                             var date = '<%= todayStr %>';
                             var cinemaName = document.getElementById("cinemaSelect").value;
-                            var theaterNumber = document.getElementById("theaterSelect").value;
-                            var url = "view-slot?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName) + "&theaterNumber=" + theaterNumber;
+                            var url = "staff-schedule?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName);
                             window.location.href = url;
                         }
 
                         function navigateToTheater() {
                             var date = '<%= todayStr %>';
                             var cinemaName = document.getElementById("cinemaSelect").value;
-                            var theaterNumber = document.getElementById("theaterSelect").value;
-                            var url = "view-slot?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName) + "&theaterNumber=" + theaterNumber;
+                            var url = "staff-schedule?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName);
                             window.location.href = url;
                         }
 
                         function navigateToYear() {
                             var cinemaName = document.getElementById("cinemaSelect").value;
-                            var theaterNumber = document.getElementById("theaterSelect").value;
                             var year = document.getElementById("yearSelect").value;
                             var week = document.getElementById("weekSelect").value;
 
@@ -473,13 +429,12 @@ Main wrapper start
                             cal.setDate(cal.getDate() + (week - 1) * 7);
 
                             var date = cal.toISOString().split('T')[0];
-                            var url = "view-slot?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName) + "&theaterNumber=" + theaterNumber;
+                            var url = "staff-schedule?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName);
                             window.location.href = url;
                         }
 
                         function navigateToWeek() {
                             var cinemaName = document.getElementById("cinemaSelect").value;
-                            var theaterNumber = document.getElementById("theaterSelect").value;
                             var year = document.getElementById("yearSelect").value;
                             var week = document.getElementById("weekSelect").value;
 
@@ -490,7 +445,7 @@ Main wrapper start
                             cal.setDate(cal.getDate() + (week - 1) * 7 + 1);
 
                             var date = cal.toISOString().split('T')[0];
-                            var url = "view-slot?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName) + "&theaterNumber=" + theaterNumber;
+                            var url = "staff-schedule?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName);
                             window.location.href = url;
                         }
                     </script>
@@ -512,7 +467,7 @@ Main wrapper start
                 <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
 
                 <script src="./assets/JS/js/custom.min.js"></script>
-                
+
                 </body>
 
                 </html>
