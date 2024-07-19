@@ -164,6 +164,7 @@ public class EmploymentInformationServlet extends HttpServlet {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            
             StaffStatus staff = new StaffStatus(phone, "Pending", address, dobDate, name, email);
             staff.setCinemaId(cinemaId);
             dao.addStaff(staff);
