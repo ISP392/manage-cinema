@@ -131,7 +131,10 @@
                 </c:if>
                 <c:if test="${not empty user}">
                     <div class="form-group">
-                        <button type="button" onclick="selectCustomer()">Chọn khách hàng này</button>
+                        <form action="checkTicket" method="post">
+                            <input type="hidden" name="userID" value="${user[0].userID}">
+                            <button type="submit">Chọn khách hàng này</button>
+                        </form>
                     </div>
                 </c:if>
             </div>
@@ -140,12 +143,5 @@
             </c:if>
         </div>
     </div>
-    <script>
-        function selectCustomer() {
-            const customerID = document.querySelector('.customer-info p strong').innerText;
-            alert('Khách hàng ' + customerID + ' đã được chọn.');
-            // Proceed to next step
-        }
-    </script>
 </body>
 </html>

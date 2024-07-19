@@ -25,7 +25,7 @@ import modal.Voucher;
  *
  * @author baoquoc
  */
-@WebServlet(name = "OrderServlet", urlPatterns = { "/order" })
+@WebServlet(name = "OrderServlet", urlPatterns = {"/order"})
 public class OrderServlet extends HttpServlet {
 
     DAO dao = new DAO();
@@ -48,8 +48,12 @@ public class OrderServlet extends HttpServlet {
 
             request.setAttribute("orderDetail", orderDetail);
             request.setAttribute("vouchers", vouchers);
-            request.getRequestDispatcher("/WEB-INF/views/order.jsp").forward(request,
-                    response);
+            if (user.getRoleID().getRoleID() == 3) {
+                response.sendRedirect("chooseCustomer");
+            } else {
+                request.getRequestDispatcher("/WEB-INF/views/order.jsp").forward(request,
+                        response);
+            }
         }
     }
 

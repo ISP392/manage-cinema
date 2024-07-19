@@ -190,7 +190,7 @@
                             </a>
                             <ul aria-expanded="false">
                                 <li><a href="addVoucher">Add Voucher</a></li>
-                                <li><a href="addFood">Add Food</a></li>
+                                <li><a href="listFood">Add Food</a></li>
                             </ul>
                         </li>
                     </ul>

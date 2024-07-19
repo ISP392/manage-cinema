@@ -5,6 +5,7 @@
 package controller.admin;
 
 import DAO.DAO;
+import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -77,20 +78,17 @@ public class listFoodServlet extends HttpServlet {
             int index = Integer.parseInt(indexPage);
             int pageSize = 10;
 
-            int totalMovies = dao.getMovieCount();
-            int endPage = totalMovies / pageSize;
-            if (totalMovies % pageSize != 0) {
-                endPage++;
+
+
+            List<FoodItem> listFood = dao.getFoodByPage(index, pageSize);
+            String realPath = request.getContextPath() + "/assets/images/food/";
+            for (FoodItem foodItem : listFood) {
+                foodItem.setImgFoodItems(realPath.concat(foodItem.getImgFoodItems()));
             }
 
 
-            Date currentDate = new Date();
-        
-
-            
-
-            request.setAttribute("endPage", endPage);
             request.setAttribute("tag", index);
+            request.setAttribute("listFood", listFood);
 
             request.getRequestDispatcher("/WEB-INF/views/addOther/listFood.jsp").forward(request, response);
         }
@@ -107,7 +105,8 @@ public class listFoodServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        DAO dao = new DAO();
+        response.sendRedirect("foodList");
     }
 
     /**

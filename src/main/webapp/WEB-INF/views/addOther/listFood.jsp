@@ -1,3 +1,76 @@
+<%-- 
+    Document   : listFood
+    Created on : Jun 23, 2024, 11:42:50 PM
+    Author     : ACER
+--%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <title>Admin Dashboard</title>
+        <link href="./assets/css/dashboard-admin.css" rel="stylesheet"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <style>
+        .action-rows{
+            width: 120px;
+        }
+        
+        /* Modal styles */
+        .modalImg {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 60px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modalImg-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        .closeImg {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .closeImg:hover,
+        .closeImg:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        @media only screen and (max-width: 700px){
+            .modalImg-content {
+                width: 100%;
+            }
+        }
+    </style>
+    <body>
+         <fmt:setLocale value = "vi_VN"/>
+        <!--*******************
+
 <%-- Document : listMovie Created on : Jun 23, 2024, 11:42:50 PM Author : ACER --%>
 
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -109,6 +182,86 @@
                     <!--**********************************
                   Sidebar start
               ***********************************-->
+            <div class="dlabnav">
+                <div class="dlabnav-scroll">
+                    <ul class="metismenu" id="menu">
+                        <li class="dropdown header-profile">
+                            <a
+                                class="nav-link"
+                                href="javascript:void(0);"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                >
+                                <div class="header-info ms-3">
+                                    <span class="font-w600">Hi, <b>baothiquoc</b></span>
+                                    <small class="text-end font-w400">baothiquoc@gmail.com</small>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="page-login.html" class="dropdown-item ai-icon">
+                                    <svg
+                                        id="icon-logout"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="text-danger"
+                                        width="18"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        >
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                    </svg>
+                                    <span class="ms-2">Logout </span>
+                                </a>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="" href="home_admin">
+                                <i class="flaticon-025-dashboard"></i>
+                                <span class="">Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="has-arrow ai-icon"
+                                href="javascript:void(0)"
+                                aria-expanded="false"
+                                >
+                                <i class="fa fa-gear fw-bold"></i>
+                                <span class="nav-text">CMS</span>
+                            </a>
+                            <ul aria-expanded="false">
+                                <li><a href="list_movie">Movie</a></li>
+                                <li><a href="menu.html">Slot</a></li>
+                                <li><a href="manager_user">Staff</a></li>
+                                <li><a href="manage-staff-status">Staff status</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a
+                                class="has-arrow ai-icon"
+                                href="javascript:void(0)"
+                                aria-expanded="false"
+                                >
+                                <i class="fa fa-gear fw-bold"></i>
+                                <span class="nav-text">Add Other</span>
+                            </a>
+                            <ul aria-expanded="false">
+                                <li><a href="listFood">Food</a></li>
+                                <li><a href="menu.html">Voucher</a></li>
+                            </ul>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </div>
+            <!--**********************************
+
                     <div class="dlabnav">
                         <div class="dlabnav-scroll">
                             <ul class="metismenu" id="menu">
@@ -161,6 +314,85 @@
                     <!--**********************************
                   Content body start
               ***********************************-->
+            <div class="content-body">
+                <!-- row -->
+                <div class="container-fluid">
+                    <!-- Row -->
+                    <div class="row">
+                        <div class="col-xl-12">
+
+                            <div class="mb-4">
+                                <a href="addFood" class="btn btn-primary">Add Food</a>
+                            </div>
+
+                            <div class="filter cm-content-box box-primary">
+                                <div class="content-title">
+                                    <div class="cpa">
+                                        <i class="fa-solid fa-file-lines me-1"></i>List Food Iterms
+                                    </div>
+                                </div>
+                                <div class="cm-content-body form excerpt">
+                                    <div class="card-body pt-2">
+                                        <div class="table-responsive">
+
+                                            <table class="table table-responsive-sm mb-0">
+
+                                                <thead>
+                                                    <tr>
+                                                        
+                                                        <th><strong>#</strong></th>
+                                                        <th><strong>Food Name</strong></th>
+                                                        <th><strong>Description</strong></th>
+                                                        <th><strong>Price</strong></th>
+                                                        <th><strong>Image</strong></th>
+                                                        
+                                                        <th class="action-rows"><strong>Actions</strong></th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody id="movieList" >
+                                                    <c:if test="${not empty errorMessage}">
+                                                    <p style="color:red">${errorMessage}</p>
+                                                </c:if>
+
+                                                <c:set var="itemsPerPage" value="10" />
+                                                <c:set var="currentPage" value="${tag}" />
+
+
+                                                <c:forEach  var="food" items="${listFood}" >
+                                                    <c:set var="foodNumber" value="${(currentPage - 1) * itemsPerPage}" />
+                                                    <tr>
+
+                                                        <td>${food.foodItemID}</td>
+                                                        <td>${food.foodName.toUpperCase()}</td>
+                                                        <td>${food.description}</td>
+                                                        <td><fmt:formatNumber value = "${food.price}" type = "currency"/></td>
+                                                        <td><img style="height: 30px" src="${food.imgFoodItems}" alt="Food Image" onclick="openModal(this.src)" /></td>
+
+                                                        <td class="action-rows">
+                                                            <a href="update_food?foodId=${food.foodItemID}" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
+                                                            <c:if test="${food.display==1}">
+                                                                <a href="updateDisplayFood?foodId=${food.foodItemID}&display=0" class="btn btn-danger shadow btn-xs sharp rounded-circle">
+                                                                    <i class="fa fa-eye"></i>
+                                                                </a>
+                                                            </c:if>
+
+                                                            <c:if test="${food.display==0}">
+
+                                                                <a  href="updateDisplayFood?foodId=${food.foodItemID}&display=1" class="btn btn-danger shadow btn-xs sharp rounded-circle">
+                                                                    <i class="fa fa-eye-slash"></i>
+                                                                </a>
+                                                            </c:if>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+
+                                                </tbody>
+                                            </table>
+                                            <div id="myModalImg" class="modalImg">
+                                                <span class="closeImg" onclick="closeModal()">&times;</span>
+                                                <img class="modalImg-content" id="img01">
+                                            </div>
                     <div class="content-body">
                         <!-- row -->
                         <div class="container-fluid">
@@ -292,7 +524,12 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <!--**********************************
                             <!--**********************************
+
                           Content body end
                       ***********************************-->
                         </div>
@@ -305,6 +542,31 @@
                 ***********************************-->
                         <!-- Required vendors -->
                         <script src="./assets/JS/vendor/global/global.min.js"></script>
+
+                <script src="./assets/JS/js/custom.min.js"></script>
+               
+               
+    
+    
+
+            <script>
+                // Function to open the modal
+                function openModal(src) {
+                    var modal = document.getElementById("myModalImg");
+                    var modalImg = document.getElementById("img01");
+                    modal.style.display = "block";
+                    modal.style.zIndex = '1000';
+                    modalImg.src = src;
+                }
+
+                // Function to close the modal
+                function closeModal() {
+                    var modal = document.getElementById("myModalImg");
+                    modal.style.display = "none";
+                }
+            </script>
+                </body>
+                </html>
 
                         <!-- Apex Chart -->
                         <script src="./assets/JS/vendor/apexchart/apexchart.js"></script>

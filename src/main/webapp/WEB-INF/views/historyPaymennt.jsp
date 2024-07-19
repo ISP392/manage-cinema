@@ -112,26 +112,31 @@
                                                                 <td>
                                                                     <div class="d-flex mb-2">
                                                                         <div class="flex-shrink-0" style="margin-right:20px; box-shadow: 0 20px 27px 0 rgb(0 0 0 / 34%);height:109px">
-                                                                            <img src="./assets/images/posterImages/${ticket.getMovieID().getPosterImage()}" alt="" width="74px" height="108px" class="img-fluid">
+                                                                            <img src="${ticket.getMovieID().getPosterImage()}" alt="" width="74px" height="108px" class="img-fluid">
                                                                         </div>
                                                                         <div class="flex-lg-grow-1 ms-3">
                                                                             <h4 class="mb-0">${ticket.getMovieID().getTitle().toUpperCase()}</h4>
                                                                             <ul>
                                                                                 <li class="item" style="width: 210px; word-break: break-word;margin-right: 0;width: 300px">
                                                                                     <c:set var="total" value="${ticket.orderID.allPrice}" />
-                                                                                    <p><span>Mã vé:</span> ${ticket.getTicketID()}</p>
+                                                                                    <p><span>Mã vé:</span>
+                                                                                        <c:forEach items="${ticket.getTicketIDs()}" var="ticketID">
+                                                                                            ${ticketID} 
+                                                                                        </c:forEach>
+                                                                                    </p>
                                                                                     <p><span>Rạp:</span> ${ticket.getCinemaID().getName()}</p>
                                                                                     <p><span>Suất chiếu:</span> <fmt:formatDate value="${ticket.getSeatID().getScreeningID().getStartTime()}" pattern="HH:mm"/>, <fmt:formatDate value="${ticket.getSeatID().getScreeningID().getStartTime()}" pattern="yyyy-MM-dd" /></p>
                                                                                     <p><span>Phòng Cinema: </span>Cinemas ${ticket.getSeatID().getScreeningID().getTheaterID().getTheaterNumber()}</p>
-                                                                                    <p><span>Ghế:</span> <span id="selectedSeats">${ticket.getSeatID().getSeatNumber()}</span></p>
+                                                                                    <p><span>Ghế:</span>
+                                                                                        <c:forEach items="${ticket.seats}" var="seat">
+                                                                                            ${seat.seatNumber} 
+                                                                                        </c:forEach>
+                                                                                    </p>
                                                                                     <p>
-                                                                                        <c:if test="${ticket.orderID.orderFood.size() == 0}">
-                                                                                            No combo
-                                                                                        </c:if>
                                                                                         <c:if test="${ticket.orderID.orderFood.size() > 0}">
                                                                                             <span>Combo:</span> <span id="selectedSeats">
                                                                                                 <c:forEach items="${ticket.orderID.orderFood}" var="food">
-                                                                                                     <c:set var="total" value="${total + (food.quantity * food.foods.price)}" />
+                                                                                                    <c:set var="total" value="${total + (food.quantity * food.foods.price)}" />
                                                                                                     ${food.foods.foodName} - ${food.quantity} - <img src="./assets/images/food/${food.foods.imgFoodItems}" width="50px" height="height" alt="alt"/>- ${food.foods.price} đồng
                                                                                                 </c:forEach>
                                                                                             </span>
@@ -153,6 +158,7 @@
                                         </div>
                                     </div>
                                 </c:forEach>
+
                                 <nav aria-label="...">
                                     <div class="pagination-wrapper">
                                         <ul class="pagination" style="margin-right:15px; margin-top: 20px; justify-content: end;">
@@ -179,3 +185,4 @@
 
     </body>
 </html>
+

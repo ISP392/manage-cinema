@@ -15,7 +15,7 @@ import modal.OrderDetail;
 import modal.ScreeningTimes;
 import modal.Users;
 
-@WebServlet(name = "pickFoodServlet", urlPatterns = { "/pickFood" })
+@WebServlet(name = "pickFoodServlet", urlPatterns = {"/pickFood"})
 public class pickFoodServlet extends HttpServlet {
 
     @Override
@@ -57,6 +57,7 @@ public class pickFoodServlet extends HttpServlet {
             request.setAttribute("foodItems", foodItems);
 
             request.getRequestDispatcher("/WEB-INF/views/pickFood.jsp").forward(request, response);
+
         }
     }
 
