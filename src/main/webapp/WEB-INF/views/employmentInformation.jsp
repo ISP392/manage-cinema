@@ -86,6 +86,17 @@
                                     </div>
 
                                     <div class="form-outline mb-4">
+                                        <div>
+                                            <label class="form-label">Rạp làm việc</label> 
+                                        </div>
+                                        <select  style="padding: 10px; width: 100%; margin-top: 5px " class="form-select" aria-label="Select Cinema" name="cinemaId">
+                                            <c:forEach var="c" items="${requestScope.cinema}">
+                                                <option value="${c.cinemaID}">${c.name}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                        
+                                    <div class="form-outline mb-4">
                                         <label class="form-label">CV</label>
                                         <input type="file" id="cv" name="cv" placeholder="file pdf" class="input-register" required=" "/>
                                     </div>

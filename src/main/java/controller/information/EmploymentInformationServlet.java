@@ -22,7 +22,9 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+import modal.Cinemas;
 import modal.StaffStatus;
 import util.Email;
 
@@ -74,7 +76,9 @@ public class EmploymentInformationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        DAO dao = new DAO();
+        List<Cinemas> cinema = dao.getAllCinemas();
+        request.setAttribute("cinema", cinema);
         request.getRequestDispatcher("/WEB-INF/views/employmentInformation.jsp").forward(request, response);
     }
 
@@ -96,9 +100,11 @@ public class EmploymentInformationServlet extends HttpServlet {
         String dob = request.getParameter("dob");
         String address = request.getParameter("address");
         String position = request.getParameter("position");
+        String cinema = request.getParameter("cinemaId");
         Part filePart = request.getPart("cv");
-
+        int cinemaId = Integer.parseInt(cinema);
         DAO dao = new DAO();
+        
         boolean emailExists = dao.checkEPstaff(email, null); 
         boolean phoneExists = dao.checkEPstaff(null, phone); 
         boolean emailAndPhoneExist = dao.checkEPstaff(email, phone); 
@@ -116,13 +122,20 @@ public class EmploymentInformationServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/views/employmentInformation.jsp").forward(request, response);
             return;
         }
-
+        String cinemaName = "";
+        List<Cinemas> cinemas = dao.getAllCinemas();
+        for (Cinemas c : cinemas) {
+            if(c.getCinemaID() == cinemaId){
+                cinemaName= c.getName();
+            }
+        }
         String textContent = "Name: " + name + "\n"
                 + "Email: " + email + "\n"
                 + "Phone: " + phone + "\n"
                 + "Date of Birth: " + dob + "\n"
                 + "Address: " + address + "\n"
-                + "Position: " + position;
+                + "Position: " + position + "\n"
+                + "cinema: " + cinemaName;
         InputStream fileContent = filePart.getInputStream();
         // Define the path to save the file
         String newFileName = generateFileName(filePart);
@@ -152,6 +165,7 @@ public class EmploymentInformationServlet extends HttpServlet {
                 e.printStackTrace();
             }
             StaffStatus staff = new StaffStatus(phone, "Pending", address, dobDate, name, email);
+            staff.setCinemaId(cinemaId);
             dao.addStaff(staff);
             request.setAttribute("success", "Your application was submitted successfully!");
         } else {

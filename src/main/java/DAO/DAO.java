@@ -1067,8 +1067,8 @@ public class DAO extends DBContext {
 //    add staffStaus
 
     public boolean addStaff(StaffStatus staff) {
-        String sql = "INSERT INTO staffstatus (phone, status, address, dob, staffName, staffEmail) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO staffstatus (phone, status, address, dob, staffName, staffEmail, cinemaId) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -1078,6 +1078,7 @@ public class DAO extends DBContext {
             stmt.setDate(4, new java.sql.Date(staff.getDob().getTime()));
             stmt.setString(5, staff.getStaffName());
             stmt.setString(6, staff.getStaffEmail());
+            stmt.setInt(7, staff.getCinemaId());
 
             int rowsInserted = stmt.executeUpdate();
             return rowsInserted > 0;
@@ -1529,7 +1530,7 @@ public class DAO extends DBContext {
 
     public List<FoodItem> getFood() {
         List<FoodItem> foodItems = new ArrayList<>();
-        String sql = "SELECT * FROM FoodItems";
+        String sql = "SELECT * FROM FoodItems where display = '1'";
 
         try (
                 PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
@@ -1540,6 +1541,8 @@ public class DAO extends DBContext {
                 foodItem.setDescription(rs.getString("description"));
                 foodItem.setPrice(rs.getInt("price"));
                 foodItem.setImgFoodItems(rs.getString("imgFoodItems"));
+                foodItem.setQuantity(rs.getInt("quantity"));
+                foodItem.setDisplay(rs.getInt("display"));
                 foodItems.add(foodItem);
             }
         } catch (Exception e) {
@@ -1547,7 +1550,7 @@ public class DAO extends DBContext {
         }
         return foodItems;
     }
-
+    
     // get all cinemas
     public List<Cinemas> getAllCinemas() {
         List<Cinemas> list = new ArrayList<>();
@@ -1556,7 +1559,14 @@ public class DAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
+                String sql1 = "SELECT * FROM project_cinema_update.Cinemas c where c.name = ? LIMIT 1";
                 Cinemas c = new Cinemas(rs.getString("name"));
+                PreparedStatement ps1 = connection.prepareStatement(sql1);
+                ps1.setString(1, c.getName());
+                ResultSet rs1 = ps1.executeQuery();
+                while (rs1.next()) {
+                    c.setCinemaID(rs1.getInt("CinemaId"));
+                }
                 list.add(c);
             }
             return list;

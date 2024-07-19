@@ -126,7 +126,7 @@ public class addFoodServlet extends HttpServlet {
                 e.printStackTrace();
             }
             dao.insertAddFood(foodName, description, price, uniqueFileName, 0);
-            response.sendRedirect("addFood");
+            response.sendRedirect("listFood");
 
         } catch (IOException | ServletException e) {
             e.printStackTrace();

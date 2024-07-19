@@ -121,22 +121,24 @@ public class updateFoodServlet extends HttpServlet {
                 Files.createDirectories(dirPath);
             }
             Part part = request.getPart("imgFoodItems");
-            if(part != null){
-                 // Lấy phần của request chứa file ảnh
+            String fileName = "";
+            fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+            if (fileName != null && !fileName.isEmpty()) {
+                // Lấy phần của request chứa file ảnh
                 // Lấy tên file gốc
-                String fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+                fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
                 // Tạo tên file duy nhất để tránh trùng lặp
                 String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
                 // Tạo đường dẫn tới file ảnh trong thư mục uploads
                 Path imagePath = Paths.get(realPath, uniqueFileName);
-            // Ghi dữ liệu từ input stream của file ảnh vào đường dẫn vừa tạo
+                // Ghi dữ liệu từ input stream của file ảnh vào đường dẫn vừa tạo
                 try (InputStream input = part.getInputStream()) {
                     Files.copy(input, imagePath);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 dao.updateFoodById(foodName, description, price, uniqueFileName, 0, foodId);
-            }else{
+            } else {
                 dao.updateFoodById(foodName, description, price, oldFood.getImgFoodItems(), 0, foodId);
             }
             Thread.sleep(5000);
@@ -148,29 +150,29 @@ public class updateFoodServlet extends HttpServlet {
             Logger.getLogger(updateFoodServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private String getPartValue(Part part) throws IOException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(part.getInputStream(), StandardCharsets.UTF_8))) {
             return reader.lines().collect(Collectors.joining("\n"));
         }
     }
-    
+
     private void triggerBuild() {
-    try {
-        String currDir = System.getProperty("user.dir");
-        ProcessBuilder processBuilder = new ProcessBuilder("mvn", "clean", "install");
-        processBuilder.directory(new File(currDir));
-        Process process = processBuilder.start();
-        int exitCode = process.waitFor();
-        if (exitCode == 0) {
-            System.out.println("Build successful");
-        } else {
-            System.err.println("Build failed with exit code " + exitCode);
+        try {
+            String currDir = System.getProperty("user.dir");
+            ProcessBuilder processBuilder = new ProcessBuilder("mvn", "clean", "install");
+            processBuilder.directory(new File(currDir));
+            Process process = processBuilder.start();
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                System.out.println("Build successful");
+            } else {
+                System.err.println("Build failed with exit code " + exitCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
-    } catch (IOException | InterruptedException e) {
-        e.printStackTrace();
     }
-}
 
     /**
      * Returns a short description of the servlet.
