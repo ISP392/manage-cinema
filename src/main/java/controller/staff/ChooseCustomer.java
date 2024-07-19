@@ -13,20 +13,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.List;
-import modal.FoodItem;
 import modal.Orders;
-import modal.ScreeningTimes;
-import modal.TicketInfo;
-import modal.Tickets;
+import modal.Users;
 
 /**
  *
  * @author caoha
  */
-@WebServlet(name="CheckTicketServlet", urlPatterns={"/checkTicket"})
-public class CheckTicketServlet extends HttpServlet {
+@WebServlet(name="ChooseCustomer", urlPatterns={"/chooseCustomer"})
+public class ChooseCustomer extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -43,10 +39,10 @@ public class CheckTicketServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CheckTicketServlet</title>");  
+            out.println("<title>Servlet ChooseCustomer</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CheckTicketServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ChooseCustomer at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,7 +59,7 @@ public class CheckTicketServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/staff-views/checkticket.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/staff-views/listCustomer.jsp").forward(request, response);
     } 
 
     /** 
@@ -76,35 +72,26 @@ public class CheckTicketServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException {
-       DAO d = new DAO();
-       String userId = req.getParameter("userID");
-       String orderId = req.getParameter("orderID");
-       
-       if (orderId == null || orderId.isEmpty()) {
-            if (userId != null && !userId.isEmpty()) {
-                orderId = d.getOrderIDByUserID(userId);
-                
-            }
-        }
-
-        if (orderId == null || orderId.isEmpty()) {
-            req.setAttribute("error", "Mã đặt vé không hợp lệ.");
-            req.getRequestDispatcher("/WEB-INF/views/staff-views/result.jsp").forward(req, resp);
+        String userIDStr = req.getParameter("userID");
+        if (userIDStr == null || userIDStr.isEmpty() || !userIDStr.matches("\\d+")) {
+            req.setAttribute("error", "Mã khách hàng không hợp lệ.");
+            req.getRequestDispatcher("/WEB-INF/views/staff-views/listCustomer.jsp").forward(req, resp);
             return;
         }
-
-        Orders order = d.getOrderById(orderId);
-        List<TicketInfo> ticketInfos = d.getTicketInfoByOrderId(orderId);
-        List<FoodItem> foodItems = d.getFoodItemsByOrderId(orderId);
-        if (order != null) {
-            req.setAttribute("order", order);
-            req.setAttribute("ticketInfos", ticketInfos);
-            req.setAttribute("foodItems", foodItems);
+        
+        int userID = Integer.parseInt(userIDStr);
+        DAO d = new DAO();
+        List<Users> usersList = d.getUserById(userID);
+        
+        if (usersList != null && !usersList.isEmpty()) {
+            req.setAttribute("user", usersList);
         } else {
-            req.setAttribute("error", "Thông tin không hợp lệ.");
+            req.setAttribute("error", "Không tìm thấy thông tin khách hàng.");
         }
-        req.getRequestDispatcher("/WEB-INF/views/staff-views/result.jsp").forward(req, resp);
+        
+        req.getRequestDispatcher("/WEB-INF/views/staff-views/listCustomer.jsp").forward(req, resp);
     }
+
 
     /** 
      * Returns a short description of the servlet.

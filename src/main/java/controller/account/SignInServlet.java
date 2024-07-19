@@ -105,6 +105,7 @@ public class SignInServlet extends HttpServlet {
                 response.sendRedirect("home");
             } else if (roleID == 3) {
                  StaffStatus status = user.getPhone();
+                 status.setPhone(String.valueOf(user.getUserID()));
                 if (status == null || !"approve".equals(status.getStatus())) {
                     request.getSession().setAttribute("error", "Your account is not approved!");
                     response.sendRedirect("signin");

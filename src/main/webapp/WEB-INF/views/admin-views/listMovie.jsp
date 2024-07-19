@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: baoquoc
-  Date: 12/06/2024
-  Time: 13:50
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -180,9 +173,10 @@
                             </a>
                             <ul aria-expanded="false">
                                 <li><a href="list_movie">Movie</a></li>
-                                <li><a href="menu.html">Slot</a></li>
+                                <li><a href="view-slot?date=<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu&theaterNumber=1">Slot</a></li>
                                 <li><a href="manager_user">Staff</a></li>
                                 <li><a href="manage-staff-status">Staff status</a></li>
+                                <li><a href="staff-schedule">Staff Schedule</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -209,7 +203,7 @@
                             <div class="filter cm-content-box box-primary">
                                 <div class="content-title">
                                     <div class="cpa">
-                                        <i class="fa-solid fa-file-lines me-1"></i>List Movies
+                                        <i class="fa fa-file-lines"></i> List Movies
 
                                     </div>
 
@@ -267,9 +261,6 @@
                                                                     <i class="fa fa-eye"></i>
                                                                 </a>
 
-                                                                <a href="addNewSlot?movieID=${movie.getMovieID()}&display=1" class="btn btn-primary shadow btn-xs sharp rounded-circle " >
-                                                                    <i class="fa fa-plus"></i>
-                                                                </a>
                                                             </c:if>
 
                                                             <c:if test="${movie.getDisplay()==0}">
@@ -369,7 +360,6 @@
                                             movieListHtml += "<a href='update_movie?movieID=" + movie.movieID + "' class='btn btn-primary shadow btn-xs sharp rounded-circle me-1'><i class='fa fa-pencil'></i></a>";
                                             if (movie.display == 1) {
                                                 movieListHtml += "<a href='updateDisplayMovie?movieID=" + movie.movieID + "&display=0' class='btn btn-danger shadow btn-xs sharp rounded-circle'><i class='fa fa-eye'></i></a>";
-                                                movieListHtml += "<a href='addNewSlot?movieID=" + movie.movieID + "&display=1' class='btn btn-primary shadow btn-xs sharp rounded-circle'><i class='fa fa-plus'></i></a>";
                                             } else {
                                                 movieListHtml += "<a href='updateDisplayMovie?movieID=" + movie.movieID + "&display=1' class='btn btn-danger shadow btn-xs sharp rounded-circle'><i class='fa fa-eye-slash'></i></a>";
                                             }
