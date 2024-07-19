@@ -1070,7 +1070,7 @@ public class DAO extends DBContext {
                 + "JOIN ScreeningTimes st ON s.screeningID = st.screeningID "
                 + "JOIN Theaters th ON st.theaterID = th.theaterID "
                 + "JOIN Orders o ON t.orderID = o.orderID "
-                + "WHERE t.userID = ? ";
+                + "WHERE t.userID = ? ORDER BY t.purchaseDate DESC";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, userID);
@@ -1123,36 +1123,6 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
         return list;
-    }
-
-    //get list screening time
-    public List<Seats> selectSeatsByTicketID(List<Integer> ticketIDs) {
-        List<Seats> seats = new ArrayList<>();
-        if (ticketIDs.isEmpty()) {
-            return seats;
-        }
-
-        String sql = "SELECT s.seatID, s.seatNumber, s.seatStatus, st.screeningID, st.startTime, st.endTime, th.theaterID, th.theaterNumber, m.movieID, m.title, m.description, m.releaseDate, m.posterImage, m.duration, m.display "
-                + "FROM Seats s "
-                + "JOIN ScreeningTimes st ON s.screeningID = st.screeningID "
-                + "JOIN Theaters th ON st.theaterID = th.theaterID "
-                + "JOIN Movies m ON st.movieID = m.movieID "
-                + "WHERE s.seatID IN (SELECT seatID FROM Tickets WHERE ticketID IN (" + ticketIDs.stream().map(String::valueOf).collect(Collectors.joining(",")) + "))";
-
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Theaters theater = new Theaters(rs.getInt("theaterID"), null, rs.getInt("theaterNumber"));
-                Movies movie = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"));
-                ScreeningTimes screening = new ScreeningTimes(rs.getInt("screeningID"), theater, movie, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"));
-                Seats seat = new Seats(rs.getInt("seatID"), screening, rs.getString("seatNumber"), rs.getString("seatStatus"));
-                seats.add(seat);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        return seats;
     }
 
     public List<OrderFoodItem> selectAllOrderFoodItems(int orderId) {
@@ -2245,12 +2215,78 @@ public class DAO extends DBContext {
         }
     }
 
-    public static void main(String[] args) {
-        DAO dao = new DAO();
-        List<Users> list = dao.getAllStaffByCinemaName("BANNY Vincom Center Bà Triệu");
-        for (Users u : list) {
-            System.out.println(u.getUserID());
+
+    public List<Shift> getAllReportShifts() {
+        List<Shift> shifts = new ArrayList<>();
+        try {
+            String sql = "SELECT s.startTime, s.endTime, s.startAmount, s.endAmount, s.tranferPayment, u.displayName "
+                    + "FROM Shift s JOIN Users u ON s.phone = u.userID "
+                    + "WHERE DATE(s.startTime) = CURDATE()";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Shift shift = new Shift();
+                shift.setDisplayName(rs.getString("displayName"));
+                shift.setStartTime(rs.getTimestamp("startTime"));
+                shift.setEndTime(rs.getTimestamp("endTime"));
+                shift.setStartAmount(rs.getDouble("startAmount"));
+                shift.setEndAmount(rs.getDouble("endAmount"));
+                shift.setTransferPayments(rs.getDouble("tranferPayment"));
+
+                // Tính toán revenue
+                double revenue = rs.getDouble("endAmount") - rs.getDouble("startAmount") + rs.getDouble("tranferPayment");
+                shift.setRevenue(revenue);
+
+                shifts.add(shift);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return shifts;
+
     }
 
+    public void saveShiftReport(int userID, String startTime, String endTime, double startAmount, double endAmount, double transferPayments) {
+        try {
+            // Kiểm tra xem ca làm việc đã tồn tại chưa
+            String checkSql = "SELECT COUNT(*) FROM Shift WHERE phone = ? AND startTime = ? AND endTime = ?";
+            PreparedStatement checkPs = connection.prepareStatement(checkSql);
+            checkPs.setInt(1, userID);
+            checkPs.setString(2, startTime);
+            checkPs.setString(3, endTime);
+            ResultSet rs = checkPs.executeQuery();
+            rs.next();
+            int count = rs.getInt(1);
+            rs.close();
+            checkPs.close();
+
+            if (count > 0) {
+                // Nếu ca làm việc đã tồn tại, thực hiện cập nhật
+                String updateSql = "UPDATE Shift SET startAmount = ?, endAmount = ?, tranferPayment = ? WHERE phone = ? AND startTime = ? AND endTime = ?";
+                PreparedStatement updatePs = connection.prepareStatement(updateSql);
+                updatePs.setDouble(1, startAmount);
+                updatePs.setDouble(2, endAmount);
+                updatePs.setDouble(3, transferPayments);
+                updatePs.setInt(4, userID);
+                updatePs.setString(5, startTime);
+                updatePs.setString(6, endTime);
+                updatePs.executeUpdate();
+                updatePs.close();
+            } else {
+                // Nếu ca làm việc chưa tồn tại, thực hiện thêm mới
+                String insertSql = "INSERT INTO Shift (phone, startTime, endTime, startAmount, endAmount, tranferPayment) VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement insertPs = connection.prepareStatement(insertSql);
+                insertPs.setInt(1, userID);
+                insertPs.setString(2, startTime);
+                insertPs.setString(3, endTime);
+                insertPs.setDouble(4, startAmount);
+                insertPs.setDouble(5, endAmount);
+                insertPs.setDouble(6, transferPayments);
+                insertPs.executeUpdate();
+                insertPs.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -86,34 +86,32 @@
     <div class="container">
         <div class="content">
             <div class="summary">
-                <h2>Summary</h2>
-                <p>Total Transfer Payments: $600</p>
-                <p>Total Revenue: $1200</p>
+                <h2>Doanh thu ca làm việc</h2>
             </div>
             <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Shift</th>
-                        <th>Start Cash</th>
-                        <th>End Cash</th>
-                        <th>Transfer Payments</th>
-                        <th>Revenue</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="shift" items="${shiftsList}">
+                    <thead>
                         <tr>
-                            <td>${shift.date}</td>
-                            <td>${shift.startTime} - ${shift.endTime}</td>
-                            <td>${shift.startCash}</td>
-                            <td>${shift.endCash}</td>
-                            <td>${shift.transferPayments}</td>
-                            <td>${shift.revenue}</td>
+                            <th>Nhân viên</th>
+                            <th>Thời gian làm</th>
+                            <th>Tiền mặt đầu ca</th>
+                            <th>Tiền mặt cuối ca</th>
+                            <th>Thanh toán chuyển khoản</th>
+                            <th>Doanh thu</th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="shift" items="${shifts}">
+                            <tr>
+                                <td>${shift.displayName}</td>
+                                <td>${shift.startTime} - ${shift.endTime}</td>
+                                <td>${shift.startAmount}</td>
+                                <td>${shift.endAmount}</td>
+                                <td>${shift.transferPayments}</td>
+                                <td>${shift.revenue}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
         </div>
     </div>
 </body>
