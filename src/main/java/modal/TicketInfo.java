@@ -11,11 +11,12 @@ public class TicketInfo {
     private String seatNumber;
     private String theaterNumber;
     private String priceTicket;
+    private boolean isChecked;
 
     public TicketInfo() {
     }
 
-    public TicketInfo(int ticketID, String title, Timestamp startTime, Timestamp endTime, String nameCinema, String seatNumber, String theaterNumber, String priceTicket) {
+    public TicketInfo(int ticketID, String title, Timestamp startTime, Timestamp endTime, String nameCinema, String seatNumber, String theaterNumber, String priceTicket, boolean isChecked) {
         this.ticketID = ticketID;
         this.title = title;
         this.startTime = startTime;
@@ -24,6 +25,7 @@ public class TicketInfo {
         this.seatNumber = seatNumber;
         this.theaterNumber = theaterNumber;
         this.priceTicket = priceTicket;
+        this.isChecked = isChecked;
     }
 
     // Getters and setters
@@ -89,6 +91,14 @@ public class TicketInfo {
 
     public void setTheaterNumber(String theaterNumber) {
         this.theaterNumber = theaterNumber;
+    }
+
+    public boolean isIsChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(boolean isChecked) {
+        this.isChecked = isChecked;
     }
     
 }
