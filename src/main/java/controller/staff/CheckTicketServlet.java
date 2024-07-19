@@ -76,8 +76,16 @@ public class CheckTicketServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException {
-       String orderId = req.getParameter("orderID");
        DAO d = new DAO();
+       String userId = req.getParameter("userID");
+       String orderId = req.getParameter("orderID");
+       
+       if (orderId == null || orderId.isEmpty()) {
+            if (userId != null && !userId.isEmpty()) {
+                orderId = d.getOrderIDByUserID(userId);
+                
+            }
+        }
 
         if (orderId == null || orderId.isEmpty()) {
             req.setAttribute("error", "Mã đặt vé không hợp lệ.");

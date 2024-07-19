@@ -1669,6 +1669,22 @@ public class DAO extends DBContext {
         }
     }
 
+    public String getOrderIDByUserID(String userID) {
+        String orderID = null;
+        String sql = "SELECT orderID FROM Orders WHERE userID = ? ORDER BY orderID DESC LIMIT 1";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, userID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                orderID = rs.getString("orderID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orderID;
+    }
+    
     // get order detail by orderID
     public Orders getOrderById(String orderId) {
         Orders od = null;
