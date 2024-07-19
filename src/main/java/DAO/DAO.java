@@ -36,7 +36,7 @@ public class DAO extends DBContext {
                 FoodItem f = new FoodItem(rs.getInt("FoodItemID"),
                         rs.getString("foodName"),
                         rs.getString("description"),
-                        rs.getInt("price"), 
+                        rs.getInt("price"),
                         rs.getString("imgFoodItems"),
                         rs.getInt("display"),
                         rs.getInt("quantity")
@@ -48,7 +48,7 @@ public class DAO extends DBContext {
         }
         return list;
     }
-    
+
     public boolean checkEPstaff(String email, String phone) {
         String sql = "SELECT * FROM staffstatus WHERE staffEmail = ? or phone = ?";
 
@@ -167,7 +167,6 @@ public class DAO extends DBContext {
         }
     }
 
-    
     public void insertAddVoucher(String voucherName, String voucherdescription, float discountAmount, Date startDate,
             Date endDate, int quantity) {
         String sql = "INSERT INTO Voucher (voucherName, voucherdescription, discountAmount, startDate, endDate, quantity) VALUES (?, ?, ?, ?, ?, ?)";
@@ -222,7 +221,6 @@ public class DAO extends DBContext {
         }
     }
 
-    
     public void updateDisplayFoodByFoodID(int foodID, int display) {
         String sql = "update FoodItems set display = ? where foodItemId = ?";
         try {
@@ -902,8 +900,6 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
-    
-    
 
     // delete movie genre by movieID
     public void deleteMovieGenreByMovieID(int movieID) {
@@ -935,111 +931,80 @@ public class DAO extends DBContext {
 
     // paging list tickets by userID
     public List<Tickets> pagingTickets(int userID, int index) {
-    List<Tickets> list = new ArrayList<>();
-    String sql = "SELECT t.ticketID, u.userID, u.displayName, u.username, u.password, u.email, u.providerID, u.point, "
-            + "r.roleID, r.name AS roleName, "
-            + "m.movieID, m.title, m.description, m.releaseDate, m.posterImage, m.duration, m.display, "
-            + "c.cinemaID, c.name AS cinemaName, c.movieDate, "
-            + "l.locationID, l.name AS locationName, "
-            + "st.screeningID, st.startTime, st.endTime, "
-            + "th.theaterID, th.theaterNumber, "
-            + "s.seatID, s.seatNumber, s.seatStatus, "
-            + "o.orderID, o.quantity, o.allPrice, "
-            + "t.price, t.purchaseDate "
-            + "FROM Tickets t "
-            + "JOIN Users u ON t.userID = u.userID "
-            + "JOIN Roles r ON u.roleID = r.roleID "
-            + "JOIN Movies m ON t.movieID = m.movieID "
-            + "JOIN Cinemas c ON t.cinemaID = c.cinemaID "
-            + "JOIN Location l ON c.locationID = l.locationID "
-            + "JOIN Seats s ON t.seatID = s.seatID "
-            + "JOIN ScreeningTimes st ON s.screeningID = st.screeningID "
-            + "JOIN Theaters th ON st.theaterID = th.theaterID "
-            + "JOIN Orders o ON t.orderID = o.orderID "
-            + "WHERE t.userID = ? ";
-    try {
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, userID);
-        ResultSet rs = ps.executeQuery();
-        
-        Map<Integer, Tickets> orderMap = new HashMap<>();
-        Map<Integer, List<Integer>> orderTicketMap = new HashMap<>();
-        Map<Integer, List<Seats>> orderSeatMap = new HashMap<>();
-        
-        while (rs.next()) {
-            int orderID = rs.getInt("orderID");
-
-            Role role = new Role(rs.getInt("roleID"), rs.getString("roleName"));
-            Users user = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("username"), rs.getString("password"), rs.getString("email"), role, rs.getInt("point"), rs.getString("providerID"));
-            Location location = new Location(rs.getInt("locationID"), rs.getString("locationName"));
-            Cinemas cinema = new Cinemas(rs.getInt("cinemaID"), rs.getString("cinemaName"), rs.getDate("movieDate"), location);
-            Movies movie = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"));
-            Theaters theater = new Theaters(rs.getInt("theaterID"), cinema, rs.getInt("theaterNumber"));
-            ScreeningTimes screeningTime = new ScreeningTimes(rs.getInt("screeningID"), theater, movie, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"));
-            Seats seat = new Seats(rs.getInt("seatID"), screeningTime, rs.getString("seatNumber"), rs.getString("seatStatus"));
-            Orders order = new Orders(orderID, user, movie, rs.getInt("quantity"), rs.getString("allPrice"));
-
-            if (!orderMap.containsKey(orderID)) {
-                Tickets ticket = new Tickets(rs.getInt("ticketID"), user, movie, cinema, rs.getString("price"), rs.getTimestamp("purchaseDate"), seat, order);
-                orderMap.put(orderID, ticket);
-                orderTicketMap.put(orderID, new ArrayList<>(Collections.singletonList(rs.getInt("ticketID"))));
-                orderSeatMap.put(orderID, new ArrayList<>(Collections.singletonList(seat)));
-                list.add(ticket);
-            } else {
-                Tickets existingTicket = orderMap.get(orderID);
-                orderSeatMap.get(orderID).add(seat);
-                existingTicket.getSeats().add(seat);
-                orderTicketMap.get(orderID).add(rs.getInt("ticketID"));
-            }
-        }
-
-        for (Map.Entry<Integer, Tickets> entry : orderMap.entrySet()) {
-            int orderID = entry.getKey();
-            Tickets ticket = entry.getValue();
-            ticket.setTicketIDs(orderTicketMap.get(orderID));
-            ticket.setSeats(orderSeatMap.get(orderID));
-            
-            List<OrderFoodItem> orderFoods = selectAllOrderFoodItems(ticket.getOrderID().getOrderID());
-            for (OrderFoodItem orderFood : orderFoods) {
-                orderFood.setFoods(getFoodItemById(orderFood.getFoodItemID()));
-            }
-            ticket.getOrderID().setOrderFood(orderFoods);
-        }
-    } catch (SQLException e) {
-        System.out.println(e);
-    }
-    return list;
-}
-
-    
-
-    public List<Seats> selectSeatsByTicketID(List<Integer> ticketIDs) {
-        List<Seats> seats = new ArrayList<>();
-        if (ticketIDs.isEmpty()) {
-            return seats;
-        }
-
-        String sql = "SELECT s.seatID, s.seatNumber, s.seatStatus, st.screeningID, st.startTime, st.endTime, th.theaterID, th.theaterNumber, m.movieID, m.title, m.description, m.releaseDate, m.posterImage, m.duration, m.display "
-                + "FROM Seats s "
+        List<Tickets> list = new ArrayList<>();
+        String sql = "SELECT t.ticketID, u.userID, u.displayName, u.username, u.password, u.email, u.providerID, u.point, "
+                + "r.roleID, r.name AS roleName, "
+                + "m.movieID, m.title, m.description, m.releaseDate, m.posterImage, m.duration, m.display, "
+                + "c.cinemaID, c.name AS cinemaName, c.movieDate, "
+                + "l.locationID, l.name AS locationName, "
+                + "st.screeningID, st.startTime, st.endTime, "
+                + "th.theaterID, th.theaterNumber, "
+                + "s.seatID, s.seatNumber, s.seatStatus, "
+                + "o.orderID, o.quantity, o.allPrice, "
+                + "t.price, t.purchaseDate "
+                + "FROM Tickets t "
+                + "JOIN Users u ON t.userID = u.userID "
+                + "JOIN Roles r ON u.roleID = r.roleID "
+                + "JOIN Movies m ON t.movieID = m.movieID "
+                + "JOIN Cinemas c ON t.cinemaID = c.cinemaID "
+                + "JOIN Location l ON c.locationID = l.locationID "
+                + "JOIN Seats s ON t.seatID = s.seatID "
                 + "JOIN ScreeningTimes st ON s.screeningID = st.screeningID "
                 + "JOIN Theaters th ON st.theaterID = th.theaterID "
-                + "JOIN Movies m ON st.movieID = m.movieID "
-                + "WHERE s.seatID IN (SELECT seatID FROM Tickets WHERE ticketID IN (" + ticketIDs.stream().map(String::valueOf).collect(Collectors.joining(",")) + "))";
-
+                + "JOIN Orders o ON t.orderID = o.orderID "
+                + "WHERE t.userID = ? ORDER BY t.purchaseDate DESC";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userID);
             ResultSet rs = ps.executeQuery();
+
+            Map<Integer, Tickets> orderMap = new HashMap<>();
+            Map<Integer, List<Integer>> orderTicketMap = new HashMap<>();
+            Map<Integer, List<Seats>> orderSeatMap = new HashMap<>();
+
             while (rs.next()) {
-                Theaters theater = new Theaters(rs.getInt("theaterID"), null, rs.getInt("theaterNumber"));
+                int orderID = rs.getInt("orderID");
+
+                Role role = new Role(rs.getInt("roleID"), rs.getString("roleName"));
+                Users user = new Users(rs.getInt("userID"), rs.getString("displayName"), rs.getString("username"), rs.getString("password"), rs.getString("email"), role, rs.getInt("point"), rs.getString("providerID"));
+                Location location = new Location(rs.getInt("locationID"), rs.getString("locationName"));
+                Cinemas cinema = new Cinemas(rs.getInt("cinemaID"), rs.getString("cinemaName"), rs.getDate("movieDate"), location);
                 Movies movie = new Movies(rs.getInt("movieID"), rs.getString("title"), rs.getString("description"), rs.getDate("releaseDate"), rs.getString("posterImage"), rs.getInt("duration"), rs.getInt("display"));
-                ScreeningTimes screening = new ScreeningTimes(rs.getInt("screeningID"), theater, movie, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"));
-                Seats seat = new Seats(rs.getInt("seatID"), screening, rs.getString("seatNumber"), rs.getString("seatStatus"));
-                seats.add(seat);
+                Theaters theater = new Theaters(rs.getInt("theaterID"), cinema, rs.getInt("theaterNumber"));
+                ScreeningTimes screeningTime = new ScreeningTimes(rs.getInt("screeningID"), theater, movie, rs.getTimestamp("startTime"), rs.getTimestamp("endTime"));
+                Seats seat = new Seats(rs.getInt("seatID"), screeningTime, rs.getString("seatNumber"), rs.getString("seatStatus"));
+                Orders order = new Orders(orderID, user, movie, rs.getInt("quantity"), rs.getString("allPrice"));
+
+                if (!orderMap.containsKey(orderID)) {
+                    Tickets ticket = new Tickets(rs.getInt("ticketID"), user, movie, cinema, rs.getString("price"), rs.getTimestamp("purchaseDate"), seat, order);
+                    orderMap.put(orderID, ticket);
+                    orderTicketMap.put(orderID, new ArrayList<>(Collections.singletonList(rs.getInt("ticketID"))));
+                    orderSeatMap.put(orderID, new ArrayList<>(Collections.singletonList(seat)));
+                    list.add(ticket);
+                } else {
+                    Tickets existingTicket = orderMap.get(orderID);
+                    orderSeatMap.get(orderID).add(seat);
+                    existingTicket.getSeats().add(seat);
+                    orderTicketMap.get(orderID).add(rs.getInt("ticketID"));
+                }
+            }
+
+            for (Map.Entry<Integer, Tickets> entry : orderMap.entrySet()) {
+                int orderID = entry.getKey();
+                Tickets ticket = entry.getValue();
+                ticket.setTicketIDs(orderTicketMap.get(orderID));
+                ticket.setSeats(orderSeatMap.get(orderID));
+
+                List<OrderFoodItem> orderFoods = selectAllOrderFoodItems(ticket.getOrderID().getOrderID());
+                for (OrderFoodItem orderFood : orderFoods) {
+                    orderFood.setFoods(getFoodItemById(orderFood.getFoodItemID()));
+                }
+                ticket.getOrderID().setOrderFood(orderFoods);
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
-        return seats;
+        return list;
     }
 
     public List<OrderFoodItem> selectAllOrderFoodItems(int orderId) {
@@ -1612,7 +1577,7 @@ public class DAO extends DBContext {
         }
         return foodItems;
     }
-    
+
     // get all cinemas
     public List<Cinemas> getAllCinemas() {
         List<Cinemas> list = new ArrayList<>();
@@ -1898,16 +1863,6 @@ public class DAO extends DBContext {
 
     // get info list ticket for bill by orderID
     public List<TicketInfo> getTicketInfoByOrderId(String orderId) {
-    List<TicketInfo> ticketInfos = new ArrayList<>();
-    String sql = "SELECT DISTINCT m.title, st.startTime, st.endTime, t.ticketID, c.name AS nameCinema, s.seatNumber, t.price AS priceTicket, th.theaterNumber " +
-                       "FROM Tickets t " +
-                       "JOIN Seats s ON t.seatID = s.seatID " +
-                       "JOIN Movies m ON t.movieID = m.movieID " +
-                       "JOIN Cinemas c ON t.cinemaID = c.cinemaID " +
-                       "JOIN Theaters th ON t.cinemaID = th.cinemaID " +
-                       "JOIN ScreeningTimes st ON s.screeningID = st.screeningID " +
-                       "WHERE t.orderID = ?";
-
         List<TicketInfo> ticketInfos = new ArrayList<>();
         String sql = "SELECT DISTINCT m.title, st.startTime, st.endTime, t.ticketID, c.name AS nameCinema, s.seatNumber, t.price AS priceTicket, th.theaterNumber "
                 + "FROM Tickets t "
