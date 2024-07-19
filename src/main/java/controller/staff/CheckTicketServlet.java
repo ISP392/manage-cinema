@@ -5,6 +5,7 @@
 
 package controller.staff;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,13 +13,20 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.List;
+import modal.FoodItem;
+import modal.Orders;
+import modal.ScreeningTimes;
+import modal.TicketInfo;
+import modal.Tickets;
 
 /**
  *
  * @author caoha
  */
-@WebServlet(name="ReportServlet", urlPatterns={"/report"})
-public class ReportServlet extends HttpServlet {
+@WebServlet(name="CheckTicketServlet", urlPatterns={"/checkTicket"})
+public class CheckTicketServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +43,10 @@ public class ReportServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ReportServlet</title>");  
+            out.println("<title>Servlet CheckTicketServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ReportServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CheckTicketServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,7 +63,7 @@ public class ReportServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/staff-views/shiftReport.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/staff-views/checkticket.jsp").forward(request, response);
     } 
 
     /** 
@@ -66,9 +74,28 @@ public class ReportServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException {
-        processRequest(request, response);
+       String orderId = req.getParameter("orderID");
+       DAO d = new DAO();
+
+        if (orderId == null || orderId.isEmpty()) {
+            req.setAttribute("error", "Mã đặt vé không hợp lệ.");
+            req.getRequestDispatcher("/WEB-INF/views/staff-views/result.jsp").forward(req, resp);
+            return;
+        }
+
+        Orders order = d.getOrderById(orderId);
+        List<TicketInfo> ticketInfos = d.getTicketInfoByOrderId(orderId);
+        List<FoodItem> foodItems = d.getFoodItemsByOrderId(orderId);
+        if (order != null) {
+            req.setAttribute("order", order);
+            req.setAttribute("ticketInfos", ticketInfos);
+            req.setAttribute("foodItems", foodItems);
+        } else {
+            req.setAttribute("error", "Thông tin không hợp lệ.");
+        }
+        req.getRequestDispatcher("/WEB-INF/views/staff-views/result.jsp").forward(req, resp);
     }
 
     /** 

@@ -17,14 +17,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.List;
 import modal.Movies;
 import modal.Users;
 import modal.Cinemas;
 import modal.ScreeningTimes;
 import util.CinemaConfig;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -155,7 +153,6 @@ public class addNewSlot extends HttpServlet {
         String startTime = request.getParameter("startTimeInput");
         String endTime = request.getParameter("endTimeInput");
 
-        // Khởi tạo đối tượng CinemaConfig để lấy thông tin về cinema
         CinemaConfig cinemaConfig = new CinemaConfig();
         // Lấy ID của địa điểm cinema từ tên cinema và lưu vào biến "locationID"
         int locationID = cinemaConfig.getLocationIdByCinemaName(cinema);
@@ -175,17 +172,13 @@ public class addNewSlot extends HttpServlet {
         List<ScreeningTimes> list = dao.getAllFlimDay(movieDateStr, Integer.parseInt(theaterNumber));
 
         if (!list.isEmpty()) {
-            for (int i = 0; i <= 1; i++) {
-
-                startTimeEarlySlot = list.get(0).getStartTime();
-                endTimeEarlySlot = list.get(0).getEndTime();
-
-            }
+            startTimeEarlySlot = list.get(0).getStartTime();
+            endTimeEarlySlot = list.get(0).getEndTime();
             System.out.println(list.size());
+
             if (list.size() == 1) {
                 startTimeLastestSlot = list.get(0).getStartTime();
-            }
-            if (list.size() > 1) {
+            } else if (list.size() > 1) {
                 startTimeLastestSlot = list.get(1).getStartTime();
             }
 

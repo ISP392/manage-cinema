@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import com.paypal.api.payments.Order;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -395,11 +396,7 @@ public class DAO extends DBContext {
     
     public Shift getShiftForUser(String phone) {
         Shift shift = null;
-        String query = "SELECT Shift.*, staffstatus.phone AS staffPhone, staffstatus.status, staffstatus.address, staffstatus.dob, staffstatus.staffName, staffstatus.staffEmail "
-                + "FROM Shift "
-                + "JOIN staffstatus ON Shift.phone = staffstatus.phone "
-                + "WHERE Shift.phone = ? "
-                + "ORDER BY startTime DESC LIMIT 1";
+        String query = "SELECT Shift.*,ss.status,ss.address,ss.dob,ss.staffName, ss.staffEmail, Users.phone AS staffPhone FROM Shift JOIN Users ON Shift.phone = Users.userID join staffstatus ss on Users.phone = ss.phone WHERE Shift.phone = ? ORDER BY startTime DESC LIMIT 1";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, phone);
@@ -1064,20 +1061,20 @@ public class DAO extends DBContext {
         return list;
     }
     
+  
+    
+
     public List<ScreeningTimes> getAllFlimDay(String movieDate, int theaterId) {
         List<ScreeningTimes> list = new ArrayList<>();
-        String sql = "select * from project_cinema_update.ScreeningTimes st \n"
-                + "join project_cinema_update.Theaters t on st.theaterID = t.theaterID\n"
-                + "join project_cinema_update.Movies m on m.movieID = st.movieID\n"
-                + "where date(st.startTime) = ? and t.theaterNumber = ?\n"
-                + "order by date(st.startTime) desc";
+        String sql = "select * from project_cinema_update.ScreeningTimes st join project_cinema_update.Theaters t on st.theaterID = t.theaterID join  project_cinema_update.Movies m on m.movieID = st.movieID\n"
+                + " where date(st.startTime) = ? and t.theaterNumber = ? order by date(st.startTime) desc";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, movieDate);
             ps.setInt(2, theaterId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                
+
                 ScreeningTimes st = new ScreeningTimes(rs.getInt("screeningID"), rs.getInt(2), rs.getInt(3), rs.getTimestamp("startTime"),
                         rs.getTimestamp("endTime"));
                 list.add(st);
@@ -1087,7 +1084,6 @@ public class DAO extends DBContext {
         }
         return list;
     }
-    
 
     // get all cinemas with movieID, date, direction
     public List<Cinemas> getAllCinemas(int movieID, Date movieDate, int direction) {
@@ -1676,6 +1672,114 @@ public class DAO extends DBContext {
         }
     }
 
+    // get order detail by orderID
+    public Orders getOrderById(String orderId) {
+        Orders od = null;
+        String sql = "SELECT o.*, u.username, od.isChecked "
+                + "FROM Orders o "
+                + "JOIN Users u ON o.userID = u.userID "
+                + "LEFT JOIN OrderDetails od ON o.userID = od.orderID "
+                + "WHERE o.orderID = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, orderId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                od = new Orders();
+                od.setOrderID(rs.getInt("orderID"));
+
+                Users user = new Users();
+                user.setUserID(rs.getInt("userID"));
+                user.setUserName(rs.getString("username"));
+                od.setUserID(user);
+
+                Movies movie = new Movies();
+                movie.setMovieID(rs.getInt("movieID"));
+                od.setMovieID(movie);
+
+                od.setQuantity(rs.getInt("quantity"));
+                od.setAllPrice(rs.getString("allPrice"));
+                
+                TicketInfo tk = new TicketInfo();
+                tk.setIsChecked(rs.getBoolean("isChecked"));
+                od.setTicketInfo(tk);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return od;
+    }
+
+    // get info list ticket for bill by orderID
+    public List<TicketInfo> getTicketInfoByOrderId(String orderId) {
+    List<TicketInfo> ticketInfos = new ArrayList<>();
+    String sql = "SELECT DISTINCT m.title, st.startTime, st.endTime, t.ticketID, c.name AS nameCinema, s.seatNumber, t.price AS priceTicket, th.theaterNumber " +
+                       "FROM Tickets t " +
+                       "JOIN Seats s ON t.seatID = s.seatID " +
+                       "JOIN Movies m ON t.movieID = m.movieID " +
+                       "JOIN Cinemas c ON t.cinemaID = c.cinemaID " +
+                       "JOIN Theaters th ON t.cinemaID = th.cinemaID " +
+                       "JOIN ScreeningTimes st ON s.screeningID = st.screeningID " +
+                       "WHERE t.orderID = ?";
+
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, orderId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            TicketInfo ticketInfo = new TicketInfo();
+            ticketInfo.setTicketID(rs.getInt("ticketID"));
+            ticketInfo.setTitle(rs.getString("title"));
+            ticketInfo.setStartTime(rs.getTimestamp("startTime"));
+            ticketInfo.setEndTime(rs.getTimestamp("endTime"));
+            ticketInfo.setNameCinema(rs.getString("nameCinema"));
+            ticketInfo.setTheaterNumber(rs.getString("theaterNumber"));
+            ticketInfo.setSeatNumber(rs.getString("seatNumber"));
+            ticketInfo.setPriceTicket(rs.getString("priceTicket"));
+            
+
+            ticketInfos.add(ticketInfo);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return ticketInfos;
+}
+
+    // get food item by orderID
+    public List<FoodItem> getFoodItemsByOrderId(String orderId) {
+    List<FoodItem> foodItems = new ArrayList<>();
+    
+    String sql = "SELECT f.foodItemID, f.foodName, f.price, od.quantity FROM FoodItems f " +
+                   "JOIN OrderDetails od ON f.foodItemID = od.foodItemID " +
+                   "WHERE od.orderID = ?";
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, orderId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            FoodItem item = new FoodItem();
+            item.setFoodItemID(rs.getInt("foodItemID"));
+            item.setFoodName(rs.getString("foodName"));
+            item.setPrice(rs.getInt("price"));
+            
+            item.setQuantity(rs.getInt("quantity")); // Ensure FoodItem has this field
+
+            foodItems.add(item);
+            
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return foodItems;
+}
+
+
     // insertOrderWithVoucherIDNull
     public void insertOrderWithVoucherIDNull(int userID, int movieID, int quantity, String allPrice) {
         String sql = "INSERT INTO Orders (userID, movieID, quantity, allPrice) VALUES (?, ?, ?, ?)";
@@ -1764,26 +1868,17 @@ public class DAO extends DBContext {
         }
     }
     
+
     public static void main(String[] args) {
         // test insert seat
-        
+
         DAO dao = new DAO();
         List<ScreeningTimes> list = dao.getAllFlimDay("2024-07-20", 1);
         System.out.println(list);
-       for (int i = 0; i < 1; i++) {
-            System.out.println(list.get(list.size() -1).getStartTime().after(list.get(0).getEndTime()));
-           
-           long millisDiff = list.get(list.size() -1).getStartTime().getTime()
-                   - list.get(0).getStartTime().getTime();
-        long minutesDiff = millisDiff / (1000 * 60); // 
-
-        // In kết quả
-        System.out.println("Số phút chênh lệch: " + minutesDiff);
-        }
 
         // Tính khoảng thời gian giữa thời gian kết thúc của phần tử đầu tiên và thời gian bắt đầu của phần tử cuối cùng
-        
-       
-        
     }
+
+    
+
 }

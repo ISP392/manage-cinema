@@ -397,7 +397,6 @@ public class updateNewSlot extends HttpServlet {
             }
 
         }
-
     }
 
     /**
