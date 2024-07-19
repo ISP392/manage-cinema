@@ -2206,6 +2206,50 @@ public class DAO extends DBContext {
             e.printStackTrace();
         }
         return shifts;
+
     }
 
+    public void saveShiftReport(int userID, String startTime, String endTime, double startAmount, double endAmount, double transferPayments) {
+        try {
+            // Kiểm tra xem ca làm việc đã tồn tại chưa
+            String checkSql = "SELECT COUNT(*) FROM Shift WHERE phone = ? AND startTime = ? AND endTime = ?";
+            PreparedStatement checkPs = connection.prepareStatement(checkSql);
+            checkPs.setInt(1, userID);
+            checkPs.setString(2, startTime);
+            checkPs.setString(3, endTime);
+            ResultSet rs = checkPs.executeQuery();
+            rs.next();
+            int count = rs.getInt(1);
+            rs.close();
+            checkPs.close();
+
+            if (count > 0) {
+                // Nếu ca làm việc đã tồn tại, thực hiện cập nhật
+                String updateSql = "UPDATE Shift SET startAmount = ?, endAmount = ?, tranferPayment = ? WHERE phone = ? AND startTime = ? AND endTime = ?";
+                PreparedStatement updatePs = connection.prepareStatement(updateSql);
+                updatePs.setDouble(1, startAmount);
+                updatePs.setDouble(2, endAmount);
+                updatePs.setDouble(3, transferPayments);
+                updatePs.setInt(4, userID);
+                updatePs.setString(5, startTime);
+                updatePs.setString(6, endTime);
+                updatePs.executeUpdate();
+                updatePs.close();
+            } else {
+                // Nếu ca làm việc chưa tồn tại, thực hiện thêm mới
+                String insertSql = "INSERT INTO Shift (phone, startTime, endTime, startAmount, endAmount, tranferPayment) VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement insertPs = connection.prepareStatement(insertSql);
+                insertPs.setInt(1, userID);
+                insertPs.setString(2, startTime);
+                insertPs.setString(3, endTime);
+                insertPs.setDouble(4, startAmount);
+                insertPs.setDouble(5, endAmount);
+                insertPs.setDouble(6, transferPayments);
+                insertPs.executeUpdate();
+                insertPs.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
