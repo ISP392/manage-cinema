@@ -270,7 +270,8 @@
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">
                                                 <input
-                                                    type="text"
+                                                    max="350000" 
+                                                    type="number"
                                                     class="form-control"
                                                     placeholder="Price"
                                                     name="price"

@@ -110,7 +110,7 @@ public class DAO extends DBContext {
         return list;
     }
     
-    public String getPoint(int userId) {
+    public String getRank(int userId) {
         String sql = "SELECT point FROM Users where userID = ?";
         
         try {
@@ -137,6 +137,40 @@ public class DAO extends DBContext {
         return " ";
     }
 
+    public String getPoint(int userId) {
+        String sql = "SELECT point FROM Users where userID = ?";
+        String point ="";
+        try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, userId);
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            point = rs.getString("point");
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+        return point;
+    }
+    
+    public String gettotalSpending(int userId) {
+        String sql = " SELECT u.userID, SUM(o.allPrice) AS totalSpending FROM Users u JOIN Orders o ON u.userID = o.userID WHERE u.userID = ? GROUP BY u.userID";
+        String totalSpending ="";
+        try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, userId);
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            totalSpending = rs.getString("totalSpending");
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+        return totalSpending;
+    }
+    
     public void insertAddFood(String foodName, String description, int price, String imgFoodItems, int quantity) {
         String sql = "INSERT INTO FoodItems (foodName, description, price, imgFoodItems, quantity, display) VALUES (?, ?, ?, ?, ?, 1)";
         try {
@@ -1868,57 +1902,6 @@ public class DAO extends DBContext {
         return ticketInfos;
     }
 
-    // get food item by orderID
-    public List<FoodItem> getFoodItemsByOrderId(String orderId) {
-        List<FoodItem> foodItems = new ArrayList<>();
-
-        String sql = "SELECT f.foodItemID, f.foodName, f.price, od.quantity FROM fooditems f "
-                + "JOIN OrderDetails od ON f.foodItemID = od.foodItemID "
-                + "WHERE od.orderID = ?";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, orderId);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                FoodItem item = new FoodItem();
-                item.setFoodItemID(rs.getInt("foodItemID"));
-                item.setFoodName(rs.getString("foodName"));
-                item.setPrice(rs.getInt("price"));
-    List<TicketInfo> ticketInfos = new ArrayList<>();
-    String sql = "SELECT DISTINCT m.title, st.startTime, st.endTime, t.ticketID, c.name AS nameCinema, s.seatNumber, t.price AS priceTicket, th.theaterNumber " +
-                       "FROM Tickets t " +
-                       "JOIN Seats s ON t.seatID = s.seatID " +
-                       "JOIN Movies m ON t.movieID = m.movieID " +
-                       "JOIN Cinemas c ON t.cinemaID = c.cinemaID " +
-                       "JOIN Theaters th ON t.cinemaID = th.cinemaID " +
-                       "JOIN ScreeningTimes st ON s.screeningID = st.screeningID " +
-                       "WHERE t.orderID = ?";
-
-    try {
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1, orderId);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            TicketInfo ticketInfo = new TicketInfo();
-            ticketInfo.setTicketID(rs.getInt("ticketID"));
-            ticketInfo.setTitle(rs.getString("title"));
-            ticketInfo.setStartTime(rs.getTimestamp("startTime"));
-            ticketInfo.setEndTime(rs.getTimestamp("endTime"));
-            ticketInfo.setNameCinema(rs.getString("nameCinema"));
-            ticketInfo.setTheaterNumber(rs.getString("theaterNumber"));
-            ticketInfo.setSeatNumber(rs.getString("seatNumber"));
-            ticketInfo.setPriceTicket(rs.getString("priceTicket"));
-            
-
-            ticketInfos.add(ticketInfo);
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return ticketInfos;
-}
 
     // get food item by orderID
     public List<FoodItem> getFoodItemsByOrderId(String orderId) {

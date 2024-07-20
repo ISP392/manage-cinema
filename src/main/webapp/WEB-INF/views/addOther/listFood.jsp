@@ -71,52 +71,7 @@
          <fmt:setLocale value = "vi_VN"/>
         <!--*******************
 
-<%-- Document : listMovie Created on : Jun 23, 2024, 11:42:50 PM Author : ACER --%>
-
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-        <%@page contentType="text/html" pageEncoding="UTF-8" %>
-            <!DOCTYPE html>
-            <html lang="en">
-
-            <head>
-                <meta charset="utf-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-                <title>Admin Dashboard</title>
-                <link href="./assets/css/dashboard-admin.css" rel="stylesheet" />
-
-            </head>
-            <style>
-                .action-rows {
-                    width: 120px;
-                }
-            </style>
-
-            <body>
-                <!--*******************
-            Preloader start
-        ********************-->
-                <div id="preloader">
-                    <div class="waviy">
-                        <span style="--i: 1">L</span>
-                        <span style="--i: 2">o</span>
-                        <span style="--i: 3">a</span>
-                        <span style="--i: 4">d</span>
-                        <span style="--i: 5">i</span>
-                        <span style="--i: 6">n</span>
-                        <span style="--i: 7">g</span>
-                        <span style="--i: 8">.</span>
-                        <span style="--i: 9">.</span>
-                        <span style="--i: 10">.</span>
-                    </div>
-                </div>
-                <!--*******************
-            Preloader end
-        ********************-->
-
-                <!--**********************************
-            Main wrapper start
-        ***********************************-->
+  ***********************************-->
                 <div id="main-wrapper">
                     <!--**********************************
                   Nav header start
@@ -260,60 +215,7 @@
                     </ul>
                 </div>
             </div>
-            <!--**********************************
-
-                    <div class="dlabnav">
-                        <div class="dlabnav-scroll">
-                            <ul class="metismenu" id="menu">
-                                <li class="dropdown header-profile">
-                                    <a class="nav-link" href="javascript:void(0);" role="button"
-                                        data-bs-toggle="dropdown">
-                                        <div class="header-info ms-3">
-                                            <span class="font-w600">Hi, <b>baothiquoc</b></span>
-                                            <small class="text-end font-w400">baothiquoc@gmail.com</small>
-                                        </div>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a href="page-login.html" class="dropdown-item ai-icon">
-                                            <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger"
-                                                width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                                stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                                <polyline points="16 17 21 12 16 7"></polyline>
-                                                <line x1="21" y1="12" x2="9" y2="12"></line>
-                                            </svg>
-                                            <span class="ms-2">Logout </span>
-                                        </a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a class="" href="home_admin">
-                                        <i class="flaticon-025-dashboard"></i>
-                                        <span class="">Dashboard</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
-                                        <i class="fa fa-gear fw-bold"></i>
-                                        <span class="nav-text">Add Other</span>
-                                    </a>
-                                    <ul aria-expanded="false">
-                                        <li><a href="listFood">Food</a></li>
-                                        <li><a href="view-slot?date=<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())%>&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu&theaterNumber=1">Slot</a></li>
-                                        <li><a href="manager_user">Staff</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!--**********************************
-                  Sidebar end
-              ***********************************-->
-
-                    <!--**********************************
-                  Content body start
-              ***********************************-->
+            
             <div class="content-body">
                 <!-- row -->
                 <div class="container-fluid">
@@ -386,7 +288,28 @@
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
+                                                    <div class="d-flex align-items-center justify-content-xl-between flex-wrap justify-content-center mt-3">
+                                                <small class="mb-xl-0 mb-2">
 
+                                                </small>
+
+                                                <ul class="pagination">
+
+                                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                                        <a class="page-link" href="?index=${currentPage - 1}">&lsaquo;</a>
+                                                    </li>
+                                                    <c:forEach begin="1" end="${endPage}" var="i">
+                                                        <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                                            <a class="page-link" href="?index=${i}">${i}</a>
+                                                        </li>
+                                                    </c:forEach>
+                                                    <li class="page-item ${currentPage == endPage ? 'disabled' : ''}">
+                                                        <a class="page-link" href="?index=${currentPage + 1}">&rsaquo;</a>
+                                                    </li>
+
+                                                </ul>
+
+                                            </div>
                                                 </tbody>
                                             </table>
                                             <div id="myModalImg" class="modalImg">
@@ -400,129 +323,7 @@
                             <div class="row">
                                 <div class="col-xl-12">
 
-                                    <div class="mb-4">
-                                        <a href="addFood" class="btn btn-primary">Add Food</a>
-                                    </div>
-
-                                    <div class="filter cm-content-box box-primary">
-                                        <div class="content-title">
-                                            <div class="cpa">
-                                                <i class="fa-solid fa-file-lines me-1"></i>List Foods
-                                            </div>
-                                            <div class="tools">
-                                                <a href="javascript:void(0);" class="expand SlideToolHeader"><i
-                                                        class="fal fa-angle-down"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="cm-content-body form excerpt">
-                                            <div class="card-body pt-2">
-                                                <div class="table-responsive">
-
-                                                    <table class="table table-responsive-sm mb-0">
-
-                                                        <thead>
-                                                            <tr>
-                                                                <th style="">
-                                                                    <div class="form-check">
-                                                                        <label class="form-check-label">
-                                                                        </label>
-                                                                    </div>
-                                                                </th>
-                                                                <th><strong>Title</strong></th>
-                                                                <!--  <th>Duration</th>  -->
-                                                                <th><strong>Modified</strong></th>
-                                                                <th><strong>Status</strong></th>
-                                                                <th class="action-rows"><strong>Actions</strong></th>
-                                                            </tr>
-                                                        </thead>
-
-                                                        <tbody>
-                                                            <c:if test="${not empty errorMessage}">
-                                                                <p style="color:red">${errorMessage}</p>
-                                                            </c:if>
-
-                                                            <c:set var="itemsPerPage" value="10" />
-                                                            <c:set var="currentPage" value="${tag}" />
-
-
-                                                            <c:forEach var="movie" items="${listMovies}"
-                                                                varStatus="status">
-                                                                <c:set var="movieNumber"
-                                                                    value="${(currentPage - 1) * itemsPerPage + status.index + 1}" />
-                                                                <tr>
-
-                                                                    <td>${movieNumber}</td>
-                                                                    <td>${movie.title.toUpperCase()}</td>
-                                                                    <!--      <td>${movie.duration}</td> -->
-                                                                    <td>${movie.releaseDate}</td>
-                                                                    <td>${movie.status}</td>
-
-                                                                    <td class="action-rows">
-                                                                        <a href="update_movie?movieID=${movie.movieID}"
-                                                                            class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i
-                                                                                class="fa fa-pencil"></i></a>
-                                                                        <c:if test="${movie.getDisplay()==1}">
-                                                                            <a href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=0"
-                                                                                class="btn btn-danger shadow btn-xs sharp rounded-circle">
-                                                                                <i class="fa fa-eye"></i>
-                                                                            </a>
-
-                                                                            <a href="addNewSlot?movieID=${movie.getMovieID()}&display=1"
-                                                                                class="btn btn-primary shadow btn-xs sharp rounded-circle ">
-                                                                                <i class="fa fa-plus"></i>
-                                                                            </a>
-                                                                        </c:if>
-
-                                                                        <c:if test="${movie.getDisplay()==0}">
-
-                                                                            <a href="updateDisplayMovie?movieID=${movie.getMovieID()}&display=1"
-                                                                                class="btn btn-danger shadow btn-xs sharp rounded-circle">
-                                                                                <i class="fa fa-eye-slash"></i>
-                                                                            </a>
-
-                                                                        </c:if>
-
-
-
-                                                                    </td>
-                                                                </tr>
-                                                            </c:forEach>
-
-                                                        </tbody>
-                                                    </table>
-
-                                                    <div
-                                                        class="d-flex align-items-center justify-content-xl-between flex-wrap justify-content-center mt-3">
-                                                        <small class="mb-xl-0 mb-2">
-
-                                                        </small>
-
-                                                        <ul class="pagination">
-
-                                                            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                                                <a class="page-link"
-                                                                    href="?index=${currentPage - 1}">&lsaquo;</a>
-                                                            </li>
-                                                            <c:forEach begin="1" end="${endPage}" var="i">
-                                                                <li
-                                                                    class="page-item ${currentPage == i ? 'active' : ''}">
-                                                                    <a class="page-link" href="?index=${i}">${i}</a>
-                                                                </li>
-                                                            </c:forEach>
-                                                            <li
-                                                                class="page-item ${currentPage == endPage ? 'disabled' : ''}">
-                                                                <a class="page-link"
-                                                                    href="?index=${currentPage + 1}">&rsaquo;</a>
-                                                            </li>
-
-                                                        </ul>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                   
                             </div>
                         </div>
                     </div>

@@ -96,7 +96,7 @@ public class addFoodServlet extends HttpServlet {
             throws ServletException, IOException {
         DAO dao = new DAO();
 
-        String foodName = getPartValue(request.getPart("foodName"));
+        String foodName = getPartValue(request.getPart("foodName")).trim();
         String description = getPartValue(request.getPart("description"));
         int price = Integer.parseInt(request.getParameter("price"));
         //int quantity = Integer.parseInt(request.getParameter("quantity"));

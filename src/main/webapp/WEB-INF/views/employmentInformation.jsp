@@ -55,6 +55,7 @@
                                     </div>
                                     <div class="form-outline mb-4">
                                         <h6 style="color: red">${errorEmail}</h6>
+                                        <h6 style="color: red">${errorEP}</h6>
                                         <label class="form-label" for="form3Example3cg"
                                                >Email</label
                                         >
@@ -89,13 +90,13 @@
                                         <div>
                                             <label class="form-label">Rạp làm việc</label> 
                                         </div>
-                                        <select  style="padding: 10px; width: 100%; margin-top: 5px " class="form-select" aria-label="Select Cinema" name="cinemaId">
+                                        <select  style="padding: 10px; width: 100%; margin-top: 5px " class="form-select" aria-label="Select Cinema" name="cinemaId" required="">
                                             <c:forEach var="c" items="${requestScope.cinema}">
                                                 <option value="${c.cinemaID}">${c.name}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
-                                        
+
                                     <div class="form-outline mb-4">
                                         <label class="form-label">CV</label>
                                         <input type="file" id="cv" name="cv" placeholder="file pdf" class="input-register" required=" "/>
@@ -180,6 +181,10 @@
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
+            if (name !== name.trim()) {
+                alert('Vui lòng điền đầy đủ thông tin.');
+                return false;
+            }
             if (dobDate >= today) {
                 alert('Ngày sinh không hợp lệ.');
                 event.preventDefault();

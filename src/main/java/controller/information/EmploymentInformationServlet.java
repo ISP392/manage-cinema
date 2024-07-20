@@ -114,9 +114,10 @@ public class EmploymentInformationServlet extends HttpServlet {
         } else if (!emailExists && phoneExists) {
             request.setAttribute("errorPhone", "Phone number is already existed");
         } else if (emailAndPhoneExist) {
-            request.setAttribute("errorEmail", "Email is already existed");
-            request.setAttribute("errorPhone", "Phone number is already existed");
+            request.setAttribute("errorEP", "Email and Phone number is already existed");
         }
+        List<Cinemas> list = dao.getAllCinemas();
+        request.setAttribute("cinema", list);
 
         if (emailExists || phoneExists) {
             request.getRequestDispatcher("/WEB-INF/views/employmentInformation.jsp").forward(request, response);
@@ -171,7 +172,8 @@ public class EmploymentInformationServlet extends HttpServlet {
         } else {
             request.setAttribute("error", "Interal server error!!");
         }
-        System.out.println(isSuccess);
+        List<Cinemas> list2 = dao.getAllCinemas();
+        request.setAttribute("cinema", list2);
         request.getRequestDispatcher("/WEB-INF/views/employmentInformation.jsp").forward(request, response);
 
     }
