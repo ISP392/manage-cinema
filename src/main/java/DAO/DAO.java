@@ -142,8 +142,8 @@ public class DAO extends DBContext {
         }
         return list;
     }
+    public String getRank(int userId) {
 
-    public String getPoint(int userId) {
         String sql = "SELECT point FROM Users where userID = ?";
 
         try {
@@ -170,6 +170,40 @@ public class DAO extends DBContext {
         return " ";
     }
 
+    public String getPoint(int userId) {
+        String sql = "SELECT point FROM Users where userID = ?";
+        String point ="";
+        try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, userId);
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            point = rs.getString("point");
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+        return point;
+    }
+    
+    public String gettotalSpending(int userId) {
+        String sql = " SELECT u.userID, SUM(o.allPrice) AS totalSpending FROM Users u JOIN Orders o ON u.userID = o.userID WHERE u.userID = ? GROUP BY u.userID";
+        String totalSpending ="";
+        try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, userId);
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            totalSpending = rs.getString("totalSpending");
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+        return totalSpending;
+    }
+    
     public void insertAddFood(String foodName, String description, int price, String imgFoodItems, int quantity) {
         String sql = "INSERT INTO FoodItems (foodName, description, price, imgFoodItems, quantity, display) VALUES (?, ?, ?, ?, ?, 1)";
         try {
@@ -1776,7 +1810,7 @@ public class DAO extends DBContext {
     //get all shift time of staff each day
     public List<ShiftCurrent> getAllShiftTimeOfStaffEachDay(Date thisDate, String cinemasName) {
         List<ShiftCurrent> list = new ArrayList<>();
-        String sql = "SELECT sh.startTime as startDate, u.displayName, sh.phone FROM Shift sh JOIN Users u ON u.userID = sh.phone JOIN staffstatus ss ON ss.phone = u.phone JOIN Cinemas c ON c.cinemaID = ss.cinemaID where CAST(sh.startTime AS date) = ? and c.name = ?";
+        String sql = "SELECT sh.startTime as startDate,sh.endTime as endDate, u.displayName, sh.phone FROM Shift sh JOIN Users u ON u.userID = sh.phone JOIN staffstatus ss ON ss.phone = u.phone JOIN Cinemas c ON c.cinemaID = ss.cinemaID where CAST(sh.startTime AS date) = ? and c.name = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setDate(1, thisDate);
@@ -1786,6 +1820,7 @@ public class DAO extends DBContext {
                 Users u = new Users();
                 u.setDisplayName(rs.getString("displayName"));
                 ShiftCurrent sc = new ShiftCurrent(rs.getTimestamp("startDate"), u);
+                sc.setEndTime(rs.getTimestamp("endDate"));
                 list.add(sc);
             }
             return list;
@@ -2065,6 +2100,7 @@ public class DAO extends DBContext {
         return ticketInfos;
     }
 
+
     // get food item by orderID
     public List<FoodItem> getFoodItemsByOrderId(String orderId) {
         List<FoodItem> foodItems = new ArrayList<>();
@@ -2182,6 +2218,7 @@ public class DAO extends DBContext {
         }
     }
 
+
     public List<Review> getReviewByMovieID(int movieID) {
         List<Review> list = new ArrayList<>();
         try {
@@ -2210,6 +2247,43 @@ public class DAO extends DBContext {
         return list;
     }
     
+
+    //get all staff of cinema by cinema name
+    public List<Users> getAllStaffByCinemaName(String cinemaName) {
+        String sql = "select distinct u.displayName, u.userID from Users u join staffstatus ss on ss.phone = u.phone join Shift s on s.phone = u.userID join Cinemas c on c.cinemaID = ss.cinemaID where c.name = ?";
+        List<Users> list = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, cinemaName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Users u = new Users();
+                u.setDisplayName(rs.getString("displayName"));
+                u.setUserID(rs.getInt("userID"));
+                list.add(u);
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    //insert shift for staff
+    public void insertShift(int userID, Timestamp startTime, Timestamp endTime){
+        String sql = "INSERT INTO Shift (phone, startTime, endTime) VALUES (?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userID);
+            ps.setTimestamp(2, startTime);
+            ps.setTimestamp(3, endTime);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+
     public List<Shift> getAllReportShifts() {
         List<Shift> shifts = new ArrayList<>();
         try {
@@ -2238,7 +2312,6 @@ public class DAO extends DBContext {
         }
         return shifts;
 
-    }
 
     public boolean deleteCommentByUserId(Review review) {
         try {
@@ -2380,6 +2453,50 @@ public class DAO extends DBContext {
             e.printStackTrace();
         }
         return false;
+
     }
 
+    public void saveShiftReport(int userID, String startTime, String endTime, double startAmount, double endAmount, double transferPayments) {
+        try {
+            // Kiểm tra xem ca làm việc đã tồn tại chưa
+            String checkSql = "SELECT COUNT(*) FROM Shift WHERE phone = ? AND startTime = ? AND endTime = ?";
+            PreparedStatement checkPs = connection.prepareStatement(checkSql);
+            checkPs.setInt(1, userID);
+            checkPs.setString(2, startTime);
+            checkPs.setString(3, endTime);
+            ResultSet rs = checkPs.executeQuery();
+            rs.next();
+            int count = rs.getInt(1);
+            rs.close();
+            checkPs.close();
+
+            if (count > 0) {
+                // Nếu ca làm việc đã tồn tại, thực hiện cập nhật
+                String updateSql = "UPDATE Shift SET startAmount = ?, endAmount = ?, tranferPayment = ? WHERE phone = ? AND startTime = ? AND endTime = ?";
+                PreparedStatement updatePs = connection.prepareStatement(updateSql);
+                updatePs.setDouble(1, startAmount);
+                updatePs.setDouble(2, endAmount);
+                updatePs.setDouble(3, transferPayments);
+                updatePs.setInt(4, userID);
+                updatePs.setString(5, startTime);
+                updatePs.setString(6, endTime);
+                updatePs.executeUpdate();
+                updatePs.close();
+            } else {
+                // Nếu ca làm việc chưa tồn tại, thực hiện thêm mới
+                String insertSql = "INSERT INTO Shift (phone, startTime, endTime, startAmount, endAmount, tranferPayment) VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement insertPs = connection.prepareStatement(insertSql);
+                insertPs.setInt(1, userID);
+                insertPs.setString(2, startTime);
+                insertPs.setString(3, endTime);
+                insertPs.setDouble(4, startAmount);
+                insertPs.setDouble(5, endAmount);
+                insertPs.setDouble(6, transferPayments);
+                insertPs.executeUpdate();
+                insertPs.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

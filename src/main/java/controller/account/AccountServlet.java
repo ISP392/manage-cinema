@@ -24,8 +24,13 @@ public class AccountServlet extends HttpServlet {
             request.setAttribute("backgroundColorSecond", "#bfd2d9");
             DAO dao = new DAO();
             int userId = user.getUserID(); // Assume getUserID() method exists in Users class
-            String rank = dao.getPoint(userId);
+            String rank = dao.getRank(userId);
+            String totalSpending = dao.gettotalSpending(userId);
+            String point = dao.getPoint(userId);
+
             request.setAttribute("userRank", rank);
+            request.setAttribute("totalSpending", totalSpending);
+            request.setAttribute("point", point);
 
             request.getRequestDispatcher("/WEB-INF/views/informationUser.jsp").forward(request, response);
         }
@@ -33,8 +38,6 @@ public class AccountServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-        
 
     }
 }
