@@ -90,10 +90,12 @@
                 <div class="form-group">
                     <label for="shift">Ca làm việc:</label>
                     <select id="shift" name="shift" required>
-                        <option value="8:00-12:00">8:00-12:00</option>
-                        <option value="12:00-16:00">12:00-16:00</option>
-                        <option value="16:00-20:00">16:00-20:00</option>
-                        <option value="20:00-0:00">20:00-0:00</option>
+                        <option value="0:00-6:00">00:00-6:00</option>
+                        <option value="6:00-12:00">6:00-12:00</option>
+                        <option value="12:00-18:00">12:00-18:00</option>
+                        <option value="18:00-24:00">18:00-24:00</option>
+                        
+                        
                     </select>
                 </div>
                 <div class="form-group">

@@ -4,6 +4,7 @@
  */
 package controller.staff;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -60,13 +61,9 @@ public class ViewReportServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String userID = (String) session.getAttribute("userID"); // Assuming userID is stored in the session
-
-        // Fetch data based on userID
-        //List<Shift> shiftsList = shiftService.getShiftsByUserID(userID);
-
-        //request.setAttribute("shiftsList", shiftsList);
+        DAO d = new DAO();
+        List<Shift> shifts = d.getAllReportShifts();
+        request.setAttribute("shifts", shifts); 
         request.getRequestDispatcher("/WEB-INF/views/staff-views/viewReport.jsp").forward(request, response);
     }
 

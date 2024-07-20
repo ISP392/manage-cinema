@@ -2209,6 +2209,36 @@ public class DAO extends DBContext {
         }
         return list;
     }
+    
+    public List<Shift> getAllReportShifts() {
+        List<Shift> shifts = new ArrayList<>();
+        try {
+            String sql = "SELECT s.startTime, s.endTime, s.startAmount, s.endAmount, s.tranferPayment, u.displayName "
+                    + "FROM Shift s JOIN Users u ON s.phone = u.userID "
+                    + "WHERE DATE(s.startTime) = CURDATE()";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Shift shift = new Shift();
+                shift.setDisplayName(rs.getString("displayName"));
+                shift.setStartTime(rs.getTimestamp("startTime"));
+                shift.setEndTime(rs.getTimestamp("endTime"));
+                shift.setStartAmount(rs.getDouble("startAmount"));
+                shift.setEndAmount(rs.getDouble("endAmount"));
+                shift.setTransferPayments(rs.getDouble("tranferPayment"));
+
+                // Tính toán revenue
+                double revenue = rs.getDouble("endAmount") - rs.getDouble("startAmount") + rs.getDouble("tranferPayment");
+                shift.setRevenue(revenue);
+
+                shifts.add(shift);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return shifts;
+
+    }
 
     public boolean deleteCommentByUserId(Review review) {
         try {
