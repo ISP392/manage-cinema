@@ -53,15 +53,14 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
       .acc-spend,
       .acc-point {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        display: -webkit-box;     
         width: 100%;
       }
 
       .show-point {
         font-weight: 600;
         color: #595959;
+        margin-left: 45px;
       }
 
       .inf {
@@ -140,13 +139,13 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                 <div class="total-spending">
                   <div class="acc-spend">
                     <label>Tổng Chi Tiêu: </label>
-                    <span class="show-point">0 đ</span>
+                    <span class="show-point"> ${totalSpending} đ </span>
                   </div>
                 </div>
                 <div class="point">
                   <div class="acc-point">
                     <label>Điểm: </label>
-                    <span class="show-point">0 P</span>
+                    <span class="show-point">${point} P</span>
                   </div>
                 </div>
               </div>

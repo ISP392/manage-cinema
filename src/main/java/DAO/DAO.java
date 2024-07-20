@@ -139,8 +139,8 @@ public class DAO extends DBContext {
         }
         return list;
     }
+    public String getRank(int userId) {
 
-    public String getPoint(int userId) {
         String sql = "SELECT point FROM Users where userID = ?";
 
         try {
@@ -167,6 +167,40 @@ public class DAO extends DBContext {
         return " ";
     }
 
+    public String getPoint(int userId) {
+        String sql = "SELECT point FROM Users where userID = ?";
+        String point ="";
+        try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, userId);
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            point = rs.getString("point");
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+        return point;
+    }
+    
+    public String gettotalSpending(int userId) {
+        String sql = " SELECT u.userID, SUM(o.allPrice) AS totalSpending FROM Users u JOIN Orders o ON u.userID = o.userID WHERE u.userID = ? GROUP BY u.userID";
+        String totalSpending ="";
+        try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, userId);
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            totalSpending = rs.getString("totalSpending");
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+        return totalSpending;
+    }
+    
     public void insertAddFood(String foodName, String description, int price, String imgFoodItems, int quantity) {
         String sql = "INSERT INTO FoodItems (foodName, description, price, imgFoodItems, quantity, display) VALUES (?, ?, ?, ?, ?, 1)";
         try {
@@ -2062,6 +2096,7 @@ public class DAO extends DBContext {
         }
         return ticketInfos;
     }
+
 
     // get food item by orderID
     public List<FoodItem> getFoodItemsByOrderId(String orderId) {
