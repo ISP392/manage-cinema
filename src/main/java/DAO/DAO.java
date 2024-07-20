@@ -14,6 +14,9 @@ import modal.*;
 import util.Encrypt;
 import java.sql.Timestamp;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -335,7 +338,6 @@ public class DAO extends DBContext {
         return list;
     }
 
-
     public int getMovieCount() {
         String sql = "SELECT COUNT(*) FROM Movies";
         try {
@@ -349,7 +351,6 @@ public class DAO extends DBContext {
         }
         return 0;
     }
-
 
     public int getEventCount() {
         String sql = "SELECT count(*) FROM Events";
@@ -2179,6 +2180,176 @@ public class DAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
+    }
+
+    public List<Review> getReviewByMovieID(int movieID) {
+        List<Review> list = new ArrayList<>();
+        try {
+            String sql = "select rv.*, u.displayName from Reviews rv JOIN Users u ON rv.userID = u.userID WHERE rv.movieID = ? ";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, movieID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Review reviewVM = new Review();
+                reviewVM.setComment(rs.getString("comment"));
+                reviewVM.setMovieID(rs.getInt("movieID"));
+                reviewVM.setStarRating(rs.getInt("starRating"));
+                reviewVM.setReviewID(rs.getInt("reviewID"));
+                reviewVM.setUserID(rs.getInt("userID"));
+                reviewVM.setReviewDate(rs.getString("reviewDate"));
+
+                Users user = new Users();
+                user.setDisplayName(rs.getString("displayName"));
+
+                reviewVM.setUser(user);
+                list.add(reviewVM);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public boolean deleteCommentByUserId(Review review) {
+        try {
+            int result = isOwnerReview(review);
+            if (result > 0) {
+                String sql = "DELETE FROM Reviews WHERE reviewID = ?";
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setInt(1, review.getReviewID());
+                int affectedRow = ps.executeUpdate();
+                if (affectedRow > 0) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private int isOwnerReview(Review review) {
+        try {
+            String sql = "select COUNT(*) from Reviews WHERE reviewID = ? AND userID = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, review.getReviewID());
+            ps.setInt(2, review.getUserID());
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Comment
+    public boolean reviewMovieByUser(Review review) {
+        try {
+            String sql = "INSERT INTO Reviews (userID, movieID, comment, starRating, reviewDate)"
+                    + " VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, review.getUserID());
+            ps.setInt(2, review.getMovieID());
+            ps.setString(3, review.getComment());
+            ps.setInt(4, review.getStarRating());
+
+            LocalDateTime now = LocalDateTime.now();
+            Timestamp timestamp = Timestamp.valueOf(now);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            String formattedDate = dateFormat.format(timestamp);
+
+            ps.setString(5, formattedDate);
+            int affectedRow = ps.executeUpdate();
+            if (affectedRow > 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // get all staffstatus
+    public List<StaffStatus> getAllStaffStatusWithCinema() {
+        List<StaffStatus> staffList = new ArrayList<>();
+        String sql = "SELECT st.*, c.cinemaID as cID,  c.name FROM staffstatus st JOIN Cinemas c ON st.cinemaID = c.cinemaID WHERE st.status = 'pending'";
+        try (
+                PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String phone = rs.getString("phone");
+                String status = rs.getString("status");
+                String address = rs.getString("address");
+                java.util.Date dob = rs.getDate("dob");
+                String staffName = rs.getString("staffName");
+                String staffEmail = rs.getString("staffEmail");
+                StaffStatus staff = new StaffStatus(phone, status, address, dob, staffName, staffEmail);
+                Cinemas ci = new Cinemas();
+                ci.setCinemaID(rs.getInt("cID"));
+                ci.setName(rs.getString("name"));
+                staff.setCinemas(ci);
+
+                staffList.add(staff);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return staffList;
+    }
+
+    // get all user staff
+    public List<Users> getAllStaffWithCinema() {
+        List<Users> staffList = new ArrayList<>();
+        String sql = "SELECT u.*, c.cinemaID as cID,  c.name FROM Users u JOIN staffstatus st ON u.phone = st.phone "
+                + "JOIN Cinemas c ON st.cinemaID = c.cinemaID ";
+        try (
+                PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Users user = new Users();
+                user.setUserID(rs.getInt("userID"));
+                user.setDisplayName(rs.getString("displayName"));
+                user.setEmail(rs.getString("email"));
+                user.setUserName(rs.getString("displayName"));
+
+                StaffStatus staff = new StaffStatus();
+                staff.setPhone(rs.getString("phone"));
+
+                Cinemas ci = new Cinemas();
+                ci.setCinemaID(rs.getInt("cID"));
+                ci.setName(rs.getString("name"));
+                staff.setCinemas(ci);
+                user.setPhone(staff);
+
+                staffList.add(user);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return staffList;
+    }
+
+    public boolean deleteStaff(int userID, String phone) {
+        String sql = "DELETE FROM Users WHERE userID = ? AND phone = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userID);
+            ps.setString(2, phone);
+
+            int aff = ps.executeUpdate();
+            return aff > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

@@ -15,6 +15,7 @@ public class StaffStatus {
     private String staffName;
     private String staffEmail;
     private int cinemaId;
+    private Cinemas cinemas;
 
     public int getCinemaId() {
         return cinemaId;
@@ -34,6 +35,14 @@ public class StaffStatus {
         this.dob = dob;
         this.staffName = staffName;
         this.staffEmail = staffEmail;
+    }
+
+    public Cinemas getCinemas() {
+        return cinemas;
+    }
+
+    public void setCinemas(Cinemas cinemas) {
+        this.cinemas = cinemas;
     }
 
     public String getPhone() {
