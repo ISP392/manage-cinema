@@ -151,7 +151,7 @@ Main wrapper start
                                 <li><a href="view-slot?date=<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())%>&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu&theaterNumber=1">Slot</a></li>
                                 <li><a href="manager_user">Staff</a></li>
                                 <li><a href="manage-staff-status">Staff status</a></li>
-                                <li><a href="staff-schedule">Staff Schedule</a></li>
+                                <li><a href="staff-schedule?date=<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())%>&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu">Staff Schedule</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -200,6 +200,7 @@ Main wrapper start
                                                         <th>DOB</th>
                                                         <th>Name</th>
                                                         <th>Email</th>
+                                                        <th>Cinema</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -214,6 +215,7 @@ Main wrapper start
                                                             <td>${staff.dob}</td>
                                                             <td>${staff.staffName}</td>
                                                             <td>${staff.staffEmail}</td>
+                                                           
                                                             <td>
                                                                 <c:if test="${staff.status == 'pending'}">
                                                                     <a onclick="return confirm('Are you sure to approve this staff?')"

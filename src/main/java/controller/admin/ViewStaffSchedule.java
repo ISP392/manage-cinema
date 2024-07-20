@@ -4,6 +4,7 @@
  */
 package controller.admin;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,21 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import modal.Cinemas;
+import modal.ShiftCurrent;
+import modal.Users;
 
 /**
  *
@@ -45,7 +61,6 @@ public class ViewStaffSchedule extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -57,17 +72,66 @@ public class ViewStaffSchedule extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            request.getRequestDispatcher("/WEB-INF/views/admin-views/staffSchedule.jsp").forward(request, response);
+        Users u = (Users) request.getSession().getAttribute("admin");
+        if (u == null || u.getRoleID().getRoleID() != 1) {
+            response.sendRedirect("admin");
+        } else {
+            DAO dao = new DAO();
+            
+            List<Cinemas> listCinemas = dao.getAllCinemas();
+            String dateParam = request.getParameter("date");
+            Date[] dates = getWeekRange(dateParam);
+            Date startHidden = dates[0]; // Ví dụ: 2024-07-01
+            Date endHidden = dates[1]; // Ví dụ: 2024-07-07
+            
+            String cinemaName = request.getParameter("cinemaName");
+            List<Users> listStaff = dao.getAllStaffByCinemaName(cinemaName);
+
+            List<java.util.Date> weekDays = new ArrayList<>();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new java.util.Date(startHidden.getTime()));
+            while (!cal.getTime().after(new java.util.Date(endHidden.getTime()))) {
+                weekDays.add(new java.util.Date(cal.getTimeInMillis()));
+                cal.add(Calendar.DATE, 1);
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+
+            List<ShiftCurrent> listShiftAllWeek = dao.getAllDayHasShiftAWeek(startHidden, endHidden, cinemaName);
+            Map<String, List<ShiftCurrent>> mapShift = new HashMap<>();
+            for(ShiftCurrent shift : listShiftAllWeek){
+                Timestamp thisDate = shift.getStartTime();
+                //change format thisDate to yyyy-MM-dd
+                String key = sdf2.format(thisDate);
+                List<ShiftCurrent> eachShiftPerDay = dao.getAllShiftTimeOfStaffEachDay(Date.valueOf(key), cinemaName);
+                if(mapShift.containsKey(key)){
+                    mapShift.get(key).addAll(eachShiftPerDay);
+                } else {
+                    mapShift.put(key, eachShiftPerDay);
+                }
+            }
+            request.setAttribute("mapShift", mapShift);
+            request.setAttribute("cinemaName", cinemaName);
+            request.setAttribute("listStaff", listStaff);
+
+             request.setAttribute("listCinemas", listCinemas);
+             request.getRequestDispatcher("/WEB-INF/views/admin-views/staffSchedule.jsp").forward(request, response);
+        }
+    }
+    
+    public Date[] getWeekRange(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(date, formatter);
+        LocalDate startDate = localDate.with(DayOfWeek.MONDAY);
+        LocalDate endDate = startDate.plusDays(6);
+        Date[] dates = new Date[2];
+        dates[0] = Date.valueOf(startDate); // Chuyển đổi LocalDate thành java.sql.Date
+        dates[1] = Date.valueOf(endDate); // Chuyển đổi LocalDate thành java.sql.Date
+        return dates;
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

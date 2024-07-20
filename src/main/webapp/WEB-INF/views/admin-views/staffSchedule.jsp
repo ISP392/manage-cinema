@@ -26,6 +26,12 @@
     } else {
         today = cal.getTime();
     }
+    // Thêm một ngày để tính ngày mai
+    cal.add(Calendar.DAY_OF_MONTH, 1);
+    Date tomorrow = cal.getTime();
+    cal.add(Calendar.DAY_OF_MONTH, -1);  // Reset lại ngày về hôm nay sau khi tính ngày mai
+
+
 
     String todayStr = sdf1.format(today);
 
@@ -63,102 +69,152 @@
 
     </head>
     <style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-    }
-    .container-fluid {
-        padding: 20px;
-        max-width: 90%;
-        margin: auto;
-        background: #fff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
-    h1 {
-        font-size: 24px;
-        color: #333;
-        margin-bottom: 20px;
-    }
-    label {
-        font-size: 16px;
-        font-weight: bold;
-        color: #333;
-        margin-right: 10px;
-    }
-    select {
-        padding: 10px;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        font-size: 16px;
-        margin-bottom: 20px;
-    }
-    select:focus {
-        border-color: #007BFF;
-        outline: none;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 12px;
-        text-align: center;
-    }
-    th {
-        background-color: #007BFF;
-        color: white;
-        font-weight: bold;
-    }
-    td {
-        background-color: #fff;
-    }
-    
-    .slot {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        background-color: #D5F8F9;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 10px;
-        height: auto;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .slot div {
-        margin-bottom: 5px;
-    }
-    .slot a {
-        color: #007BFF;
-        text-decoration: none;
-        font-weight: bold;
-    }
-    .slot a:hover {
-        text-decoration: underline;
-    }
-    .selected {
-        background-color: #007BFF;
-        color: white;
-    }
-    .button {
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        font-size: 16px;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-    }
-    .button:hover {
-        background-color: #0056b3;
-    }
-</style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container-fluid {
+            padding: 20px;
+            max-width: 90%;
+            margin: auto;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-right: 10px;
+        }
+        select {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        select:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+            width: 200px;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+            font-weight: bold;
+        }
+        td {
+            background-color: #fff;
+        }
+
+        .slot {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #D5F8F9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .slot div {
+            margin-bottom: 5px;
+        }
+        .slot a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .slot a:hover {
+            text-decoration: underline;
+        }
+        .selected {
+            background-color: #007BFF;
+            color: white;
+        }
+        .button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .link-active {
+            color: #007BFF;
+            font-weight: bold;
+        }
+        .link-active:hover {
+            text-decoration: underline;
+        }
+        .link-disabled {
+            color: gray;
+            pointer-events: none;
+            font-weight: bold;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 
     <body>
         <!--*******************
@@ -291,19 +347,19 @@ Main wrapper start
                                 <li><a href="view-slot?date=<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())%>&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu&theaterNumber=1">Slot</a></li>
                                 <li><a href="manager_user">Staff</a></li>
                                 <li><a href="manage-staff-status">Staff status</a></li>
-                                <li><a href="staff-schedule">Staff Schedule</a></li>
+                                <li><a href="staff-schedule?date=<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())%>&cinemaName=BANNY%20Vincom%20Center%20Bà%20Triệu">Staff Schedule</a></li>
                             </ul>
                         </li>
                     </ul>
                 </div>
             </div>
             <!--**********************************
-  Sidebar end
-***********************************-->
+            Sidebar end
+            ***********************************-->
 
             <!--**********************************
-  Content body start
-***********************************-->
+            Content body start
+            ***********************************-->
             <div class="content-body">
                 <!-- row -->
                 <div class="container-fluid">
@@ -315,14 +371,6 @@ Main wrapper start
                         <select id="cinemaSelect" name="cinemaName" onchange="navigateToCinema()">
                             <c:forEach items="${listCinemas}" var="cinema">
                                 <option value="${cinema.name}" <c:if test="${cinema.name == param.cinemaName}">selected</c:if>>${cinema.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="theaterSelect">Theater Number:</label>
-                        <select id="theaterSelect" name="theaterNumber" onchange="navigateToTheater()">
-                            <c:forEach var="i" begin="1" end="4">
-                                <option value="${i}" <c:if test="${i == param.theaterNumber}">selected</c:if>>${i}</option>
                             </c:forEach>
                         </select>
                     </div>
@@ -367,102 +415,123 @@ Main wrapper start
                                 <th>Saturday</th>
                                 <th>Sunday</th>
                             </tr>
-                            <%-- date for each day of week --%>
                             <tr>
                                 <th style="width: 200px;">Date</th>
                                     <% for (int i = 0; i < 7; i++) { %>
                                 <th><%= displayFormat.format(weekDays[i]) %></th>
-                                    <%-- Hidden input để lưu trữ ngày đầy đủ --%>
                         <input type="hidden" name="weekStartDate" value="<%= fullDateFormat.format(weekDays[i]) %>">
                         <% } %>
                         </tr>
                         </thead>
-                        <!-- <tbody>
-                        <c:forEach var="day" items="${weekDays}">
-                            <c:set var="formattedDate">
-                                <fmt:formatDate value="${day}" pattern="MM/dd"/>
-                            </c:set>
-                            <tr>
-                            <c:if test="${showtimeMap[formattedDate] != null}">
-                                <c:forEach var="showtime" items="${showtimeMap[formattedDate]}">
-                                    <td>${showtime.theaterID.cinemaID.name}</td>
-                                    <td>${formattedDate}</td>
-                                </c:forEach>
-                                    <td>yes</td>
-                            </c:if>
-                            <c:if test="${showtimeMap[formattedDate] == null}">
-                                <tr>
-                                    <td>no123</td>
-                                    <td>${formattedDate}</td>
-                                </tr>
-                            </c:if>
-                        </tr>
-                        
-                        </c:forEach>
-                        </tbody> -->
                         <tbody>
+                            <%
+                                String[][] timeSlots = {
+                                    {"00:00:00", "00:00 ~ 06:00"},
+                                    {"06:00:00", "06:00 ~ 12:00"},
+                                    {"12:00:00", "12:00 ~ 18:00"},
+                                    {"18:00:00", "18:00 ~ 23:59"}
+                                };
+                                String [][] timeEndSlots = {
+                                    {"06:00:00", "06:00 ~ 12:00"},
+                                    {"12:00:00", "12:00 ~ 18:00"},
+                                    {"18:00:00", "18:00 ~ 23:59"},
+                                    {"23:59:59", "23:59 ~ 00:00"}
+                                };
+                            
+                                for (int row = 0; row < timeSlots.length; row++) {
+                            %>
                             <tr>
-                                <td><a href="addNewSlot" >Add Slot</a></td>
+                                <td style="font-size:20px; font-weight: bold"><%= timeSlots[row][1] %></td>
+                                <% for (int col = 0; col < 7; col++) { 
+                                    String hiddenValue = fullDateFormat.format(weekDays[col]) + " " + timeSlots[row][0];
+                                    String hiddenValueEnd = fullDateFormat.format(weekDays[col]) + " " + timeEndSlots[row][0];
+                                    boolean isPastDate = weekDays[col].before(tomorrow);
+                                %>
+                                <td>
+                                    <input type="hidden" name="date" value="<%= hiddenValue %>">
+                                    <!-- Sử dụng c:set để thiết lập biến JSTL cho hiddenValue -->
+                                    <c:set var="hiddenValueStr" value="<%= hiddenValue %>" />
+                                    <c:set var="hiddenValueEndStr" value="<%= hiddenValueEnd %>" />
 
-                                <c:forEach var="day" items="${weekDays}">
-                                    <c:set var="formattedDate">
-                                        <fmt:formatDate value="${day}" pattern="MM/dd"/>
-                                    </c:set>
-                                    <c:choose>
-                                        <c:when test="${showtimeMap[formattedDate] != null}">
-                                            <td style="width: 200px; vertical-align: top;">
-                                                <c:forEach var="showtime" items="${showtimeMap[formattedDate]}" varStatus="status">
+                                    <!-- Biến cờ để kiểm tra nếu có shift nào khớp -->
+                                    <c:set var="hasShift" value="false" />
 
-                                                    <div class="slot">   
-                                                        <div>${showtime.theaterID.cinemaID.name}</div>
-                                                        <div style="font-size: 20px; font-weight: bold; margin-top: 10px;">
-                                                            <c:set var="parsedDate" value="${fn:substring(showtime.startTime, 0, 19)}" />
-                                                            <c:set var="parsedDate2" value="${fn:substring(showtime.endTime, 0, 19)}" />
-                                                            <fmt:parseDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm:ss" var="dateObj" />
-                                                            <fmt:parseDate value="${parsedDate2}" pattern="yyyy-MM-dd HH:mm:ss" var="dateObj2" />
-                                                            <fmt:formatDate value="${dateObj}" pattern="HH:mm" /> ~ <fmt:formatDate value="${dateObj2}" pattern="HH:mm" />
-                                                        </div>
+                                    <c:forEach var="entry" items="${mapShift}">
+                                        <c:forEach var="shift" items="${entry.value}">
+                                            <c:set var="formattedStartTime" value="${fn:substringBefore(shift.startTime, '.0')}" />
+                                            <c:set var="formattedStartTimeStr" value="${fn:trim(formattedStartTime)}" />
+                                            <c:if test="${formattedStartTimeStr eq hiddenValueStr}">
+                                                <c:set var="hasShift" value="true" />
+                                                <div style="padding: 10px; border: 1px solid #ddd; margin: 5px; background-color: #f9f9f9; border-radius: 10px; font-weight: bold; font-size: 15px; color:black;">
+                                                    ${shift.getPhone().getDisplayName()}
 
-                                                    </div>
+                                                </div>
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:forEach>
 
+                                    <!-- Kiểm tra nếu không có shift nào khớp -->
+                                    <c:if test="${not hasShift}">
+                                        <% if (!isPastDate) { %>
+                                        <!-- input hidden to store cinemaName, startTime -->
+                                        <input type="hidden" id="cinemaName" name="cinemaName" value="${cinemaName}">
+                                        <input type="hidden" id="startTime" name="startTime" value="${hiddenValueStr}">
+                                        <input type="hidden" id="endTime" name="endTime" value="${hiddenValueEndStr}">
+                                        <a href="#" class="link-active">Add New Schedule</a>
+                                        <% } else { %>
+                                        <a href="#" class="link-disabled">Add New Schedule</a>
+                                        <% } %>
+                                    </c:if>
+                                </td>
 
-                                                    <a href="updateNewSlot?id=${showtime.screeningID}">Update Slot</a>
-
-                                                </c:forEach>      
-
-                                            </td>
-
-                                        </c:when>
-                                        <c:otherwise>
-                                            <td>-</td>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
-
+                                <% } %>
                             </tr>
+                            <% } %>
                         </tbody>
                     </table>
+
+
+                    <div id="scheduleModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <h2>Add New Schedule</h2>
+                            <form id="scheduleForm" action="add_shift">
+                                <label for="cinemaName">Cinema Name:</label>
+                                <input type="text" id="modalCinemaName" name="cinemaName" readonly><br><br>
+                                <label for="startTime">Start Time:</label>
+                                <input type="text" id="modalStartTime" name="startTime" ><br><br>
+                                <label for="endTime">End Time:</label>
+                                <input type="text" id="modalEndTime" name="endTime" ><br><br>
+                                <select id="staffSelect" name="userID">
+                                    <c:forEach items="${listStaff}" var="staff">
+                                        <option value="${staff.getUserID()}">${staff.getDisplayName()}</option>
+                                    </c:forEach>
+                                </select><br><br>
+                                <!-- Add more form fields as necessary -->
+                                <button type="submit" class="button">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+
+
 
                     <script>
                         function navigateToCinema() {
                             var date = '<%= todayStr %>';
                             var cinemaName = document.getElementById("cinemaSelect").value;
-                            var theaterNumber = document.getElementById("theaterSelect").value;
-                            var url = "view-slot?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName) + "&theaterNumber=" + theaterNumber;
+                            var url = "staff-schedule?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName);
                             window.location.href = url;
                         }
 
                         function navigateToTheater() {
                             var date = '<%= todayStr %>';
                             var cinemaName = document.getElementById("cinemaSelect").value;
-                            var theaterNumber = document.getElementById("theaterSelect").value;
-                            var url = "view-slot?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName) + "&theaterNumber=" + theaterNumber;
+                            var url = "staff-schedule?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName);
                             window.location.href = url;
                         }
 
                         function navigateToYear() {
                             var cinemaName = document.getElementById("cinemaSelect").value;
-                            var theaterNumber = document.getElementById("theaterSelect").value;
                             var year = document.getElementById("yearSelect").value;
                             var week = document.getElementById("weekSelect").value;
 
@@ -473,13 +542,12 @@ Main wrapper start
                             cal.setDate(cal.getDate() + (week - 1) * 7);
 
                             var date = cal.toISOString().split('T')[0];
-                            var url = "view-slot?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName) + "&theaterNumber=" + theaterNumber;
+                            var url = "staff-schedule?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName);
                             window.location.href = url;
                         }
 
                         function navigateToWeek() {
                             var cinemaName = document.getElementById("cinemaSelect").value;
-                            var theaterNumber = document.getElementById("theaterSelect").value;
                             var year = document.getElementById("yearSelect").value;
                             var week = document.getElementById("weekSelect").value;
 
@@ -490,14 +558,53 @@ Main wrapper start
                             cal.setDate(cal.getDate() + (week - 1) * 7 + 1);
 
                             var date = cal.toISOString().split('T')[0];
-                            var url = "view-slot?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName) + "&theaterNumber=" + theaterNumber;
+                            var url = "staff-schedule?date=" + date + "&cinemaName=" + encodeURIComponent(cinemaName);
                             window.location.href = url;
                         }
+
+
+
                     </script>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            var modal = document.getElementById("scheduleModal");
+                            var span = document.getElementsByClassName("close")[0];
+
+                            document.querySelectorAll('.link-active').forEach(function (element) {
+                                element.addEventListener('click', function (event) {
+                                    event.preventDefault();
+                                    //get cinema name
+                                    var cinemaName = document.getElementById("cinemaName").value;
+                                    //get start time
+                                    var startTime = document.getElementById("startTime").value;
+                                    //get end time
+                                    var endTime = document.getElementById("endTime").value;
+                                    document.getElementById("modalCinemaName").value = cinemaName;
+                                    document.getElementById("modalStartTime").value = startTime;
+                                    document.getElementById("modalEndTime").value = endTime;
+
+                                    modal.style.display = "block";
+                                });
+                            });
+
+                            span.onclick = function () {
+                                modal.style.display = "none";
+                            }
+
+                            window.onclick = function (event) {
+                                if (event.target == modal) {
+                                    modal.style.display = "none";
+                                }
+                            }
+                        });
+                    </script>
+
+
                 </div>
                 <!--**********************************
-    Main wrapper end
-***********************************-->
+                    Main wrapper end
+                ***********************************-->
 
                 <!--**********************************
     Scripts
@@ -512,7 +619,7 @@ Main wrapper start
                 <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
 
                 <script src="./assets/JS/js/custom.min.js"></script>
-                
+
                 </body>
 
                 </html>

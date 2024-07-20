@@ -104,19 +104,16 @@ public class SignInServlet extends HttpServlet {
                 session.setAttribute("account", user);
                 response.sendRedirect("home");
             } else if (roleID == 3) {
-                 StaffStatus status = user.getPhone();
-                 status.setPhone(String.valueOf(user.getUserID()));
+                StaffStatus status = user.getPhone();
+                status.setPhone(String.valueOf(user.getUserID()));
                 if (status == null || !"approve".equals(status.getStatus())) {
                     request.getSession().setAttribute("error", "Your account is not approved!");
                     response.sendRedirect("signin");
                     return;
                 }
 
-                // Get current time
-                Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-                Shift shift = d.getShiftForUser(status.getPhone());
-
-                if (shift == null || currentTime.before(shift.getStartTime()) || currentTime.after(shift.getEndTime())) {
+                // Kiểm tra xem người dùng có đang trong ca làm việc không
+                if (!d.isUserInCurrentShift(status.getPhone())) {
                     request.getSession().setAttribute("error", "You are not in your shift time!");
                     response.sendRedirect("signin");
                 } else {

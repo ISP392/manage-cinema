@@ -2,25 +2,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.staff;
+package controller.admin;
 
-import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import DAO.DAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import modal.Users;
 
 /**
  *
- * @author caoha
+ * @author baoquoc
  */
-@WebServlet(name = "ReportServlet", urlPatterns = {"/report"})
-public class ReportServlet extends HttpServlet {
+@WebServlet(name = "AddShiftServlet", urlPatterns = {"/add_shift"})
+public class AddShiftServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,28 +41,48 @@ public class ReportServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ReportServlet</title>");
+            out.println("<title>Servlet AddShiftServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ReportServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AddShiftServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/staff-views/shiftReport.jsp").forward(request, response);
+        Users u = (Users) request.getSession().getAttribute("admin");
+        if (u == null || u.getRoleID().getRoleID() != 1) {
+            response.sendRedirect("admin");
+        } else {
+            DAO dao = new DAO();
+            String startTime = request.getParameter("startTime");
+            String endTime = request.getParameter("endTime");
+            String userID = request.getParameter("userID");
+
+// Định dạng không có phần giây chính xác
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            java.util.Date parsedDate;
+
+            try {
+                // Phân tích cú pháp ngày giờ
+                parsedDate = dateFormat.parse(startTime);
+                java.sql.Timestamp startTimestamp = new java.sql.Timestamp(parsedDate.getTime());
+
+                parsedDate = dateFormat.parse(endTime);
+                java.sql.Timestamp endTimestamp = new java.sql.Timestamp(parsedDate.getTime());
+
+                // Gọi phương thức DAO để chèn dữ liệu
+                dao.insertShift(Integer.parseInt(userID), startTimestamp, endTimestamp);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            response.sendRedirect("home_admin");
+        }
+
     }
 
     /**
@@ -72,29 +94,9 @@ public class ReportServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Users user = (Users) req.getSession().getAttribute("account");
-        if (user == null) {
-            resp.sendRedirect("signin");
-        } else {
-            int userID = user.getUserID();
-            String date = req.getParameter("date");
-            String shift = req.getParameter("shift");
-            String startCash = req.getParameter("startCash");
-            String endCash = req.getParameter("endCash");
-            String transferPayments = req.getParameter("transferPayments"); // Sửa lại tên biến cho đúng
-
-            String[] shiftTimes = shift.split("-");
-            String startTime = date + " " + shiftTimes[0] + ":00";
-            String endTime = date + " " + shiftTimes[1] + ":00";
-
-            DAO dao = new DAO();
-            dao.saveShiftReport(userID, startTime, endTime, Double.parseDouble(startCash), Double.parseDouble(endCash), Double.parseDouble(transferPayments));
-
-            req.setAttribute("userID", userID);
-            req.getRequestDispatcher("/WEB-INF/views/staff-views/reportSuccess.jsp").forward(req, resp);
-        }
+        processRequest(request, response);
     }
 
     /**

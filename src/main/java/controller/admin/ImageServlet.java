@@ -2,9 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.staff;
+package controller.admin;
 
-import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,15 +11,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import modal.Users;
 
 /**
  *
- * @author caoha
+ * @author LÊ PHƯƠNG MAI
  */
-@WebServlet(name = "ReportServlet", urlPatterns = {"/report"})
-public class ReportServlet extends HttpServlet {
+@WebServlet(name = "ImageServlet", urlPatterns = {"/ImageServlet"})
+public class ImageServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +36,10 @@ public class ReportServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ReportServlet</title>");
+            out.println("<title>Servlet ImageServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ReportServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ImageServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,7 +57,7 @@ public class ReportServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/staff-views/shiftReport.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -72,29 +69,9 @@ public class ReportServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Users user = (Users) req.getSession().getAttribute("account");
-        if (user == null) {
-            resp.sendRedirect("signin");
-        } else {
-            int userID = user.getUserID();
-            String date = req.getParameter("date");
-            String shift = req.getParameter("shift");
-            String startCash = req.getParameter("startCash");
-            String endCash = req.getParameter("endCash");
-            String transferPayments = req.getParameter("transferPayments"); // Sửa lại tên biến cho đúng
-
-            String[] shiftTimes = shift.split("-");
-            String startTime = date + " " + shiftTimes[0] + ":00";
-            String endTime = date + " " + shiftTimes[1] + ":00";
-
-            DAO dao = new DAO();
-            dao.saveShiftReport(userID, startTime, endTime, Double.parseDouble(startCash), Double.parseDouble(endCash), Double.parseDouble(transferPayments));
-
-            req.setAttribute("userID", userID);
-            req.getRequestDispatcher("/WEB-INF/views/staff-views/reportSuccess.jsp").forward(req, resp);
-        }
+        processRequest(request, response);
     }
 
     /**

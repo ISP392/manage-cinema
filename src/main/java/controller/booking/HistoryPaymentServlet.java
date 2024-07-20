@@ -48,15 +48,22 @@ public class HistoryPaymentServlet extends HttpServlet {
                 indexPage = "1";
             }
             int index = Integer.parseInt(indexPage);
+            int pageSize = 5;
 
-            //get list history payment
             DAO dao = new DAO();
-            List<Tickets> listTickets = dao.pagingTickets(user.getUserID(), index);
-            int count = dao.countPagingTickets(user.getUserID());
-            int endPage = count / 5;
-            if (count % 5 != 0) {
+
+            // Get total number of tickets for the user
+            List<Tickets> allTickets = dao.pagingTickets(user.getUserID(), 1); // Fetch all tickets
+            int totalTickets = allTickets.size();
+            int endPage = totalTickets / pageSize;
+            if (totalTickets % pageSize != 0) {
                 endPage++;
             }
+
+            // Get the tickets for the current page
+            int fromIndex = (index - 1) * pageSize;
+            int toIndex = Math.min(fromIndex + pageSize, totalTickets);
+            List<Tickets> listTickets = allTickets.subList(fromIndex, toIndex);
 
             request.setAttribute("endPage", endPage);
             request.setAttribute("tag", index);
