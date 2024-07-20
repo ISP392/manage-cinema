@@ -5,6 +5,7 @@
 
 package controller.admin;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -58,10 +59,49 @@ public class ManageUser extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         List<Users> listUser = new ArrayList<>();
-         request.setAttribute("listUser", listUser); 
-        request.getRequestDispatcher("/WEB-INF/views/admin-views/managerAccountUsers.jsp").forward(request, response);
-    } 
+        try {
+            Users u = (Users) request.getSession().getAttribute("admin");
+            if (u == null || u.getRoleID().getRoleID() != 1) {
+                response.sendRedirect("admin");
+            } else {
+                String action = request.getParameter("action");
+                action = action != null ? action : "";
+                DAO dao = new DAO();
+                switch (action) {
+                    case "delete":
+                        this.delete(request, response);
+                        break;
+                    default:
+                        List<Users> listUsers = dao.getAllStaffWithCinema();
+                        request.setAttribute("USERS", listUsers);
+                        request.getRequestDispatcher("/WEB-INF/views/admin-views/managerAccountUsers.jsp").forward(request, response);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    
+    private void delete(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String userIDs = request.getParameter("userID");        
+            String phone = request.getParameter("phone");
+
+            if (userIDs != null) {
+                DAO dao = new DAO();
+                boolean reuslt = dao.deleteStaff(Integer.parseInt(userIDs), phone);
+                if (reuslt) {
+                    response.sendRedirect("manager_user?success=Delete this staff successfully");
+                } else {
+                    response.sendRedirect("manager_user?error=Delete this staff failed");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /** 
      * Handles the HTTP <code>POST</code> method.

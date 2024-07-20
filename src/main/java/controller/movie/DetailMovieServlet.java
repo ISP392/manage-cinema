@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import modal.MovieGenres;
 import modal.Movies;
+import modal.Review;
 import modal.UserLikeMovie;
 import modal.Users;
 
@@ -84,6 +85,11 @@ public class DetailMovieServlet extends HttpServlet {
         if (m.getReleaseDate().after(today)) {
             isCommingSoon = true;
         }
+        
+        List<Review> listReview = d.getReviewByMovieID(Integer.parseInt(movieID));
+        request.setAttribute("REVIEWS", listReview);
+        
+        
         if(user != null) {
             if (userLikeMovie == null) {
                 request.setAttribute("isLiked", false);
