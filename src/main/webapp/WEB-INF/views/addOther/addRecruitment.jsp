@@ -1,5 +1,10 @@
-<%-- Document : addFood Created on : Jun 20, 2024, 10:48:41 PM Author : ACER --%>
+<%-- 
+    Document   : addRecruitment
+    Created on : Jul 21, 2024, 6:11:49 PM
+    Author     : ACER
+--%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,8 +14,55 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <link href="./assets/css/dashboard-admin.css" rel="stylesheet" />
-
         <style>
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 80px;
+                height: 34px;
+            }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                transition: .4s;
+                border-radius: 34px;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+            input:checked + .slider {
+                background-color: #2196F3;
+            }
+
+            input:checked + .slider:before {
+                transform: translateX(26px);
+            }
+            
+            
+            
+            
             .genre-buttons {
                 display: flex;
                 flex-wrap: wrap;
@@ -108,7 +160,7 @@
                     <nav class="navbar navbar-expand">
                         <div class="collapse navbar-collapse">
                             <div class="header-left">
-                                <div class="dashboard_bar">Add Food</div>
+                                <div class="dashboard_bar">Add Recruitment</div>
                             </div>
                             <ul class="navbar-nav header-right" style="margin-left: 15px">
                                 <li class="nav-item dropdown notification_dropdown">
@@ -202,6 +254,8 @@
                             <ul aria-expanded="false">
                                 <li><a href="listFood">Add Food</a></li>
                                 <li><a href="addVoucher">Voucher</a></li>
+                                <li><a href="listRecruitments">Recruitments</a></li>
+
                             </ul>
                         </li>
 
@@ -219,21 +273,50 @@
                 <!-- row -->
                 <div class="container-fluid">
                     <!-- Row -->
-                    <form action="addFood" method="post" enctype="multipart/form-data">
+                    <form action="addRecruitment" method="post">
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="row">
                                     <div class="col-xl-12">
                                         <div class="mb-3">
-                                            <label class="form-label">Food Name</label>
+                                            <label class="form-label">Vacancies</label>
                                             <div class="card h-auto">
                                                 <div class="card-body pt-3">
-                                                    <input type="text" class="form-control" placeholder="Food Name"
-                                                           name="foodName" required="" />
+                                                    <input type="text" class="form-control" placeholder="Vacancies"
+                                                           name="vacancies" required="" />
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <label class="form-label">Number Needed</label>
+                                        <div class="card h-auto">
+                                            <div class="card-body pt-3">
+                                                <input type ="number" id="numberNeeded" placeholder="numberNeeded" style="margin-top: 10px"
+                                                       class="form-control" name="numberNeeded" required =""/>
+                                            </div>
+                                        </div>
+                                        <label class="form-label">Address</label><br/>
+                                        <div class="card h-auto">
+                                            <div class="card-body pt-3">
+                                                <c:forEach var="item" items="${requestScope.cinemas}">
+                                                    <input type="checkbox" value="${item.cinemaID}" style="margin-top: 10px" name="addresses" />&nbsp;&nbsp;&nbsp;${item.name} <br/>
+                                                </c:forEach>
+                                            </div>
+                                        </div>
+
+                                        <label class="form-label">Start Date</label>
+                                        <div class="card h-auto">
+                                            <div class="card-body pt-3">
+                                                <input type="date" class="form-control" placeholder="Start Date"
+                                                       name="startDate" required =""/>
+                                            </div>
+                                        </div><label class="form-label">End Date</label>
+                                        <div class="card h-auto">
+                                            <div class="card-body pt-3">
+                                                <input type="date" class="form-control" placeholder="endDate"
+                                                       name="endDate" required =""/>
+                                            </div>
+                                        </div>
                                         <label class="form-label">Description</label>
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">
@@ -241,130 +324,86 @@
                                                           class="form-control" name="description" required =""></textarea>
                                             </div>
                                         </div>
-                                        <label class="form-label">Price</label>
+                                        <label class="form-label">Display</label>
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">
-                                                <input type="number" class="form-control" placeholder="Price"
-                                                       name="price" max="350000" required =""/>
-                                            </div>
-                                        </div>
-
-
-                                        <!--                                        <label class="form-label">Quantity</label>
-                                                                                <div class="card h-auto">
-                                                                                    <div class="card-body pt-3">
-                                                                                        <input
-                                                                                            type="text"
-                                                                                            class="form-control"
-                                                                                            placeholder="quantity"
-                                                                                            name="quantity"
-                                                                                            required
-                                                                                            />
-                                                                                    </div>
-                                                                                </div>-->
-
-
-                                        <div class="filter cm-content-box box-primary">
-                                            <div class="content-title">
-                                                <div class="cpa" >img FoodItems</div>
-                                                <div class="tools">
-                                                    <a href="javascript:void(0);" class="expand SlideToolHeader" required =""><i
-                                                            class="fal fa-angle-down"></i></a>
-                                                </div>
-                                            </div>
-                                            <div class="cm-content-body publish-content form excerpt">
-                                                <div class="card-body">
-                                                    <div class="avatar-upload d-flex align-items-center">
-                                                        <div class="position-relative">
-                                                            <div class="avatar-preview">
-                                                                <div id="imagePreview" style="
-                                                                     background-image: url(./assets/images/no-img-avatar.png);
-                                                                     "></div>
-                                                            </div>
-                                                            <div
-                                                                class="change-btn d-flex align-items-center flex-wrap">
-                                                                <input type="file" class="form-control d-none"
-                                                                       accept=".png, .jpg, .jpeg" name="imgFoodItems"
-                                                                       id="imageUpload" required />
-                                                                <label for="imageUpload"
-                                                                       class="btn btn-light ms-0">Select Image</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <label class="switch">
+                                                    <input name="display" type="checkbox">
+                                                    <span class="slider round"></span>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <button type="submit" class="btn btn-primary mb-3 open">
+                                        Add Recruitment
+                                    </button>
                                 </div>
-
-                                <button type="submit" class="btn btn-primary mb-3 open">
-                                    Add Food
-                                </button>
-                                </form>
                             </div>
+                            <!--**********************************
+                                    Content body end
+                                ***********************************-->
                         </div>
+                    </form>
+
                         <!--**********************************
-                                Content body end
-                            ***********************************-->
-                </div>
-                <!--**********************************
-                    Main wrapper end
-                ***********************************-->
+                            Main wrapper end
+                        ***********************************-->
 
-                <!--**********************************
-                    Scripts
-                ***********************************-->
-                <!-- Required vendors -->
-                <script src="./assets/JS/vendor/global/global.min.js"></script>
-                <script src="./assets/JS/vendor/ckeditor/ckeditor.js"></script>
+                        <!--**********************************
+                            Scripts
+                        ***********************************-->
+                        <!-- Required vendors -->
+                        <script src="./assets/JS/vendor/global/global.min.js"></script>
+                        <script src="./assets/JS/vendor/ckeditor/ckeditor.js"></script>
 
-                <!-- Apex Chart -->
-                <script src="./assets/JS/vendor/apexchart/apexchart.js"></script>
+                        <!-- Apex Chart -->
+                        <script src="./assets/JS/vendor/apexchart/apexchart.js"></script>
 
-                <!-- Dashboard 1 -->
-                <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
+                        <!-- Dashboard 1 -->
+                        <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
 
-                <script src="./assets/JS/js/custom.min.js"></script>
-                <script>
-                    function checkForm() {
-                        var foodName = document.getElementById('foodName').value.trim();
-                        var description = document.getElementById('description').value.trim();
-                        var errorMessage = document.getElementById('error-message');
+                        <script src="./assets/JS/js/custom.min.js"></script>
+                        <script>
+                            function checkForm() {
+                                var foodName = document.getElementById('foodName').value.trim();
+                                var description = document.getElementById('description').value.trim();
+                                var errorMessage = document.getElementById('error-message');
 
-                        if (!foodName || !description) {
-                            errorMessage.style.display = 'block';
-                        } else {
-                            errorMessage.style.display = 'none';
-                            alert('Form is valid and ready to be submitted');
-                        }
-                    }
-                </script>
+                                if (!foodName || !description) {
+                                    errorMessage.style.display = 'block';
+                                } else {
+                                    errorMessage.style.display = 'none';
+                                    alert('Form is valid and ready to be submitted');
+                                }
+                            }
+                        </script>
 
-                <script>
+                        <script>
 
-                    function readURL(input) {
-                        if (input.files && input.files[0]) {
-                            var reader = new FileReader();
-                            reader.onload = function (e) {
-                                $("#imagePreview").css(
-                                        "background-image",
-                                        "url(" + e.target.result + ")"
-                                        );
-                                $("#imagePreview").hide();
-                                $("#imagePreview").fadeIn(650);
-                            };
-                            reader.readAsDataURL(input.files[0]);
-                        }
-                    }
-                    $("#imageUpload").on("change", function () {
-                        readURL(this);
-                    });
-                    $(".remove-img").on("click", function () {
-                        var imageUrl = "images/no-img-avatar.png";
-                        $(".avatar-preview, #imagePreview").removeAttr("style");
-                        $("#imagePreview").css("background-image", "url(" + imageUrl + ")");
-                    });
-                </script>
-                </body>
+                            function readURL(input) {
+                                if (input.files && input.files[0]) {
+                                    var reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        $("#imagePreview").css(
+                                                "background-image",
+                                                "url(" + e.target.result + ")"
+                                                );
+                                        $("#imagePreview").hide();
+                                        $("#imagePreview").fadeIn(650);
+                                    };
+                                    reader.readAsDataURL(input.files[0]);
+                                }
+                            }
+                            $("#imageUpload").on("change", function () {
+                                readURL(this);
+                            });
+                            $(".remove-img").on("click", function () {
+                                var imageUrl = "images/no-img-avatar.png";
+                                $(".avatar-preview, #imagePreview").removeAttr("style");
+                                $("#imagePreview").css("background-image", "url(" + imageUrl + ")");
+                            });
+                        </script>
+                        </body>
 
-                </html>
+                        </html>
