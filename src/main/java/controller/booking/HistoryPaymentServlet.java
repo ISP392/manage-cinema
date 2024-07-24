@@ -53,7 +53,7 @@ public class HistoryPaymentServlet extends HttpServlet {
             DAO dao = new DAO();
 
             // Get total number of tickets for the user
-            List<Tickets> allTickets = dao.pagingTickets(user.getUserID(), 1); // Fetch all tickets
+            List<Tickets> allTickets = dao.pagingTickets(user.getUserID(), 1); 
             int totalTickets = allTickets.size();
             int endPage = totalTickets / pageSize;
             if (totalTickets % pageSize != 0) {

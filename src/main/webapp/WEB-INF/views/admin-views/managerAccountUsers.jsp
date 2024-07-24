@@ -166,161 +166,70 @@
                             <!--**********************************
                   Content body start
               ***********************************-->
-                            <div class="content-body">
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h4 class="card-title">Manage Users</h4>
-                                                    <form action="./SearchUserServlet" method="get" class="d-flex">
-                                                        <input type="number" class="form-control" name="userId"
-                                                            placeholder="Search" id="search">
-                                                        <button type="submit"
-                                                            class="btn btn-primary ms-2">Search</button>
-                                                    </form>
-                                                </div>
-                                                <div class="filter cm-content-box box-primary">
-                                                    <div class="content-title">
-                                                        <div class="cpa">
-                                                            <i style="margin-right:5px;"
-                                                                class="fa fa-file-lines"></i>List Users
-                                                        </div>
-                                                        <div class="tools">
-                                                            <a href="javascript:void(0);"
-                                                                class="expand SlideToolHeader"><i
-                                                                    class="fal fa-angle-down"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="cm-content-body form excerpt">
-                                                        <div class="card-body pt-2">
-                                                            <c:if test="${not empty errorMessage}">
-                                                                <div class="alert alert-danger" role="alert">
-                                                                    ${errorMessage}
-                                                                </div>
-                                                            </c:if>
-                                                            <c:if test="${empty errorMessage}">
-                                                                <div class="table-responsive">
-                                                                    <table class="table table-responsive-sm mb-0">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th><strong>UserID</strong></th>
-                                                                                <th><strong>Name</strong></th>
-                                                                                <th><strong>Email</strong></th>
-                                                                                <th><strong>Role</strong></th>
-                                                                                <th style="width:85px;">
-                                                                                    <strong>Actions</strong></th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody id="userTableBody">
-
-                                                                            <% List<Users> listUser = (List<Users>)
-                                                                                    request.getAttribute("listUser");
-                                                                                    int roleId = (Integer)
-                                                                                    request.getAttribute("roleId");
-                                                                                    for (Users user : listUser) {
-                                                                                    %>
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            <%= user.getUserID() %>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <%= user.getDisplayName().toUpperCase()
-                                                                                                %>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <%= user.getEmail() %>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <% if
-                                                                                                (user.getRoleID().getRoleID()==1)
-                                                                                                { out.print("ADMIN"); }
-                                                                                                else if
-                                                                                                (user.getRoleID().getRoleID()==2)
-                                                                                                { out.print("USER");
-                                                                                                }else if
-                                                                                                (user.getRoleID().getRoleID()==3)
-                                                                                                { out.print("STAFF"); }
-                                                                                                else {
-                                                                                                out.print("Unknown Role"); } %>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <a href="javascript:void(0);"
-                                                                                                class="btn btn-primary shadow btn-xs sharp rounded-circle me-1 edit-role"
-                                                                                                data-userid="<%= user.getUserID() %>"
-                                                                                                data-roleid="<%= user.getRoleID().getRoleID() %>">
-                                                                                                <i
-                                                                                                    class="fa fa-pencil"></i>
-                                                                                            </a>
-
-                                                                                        </td>
-
-                                                                                    </tr>
-                                                                                    <% } %>
-                                                                        </tbody>
-                                                                    </table>
-
-                                                                </div>
-                                                                <!-- Pagination controls -->
-                                                                <style>
-                                                                    .small-select {
-                                                                        width: 100px;
-                                                                        /* Bạn có thể điều chỉnh giá trị này theo nhu cầu */
-                                                                        font-size: 12px;
-                                                                        /* Giảm kích thước chữ */
-                                                                    }
-                                                                </style>
-
-                                                                <nav aria-label="Page navigation">
-                                                                    <select class="form-select small-select"
-                                                                        onchange="location = this.value;">
-                                                                        <c:forEach var="i" begin="1" end="${noOfPages}">
-                                                                            <option value="SearchUserServlet?page=${i}"
-                                                                                <c:if test='${i == currentPage}'>
-                                                                                selected
-                                                            </c:if>>Page ${i}</option>
-                                                            </c:forEach>
-                                                            </select>
-                                                            </nav>
-                                                            </c:if>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="updateRoleModal" tabindex="-1" role="dialog"
-                                                aria-labelledby="updateRoleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <form action="UpdateRoleServlet" method="post">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="updateRoleModalLabel">Update
-                                                                    Role</h5>
-                                                                <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <input type="hidden" name="userID" id="modalUserID">
-                                                                <div class="form-group">
-                                                                    <label for="modalRoleID">Role</label>
-                                                                    <select name="roleID" id="modalRoleID"
-                                                                        class="form-control">
-                                                                        <option value="2">User</option>
-                                                                        <option value="3">Staff</option>
-                                                                        <option value="1">Admin</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="submit" class="btn btn-primary">Save
-                                                                    changes</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
+                           <div class="content-body">
+                <div class="container-fluid">
+                    <div class="container-fluid">
+                        <!-- Row -->
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <c:if test="${param.error != null}">
+                                    <div class="alert alert-danger" role="alart">
+                                        ${param.error}
+                                    </div>
+                                </c:if>
+                                <c:if test="${param.success != null}">
+                                    <div class="alert alert-success" role="alart">
+                                        ${param.success}
+                                    </div>
+                                </c:if>
+                                <div class="filter cm-content-box box-primary">
+                                    <div class="content-title">
+                                        <div class="cpa">
+                                            <i class="fa fa-file-lines"></i> List staff status
 
                                         </div>
+                                    </div>
+                                    <div class="cm-content-body form excerpt">
+                                        <div class="card-body pt-2">
+                                            <div class="table-responsive">
+                                                <table id="staffTable" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Name</th>
+                                                            <th>Email</th>
+                                                            <th>Phone</th>
+                                                            <th>Cinema</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach var="staff" items="${USERS}"
+                                                                   varStatus="status">
+                                                            <tr>
+                                                                <td>${status.index + 1}</td>
+                                                                <td>${staff.displayName}</td>      
+                                                                <td>${staff.email}</td>
+                                                                <td>${staff.phone.phone}</td>
+                                                                <td>${staff.phone.cinemas.name}</td>
+                                                                <td>
+                                                                        <a onclick="return confirm('Are you sure to delete this staff?')"
+                                                                           href="manager_user?action=delete&userID=${staff.userID}&phone=${staff.phone.phone}"
+                                                                           class="btn btn-danger btn-sm">
+                                                                          <i class="fa fa-pencil"></i>
+                                                                        </a>
+                                                                      
+                                                                </td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                                         <!--**********************************
                               Content body end
                           ***********************************-->
