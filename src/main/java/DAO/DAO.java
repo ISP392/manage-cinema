@@ -2311,7 +2311,7 @@ public class DAO extends DBContext {
             e.printStackTrace();
         }
         return shifts;
-
+    }
 
     public boolean deleteCommentByUserId(Review review) {
         try {
