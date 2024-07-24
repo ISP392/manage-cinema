@@ -14,6 +14,8 @@ import modal.*;
 import util.Encrypt;
 import java.sql.Timestamp;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -327,6 +329,20 @@ public class DAO extends DBContext {
         }
     }
 
+    public void updateDisplayRecruitmentByRecruitmentID(int id, int display) {
+        String sql = "update Recruitment set display = ? where recruitmentId = ?";
+        boolean isDisplay = display == 1;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setBoolean(1, isDisplay);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
     public List<Movies> getMoviesByPage(int page, int pageSize) {
         List<Movies> list = new ArrayList<>();
         String sql = "SELECT * FROM Movies ORDER BY releaseDate DESC LIMIT ? OFFSET ?";
@@ -2499,4 +2515,202 @@ public class DAO extends DBContext {
             e.printStackTrace();
         }
     }
+    public int GetCurrentIdRecruiment(){
+        int id = 0;
+        try {
+            String sql = "SELECT recruitmentID FROM recruitment order by recruitmentID";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                id = rs.getInt("recruitmentID");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+    
+    public int insertRecruiemnt(Recruiments recruitment) throws ParseException {
+        String sql = "INSERT INTO Recruitment (vacancies, numberNeeded, startDate, endDate, description, display) VALUES (?, ?, ?, ?, ?, ?)";
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date startDate = dateFormat.parse(recruitment.getStartDate());
+            java.util.Date endDate = dateFormat.parse(recruitment.getEndDate());
+            java.sql.Date sqlStartDate = new java.sql.Date(startDate.getTime());
+            java.sql.Date sqlEndDate = new java.sql.Date(endDate.getTime());
+            
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, recruitment.getVacancies());
+            ps.setInt(2, recruitment.getNumberNeeded());
+            ps.setDate(3, sqlStartDate);
+            ps.setDate(4, sqlEndDate);
+            ps.setString(5, recruitment.getDescription());
+            ps.setBoolean(6, recruitment.isIsDisplay());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return GetCurrentIdRecruiment();
+    }
+    
+    public void insertRecruiemntCinema(int recruimentId, int cinemaId) {
+        String sql = "INSERT INTO RecruitmentCinema (recruitmentId, cinemaId) VALUES (?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(2, cinemaId);
+            ps.setInt(1, recruimentId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
+    public List<Recruiments> getRecruimentsByPage(int page, int pageSize) {
+        List<Recruiments> list = new ArrayList<>();
+        String sql = "SELECT * FROM Recruitment ORDER BY RecruitmentId ASC LIMIT ? OFFSET ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, pageSize);
+            ps.setInt(2, (page - 1) * pageSize);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Recruiments r = new Recruiments(rs.getInt("RecruitmentID"),
+                        rs.getString("vacancies"),
+                        rs.getInt("numberNeeded"),
+                        rs.getString("startDate"),
+                        rs.getString("endDate"),
+                        rs.getString("description"), 
+                        rs.getBoolean("display"),
+                        null
+                );
+                ArrayList<RecruimentCinemas> rc = GetRecruimentCinemasByRecruimentId(r.getRecruitmentID());
+                r.setRecruimentCinemas(rc);
+                list.add(r);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    public Recruiments getRecruimentById(int id) {
+        Recruiments c =  null;
+        String sql = "SELECT * FROM Recruitment Where RecruitmentID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Recruiments r = new Recruiments(rs.getInt("RecruitmentID"),
+                        rs.getString("vacancies"),
+                        rs.getInt("numberNeeded"),
+                        rs.getString("startDate"),
+                        rs.getString("endDate"),
+                        rs.getString("description"), 
+                        rs.getBoolean("display"),
+                        null
+                );
+                ArrayList<RecruimentCinemas> rc = GetRecruimentCinemasByRecruimentId(r.getRecruitmentID());
+                r.setRecruimentCinemas(rc);
+                return r;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return c;
+    }
+    
+    public ArrayList<RecruimentCinemas> GetRecruimentCinemasByRecruimentId(int recruimentId){
+        ArrayList<RecruimentCinemas> list = new ArrayList<>();
+        String sql = "SELECT * FROM RecruitmentCinema WHERE RecruitmentId = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, recruimentId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                RecruimentCinemas r = new RecruimentCinemas(
+                        rs.getInt("cinemaId"),
+                        rs.getInt("RecruitmentID"),
+                        null
+                );
+                Cinemas c = getCinemaById(r.getCinemaId());
+                r.setCinema(c);
+                list.add(r);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    
+    public Cinemas getCinemaById(int cinemaId) {
+        String sql = "select * from Cinemas Where cinemaId = ? ";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, cinemaId);
+            ResultSet rs = ps.executeQuery();
+            Cinemas c = new Cinemas();
+            if (rs.next()) {
+                c.setName(rs.getString("name"));
+                c.setCinemaID(rs.getInt("cinemaID"));
+                return c;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
+    
+    public void updateRecruitment(Recruiments recruitment ) throws ParseException {
+        String sql = "UPDATE recruitment SET vancancies = ?, numberNeeded = ?, startDate = ?, endDate = ?, description = ?, display = ?, updatedDate = NOW() WHERE recruitmentId = ?";
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date startDate = dateFormat.parse(recruitment.getStartDate());
+            java.util.Date endDate = dateFormat.parse(recruitment.getEndDate());
+            java.sql.Date sqlStartDate = new java.sql.Date(startDate.getTime());
+            java.sql.Date sqlEndDate = new java.sql.Date(endDate.getTime());
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, recruitment.getVacancies());
+            ps.setInt(2, recruitment.getNumberNeeded());
+            ps.setDate(3, sqlStartDate);
+            ps.setDate(4, sqlEndDate);
+            ps.setString(5, recruitment.getDescription());
+            ps.setBoolean(6,  recruitment.isIsDisplay());
+            ps.setInt(7,  recruitment.getRecruitmentID());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void UpdateRecruitmentCinema(List<Integer> cinemaIdsOld, List<Integer> cinemaIdsNew, int recruitmentId){
+        List<Integer> oldNotInNew = cinemaIdsOld.stream().filter(id -> !cinemaIdsNew.contains(id)).collect(Collectors.toList());
+        
+        List<Integer> newNotInOld = cinemaIdsNew.stream()
+                .filter(id -> !cinemaIdsOld.contains(id))
+                .collect(Collectors.toList());
+        
+        for (Integer integer : oldNotInNew) {
+            RemoveRecruitmentCinema(integer, recruitmentId);
+        }
+        
+        for (Integer integer : newNotInOld) {
+            insertRecruiemntCinema(recruitmentId,integer);
+        }
+    }
+    
+    public void RemoveRecruitmentCinema(int cinemaId, int recruitmentId){
+        String sql = "DELETE FROM RecruitmentCinema WHERE recruitmentId = ? AND cinemaId = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, recruitmentId);
+            ps.setInt(2, cinemaId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
 }
