@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author ACER
  */
-public class Recruiments {
+public class Recruiments { 
     private int recruitmentID;
     private String vacancies;
     private int numberNeeded;
