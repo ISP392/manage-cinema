@@ -15,15 +15,11 @@ import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import modal.Movies;
-import modal.Users;
 import modal.Cinemas;
 import modal.ScreeningTimes;
 import util.CinemaConfig;
-import java.time.format.DateTimeFormatter;
 
 /**
  *

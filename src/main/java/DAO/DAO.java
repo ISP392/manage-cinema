@@ -2531,7 +2531,7 @@ public class DAO extends DBContext {
     }
     
     public int insertRecruiemnt(Recruiments recruitment) throws ParseException {
-        String sql = "INSERT INTO Recruitment (vacancies, numberNeeded, startDate, endDate, description, display) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO recruitment (vacancies, numberNeeded, startDate, endDate, description, display) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date startDate = dateFormat.parse(recruitment.getStartDate());
@@ -2554,7 +2554,7 @@ public class DAO extends DBContext {
     }
     
     public void insertRecruiemntCinema(int recruimentId, int cinemaId) {
-        String sql = "INSERT INTO RecruitmentCinema (recruitmentId, cinemaId) VALUES (?, ?)";
+        String sql = "INSERT INTO recruitmentCinema (recruitmentId, cinemaId) VALUES (?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(2, cinemaId);
@@ -2567,7 +2567,7 @@ public class DAO extends DBContext {
     
     public List<Recruiments> getRecruimentsByPage(int page, int pageSize) {
         List<Recruiments> list = new ArrayList<>();
-        String sql = "SELECT * FROM Recruitment ORDER BY RecruitmentId ASC LIMIT ? OFFSET ?";
+        String sql = "SELECT * FROM recruitment ORDER BY recruitmentId ASC LIMIT ? OFFSET ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, pageSize);
@@ -2595,7 +2595,7 @@ public class DAO extends DBContext {
     
     public Recruiments getRecruimentById(int id) {
         Recruiments c =  null;
-        String sql = "SELECT * FROM Recruitment Where RecruitmentID = ?";
+        String sql = "SELECT * FROM recruitment Where RecruitmentID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
@@ -2622,7 +2622,7 @@ public class DAO extends DBContext {
     
     public ArrayList<RecruimentCinemas> GetRecruimentCinemasByRecruimentId(int recruimentId){
         ArrayList<RecruimentCinemas> list = new ArrayList<>();
-        String sql = "SELECT * FROM RecruitmentCinema WHERE RecruitmentId = ?";
+        String sql = "SELECT * FROM recruitmentCinema WHERE RecruitmentId = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, recruimentId);
@@ -2711,6 +2711,12 @@ public class DAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
+    }
+
+    public static void main(String[] args) {
+        DAO dao = new DAO();
+        Timestamp endTime = dao.getLastestEndTimeOfTheater("BANNY Crescent Mall", Date.valueOf("2024-07-25"),1);
+        System.out.println(endTime);
     }
     
 }
