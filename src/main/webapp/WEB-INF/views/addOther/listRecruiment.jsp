@@ -7,6 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -225,13 +226,13 @@
                         <div class="col-xl-12">
 
                             <div class="mb-4">
-                                <a href="addFood" class="btn btn-primary">Add Food</a>
+                                <a href="addRecruitment" class="btn btn-primary">Add Recruiemnt</a>
                             </div>
 
                             <div class="filter cm-content-box box-primary">
                                 <div class="content-title">
                                     <div class="cpa">
-                                        <i class="fa-solid fa-file-lines me-1"></i>List Food Iterms
+                                        <i class="fa-solid fa-file-lines me-1"></i>List Recruiemnts
                                     </div>
                                 </div>
                                 <div class="cm-content-body form excerpt">
@@ -244,11 +245,12 @@
                                                     <tr>
                                                         
                                                         <th><strong>#</strong></th>
-                                                        <th><strong>Food Name</strong></th>
+                                                        <th><strong>Vacancies</strong></th>
+                                                        <th><strong>Number Needed</strong></th>
+                                                        <th><strong>Address</strong></th>
+                                                        <th><strong>Start Date</strong></th>
+                                                        <th><strong>End Date</strong></th>
                                                         <th><strong>Description</strong></th>
-                                                        <th><strong>Price</strong></th>
-                                                        <th><strong>Image</strong></th>
-                                                        
                                                         <th class="action-rows"><strong>Actions</strong></th>
                                                     </tr>
                                                 </thead>
@@ -262,29 +264,38 @@
                                                 <c:set var="currentPage" value="${tag}" />
 
 
-                                                <c:forEach  var="food" items="${listFood}" >
-                                                    <c:set var="foodNumber" value="${(currentPage - 1) * itemsPerPage}" />
+                                                <c:forEach  var="item" items="${list}" >
+                                                    <c:set var="itemNumber" value="${(currentPage - 1) * itemsPerPage}" />
                                                     <tr>
 
-                                                        <td>${food.foodItemID}</td>
-                                                        <td>${food.foodName.toUpperCase()}</td>
-                                                        <td>${food.description}</td>
-                                                        <td><fmt:formatNumber value = "${food.price}" type = "currency"/></td>
-                                                        <td><img style="height: 30px" src="${food.imgFoodItems}" alt="Food Image" onclick="openModal(this.src)" /></td>
-
+                                                        <td>${item.recruitmentID}</td>
+                                                        <td>${item.vacancies.toUpperCase()}</td>
+                                                        <td>${item.numberNeeded}</td>
+                                                        <td>
+                                                            <c:if test="${item.recruimentCinemas != null}">
+                                                                <c:forEach  var="address" items="${item.recruimentCinemas}" >
+                                                                    <p>${address.cinema.name}</p>
+                                                                </c:forEach>
+                                                            </c:if>
+                                                        </td>
+                                                        <td>${item.startDate}</td>
+                                                        <td>${item.endDate}</td>
+                                                        <td>${item.description}</td>
                                                         <td class="action-rows">
-                                                            <a href="update_food?foodId=${food.foodItemID}" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
-                                                            <c:if test="${food.display==1}">
-                                                                <a href="updateDisplayFood?foodId=${food.foodItemID}&display=0" class="btn btn-danger shadow btn-xs sharp rounded-circle">
+                                                            <a href="update_recruitment?recruitmentID=${item.recruitmentID}" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
+                                                            <c:if test="${item.isDisplay}">
+                                                                <a href="updateDisplayRecruitment?recruitmentID=${item.recruitmentID}&display=0" class="btn btn-danger shadow btn-xs sharp rounded-circle">
                                                                     <i class="fa fa-eye"></i>
                                                                 </a>
+
                                                             </c:if>
 
-                                                            <c:if test="${food.display==0}">
+                                                            <c:if test="${!item.isDisplay}">
 
-                                                                <a  href="updateDisplayFood?foodId=${food.foodItemID}&display=1" class="btn btn-danger shadow btn-xs sharp rounded-circle">
+                                                                <a  href="updateDisplayRecruitment?recruitmentID=${item.recruitmentID}&display=1" class="btn btn-danger shadow btn-xs sharp rounded-circle">
                                                                     <i class="fa fa-eye-slash"></i>
                                                                 </a>
+
                                                             </c:if>
                                                         </td>
                                                     </tr>
@@ -313,10 +324,6 @@
                                             </div>
                                                 </tbody>
                                             </table>
-                                            <div id="myModalImg" class="modalImg">
-                                                <span class="closeImg" onclick="closeModal()">&times;</span>
-                                                <img class="modalImg-content" id="img01">
-                                            </div>
                     <div class="content-body">
                         <!-- row -->
                         <div class="container-fluid">
