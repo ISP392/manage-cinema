@@ -16,7 +16,6 @@
                 margin-top: 50px;
             }
             .carrer1 {
-                height: 225px;
                 position: relative;
                 display: -ms-flexbox;
                 display: flex;
@@ -238,6 +237,48 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <p style="text-align: center; padding-block-start: 15px">
+                            <img
+                                src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/web/member-star.png"
+                                alt=" "
+                                />
+                        </p>
+                        <div class="row">
+                            <p style="text-align: center; font-size: 25px; font-weight: bolder">
+                                THÔNG TIN TUYỂN DỤNG
+                            </p>
+                            <div class="row">
+                                <div class="row">
+                                    <c:forEach items="${requestScope.list}" var="item">
+                                        <div class="col-md-12 mt-5">
+                                            <div class="carrer1">
+                                                <form action="employmentInformation" method="get">
+                                                    <input type="hidden" name="recruitmentId" value="${item.recruitmentID}" />
+                                                    <div class="header">VỊ TRÍ: ${item.vacancies}</div>
+                                                    <div class="sub-header">Khối Văn Phòng/ Cụm Rạp</div>
+                                                    <hr/>
+                                                    <div class="content">
+                                                        <p><strong>Cụm rạp: </strong></p>
+                                                        <c:forEach var="address" items="${item.recruimentCinemas}">
+                                                            <p>${address.cinema.name}</p>
+                                                        </c:forEach>
+                                                            <p><strong>Số lượng: </strong>${item.numberNeeded}</p>
+                                                        <p><strong>Ngày bắt đầu:</strong> ${item.startDate}</p>
+                                                        <p><strong>Ngày kết thúc:</strong> ${item.endDate}</p>
+                                                        <p><strong>Chi tiết:</strong> ${item.description}</p>
+                                                        <p><strong>Cách 1:</strong> Gửi CV ứng tuyển <strong><button type="submit" class="btn btn-primary">Tại đây!</button></strong></p>
+                                                        <p><strong>Cách 2:</strong> Nộp hồ sơ trực tiếp trên các trang tuyển dụng uy tín mà BANNY có đăng tuyển như Linkedin, Vietnamwork, Careerbuilder, Hoteljob, Vieclam24, TopCV ....</p>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                    
+                                </div>
+                            </div>
+
+                            
+                        </div>
                         <p style="text-align: center; padding-block-start: 15px">
                             <img
                                 src="https://iguov8nhvyobj.vcdn.cloud/media/wysiwyg/web/member-star.png"

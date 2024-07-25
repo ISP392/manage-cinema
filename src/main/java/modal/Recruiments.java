@@ -16,19 +16,29 @@ public class Recruiments {
     private int numberNeeded;
     private String startDate;
     private String endDate;
-    private String Description;
+    private String description;
+    private String type;
     private boolean isDisplay;
     private ArrayList<RecruimentCinemas> recruimentCinemas;
 
-    public Recruiments(int recruitmentID, String vacancies, int numberNeeded, String startDate, String endDate, String Description,boolean isDisplay, ArrayList<RecruimentCinemas> recruimentCinemas) {
+    public Recruiments(int recruitmentID, String vacancies, int numberNeeded, String startDate, String endDate, String description,boolean isDisplay, String type, ArrayList<RecruimentCinemas> recruimentCinemas) {
         this.recruitmentID = recruitmentID;
         this.vacancies = vacancies;
         this.numberNeeded = numberNeeded;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.Description = Description;
+        this.description = description;
         this.isDisplay = isDisplay;
+        this.type = type;
         this.recruimentCinemas = recruimentCinemas;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public boolean isIsDisplay() {
@@ -83,11 +93,11 @@ public class Recruiments {
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String Description) {
-        this.Description = Description;
+        this.description = Description;
     }
 
     public ArrayList<RecruimentCinemas> getRecruimentCinemas() {

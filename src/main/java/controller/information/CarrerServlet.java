@@ -5,6 +5,7 @@
 
 package controller.information;
 
+import DAO.DAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import modal.Recruiments;
 
 /**
  *
@@ -55,6 +58,9 @@ public class CarrerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        DAO dao = new DAO();
+        ArrayList<Recruiments> list = dao.getRecruimentsAvailable();
+        request.setAttribute("list", list);
         request.getRequestDispatcher("/WEB-INF/views/Carrer.jsp").forward(request, response);
     } 
 
