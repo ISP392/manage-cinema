@@ -369,8 +369,8 @@ public class DAO extends DBContext {
         return list;
     }
 
-    public List<Events> getEventByPage(int page, int pageSize) {
-        String sql = "SELECT * FROM  Events ORDER BY startTime DESC LIMIT ? OFFSET ?";
+   public List<Events> getEventByPage(int page, int pageSize) {
+        String sql = "SELECT * FROM project_cinema_update.Events WHERE date(endTime) > CURDATE() ORDER BY endTime DESC LIMIT ? OFFSET ?";
         List<Events> list = new ArrayList<>();
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -415,7 +415,7 @@ public class DAO extends DBContext {
     }
 
     public List<Events> getAllEvent() {
-        String sql = "select * from Events ";
+        String sql = "SELECT * FROM project_cinema_update.Events  where date(endTime) > CURDATE()";
         List<Events> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
