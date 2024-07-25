@@ -51,6 +51,7 @@ public class StaffStatus {
     public void setType(String type) {
         this.type = type;
     }
+    private Cinemas cinemas;
 
     public int getCinemaId() {
         return cinemaId;
@@ -72,6 +73,14 @@ public class StaffStatus {
         this.staffEmail = staffEmail;
         this.type = type;
         this.recruitmentId = recruitmentId;
+    }
+
+    public Cinemas getCinemas() {
+        return cinemas;
+    }
+
+    public void setCinemas(Cinemas cinemas) {
+        this.cinemas = cinemas;
     }
 
     public String getPhone() {

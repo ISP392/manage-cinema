@@ -22,7 +22,7 @@ import util.Generate;
 
 /**
  *
- * @author HP
+ * @author Miss Nga
  */
 @WebServlet(name = "ManageStaffStatusController", urlPatterns = {"/manage-staff-status"})
 public class ManageStaffStatusController extends HttpServlet {
@@ -80,7 +80,7 @@ public class ManageStaffStatusController extends HttpServlet {
                     this.reject(request, response);
                     break;
                 default:
-                    List<StaffStatus> staffStatus = dao.getAllStaff();
+                    List<StaffStatus> staffStatus = dao.getAllStaffStatusWithCinema();
                     request.setAttribute("staffStatus", staffStatus);
                     request.getRequestDispatcher("/WEB-INF/views/admin-views/staffStatus.jsp").forward(request, response);
             }

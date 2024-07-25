@@ -1,4 +1,4 @@
-<%-- Document : staffStatus Created on : Jul 16, 2024, 2:30:07 PM Author : HP --%>
+<%-- Document : staffStatus Created on : Jul 16, 2024, 2:30:07 PM Author : Miss Nga --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
@@ -219,21 +219,19 @@ Main wrapper start
                                                             <td>${staff.staffEmail}</td>
                                                             <td>${staff.cinema.name}</td>
                                                             <td>${staff.type}</td>
-                                                            <td>${staff.recruitment.numberNeeded}</td>
-                                                           
+                                                            <td>${staff.recruitment.numberNeeded}</td>                                                           
+                                                            <td>${staff.cinemas.name}</td>
                                                             <td>
-                                                                <c:if test="${staff.status == 'pending'}">
-                                                                    <a onclick="return confirm('Are you sure to approve this staff?')"
-                                                                       href="manage-staff-status?action=approve&phone=${staff.phone}"
-                                                                       class="btn btn-success btn-sm">
-                                                                        <i class="fa fa-check"></i> Approve
-                                                                    </a>
-                                                                    <a onclick="return confirm('Are you sure to reject this staff?')"
-                                                                       href="manage-staff-status?action=reject&phone=${staff.phone}"
-                                                                       class="btn btn-danger btn-sm">
-                                                                        <i class="fa fa-times"></i> Reject
-                                                                    </a>
-                                                                </c:if>
+                                                                <a onclick="return confirm('Are you sure to approve this staff?')"
+                                                                   href="manage-staff-status?action=approve&phone=${staff.phone}"
+                                                                   class="btn btn-success btn-sm">
+                                                                    <i class="fa fa-check"></i> Approve
+                                                                </a>
+                                                                <a onclick="return confirm('Are you sure to reject this staff?')"
+                                                                   href="manage-staff-status?action=reject&phone=${staff.phone}"
+                                                                   class="btn btn-danger btn-sm">
+                                                                    <i class="fa fa-times"></i> Reject
+                                                                </a>
                                                             </td>
                                                         </tr>
                                                     </c:forEach>
@@ -269,56 +267,55 @@ Main wrapper start
 
 
                 <script>
-                $(document).ready(function () {
-                    $("#searchInput").on("keyup", function () {
-                        var query = $(this).val();
-                        console.log("Search query: ", query); // Log để kiểm tra query
-                        $.ajax({
-                            url: "/manage-cinema/searchMovies", // Đường dẫn đầy đủ đến servlet tìm kiếm
-                            type: "GET",
-                            data: {searchQuery: query},
-                            success: function (response) {
-                                try {
-                                    console.log("Response: ", response); // Log phản hồi để kiểm tra
+                                                                    $(document).ready(function () {
+                                                                        $("#searchInput").on("keyup", function () {
+                                                                            var query = $(this).val();
+                                                                            console.log("Search query: ", query);
+                                                                            $.ajax({
+                                                                                url: "/manage-cinema/searchMovies",
+                                                                                type: "GET",
+                                                                                data: {searchQuery: query},
+                                                                                success: function (response) {
+                                                                                    try {
+                                                                                        console.log("Response: ", response);
 
-                                    // Nếu phản hồi không phải là chuỗi JSON hợp lệ, chuyển đổi nó
-                                    if (typeof response !== 'string') {
-                                        response = JSON.stringify(response);
-                                    }
+                                                                                        if (typeof response !== 'string') {
+                                                                                            response = JSON.stringify(response);
+                                                                                        }
 
-                                    var movies = JSON.parse(response);
-                                    var movieListHtml = "";
-                                    $.each(movies, function (index, movie) {
-                                        movieListHtml += "<tr>";
-                                        movieListHtml += "<td>" + (index + 1) + "</td>";
-                                        movieListHtml += "<td>" + movie.title.toUpperCase() + "</td>";
-                                        movieListHtml += "<td>" + movie.releaseDate + "</td>";
-                                        movieListHtml += "<td>" + movie.status + "</td>";
-                                        movieListHtml += "<td class='action-rows'>";
-                                        movieListHtml += "<a href='update_movie?movieID=" + movie.movieID + "' class='btn btn-primary shadow btn-xs sharp rounded-circle me-1'><i class='fa fa-pencil'></i></a>";
-                                        if (movie.display == 1) {
-                                            movieListHtml += "<a href='updateDisplayMovie?movieID=" + movie.movieID + "&display=0' class='btn btn-danger shadow btn-xs sharp rounded-circle'><i class='fa fa-eye'></i></a>";
-                                            movieListHtml += "<a href='addNewSlot?movieID=" + movie.movieID + "&display=1' class='btn btn-primary shadow btn-xs sharp rounded-circle'><i class='fa fa-plus'></i></a>";
-                                        } else {
-                                            movieListHtml += "<a href='updateDisplayMovie?movieID=" + movie.movieID + "&display=1' class='btn btn-danger shadow btn-xs sharp rounded-circle'><i class='fa fa-eye-slash'></i></a>";
-                                        }
-                                        movieListHtml += "</td>";
-                                        movieListHtml += "</tr>";
-                                    });
-                                    console.log("Generated HTML: ", movieListHtml); // Log HTML được tạo ra
-                                    $("#movieList").html(movieListHtml); // Cập nhật DOM
-                                } catch (e) {
-                                    console.error("Error parsing JSON response: ", e);
-                                    console.log("Response: ", response);
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.error("AJAX Error: ", error);
-                                console.log("Response: ", xhr.responseText);
-                            }
-                        });
-                    });
-                });
+                                                                                        var movies = JSON.parse(response);
+                                                                                        var movieListHtml = "";
+                                                                                        $.each(movies, function (index, movie) {
+                                                                                            movieListHtml += "<tr>";
+                                                                                            movieListHtml += "<td>" + (index + 1) + "</td>";
+                                                                                            movieListHtml += "<td>" + movie.title.toUpperCase() + "</td>";
+                                                                                            movieListHtml += "<td>" + movie.releaseDate + "</td>";
+                                                                                            movieListHtml += "<td>" + movie.status + "</td>";
+                                                                                            movieListHtml += "<td class='action-rows'>";
+                                                                                            movieListHtml += "<a href='update_movie?movieID=" + movie.movieID + "' class='btn btn-primary shadow btn-xs sharp rounded-circle me-1'><i class='fa fa-pencil'></i></a>";
+                                                                                            if (movie.display == 1) {
+                                                                                                movieListHtml += "<a href='updateDisplayMovie?movieID=" + movie.movieID + "&display=0' class='btn btn-danger shadow btn-xs sharp rounded-circle'><i class='fa fa-eye'></i></a>";
+                                                                                                movieListHtml += "<a href='addNewSlot?movieID=" + movie.movieID + "&display=1' class='btn btn-primary shadow btn-xs sharp rounded-circle'><i class='fa fa-plus'></i></a>";
+                                                                                            } else {
+                                                                                                movieListHtml += "<a href='updateDisplayMovie?movieID=" + movie.movieID + "&display=1' class='btn btn-danger shadow btn-xs sharp rounded-circle'><i class='fa fa-eye-slash'></i></a>";
+                                                                                            }
+                                                                                            movieListHtml += "</td>";
+                                                                                            movieListHtml += "</tr>";
+                                                                                        });
+                                                                                        console.log("Generated HTML: ", movieListHtml);
+                                                                                        $("#movieList").html(movieListHtml);
+                                                                                    } catch (e) {
+                                                                                        console.error("Error parsing JSON response: ", e);
+                                                                                        console.log("Response: ", response);
+                                                                                    }
+                                                                                },
+                                                                                error: function (xhr, status, error) {
+                                                                                    console.error("AJAX Error: ", error);
+                                                                                    console.log("Response: ", xhr.responseText);
+                                                                                }
+                                                                            });
+                                                                        });
+                                                                    });
 
 
                 </script>

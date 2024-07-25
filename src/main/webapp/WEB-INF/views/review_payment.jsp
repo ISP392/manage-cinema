@@ -79,10 +79,17 @@
                         </ul>
                     </div>
                     <div class="button-container">
-                        <a href="payment_complete" class="confirm-button">Confirm Payment</a>
+                        <a href="payment_complete" onclick="confirmPayment()" class="confirm-button">Confirm Payment</a>
                         <a href="home" class="cancel-button">Cancel</a>
                     </div>
                 </div>
             </body>
+            <script>
+                function confirmPayment() {
+                    alert("Payment Successful!");
+                    localStorage.clear();
+                    sessionStorage.clear();
+                }
+            </script>
 
             </html>
