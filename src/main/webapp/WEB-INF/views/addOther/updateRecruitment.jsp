@@ -287,6 +287,15 @@
                                                        name="endDate" required ="" value="${requestScope.item.endDate}"/>
                                             </div>
                                         </div>
+                                            <label class="form-label">Type</label>
+                                        <div class="card h-auto">
+                                            <div class="card-body pt-3">
+                                                <select name="type">
+                                                    <option <c:if test="${requestScope.item.type eq 'fulltime'}">selected</c:if> value="fulltime">Full time</option>
+                                                    <option <c:if test="${requestScope.item.type eq 'parttime'}">selected</c:if> value="parttime">Part time</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                         <label class="form-label">Description</label>
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">
@@ -294,6 +303,7 @@
                                                           class="form-control" name="description" required ="">${requestScope.item.description}</textarea>
                                             </div>
                                         </div>
+                                            
                                         <label class="form-label">Display</label>
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">

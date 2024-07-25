@@ -11,10 +11,46 @@ public class StaffStatus {
     private String phone;
     private String status;
     private String address;
+    private String type;
     private Date dob;
     private String staffName;
     private String staffEmail;
     private int cinemaId;
+    private int recruitmentId;
+    private Recruiments recruitment;
+    private Cinemas cinema;
+
+    public Recruiments getRecruitment() {
+        return recruitment;
+    }
+
+    public void setRecruitment(Recruiments recruitment) {
+        this.recruitment = recruitment;
+    }
+
+    public Cinemas getCinema() {
+        return cinema;
+    }
+
+    public void setCinema(Cinemas cinema) {
+        this.cinema = cinema;
+    }
+
+    public int getRecruitmentId() {
+        return recruitmentId;
+    }
+
+    public void setRecruitmentId(int recruitmentId) {
+        this.recruitmentId = recruitmentId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
     private Cinemas cinemas;
 
     public int getCinemaId() {
@@ -28,13 +64,15 @@ public class StaffStatus {
     public StaffStatus() {
     }
 
-    public StaffStatus(String phone, String status, String address, Date dob, String staffName, String staffEmail) {
+    public StaffStatus(String phone, String status, String address, Date dob, String staffName, String staffEmail, String type, int recruitmentId) {
         this.phone = phone;
         this.status = status;
         this.address = address;
         this.dob = dob;
         this.staffName = staffName;
         this.staffEmail = staffEmail;
+        this.type = type;
+        this.recruitmentId = recruitmentId;
     }
 
     public Cinemas getCinemas() {

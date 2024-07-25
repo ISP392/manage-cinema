@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import modal.Cinemas;
+import modal.Recruiments;
 import modal.StaffStatus;
 import util.Email;
 
@@ -77,8 +78,10 @@ public class EmploymentInformationServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         DAO dao = new DAO();
-        List<Cinemas> cinema = dao.getAllCinemas();
-        request.setAttribute("cinema", cinema);
+        String recruitment = request.getParameter("recruitmentId");
+        int recruitmentId = Integer.parseInt(recruitment);
+        Recruiments r = dao.getRecruimentById(recruitmentId);
+        request.setAttribute("recruitment", r);
         request.getRequestDispatcher("/WEB-INF/views/employmentInformation.jsp").forward(request, response);
     }
 
@@ -101,14 +104,18 @@ public class EmploymentInformationServlet extends HttpServlet {
         String address = request.getParameter("address");
         String position = request.getParameter("position");
         String cinema = request.getParameter("cinemaId");
+        String type = request.getParameter("type");
         Part filePart = request.getPart("cv");
         int cinemaId = Integer.parseInt(cinema);
+        String recruitment = request.getParameter("recruitmentId");
+        int recruitmentId = Integer.parseInt(recruitment);
         DAO dao = new DAO();
-        
-        boolean emailExists = dao.checkEPstaff(email, null); 
-        boolean phoneExists = dao.checkEPstaff(null, phone); 
-        boolean emailAndPhoneExist = dao.checkEPstaff(email, phone); 
 
+        boolean emailExists = dao.checkEPstaff(email, null);
+        boolean phoneExists = dao.checkEPstaff(null, phone);
+        boolean emailAndPhoneExist = dao.checkEPstaff(email, phone);
+        Recruiments r = dao.getRecruimentById(recruitmentId);
+        request.setAttribute("recruitment", r);
         if (emailExists && !phoneExists) {
             request.setAttribute("errorEmail", "Email is already existed");
         } else if (!emailExists && phoneExists) {
@@ -126,8 +133,8 @@ public class EmploymentInformationServlet extends HttpServlet {
         String cinemaName = "";
         List<Cinemas> cinemas = dao.getAllCinemas();
         for (Cinemas c : cinemas) {
-            if(c.getCinemaID() == cinemaId){
-                cinemaName= c.getName();
+            if (c.getCinemaID() == cinemaId) {
+                cinemaName = c.getName();
             }
         }
         String textContent = "Name: " + name + "\n"
@@ -136,6 +143,7 @@ public class EmploymentInformationServlet extends HttpServlet {
                 + "Date of Birth: " + dob + "\n"
                 + "Address: " + address + "\n"
                 + "Position: " + position + "\n"
+                + "Type: " + type.toUpperCase() + "\n"
                 + "cinema: " + cinemaName;
         InputStream fileContent = filePart.getInputStream();
         // Define the path to save the file
@@ -165,16 +173,15 @@ public class EmploymentInformationServlet extends HttpServlet {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            
-            StaffStatus staff = new StaffStatus(phone, "Pending", address, dobDate, name, email);
+
+            StaffStatus staff = new StaffStatus(phone, "Pending", address, dobDate, name, email, type, recruitmentId);
             staff.setCinemaId(cinemaId);
             dao.addStaff(staff);
             request.setAttribute("success", "Your application was submitted successfully!");
         } else {
             request.setAttribute("error", "Interal server error!!");
         }
-        List<Cinemas> list2 = dao.getAllCinemas();
-        request.setAttribute("cinema", list2);
+        
         request.getRequestDispatcher("/WEB-INF/views/employmentInformation.jsp").forward(request, response);
 
     }

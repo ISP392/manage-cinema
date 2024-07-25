@@ -70,7 +70,7 @@ public class addRecruitmentServlet extends HttpServlet {
             response.sendRedirect("admin");
         } else {
             DAO dao = new DAO();
-            ArrayList<Cinemas> cinemas = (ArrayList<Cinemas>) dao.getAllCinemas(); 
+            ArrayList<Cinemas> cinemas = (ArrayList<Cinemas>) dao.getAllCinemas();
             request.setAttribute("cinemas", cinemas);
             request.getRequestDispatcher("/WEB-INF/views/addOther/addRecruitment.jsp").forward(request, response);
         }
@@ -91,15 +91,25 @@ public class addRecruitmentServlet extends HttpServlet {
         int numberNeeded = Integer.parseInt(request.getParameter("numberNeeded"));
         String[] addresses = request.getParameterValues("addresses");
         String startDate = request.getParameter("startDate");
+        String type = request.getParameter("type");
         String endDate = request.getParameter("endDate");
         String description = request.getParameter("description");
         boolean isDisplayOn = request.getParameter("display") != null;
-        
-        DAO dao = new DAO();
+
+                DAO dao = new DAO();
+
+        if (addresses == null) {
+            ArrayList<Cinemas> cinemas = (ArrayList<Cinemas>) 
+                    dao.getAllCinemas();
+            request.setAttribute("cinemas", cinemas);
+            request.setAttribute("error", "You must choose at least one theater");
+            request.getRequestDispatcher("/WEB-INF/views/addOther/addRecruitment.jsp").forward(request, response);
+            return;
+        }
         int id = 0;
         try {
-            id = dao.insertRecruiemnt(new Recruiments(0, vacancies, numberNeeded, startDate, endDate, description, isDisplayOn,null));
-            if(id != 0){
+            id = dao.insertRecruiemnt(new Recruiments(0, vacancies, numberNeeded, startDate, endDate, description, isDisplayOn, type, null));
+            if (id != 0) {
                 for (String addresse : addresses) {
                     int cinemaId = Integer.parseInt(addresse);
                     dao.insertRecruiemntCinema(id, cinemaId);
@@ -108,9 +118,9 @@ public class addRecruitmentServlet extends HttpServlet {
         } catch (ParseException ex) {
             Logger.getLogger(addRecruitmentServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         response.sendRedirect("listRecruitments");
-        
+
     }
 
     /**

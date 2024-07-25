@@ -30,7 +30,7 @@
     <body>
         <%@include file="header.jsp" %>
         <form action="employmentInformation" method="post" onsubmit="return validateForm()" enctype="multipart/form-data">
-
+            <input type="hidden" name="recruitmentId" value="${requestScope.recruitment.recruitmentID}" />
             <div class="mask d-flex align-items-center h-100 gradient-custom-3">
                 <div class="container h-100">
                     <div
@@ -82,8 +82,13 @@
                                     </div>
                                     <div class="form-outline mb-4">
                                         <label class="form-label">Vị trí ứng tuyển</label>
-                                        <input type="text" id="position" name="position" placeholder="Position You Apply For" class="input-register" value="Staff" readonly="" required=" "/>
+                                        <input type="text" id="position" name="position" placeholder="Position You Apply For" class="input-register" value="${requestScope.recruitment.vacancies}" readonly="" required=" "/>
 
+                                    </div>
+                                        
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Thời gian làm việc</label>
+                                        <input type="text" id="" name="type" placeholder="" class="input-register" value="${requestScope.recruitment.type}" readonly="" required=" "/>
                                     </div>
 
                                     <div class="form-outline mb-4">
@@ -91,8 +96,8 @@
                                             <label class="form-label">Rạp làm việc</label> 
                                         </div>
                                         <select  style="padding: 10px; width: 100%; margin-top: 5px " class="form-select" aria-label="Select Cinema" name="cinemaId" required="">
-                                            <c:forEach var="c" items="${requestScope.cinema}">
-                                                <option value="${c.cinemaID}">${c.name}</option>
+                                            <c:forEach var="c" items="${requestScope.recruitment.recruimentCinemas}">
+                                                <option value="${c.cinema.cinemaID}">${c.cinema.name}</option>
                                             </c:forEach>
                                         </select>
                                     </div>

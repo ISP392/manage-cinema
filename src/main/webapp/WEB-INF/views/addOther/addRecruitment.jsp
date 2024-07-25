@@ -59,10 +59,10 @@
             input:checked + .slider:before {
                 transform: translateX(26px);
             }
-            
-            
-            
-            
+
+
+
+
             .genre-buttons {
                 display: flex;
                 flex-wrap: wrap;
@@ -298,8 +298,9 @@
                                         <label class="form-label">Address</label><br/>
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">
+                                                <p style="color: red">${error}</p>
                                                 <c:forEach var="item" items="${requestScope.cinemas}">
-                                                    <input type="checkbox" value="${item.cinemaID}" style="margin-top: 10px" name="addresses" />&nbsp;&nbsp;&nbsp;${item.name} <br/>
+                                                    <input type="checkbox" value="${item.cinemaID}" style="margin-top: 10px" name="addresses" id="addresses"  />&nbsp;&nbsp;&nbsp;${item.name} <br/>
                                                 </c:forEach>
                                             </div>
                                         </div>
@@ -308,13 +309,22 @@
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">
                                                 <input type="date" class="form-control" placeholder="Start Date"
-                                                       name="startDate" required =""/>
+                                                       name="startDate" id ="startDate"required =""/>
                                             </div>
                                         </div><label class="form-label">End Date</label>
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">
                                                 <input type="date" class="form-control" placeholder="endDate"
-                                                       name="endDate" required =""/>
+                                                       name="endDate" id= "endDate" required =""/>
+                                            </div>
+                                        </div>
+                                        <label class="form-label">Type</label>
+                                        <div class="card h-auto">
+                                            <div class="card-body pt-3">
+                                                <select name="type">
+                                                    <option value="fulltime">Full time</option>
+                                                    <option value="parttime">Part time</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <label class="form-label">Description</label>
@@ -346,64 +356,95 @@
                         </div>
                     </form>
 
-                        <!--**********************************
-                            Main wrapper end
-                        ***********************************-->
+                    <!--**********************************
+                        Main wrapper end
+                    ***********************************-->
 
-                        <!--**********************************
-                            Scripts
-                        ***********************************-->
-                        <!-- Required vendors -->
-                        <script src="./assets/JS/vendor/global/global.min.js"></script>
-                        <script src="./assets/JS/vendor/ckeditor/ckeditor.js"></script>
+                    <!--**********************************
+                        Scripts
+                    ***********************************-->
+                    <!-- Required vendors -->
+                    <script src="./assets/JS/vendor/global/global.min.js"></script>
+                    <script src="./assets/JS/vendor/ckeditor/ckeditor.js"></script>
 
-                        <!-- Apex Chart -->
-                        <script src="./assets/JS/vendor/apexchart/apexchart.js"></script>
+                    <!-- Apex Chart -->
+                    <script src="./assets/JS/vendor/apexchart/apexchart.js"></script>
 
-                        <!-- Dashboard 1 -->
-                        <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
+                    <!-- Dashboard 1 -->
+                    <script src="./assets/JS/js/dashboard/dashboard-1.js"></script>
 
-                        <script src="./assets/JS/js/custom.min.js"></script>
-                        <script>
-                            function checkForm() {
-                                var foodName = document.getElementById('foodName').value.trim();
-                                var description = document.getElementById('description').value.trim();
-                                var errorMessage = document.getElementById('error-message');
+                    <script src="./assets/JS/js/custom.min.js"></script>
+                    <script>
+                        function checkForm() {
+                            var foodName = document.getElementById('foodName').value.trim();
+                            var description = document.getElementById('description').value.trim();
+                            var errorMessage = document.getElementById('error-message');
 
-                                if (!foodName || !description) {
-                                    errorMessage.style.display = 'block';
-                                } else {
-                                    errorMessage.style.display = 'none';
-                                    alert('Form is valid and ready to be submitted');
-                                }
+                            if (!foodName || !description) {
+                                errorMessage.style.display = 'block';
+                            } else {
+                                errorMessage.style.display = 'none';
+                                alert('Form is valid and ready to be submitted');
                             }
-                        </script>
+                        }
+                    </script>
 
-                        <script>
+                    <script>
 
-                            function readURL(input) {
-                                if (input.files && input.files[0]) {
-                                    var reader = new FileReader();
-                                    reader.onload = function (e) {
-                                        $("#imagePreview").css(
-                                                "background-image",
-                                                "url(" + e.target.result + ")"
-                                                );
-                                        $("#imagePreview").hide();
-                                        $("#imagePreview").fadeIn(650);
-                                    };
-                                    reader.readAsDataURL(input.files[0]);
-                                }
+                        function readURL(input) {
+                            if (input.files && input.files[0]) {
+                                var reader = new FileReader();
+                                reader.onload = function (e) {
+                                    $("#imagePreview").css(
+                                            "background-image",
+                                            "url(" + e.target.result + ")"
+                                            );
+                                    $("#imagePreview").hide();
+                                    $("#imagePreview").fadeIn(650);
+                                };
+                                reader.readAsDataURL(input.files[0]);
                             }
-                            $("#imageUpload").on("change", function () {
-                                readURL(this);
-                            });
-                            $(".remove-img").on("click", function () {
-                                var imageUrl = "images/no-img-avatar.png";
-                                $(".avatar-preview, #imagePreview").removeAttr("style");
-                                $("#imagePreview").css("background-image", "url(" + imageUrl + ")");
-                            });
-                        </script>
-                        </body>
+                        }
+                        $("#imageUpload").on("change", function () {
+                            readURL(this);
+                        });
+                        $(".remove-img").on("click", function () {
+                            var imageUrl = "images/no-img-avatar.png";
+                            $(".avatar-preview, #imagePreview").removeAttr("style");
+                            $("#imagePreview").css("background-image", "url(" + imageUrl + ")");
+                        });
+                    </script>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const today = new Date();
+                            const minDateString = today.toISOString().split('T')[0];
+                            document.getElementById('startDate').setAttribute('min', minDateString);
 
-                        </html>
+                            document.getElementById('startDate').addEventListener('change', function () {
+                                const startDate = new Date(this.value);
+                                const minEndDate = new Date(startDate);
+                                minEndDate.setDate(startDate.getDate() + 1);
+                                const minEndDateString = minEndDate.toISOString().split('T')[0];
+                                document.getElementById('endDate').setAttribute('min', minEndDateString);
+                            });
+                        });
+
+                        document.getElementById('dateForm').addEventListener('submit', function (event) {
+                            const startDate = new Date(document.getElementById('startDate').value);
+                            const endDate = new Date(document.getElementById('endDate').value);
+
+                            if (endDate <= startDate) {
+                                event.preventDefault();
+                                alert('The end date must be after the start date.');
+                            }
+                            
+                            if (addresses.length === 0) {
+                    event.preventDefault();
+                    alert('Please select at least one address.');
+                }
+                        });
+                    </script>
+
+                    </body>
+
+                    </html>

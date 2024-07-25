@@ -103,6 +103,8 @@ public class ManageStaffStatusController extends HttpServlet {
 
                 Users u = new Users(0, staff.getStaffName(), username, en.toSHA1No(password), staff.getStaffEmail(), role, 0, phoneAcc);
                 dao.addStaff(u, staff.getPhone());
+                dao.UpdateNumberNeed(staff.getRecruitmentId());
+                
                 String textContent = "Your account is approved. Please using username: " + username + "\n password: " + password + " \n. To login into the system";
                 boolean isSuccess = Email.sendEmail(staff.getStaffEmail(), "Reply Application: ", textContent);
                 response.sendRedirect("manage-staff-status?success=Approved this staff successfully");
@@ -125,6 +127,7 @@ public class ManageStaffStatusController extends HttpServlet {
             if (isOk) {
                 String textContent = "Sorry you. You appplication are rejected. You maybe can not fit with our company. I wish I see you in our company in the feature";
                 boolean isSuccess = Email.sendEmail(staff.getStaffEmail(), "Reply Application:", textContent);
+                dao.DeleteUserStaff(staff.getStaffEmail(),staff.getPhone());
                 response.sendRedirect("manage-staff-status?error=Reject  this staff success");
             } else {
                 response.sendRedirect("manage-staff-status?error=Reject this staff fail");

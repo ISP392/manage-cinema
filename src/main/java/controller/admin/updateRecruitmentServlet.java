@@ -118,10 +118,10 @@ public class updateRecruitmentServlet extends HttpServlet {
         String endDate = request.getParameter("endDate");
         String description = request.getParameter("description");
         boolean isDisplayOn = request.getParameter("display") != null;
-        
+        String type = request.getParameter("type");
         DAO dao = new DAO();
         try {
-            dao.updateRecruitment(new Recruiments(Integer.parseInt(recruitmentId), vacancies, numberNeeded, startDate, endDate, description, isDisplayOn,null));
+            dao.updateRecruitment(new Recruiments(Integer.parseInt(recruitmentId), vacancies, numberNeeded, startDate, endDate, description, isDisplayOn,type,null));
             
             
             ArrayList<RecruimentCinemas> list = dao.GetRecruimentCinemasByRecruimentId(Integer.parseInt(recruitmentId));

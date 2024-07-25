@@ -250,6 +250,7 @@
                                                         <th><strong>Address</strong></th>
                                                         <th><strong>Start Date</strong></th>
                                                         <th><strong>End Date</strong></th>
+                                                        <th><strong>Type</strong></th>
                                                         <th><strong>Description</strong></th>
                                                         <th class="action-rows"><strong>Actions</strong></th>
                                                     </tr>
@@ -280,6 +281,7 @@
                                                         </td>
                                                         <td>${item.startDate}</td>
                                                         <td>${item.endDate}</td>
+                                                        <td>${item.type.toUpperCase()}</td>
                                                         <td>${item.description}</td>
                                                         <td class="action-rows">
                                                             <a href="update_recruitment?recruitmentID=${item.recruitmentID}" class="btn btn-primary shadow btn-xs sharp rounded-circle me-1"><i class="fa fa-pencil"></i></a>
