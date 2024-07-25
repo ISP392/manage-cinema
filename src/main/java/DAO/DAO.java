@@ -1357,10 +1357,30 @@ public class DAO extends DBContext {
         return list;
     }
 
-    public List<ScreeningTimes> getAllFlimDay(String movieDate, int theaterId) {
+    public List<ScreeningTimes> getAllFlimDay(String movieDate, int theaterId, String cinemaName) {
         List<ScreeningTimes> list = new ArrayList<>();
-        String sql = "select * from project_cinema_update.ScreeningTimes st join project_cinema_update.Theaters t on st.theaterID = t.theaterID join  project_cinema_update.Movies m on m.movieID = st.movieID\n"
-                + " where date(st.startTime) = ? and t.theaterNumber = ? order by date(st.startTime) desc";
+        String sql = "select * from ScreeningTimes st join Theaters t on st.theaterID = t.theaterID join  Movies m on m.movieID = st.movieID join Cinemas c on c.cinemaID = t.cinemaID where date(st.startTime) = ? and t.theaterNumber = ? and c.name = ? order by date(st.startTime) desc";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, movieDate);
+            ps.setInt(2, theaterId);
+            ps.setString(3, cinemaName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+
+                ScreeningTimes st = new ScreeningTimes(rs.getInt("screeningID"), rs.getInt(2), rs.getInt(3), rs.getTimestamp("startTime"),
+                        rs.getTimestamp("endTime"));
+                list.add(st);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    public List<ScreeningTimes> getAllFlimDayOfUpdate(String movieDate, int theaterId) {
+        List<ScreeningTimes> list = new ArrayList<>();
+        String sql = "select * from ScreeningTimes st join Theaters t on st.theaterID = t.theaterID join  Movies m on m.movieID = st.movieID where date(st.startTime) = ? and t.theaterNumber = ? order by date(st.startTime) desc";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, movieDate);

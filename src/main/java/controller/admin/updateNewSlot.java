@@ -134,7 +134,7 @@ public class updateNewSlot extends HttpServlet {
         java.sql.Timestamp startTimeEarlySlot = null;
         java.sql.Timestamp endTimeEarlySlot = null;
         java.sql.Timestamp startTimeLastestSlot = null;
-        List<ScreeningTimes> list = dao.getAllFlimDay(movieDateStr, Integer.parseInt(theaterNumber));
+        List<ScreeningTimes> list = dao.getAllFlimDayOfUpdate(movieDateStr, Integer.parseInt(theaterNumber));
 
         if (!list.isEmpty()) {
             for (int i = 0; i <= 1; i++) {
