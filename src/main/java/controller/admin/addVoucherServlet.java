@@ -5,6 +5,7 @@
 package controller.admin;
 
 import DAO.DAO;
+import com.mysql.cj.Messages;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -101,6 +102,7 @@ public class addVoucherServlet extends HttpServlet {
         Date startDate = Date.valueOf(getPartValue(request.getPart("startDate")));
         Date endDate = Date.valueOf(getPartValue(request.getPart("endDate")));
         int quantity = Integer.parseInt(request.getParameter("quantity"));
+        String code = getPartValue(request.getPart("code"));
         Dotenv dotenv = Dotenv.load();
 
         // Tạo đối tượng Path từ đường dẫn thực tế
@@ -115,7 +117,7 @@ public class addVoucherServlet extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/views/addQther/addVoucher.jsp").forward(request, response);
             } 
                 
-                dao.insertAddVoucher(name, description, discount, startDate, endDate, quantity);
+                dao.insertAddVoucher(name, description, discount, startDate, endDate, quantity, code);
                 Movies movie = dao.getMovieRecentlyAdded();
                
                 response.sendRedirect("addVoucher");

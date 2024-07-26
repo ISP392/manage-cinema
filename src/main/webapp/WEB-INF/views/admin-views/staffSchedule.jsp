@@ -356,11 +356,12 @@ Main wrapper start
                                 <input type="text" id="modalStartTime" name="startTime" readonly><br><br>
                                 <label for="endTime">End Time:</label>
                                 <input type="text" id="modalEndTime" name="endTime" readonly><br><br>
-                                <select id="staffSelect" name="userID">
+                                <select id="staffSelect" name="userID" onchange="updateEmail()">
                                     <c:forEach items="${listStaff}" var="staff">
-                                        <option value="${staff.getUserID()}">${staff.getDisplayName()}</option>
+                                        <option value="${staff.getUserID()}" data-email="${staff.getEmail()}">${staff.getDisplayName()}</option>
                                     </c:forEach>
-                                </select><br><br>
+                                </select>
+                                <input type="hidden" id="staffEmail" name="email" value=""><br><br>
                                 <!-- Add more form fields as necessary -->
                                 <button type="submit" class="button">Submit</button>
                             </form>
@@ -370,6 +371,12 @@ Main wrapper start
 
 
                     <script>
+                        function updateEmail() {
+                            var select = document.getElementById("staffSelect");
+                            var selectedOption = select.options[select.selectedIndex];
+                            var email = selectedOption.getAttribute("data-email");
+                            document.getElementById("staffEmail").value = email;
+                        }
                         function navigateToCinema() {
                             var date = '<%= todayStr %>';
                             var cinemaName = document.getElementById("cinemaSelect").value;
@@ -456,7 +463,6 @@ Main wrapper start
                                 }
                             }
                         });
-
                     </script>
 
 

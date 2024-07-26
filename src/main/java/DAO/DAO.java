@@ -239,8 +239,8 @@ public class DAO extends DBContext {
     }
 
     public void insertAddVoucher(String voucherName, String voucherdescription, float discountAmount, Date startDate,
-            Date endDate, int quantity) {
-        String sql = "INSERT INTO Voucher (voucherName, voucherdescription, discountAmount, startDate, endDate, quantity) VALUES (?, ?, ?, ?, ?, ?)";
+            Date endDate, int quantity, String code) {
+        String sql = "INSERT INTO Voucher (voucherName, voucherdescription, discountAmount, startDate, endDate, quantity, code) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, voucherName);
@@ -249,6 +249,7 @@ public class DAO extends DBContext {
             ps.setDate(4, startDate);
             ps.setDate(5, endDate);
             ps.setInt(6, quantity);
+            ps.setString(7, code);
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
@@ -331,7 +332,7 @@ public class DAO extends DBContext {
     }
 
     public void updateDisplayRecruitmentByRecruitmentID(int id, int display) {
-        String sql = "update Recruitment set display = ? where recruitmentId = ?";
+        String sql = "update recruitment set display = ? where recruitmentID = ?";
         boolean isDisplay = display == 1;
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -1797,7 +1798,7 @@ public class DAO extends DBContext {
                 ps1.setString(1, c.getName());
                 ResultSet rs1 = ps1.executeQuery();
                 while (rs1.next()) {
-                    c.setCinemaID(rs1.getInt("CinemaId"));
+                    c.setCinemaID(rs1.getInt("CinemaID"));
                 }
                 list.add(c);
             }
@@ -2150,8 +2151,6 @@ public class DAO extends DBContext {
     } catch (SQLException e) {
         e.printStackTrace();
     }
-    return ticketInfos;
-}
 
     // get food item by orderID
     public List<FoodItem> getFoodItemsByOrderId(String orderId) {
@@ -2305,7 +2304,7 @@ public class DAO extends DBContext {
 
     //get all staff of cinema by cinema name
     public List<Users> getAllStaffByCinemaName(String cinemaName) {
-        String sql = "select distinct u.displayName, u.userID from Users u join staffstatus ss on ss.phone = u.phone join Shift s on s.phone = u.userID join Cinemas c on c.cinemaID = ss.cinemaID where c.name = ?";
+        String sql = "select distinct u.displayName, u.userID, u.email from Users u join staffstatus ss on ss.phone = u.phone join Cinemas c on c.cinemaID = ss.cinemaID where c.name = ? and ss.status = 'approve'";
         List<Users> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -2315,6 +2314,7 @@ public class DAO extends DBContext {
                 Users u = new Users();
                 u.setDisplayName(rs.getString("displayName"));
                 u.setUserID(rs.getInt("userID"));
+                u.setEmail(rs.getString("email"));
                 list.add(u);
             }
             return list;
@@ -2444,7 +2444,9 @@ public class DAO extends DBContext {
                 java.util.Date dob = rs.getDate("dob");
                 String staffName = rs.getString("staffName");
                 String staffEmail = rs.getString("staffEmail");
-                StaffStatus staff = new StaffStatus(phone, status, address, dob, staffName, staffEmail, phone, 0);
+                String type = rs.getString("type");
+                StaffStatus staff = new StaffStatus(phone, status, address, dob, staffName, staffEmail, type, 0);
+//                StaffStatus staff = new StaffStatus(phone, status, address, dob, staffName, staffEmail, phone, 0);
 //                StaffStatus staff = new StaffStatus(phone, status, address, dob, staffName, staffEmail);
                 Cinemas ci = new Cinemas();
                 ci.setCinemaID(rs.getInt("cID"));
@@ -2571,7 +2573,7 @@ public class DAO extends DBContext {
     }
 
     public int insertRecruiemnt(Recruiments recruitment) throws ParseException {
-        String sql = "INSERT INTO Recruitment (vacancies, numberNeeded, startDate, endDate, description, display, type) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO recruitment (vacancies, numberNeeded, startDate, endDate, description, display, type) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -2596,7 +2598,7 @@ public class DAO extends DBContext {
     }
 
     public void insertRecruiemntCinema(int recruimentId, int cinemaId) {
-        String sql = "INSERT INTO recruitmentCinema (recruitmentId, cinemaId) VALUES (?, ?)";
+        String sql = "INSERT INTO recruitmentcinema (recruitmentId, cinemaId) VALUES (?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(2, cinemaId);
@@ -2609,14 +2611,14 @@ public class DAO extends DBContext {
 
     public List<Recruiments> getRecruimentsByPage(int page, int pageSize) {
         List<Recruiments> list = new ArrayList<>();
-        String sql = "SELECT * FROM recruitment ORDER BY recruitmentId ASC LIMIT ? OFFSET ?";
+        String sql = "SELECT * FROM recruitment ORDER BY recruitmentID ASC LIMIT ? OFFSET ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, pageSize);
             ps.setInt(2, (page - 1) * pageSize);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Recruiments r = new Recruiments(rs.getInt("RecruitmentID"),
+                Recruiments r = new Recruiments(rs.getInt("recruitmentID"),
                         rs.getString("vacancies"),
                         rs.getInt("numberNeeded"),
                         rs.getString("startDate"),
@@ -2638,13 +2640,13 @@ public class DAO extends DBContext {
 
     public Recruiments getRecruimentById(int id) {
         Recruiments c = null;
-        String sql = "SELECT * FROM recruitment Where RecruitmentID = ?";
+        String sql = "SELECT * FROM recruitment Where recruitmentID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Recruiments r = new Recruiments(rs.getInt("RecruitmentID"),
+                Recruiments r = new Recruiments(rs.getInt("recruitmentID"),
                         rs.getString("vacancies"),
                         rs.getInt("numberNeeded"),
                         rs.getString("startDate"),
@@ -2666,7 +2668,7 @@ public class DAO extends DBContext {
 
     public ArrayList<RecruimentCinemas> GetRecruimentCinemasByRecruimentId(int recruimentId) {
         ArrayList<RecruimentCinemas> list = new ArrayList<>();
-        String sql = "SELECT * FROM recruitmentCinema WHERE RecruitmentId = ?";
+        String sql = "SELECT * FROM recruitmentcinema WHERE recruitmentId = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, recruimentId);
@@ -2674,7 +2676,7 @@ public class DAO extends DBContext {
             while (rs.next()) {
                 RecruimentCinemas r = new RecruimentCinemas(
                         rs.getInt("cinemaId"),
-                        rs.getInt("RecruitmentID"),
+                        rs.getInt("recruitmentId"),
                         null
                 );
                 Cinemas c = getCinemaById(r.getCinemaId());
@@ -2706,7 +2708,7 @@ public class DAO extends DBContext {
     }
 
     public void updateRecruitment(Recruiments recruitment) throws ParseException {
-        String sql = "UPDATE recruitment SET vancancies = ?, numberNeeded = ?, startDate = ?, endDate = ?, description = ?, display = ?, type = ?,updatedDate = NOW() WHERE recruitmentId = ?";
+        String sql = "UPDATE recruitment SET vacancies = ?, numberNeeded = ?, startDate = ?, endDate = ?, description = ?,updatedDate = NOW(), display = ?, type = ? WHERE recruitmentID = ?";
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date startDate = dateFormat.parse(recruitment.getStartDate());
@@ -2745,7 +2747,7 @@ public class DAO extends DBContext {
     }
 
     public void RemoveRecruitmentCinema(int cinemaId, int recruitmentId) {
-        String sql = "DELETE FROM RecruitmentCinema WHERE recruitmentId = ? AND cinemaId = ?";
+        String sql = "DELETE FROM recruitmentcinema WHERE recruitmentId = ? AND cinemaId = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, recruitmentId);
@@ -2757,7 +2759,7 @@ public class DAO extends DBContext {
     }
 
     public void UpdateNumberNeed(int recruitmentId) {
-        String sql = "Update Recruitment SET numberNeeded = numberNeeded -1 WHERE recruitmentId = ?";
+        String sql = "Update recruitment SET numberNeeded = numberNeeded -1 WHERE recruitmentID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, recruitmentId);
@@ -2781,12 +2783,12 @@ public class DAO extends DBContext {
 
     public ArrayList<Recruiments> getRecruimentsAvailable() {
         ArrayList<Recruiments> list = new ArrayList<>();
-        String sql = "SELECT * FROM Recruitment WHERE display = 1 AND  NumberNeeded != 0 ORDER BY RecruitmentId DESC ";
+        String sql = "SELECT * FROM recruitment WHERE display = 1 AND  NumberNeeded != 0 ORDER BY recruitmentID DESC ";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Recruiments r = new Recruiments(rs.getInt("RecruitmentID"),
+                Recruiments r = new Recruiments(rs.getInt("recruitmentID"),
                         rs.getString("vacancies"),
                         rs.getInt("numberNeeded"),
                         rs.getString("startDate"),
