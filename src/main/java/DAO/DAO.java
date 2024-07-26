@@ -2700,7 +2700,7 @@ public class DAO extends DBContext {
     }
 
     public void updateRecruitment(Recruiments recruitment) throws ParseException {
-        String sql = "UPDATE recruitment SET vancancies = ?, numberNeeded = ?, startDate = ?, endDate = ?, description = ?, display = ?, type = ?,updatedDate = NOW() WHERE recruitmentId = ?";
+        String sql = "UPDATE recruitment SET vacancies = ?, numberNeeded = ?, startDate = ?, endDate = ?, description = ?,updatedDate = NOW(), display = ?, type = ? WHERE recruitmentID = ?";
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date startDate = dateFormat.parse(recruitment.getStartDate());
