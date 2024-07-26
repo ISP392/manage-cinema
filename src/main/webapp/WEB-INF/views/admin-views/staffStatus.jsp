@@ -202,7 +202,7 @@ Main wrapper start
                                                         <th>Email</th>
                                                         <th>Cinema</th>
                                                         <th>Type</th>
-                                                        <th>NumberNeed</th>
+<!--                                                        <th>NumberNeed</th>-->
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -217,10 +217,10 @@ Main wrapper start
                                                             <td>${staff.dob}</td>
                                                             <td>${staff.staffName}</td>
                                                             <td>${staff.staffEmail}</td>
-                                                            <td>${staff.cinema.name}</td>
-                                                            <td>${staff.type}</td>
-                                                            <td>${staff.recruitment.numberNeeded}</td>                                                           
+<!--                                                            <td>${staff.cinema.name}</td>-->
                                                             <td>${staff.cinemas.name}</td>
+                                                            <td>${staff.type}</td>
+<!--                                                            <td>${staff.recruitment.numberNeeded}</td>                                                           -->
                                                             <td>
                                                                 <a onclick="return confirm('Are you sure to approve this staff?')"
                                                                    href="manage-staff-status?action=approve&phone=${staff.phone}"

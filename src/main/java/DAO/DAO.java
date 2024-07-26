@@ -144,6 +144,7 @@ public class DAO extends DBContext {
         }
         return list;
     }
+
     public String getRank(int userId) {
 
         String sql = "SELECT point FROM Users where userID = ?";
@@ -174,38 +175,38 @@ public class DAO extends DBContext {
 
     public String getPoint(int userId) {
         String sql = "SELECT point FROM Users where userID = ?";
-        String point ="";
+        String point = "";
         try {
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, userId);
-        ResultSet rs = ps.executeQuery();
-        
-        if (rs.next()) {
-            point = rs.getString("point");
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                point = rs.getString("point");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
-    } catch (SQLException e) {
-        System.out.println(e);
-    }
         return point;
     }
-    
+
     public String gettotalSpending(int userId) {
         String sql = " SELECT u.userID, SUM(o.allPrice) AS totalSpending FROM Users u JOIN Orders o ON u.userID = o.userID WHERE u.userID = ? GROUP BY u.userID";
-        String totalSpending ="";
+        String totalSpending = "";
         try {
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, userId);
-        ResultSet rs = ps.executeQuery();
-        
-        if (rs.next()) {
-            totalSpending = rs.getString("totalSpending");
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                totalSpending = rs.getString("totalSpending");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
-    } catch (SQLException e) {
-        System.out.println(e);
-    }
         return totalSpending;
     }
-    
+
     public void insertAddFood(String foodName, String description, int price, String imgFoodItems, int quantity) {
         String sql = "INSERT INTO FoodItems (foodName, description, price, imgFoodItems, quantity, display) VALUES (?, ?, ?, ?, ?, 1)";
         try {
@@ -330,7 +331,7 @@ public class DAO extends DBContext {
     }
 
     public void updateDisplayRecruitmentByRecruitmentID(int id, int display) {
-        String sql = "update Recruitment set display = ? where recruitmentId = ?";
+        String sql = "update recruitment set display = ? where recruitmentID = ?";
         boolean isDisplay = display == 1;
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -342,7 +343,7 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
-    
+
     public List<Movies> getMoviesByPage(int page, int pageSize) {
         List<Movies> list = new ArrayList<>();
         String sql = "SELECT * FROM Movies ORDER BY releaseDate DESC LIMIT ? OFFSET ?";
@@ -1796,7 +1797,7 @@ public class DAO extends DBContext {
                 ps1.setString(1, c.getName());
                 ResultSet rs1 = ps1.executeQuery();
                 while (rs1.next()) {
-                    c.setCinemaID(rs1.getInt("CinemaId"));
+                    c.setCinemaID(rs1.getInt("CinemaID"));
                 }
                 list.add(c);
             }
@@ -2147,7 +2148,6 @@ public class DAO extends DBContext {
         return ticketInfos;
     }
 
-
     // get food item by orderID
     public List<FoodItem> getFoodItemsByOrderId(String orderId) {
         List<FoodItem> foodItems = new ArrayList<>();
@@ -2265,7 +2265,6 @@ public class DAO extends DBContext {
         }
     }
 
-
     public List<Review> getReviewByMovieID(int movieID) {
         List<Review> list = new ArrayList<>();
         try {
@@ -2293,7 +2292,6 @@ public class DAO extends DBContext {
         }
         return list;
     }
-    
 
     //get all staff of cinema by cinema name
     public List<Users> getAllStaffByCinemaName(String cinemaName) {
@@ -2317,7 +2315,7 @@ public class DAO extends DBContext {
     }
 
     //insert shift for staff
-    public void insertShift(int userID, Timestamp startTime, Timestamp endTime){
+    public void insertShift(int userID, Timestamp startTime, Timestamp endTime) {
         String sql = "INSERT INTO Shift (phone, startTime, endTime) VALUES (?, ?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -2329,7 +2327,6 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
-
 
     public List<Shift> getAllReportShifts() {
         List<Shift> shifts = new ArrayList<>();
@@ -2437,7 +2434,9 @@ public class DAO extends DBContext {
                 java.util.Date dob = rs.getDate("dob");
                 String staffName = rs.getString("staffName");
                 String staffEmail = rs.getString("staffEmail");
-                StaffStatus staff = new StaffStatus(phone, status, address, dob, staffName, staffEmail, phone, 0);
+                String type = rs.getString("type");
+                StaffStatus staff = new StaffStatus(phone, status, address, dob, staffName, staffEmail, type, 0);
+//                StaffStatus staff = new StaffStatus(phone, status, address, dob, staffName, staffEmail, phone, 0);
 //                StaffStatus staff = new StaffStatus(phone, status, address, dob, staffName, staffEmail);
                 Cinemas ci = new Cinemas();
                 ci.setCinemaID(rs.getInt("cID"));
@@ -2547,7 +2546,8 @@ public class DAO extends DBContext {
             e.printStackTrace();
         }
     }
-    public int GetCurrentIdRecruiment(){
+
+    public int GetCurrentIdRecruiment() {
         int id = 0;
         try {
             String sql = "SELECT recruitmentID FROM recruitment order by recruitmentID";
@@ -2561,9 +2561,9 @@ public class DAO extends DBContext {
         }
         return id;
     }
-    
+
     public int insertRecruiemnt(Recruiments recruitment) throws ParseException {
-        String sql = "INSERT INTO Recruitment (vacancies, numberNeeded, startDate, endDate, description, display, type) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO recruitment (vacancies, numberNeeded, startDate, endDate, description, display, type) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -2571,7 +2571,7 @@ public class DAO extends DBContext {
             java.util.Date endDate = dateFormat.parse(recruitment.getEndDate());
             java.sql.Date sqlStartDate = new java.sql.Date(startDate.getTime());
             java.sql.Date sqlEndDate = new java.sql.Date(endDate.getTime());
-            
+
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, recruitment.getVacancies());
             ps.setInt(2, recruitment.getNumberNeeded());
@@ -2586,9 +2586,9 @@ public class DAO extends DBContext {
         }
         return GetCurrentIdRecruiment();
     }
-    
+
     public void insertRecruiemntCinema(int recruimentId, int cinemaId) {
-        String sql = "INSERT INTO recruitmentCinema (recruitmentId, cinemaId) VALUES (?, ?)";
+        String sql = "INSERT INTO recruitmentcinema (recruitmentId, cinemaId) VALUES (?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(2, cinemaId);
@@ -2598,22 +2598,22 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
-    
+
     public List<Recruiments> getRecruimentsByPage(int page, int pageSize) {
         List<Recruiments> list = new ArrayList<>();
-        String sql = "SELECT * FROM recruitment ORDER BY recruitmentId ASC LIMIT ? OFFSET ?";
+        String sql = "SELECT * FROM recruitment ORDER BY recruitmentID ASC LIMIT ? OFFSET ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, pageSize);
             ps.setInt(2, (page - 1) * pageSize);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Recruiments r = new Recruiments(rs.getInt("RecruitmentID"),
+                Recruiments r = new Recruiments(rs.getInt("recruitmentID"),
                         rs.getString("vacancies"),
                         rs.getInt("numberNeeded"),
                         rs.getString("startDate"),
                         rs.getString("endDate"),
-                        rs.getString("description"), 
+                        rs.getString("description"),
                         rs.getBoolean("display"),
                         rs.getString("type"),
                         null
@@ -2627,21 +2627,21 @@ public class DAO extends DBContext {
         }
         return list;
     }
-    
+
     public Recruiments getRecruimentById(int id) {
-        Recruiments c =  null;
-        String sql = "SELECT * FROM recruitment Where RecruitmentID = ?";
+        Recruiments c = null;
+        String sql = "SELECT * FROM recruitment Where recruitmentID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Recruiments r = new Recruiments(rs.getInt("RecruitmentID"),
+                Recruiments r = new Recruiments(rs.getInt("recruitmentID"),
                         rs.getString("vacancies"),
                         rs.getInt("numberNeeded"),
                         rs.getString("startDate"),
                         rs.getString("endDate"),
-                        rs.getString("description"), 
+                        rs.getString("description"),
                         rs.getBoolean("display"),
                         rs.getString("type"),
                         null
@@ -2655,10 +2655,10 @@ public class DAO extends DBContext {
         }
         return c;
     }
-    
-    public ArrayList<RecruimentCinemas> GetRecruimentCinemasByRecruimentId(int recruimentId){
+
+    public ArrayList<RecruimentCinemas> GetRecruimentCinemasByRecruimentId(int recruimentId) {
         ArrayList<RecruimentCinemas> list = new ArrayList<>();
-        String sql = "SELECT * FROM recruitmentCinema WHERE RecruitmentId = ?";
+        String sql = "SELECT * FROM recruitmentcinema WHERE recruitmentId = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, recruimentId);
@@ -2666,7 +2666,7 @@ public class DAO extends DBContext {
             while (rs.next()) {
                 RecruimentCinemas r = new RecruimentCinemas(
                         rs.getInt("cinemaId"),
-                        rs.getInt("RecruitmentID"),
+                        rs.getInt("recruitmentId"),
                         null
                 );
                 Cinemas c = getCinemaById(r.getCinemaId());
@@ -2678,8 +2678,7 @@ public class DAO extends DBContext {
         }
         return list;
     }
-    
-    
+
     public Cinemas getCinemaById(int cinemaId) {
         String sql = "select * from Cinemas Where cinemaId = ? ";
         try {
@@ -2697,9 +2696,8 @@ public class DAO extends DBContext {
         }
         return null;
     }
-    
-    
-    public void updateRecruitment(Recruiments recruitment ) throws ParseException {
+
+    public void updateRecruitment(Recruiments recruitment) throws ParseException {
         String sql = "UPDATE recruitment SET vancancies = ?, numberNeeded = ?, startDate = ?, endDate = ?, description = ?, display = ?, type = ?,updatedDate = NOW() WHERE recruitmentId = ?";
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -2713,33 +2711,33 @@ public class DAO extends DBContext {
             ps.setDate(3, sqlStartDate);
             ps.setDate(4, sqlEndDate);
             ps.setString(5, recruitment.getDescription());
-            ps.setBoolean(6,  recruitment.isIsDisplay());
+            ps.setBoolean(6, recruitment.isIsDisplay());
             ps.setString(7, recruitment.getType());
-            ps.setInt(8,  recruitment.getRecruitmentID());
+            ps.setInt(8, recruitment.getRecruitmentID());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
-    public void UpdateRecruitmentCinema(List<Integer> cinemaIdsOld, List<Integer> cinemaIdsNew, int recruitmentId){
+
+    public void UpdateRecruitmentCinema(List<Integer> cinemaIdsOld, List<Integer> cinemaIdsNew, int recruitmentId) {
         List<Integer> oldNotInNew = cinemaIdsOld.stream().filter(id -> !cinemaIdsNew.contains(id)).collect(Collectors.toList());
-        
+
         List<Integer> newNotInOld = cinemaIdsNew.stream()
                 .filter(id -> !cinemaIdsOld.contains(id))
                 .collect(Collectors.toList());
-        
+
         for (Integer integer : oldNotInNew) {
             RemoveRecruitmentCinema(integer, recruitmentId);
         }
-        
+
         for (Integer integer : newNotInOld) {
-            insertRecruiemntCinema(recruitmentId,integer);
+            insertRecruiemntCinema(recruitmentId, integer);
         }
     }
-    
-    public void RemoveRecruitmentCinema(int cinemaId, int recruitmentId){
-        String sql = "DELETE FROM RecruitmentCinema WHERE recruitmentId = ? AND cinemaId = ?";
+
+    public void RemoveRecruitmentCinema(int cinemaId, int recruitmentId) {
+        String sql = "DELETE FROM recruitmentcinema WHERE recruitmentId = ? AND cinemaId = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, recruitmentId);
@@ -2749,8 +2747,9 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
-    public void UpdateNumberNeed(int recruitmentId){
-        String sql = "Update Recruitment SET numberNeeded = numberNeeded -1 WHERE recruitmentId = ?";
+
+    public void UpdateNumberNeed(int recruitmentId) {
+        String sql = "Update recruitment SET numberNeeded = numberNeeded -1 WHERE recruitmentID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, recruitmentId);
@@ -2759,8 +2758,8 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
-    
-    public void DeleteUserStaff(String email, String phone){
+
+    public void DeleteUserStaff(String email, String phone) {
         String sql = "DELETE FROM staffstatus WHERE staffEmail = ? OR Phone = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -2771,19 +2770,20 @@ public class DAO extends DBContext {
             System.out.println(e);
         }
     }
+
     public ArrayList<Recruiments> getRecruimentsAvailable() {
         ArrayList<Recruiments> list = new ArrayList<>();
-        String sql = "SELECT * FROM Recruitment WHERE display = 1 AND  NumberNeeded != 0 ORDER BY RecruitmentId DESC ";
+        String sql = "SELECT * FROM recruitment WHERE display = 1 AND  NumberNeeded != 0 ORDER BY recruitmentID DESC ";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Recruiments r = new Recruiments(rs.getInt("RecruitmentID"),
+                Recruiments r = new Recruiments(rs.getInt("recruitmentID"),
                         rs.getString("vacancies"),
                         rs.getInt("numberNeeded"),
                         rs.getString("startDate"),
                         rs.getString("endDate"),
-                        rs.getString("description"), 
+                        rs.getString("description"),
                         rs.getBoolean("display"),
                         rs.getString("type"),
                         null
@@ -2797,11 +2797,13 @@ public class DAO extends DBContext {
         }
         return list;
     }
+
     public static void main(String[] args) {
         DAO dao = new DAO();
-        Timestamp endTime = dao.getLastestEndTimeOfTheater("BANNY Crescent Mall", Date.valueOf("2024-07-25"),1);
+        Timestamp endTime = dao.getLastestEndTimeOfTheater("BANNY Crescent Mall", Date.valueOf("2024-07-25"), 1);
         System.out.println(endTime);
     }
+
     
 public void saveOrder(Orders order, int movieID) {
         String sql = "INSERT INTO Orders (userID, staffID, movieID, quantity, allPrice) VALUES (?, ?, ?, ?, ?)";
@@ -2865,16 +2867,5 @@ public void saveOrder(Orders order, int movieID) {
         }
     }
 
-    public static void main(String[] args) {
-        DAO dao = new DAO();
-        Users u = new Users();
-        u.setUserID(43);
-        Orders order = new Orders();
-        order.setStaffID(55);
-        order.setUserID(u);
-        order.setQuantity(1);  // Set a default quantity, you can adjust this as needed
-        order.setAllPrice("85000");  // Set a default price, you can adjust this as needed
-        dao.saveOrder(order, 55);
-    }
     
 }
