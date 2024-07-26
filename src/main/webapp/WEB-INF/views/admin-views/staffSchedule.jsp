@@ -349,14 +349,15 @@ Main wrapper start
                         <div class="modal-content">
                             <span class="close">&times;</span>
                             <h2>Add New Schedule</h2>
-                            <form id="scheduleForm" action="add_shift">
+                            <form id="scheduleForm" action="add_shift" onsubmit="return validateForm()">
                                 <label for="cinemaName">Cinema Name:</label>
                                 <input type="text" id="modalCinemaName" name="cinemaName" readonly><br><br>
                                 <label for="startTime">Start Time:</label>
                                 <input type="text" id="modalStartTime" name="startTime" readonly><br><br>
                                 <label for="endTime">End Time:</label>
                                 <input type="text" id="modalEndTime" name="endTime" readonly><br><br>
-                                <select id="staffSelect" name="userID" onchange="updateEmail()">
+                                <select id="staffSelect" name="userID">
+                                    <option value="default">Choose Staff</option>
                                     <c:forEach items="${listStaff}" var="staff">
                                         <option value="${staff.getUserID()}" data-email="${staff.getEmail()}">${staff.getDisplayName()}</option>
                                     </c:forEach>
@@ -371,11 +372,27 @@ Main wrapper start
 
 
                     <script>
+                        document.getElementById('staffSelect').onchange = updateEmail;
+
                         function updateEmail() {
+                            // Check if the selected option is default will popup alert
+                            if (document.getElementById("staffSelect").value === "default") {
+                                alert("Please choose a staff");
+                                return;
+                            }
                             var select = document.getElementById("staffSelect");
                             var selectedOption = select.options[select.selectedIndex];
                             var email = selectedOption.getAttribute("data-email");
                             document.getElementById("staffEmail").value = email;
+                        }
+
+                        function validateForm() {
+                            var select = document.getElementById("staffSelect");
+                            if (select.value === "default") {
+                                alert("Please choose a staff");
+                                return false; // Prevent form submission
+                            }
+                            return true; // Allow form submission
                         }
                         function navigateToCinema() {
                             var date = '<%= todayStr %>';
