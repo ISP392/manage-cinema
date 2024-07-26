@@ -31,37 +31,33 @@ public class CheckTicketServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         DAO d = new DAO();
-        String userId = req.getParameter("userID");
-        String orderId = req.getParameter("orderID");
+    String userId = req.getParameter("userID");
+    String orderId = req.getParameter("orderID");
 
-        if (orderId == null || orderId.isEmpty()) {
-            if (userId != null && !userId.isEmpty()) {
-                orderId = d.getOrderIDByUserID(userId);
-            }
-        }
-
-        if (orderId == null || orderId.isEmpty()) {
-            req.setAttribute("error", "Mã đặt vé không hợp lệ.");
+    // Kiểm tra nếu orderId null hoặc rỗng thì cố gắng lấy từ userId
+    if (orderId == null || orderId.isEmpty()) {
+        if (userId != null && !userId.isEmpty()) {
+            orderId = d.getOrderIDByUserID(userId);
+        } else {
+            // Nếu cả orderId và userId đều null hoặc rỗng, báo lỗi
+            req.setAttribute("error", "Vui lòng nhập mã đặt vé hoặc mã khách hàng.");
             req.getRequestDispatcher("/WEB-INF/views/staff-views/result.jsp").forward(req, resp);
             return;
         }
-
-        Orders order = d.getOrderById(orderId);
-        List<TicketInfo> ticketInfos = d.getTicketInfoByOrderId(orderId);
-        List<FoodItem> foodItems = d.getFoodItemsByOrderId(orderId);
-
-        if (order != null) {
-            req.setAttribute("order", order);
-            req.setAttribute("ticketInfos", ticketInfos);
-            req.setAttribute("foodItems", foodItems);
-        } else {
-            req.setAttribute("error", "Thông tin không hợp lệ.");
-        }
-        req.getRequestDispatcher("/WEB-INF/views/staff-views/result.jsp").forward(req, resp);
     }
 
-    @Override
-    public String getServletInfo() {
-        return "Short description";
+    // Tiếp tục xử lý với orderId đã có
+    Orders order = d.getOrderById(orderId);
+    List<TicketInfo> ticketInfos = d.getTicketInfoByOrderId(orderId);
+    List<FoodItem> foodItems = d.getFoodItemsByOrderId(orderId);
+
+    if (order != null) {
+        req.setAttribute("order", order);
+        req.setAttribute("ticketInfos", ticketInfos);
+        req.setAttribute("foodItems", foodItems);
+    } else {
+        req.setAttribute("error", "Thông tin không hợp lệ.");
+    }
+    req.getRequestDispatcher("/WEB-INF/views/staff-views/result.jsp").forward(req, resp);
     }
 }

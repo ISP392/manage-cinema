@@ -11,12 +11,12 @@ public class TicketInfo {
     private String seatNumber;
     private String theaterNumber;
     private String priceTicket;
-    private boolean isChecked;
+    private int isChecked;
 
     public TicketInfo() {
     }
 
-    public TicketInfo(int ticketID, String title, Timestamp startTime, Timestamp endTime, String nameCinema, String seatNumber, String theaterNumber, String priceTicket, boolean isChecked) {
+    public TicketInfo(int ticketID, String title, Timestamp startTime, Timestamp endTime, String nameCinema, String seatNumber, String theaterNumber, String priceTicket, int isChecked) {
         this.ticketID = ticketID;
         this.title = title;
         this.startTime = startTime;
@@ -93,12 +93,14 @@ public class TicketInfo {
         this.theaterNumber = theaterNumber;
     }
 
-    public boolean isIsChecked() {
+    public int getIsChecked() {
         return isChecked;
     }
 
-    public void setIsChecked(boolean isChecked) {
+    public void setIsChecked(int isChecked) {
         this.isChecked = isChecked;
     }
+
+    
     
 }

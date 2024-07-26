@@ -28,22 +28,25 @@ public class CreateOrderServlet extends HttpServlet {
             throws ServletException, IOException {
         Users staffUser = (Users) request.getSession().getAttribute("account");
         OrderDetail OD = (OrderDetail) request.getSession().getAttribute("orderDetail");
-        int customerId = Integer.parseInt(request.getParameter("userID"));
+        String customerIdStr = request.getParameter("userID");
         int movieId = OD.getScreeningID().getMovieID().getMovieID();
 
         Users customer = null;
-        if (customerId != 0) {
+        Integer customerId = null;
+        if (customerIdStr != null && !customerIdStr.equals("null")) {
+            customerId = Integer.parseInt(customerIdStr);
             List<Users> customerList = dao.getUserById(customerId);
-            if (customerList == null || customerList.isEmpty()) {
-                response.sendRedirect("chooseCustomer.jsp?error=Customer not found");
-                return;
+            if (customerList != null && !customerList.isEmpty()) {
+                customer = customerList.get(0);
+            } else {
+                customer = new Users();
+                customer.setUserID(0); // set to 0 for guests
             }
-            customer = customerList.get(0);
         } else {
             customer = new Users();
-            customer.setUserID(0);
+            customer.setUserID(0); // set to 0 for guests
         }
-        
+
         Orders order = new Orders();
         int quantitySeat = OD.getSelectedSeats().split(", ").length;
         int totalPrice = Integer.parseInt(OD.getTotalPrice());
@@ -82,11 +85,11 @@ public class CreateOrderServlet extends HttpServlet {
 
         for (Seats seat : seats) {
             if (OD.getIsVip() == 1) {
-                dao.insertTickets(customer.getUserID(), OD.getScreeningID().getMovieID().getMovieID(),
+                dao.insertTickets(customerId, OD.getScreeningID().getMovieID().getMovieID(),
                         OD.getScreeningID().getTheaterID().getCinemaID().getCinemaID(), "85000",
                         purchaseDate, seat.getSeatID(), orderID);
             } else {
-                dao.insertTickets(customer.getUserID(), OD.getScreeningID().getMovieID().getMovieID(),
+                dao.insertTickets(customerId, OD.getScreeningID().getMovieID().getMovieID(),
                         OD.getScreeningID().getTheaterID().getCinemaID().getCinemaID(), "75000",
                         purchaseDate, seat.getSeatID(), orderID);
             }
