@@ -18,8 +18,14 @@ public class CheckTicketServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String orderId = request.getParameter("orderID");
+        if (orderId != null && !orderId.isEmpty()) {
+            request.setAttribute("orderID", orderId);
+        }
         request.getRequestDispatcher("/WEB-INF/views/staff-views/checkticket.jsp").forward(request, response);
     }
+
+    
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)

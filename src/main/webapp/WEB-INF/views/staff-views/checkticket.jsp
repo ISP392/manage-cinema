@@ -93,7 +93,7 @@
             <form action="checkTicket" method="post">
                 <div class="form-group">
                     <label for="orderID">Nhập ID hoá đơn:</label>
-                    <input type="text" id="orderID" name="orderID" required>
+                    <input type="text" id="orderID" name="orderID" value="${param.orderID}" required>
                 </div>
                 <div class="form-group">
                     <button type="submit">Kiểm tra</button>

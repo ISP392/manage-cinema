@@ -2763,6 +2763,18 @@ public void saveOrder(Orders order, int movieID) {
         }
         return movie;
     }
+    
+    public void updateOrderTotalPrice(int orderID, int totalPrice) {
+        String sql = "UPDATE Orders SET allPrice = ? WHERE orderID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, totalPrice);
+            ps.setInt(2, orderID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         DAO dao = new DAO();
