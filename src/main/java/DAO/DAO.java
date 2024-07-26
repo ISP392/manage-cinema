@@ -2296,7 +2296,7 @@ public class DAO extends DBContext {
 
     //get all staff of cinema by cinema name
     public List<Users> getAllStaffByCinemaName(String cinemaName) {
-        String sql = "select distinct u.displayName, u.userID from Users u join staffstatus ss on ss.phone = u.phone join Shift s on s.phone = u.userID join Cinemas c on c.cinemaID = ss.cinemaID where c.name = ?";
+        String sql = "select distinct u.displayName, u.userID, u.email from Users u join staffstatus ss on ss.phone = u.phone join Cinemas c on c.cinemaID = ss.cinemaID where c.name = ? and ss.status = 'approve'";
         List<Users> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -2306,6 +2306,7 @@ public class DAO extends DBContext {
                 Users u = new Users();
                 u.setDisplayName(rs.getString("displayName"));
                 u.setUserID(rs.getInt("userID"));
+                u.setEmail(rs.getString("email"));
                 list.add(u);
             }
             return list;

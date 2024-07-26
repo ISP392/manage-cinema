@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import modal.Users;
+import util.Email;
 
 /**
  *
@@ -61,8 +62,9 @@ public class AddShiftServlet extends HttpServlet {
             String startTime = request.getParameter("startTime");
             String endTime = request.getParameter("endTime");
             String userID = request.getParameter("userID");
+            String email = request.getParameter("email");
 
-// Định dạng không có phần giây chính xác
+            // Định dạng không có phần giây chính xác
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             java.util.Date parsedDate;
 
@@ -74,8 +76,10 @@ public class AddShiftServlet extends HttpServlet {
                 parsedDate = dateFormat.parse(endTime);
                 java.sql.Timestamp endTimestamp = new java.sql.Timestamp(parsedDate.getTime());
 
-                // Gọi phương thức DAO để chèn dữ liệu
-                dao.insertShift(Integer.parseInt(userID), startTimestamp, endTimestamp);
+                Email.sendEmail(email, "Shift", "You have a new shift at " + startTimestamp + " to " + endTimestamp);
+               
+                    dao.insertShift(Integer.parseInt(userID), startTimestamp, endTimestamp);
+                
             } catch (ParseException e) {
                 e.printStackTrace();
             }
