@@ -2072,7 +2072,7 @@ public class DAO extends DBContext {
     // get order detail by orderID
     public Orders getOrderById(String orderId) {
         Orders od = null;
-        String sql = "SELECT o.*, u.username, od.isChecked "
+        String sql = "SELECT o.*, u.displayName, od.isChecked "
                 + "FROM Orders o "
                 + "JOIN Users u ON o.userID = u.userID "
                 + "LEFT JOIN OrderDetails od ON o.userID = od.orderID "
@@ -2089,7 +2089,7 @@ public class DAO extends DBContext {
 
                 Users user = new Users();
                 user.setUserID(rs.getInt("userID"));
-                user.setUserName(rs.getString("username"));
+                user.setDisplayName(rs.getString("displayName"));
                 od.setUserID(user);
 
                 Movies movie = new Movies();
@@ -2103,6 +2103,7 @@ public class DAO extends DBContext {
                 tk.setIsChecked(rs.getBoolean("isChecked"));
                 od.setTicketInfo(tk);
 
+                
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -2800,6 +2801,80 @@ public class DAO extends DBContext {
         DAO dao = new DAO();
         Timestamp endTime = dao.getLastestEndTimeOfTheater("BANNY Crescent Mall", Date.valueOf("2024-07-25"),1);
         System.out.println(endTime);
+    }
+    
+public void saveOrder(Orders order, int movieID) {
+        String sql = "INSERT INTO Orders (userID, staffID, movieID, quantity, allPrice) VALUES (?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, order.getUserID().getUserID());
+            ps.setInt(2, order.getStaffID());
+            ps.setInt(3, movieID);
+            ps.setInt(4, order.getQuantity());
+            ps.setString(5, order.getAllPrice());
+            ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveOrderDetail(OrderFoodItem orderFoodItem) {
+        String sql = "INSERT INTO OrderDetails (orderID, foodItemID, quantity) VALUES (?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, orderFoodItem.getOrderID());
+            ps.setInt(2, orderFoodItem.getFoodItemID());
+            ps.setInt(3, orderFoodItem.getQuantity());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+      
+    public Movies getMovieById(int id) {
+        String sql = "SELECT * FROM Movies WHERE movieID = ?";
+        Movies movie = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    movie = new Movies();
+                    movie.setMovieID(rs.getInt("movieID"));
+                    movie.setTitle(rs.getString("title"));
+                    // Set other fields as needed
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return movie;
+    }
+    
+    public void updateOrderTotalPrice(int orderID, int totalPrice) {
+        String sql = "UPDATE Orders SET allPrice = ? WHERE orderID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, totalPrice);
+            ps.setInt(2, orderID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        DAO dao = new DAO();
+        Users u = new Users();
+        u.setUserID(43);
+        Orders order = new Orders();
+        order.setStaffID(55);
+        order.setUserID(u);
+        order.setQuantity(1);  // Set a default quantity, you can adjust this as needed
+        order.setAllPrice("85000");  // Set a default price, you can adjust this as needed
+        dao.saveOrder(order, 55);
     }
     
 }

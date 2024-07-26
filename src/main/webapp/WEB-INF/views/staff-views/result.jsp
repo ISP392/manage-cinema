@@ -168,7 +168,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </p>
-                                <p><strong>Khách hàng:</strong> ${order.userID.userName}</p> 
+                                <p><strong>Khách hàng:</strong> ${order.userID.displayName}</p> 
                                 <p><strong>Mã khách hàng:</strong> ${order.userID.userID}</p>                           
                                 <c:forEach var="foodItems" items="${foodItems}">
                                     <div class="ticket-card">

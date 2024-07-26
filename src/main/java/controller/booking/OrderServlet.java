@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import modal.FoodItem;
 import modal.OrderDetail;
+import modal.Orders;
 import modal.Users;
 import modal.Voucher;
 
@@ -44,14 +45,14 @@ public class OrderServlet extends HttpServlet {
             request.setAttribute("orderDetail", orderDetail);
             request.setAttribute("vouchers", vouchers);
             if (user.getRoleID().getRoleID() == 3) {
-                response.sendRedirect("chooseCustomer");
+                request.getRequestDispatcher("/WEB-INF/views/staff-views/listCustomer.jsp").forward(request,
+                        response);
             } else {
                 request.getRequestDispatcher("/WEB-INF/views/order.jsp").forward(request,
                         response);
             }
         }
     }
-
     private void parseOrderAndStoreInFoodMap(String order, OrderDetail orderDetail) {
         String[] items = order.split(", ");
         Map<FoodItem, Integer> foodMap = new HashMap<>();
