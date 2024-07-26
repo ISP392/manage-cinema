@@ -121,17 +121,25 @@ public class updateRecruitmentServlet extends HttpServlet {
         String type = request.getParameter("type");
         DAO dao = new DAO();
         
-        if (addresses == null) {
+        if (addresses == null || addresses.length == 0) {
             ArrayList<Cinemas> cinemas = (ArrayList<Cinemas>) 
                     dao.getAllCinemas();
             request.setAttribute("cinemas", cinemas);
             request.setAttribute("error", "You must choose at least one theater");
+            request.setAttribute("cinemas", cinemas);
+            Recruiments r = dao.getRecruimentById(Integer.parseInt(recruitmentId));
+            request.setAttribute("item", r);
+            List<RecruimentCinemas> recruitmentCinemas = r.getRecruimentCinemas();
+            List<Integer> cinemaIds = recruitmentCinemas.stream()
+                .map(RecruimentCinemas::getCinemaId)
+                .collect(Collectors.toList());
+            request.setAttribute("recruitmentCinemas", cinemaIds);
+            
             request.getRequestDispatcher("/WEB-INF/views/addOther/updateRecruitment.jsp").forward(request, response);
             return;
         }
         try {
             dao.updateRecruitment(new Recruiments(Integer.parseInt(recruitmentId), vacancies, numberNeeded, startDate, endDate, description, isDisplayOn,type,null));
-            
             
             ArrayList<RecruimentCinemas> list = dao.GetRecruimentCinemasByRecruimentId(Integer.parseInt(recruitmentId));
             
