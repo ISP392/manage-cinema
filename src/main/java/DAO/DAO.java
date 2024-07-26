@@ -370,8 +370,8 @@ public class DAO extends DBContext {
         return list;
     }
 
-    public List<Events> getEventByPage(int page, int pageSize) {
-        String sql = "SELECT * FROM  Events ORDER BY startTime DESC LIMIT ? OFFSET ?";
+   public List<Events> getEventByPage(int page, int pageSize) {
+        String sql = "SELECT * FROM project_cinema_update.Events WHERE date(endTime) > CURDATE() ORDER BY endTime DESC LIMIT ? OFFSET ?";
         List<Events> list = new ArrayList<>();
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -416,7 +416,7 @@ public class DAO extends DBContext {
     }
 
     public List<Events> getAllEvent() {
-        String sql = "select * from Events ";
+        String sql = "SELECT * FROM project_cinema_update.Events  where date(endTime) > CURDATE()";
         List<Events> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -1368,10 +1368,30 @@ public class DAO extends DBContext {
         return list;
     }
 
-    public List<ScreeningTimes> getAllFlimDay(String movieDate, int theaterId) {
+    public List<ScreeningTimes> getAllFlimDay(String movieDate, int theaterId, String cinemaName) {
         List<ScreeningTimes> list = new ArrayList<>();
-        String sql = "select * from project_cinema_update.ScreeningTimes st join project_cinema_update.Theaters t on st.theaterID = t.theaterID join  project_cinema_update.Movies m on m.movieID = st.movieID\n"
-                + " where date(st.startTime) = ? and t.theaterNumber = ? order by date(st.startTime) desc";
+        String sql = "select * from ScreeningTimes st join Theaters t on st.theaterID = t.theaterID join  Movies m on m.movieID = st.movieID join Cinemas c on c.cinemaID = t.cinemaID where date(st.startTime) = ? and t.theaterNumber = ? and c.name = ? order by date(st.startTime) desc";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, movieDate);
+            ps.setInt(2, theaterId);
+            ps.setString(3, cinemaName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+
+                ScreeningTimes st = new ScreeningTimes(rs.getInt("screeningID"), rs.getInt(2), rs.getInt(3), rs.getTimestamp("startTime"),
+                        rs.getTimestamp("endTime"));
+                list.add(st);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    public List<ScreeningTimes> getAllFlimDayOfUpdate(String movieDate, int theaterId) {
+        List<ScreeningTimes> list = new ArrayList<>();
+        String sql = "select * from ScreeningTimes st join Theaters t on st.theaterID = t.theaterID join  Movies m on m.movieID = st.movieID where date(st.startTime) = ? and t.theaterNumber = ? order by date(st.startTime) desc";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, movieDate);
@@ -2053,7 +2073,7 @@ public class DAO extends DBContext {
     // get order detail by orderID
     public Orders getOrderById(String orderId) {
         Orders od = null;
-        String sql = "SELECT o.*, u.username, od.isChecked "
+        String sql = "SELECT o.*, u.displayName, od.isChecked "
                 + "FROM Orders o "
                 + "JOIN Users u ON o.userID = u.userID "
                 + "LEFT JOIN OrderDetails od ON o.userID = od.orderID "
@@ -2070,7 +2090,7 @@ public class DAO extends DBContext {
 
                 Users user = new Users();
                 user.setUserID(rs.getInt("userID"));
-                user.setUserName(rs.getString("username"));
+                user.setDisplayName(rs.getString("displayName"));
                 od.setUserID(user);
 
                 Movies movie = new Movies();
@@ -2084,6 +2104,7 @@ public class DAO extends DBContext {
                 tk.setIsChecked(rs.getBoolean("isChecked"));
                 od.setTicketInfo(tk);
 
+                
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -2783,4 +2804,68 @@ public class DAO extends DBContext {
         System.out.println(endTime);
     }
 
+    
+public void saveOrder(Orders order, int movieID) {
+        String sql = "INSERT INTO Orders (userID, staffID, movieID, quantity, allPrice) VALUES (?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, order.getUserID().getUserID());
+            ps.setInt(2, order.getStaffID());
+            ps.setInt(3, movieID);
+            ps.setInt(4, order.getQuantity());
+            ps.setString(5, order.getAllPrice());
+            ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveOrderDetail(OrderFoodItem orderFoodItem) {
+        String sql = "INSERT INTO OrderDetails (orderID, foodItemID, quantity) VALUES (?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, orderFoodItem.getOrderID());
+            ps.setInt(2, orderFoodItem.getFoodItemID());
+            ps.setInt(3, orderFoodItem.getQuantity());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+      
+    public Movies getMovieById(int id) {
+        String sql = "SELECT * FROM Movies WHERE movieID = ?";
+        Movies movie = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    movie = new Movies();
+                    movie.setMovieID(rs.getInt("movieID"));
+                    movie.setTitle(rs.getString("title"));
+                    // Set other fields as needed
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return movie;
+    }
+    
+    public void updateOrderTotalPrice(int orderID, int totalPrice) {
+        String sql = "UPDATE Orders SET allPrice = ? WHERE orderID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, totalPrice);
+            ps.setInt(2, orderID);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
 }

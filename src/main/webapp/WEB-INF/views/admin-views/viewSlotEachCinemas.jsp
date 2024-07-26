@@ -402,7 +402,7 @@ Main wrapper start
                         </tbody> -->
                         <tbody>
                             <tr>
-                                <td><a href="addNewSlot" >Add Slot</a></td>
+                                <td> <a style="color:blue; font-size: 15px; font-weight: bold" href="addNewSlot" >Add Slot</a></td>
 
                                 <c:forEach var="day" items="${weekDays}">
                                     <c:set var="formattedDate">
