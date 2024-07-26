@@ -75,7 +75,8 @@ public class AddShiftServlet extends HttpServlet {
 
                 parsedDate = dateFormat.parse(endTime);
                 java.sql.Timestamp endTimestamp = new java.sql.Timestamp(parsedDate.getTime());
-
+                
+                System.out.println("Email: "+email);
                 Email.sendEmail(email, "Shift", "You have a new shift at " + startTimestamp + " to " + endTimestamp);
                
                     dao.insertShift(Integer.parseInt(userID), startTimestamp, endTimestamp);
