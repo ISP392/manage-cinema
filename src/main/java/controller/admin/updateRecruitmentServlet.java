@@ -120,6 +120,15 @@ public class updateRecruitmentServlet extends HttpServlet {
         boolean isDisplayOn = request.getParameter("display") != null;
         String type = request.getParameter("type");
         DAO dao = new DAO();
+        
+        if (addresses == null) {
+            ArrayList<Cinemas> cinemas = (ArrayList<Cinemas>) 
+                    dao.getAllCinemas();
+            request.setAttribute("cinemas", cinemas);
+            request.setAttribute("error", "You must choose at least one theater");
+            request.getRequestDispatcher("/WEB-INF/views/addOther/updateRecruitment.jsp").forward(request, response);
+            return;
+        }
         try {
             dao.updateRecruitment(new Recruiments(Integer.parseInt(recruitmentId), vacancies, numberNeeded, startDate, endDate, description, isDisplayOn,type,null));
             

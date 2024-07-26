@@ -261,49 +261,50 @@
                                         <label class="form-label">Address</label><br/>
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">
-                                                <c:forEach var="item" items="${requestScope.cinemas}">
+                                                <p style="color: red">${error}</p>
+                                                <!-- comment<c:forEach var="item" items="${requestScope.cinemas}">
                                                     <input type="checkbox" value="${item.cinemaID}" style="margin-top: 10px" name="addresses" />&nbsp;&nbsp;&nbsp;${item.name} <br/>
-                                                </c:forEach>
-                                                    
-                                                <c:forEach var="item" items="${requestScope.cinemas}">
-                                                    <input type="checkbox" value="${item.cinemaID}" name="addresses" style="margin-top: 10px"
-                                                           <c:if test="${fn:contains(requestScope.recruitmentCinemas, item.cinemaID)}">checked</c:if> />
-                                                     &nbsp;&nbsp;&nbsp;${item.name} <br/>
+                                                </c:forEach>-->
+
+                                                 <c:forEach var="item" items="${requestScope.cinemas}">
+                                                <input type="checkbox" value="${item.cinemaID}" name="addresses" style="margin-top: 10px"
+                                                    <c:if test="${fn:contains(requestScope.recruitmentCinemas, item.cinemaID)}">checked</c:if> />
+                                              &nbsp;&nbsp;&nbsp;${item.name} <br/>
                                                 </c:forEach>
                                             </div>
                                         </div>
-                                        
+
 
                                         <label class="form-label">Start Date</label>
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">
                                                 <input type="date" class="form-control" placeholder="Start Date"
-                                                       name="startDate" required ="" value="${requestScope.item.startDate}"/>
+                                                       name="startDate" id="startDate" required ="" value="${requestScope.item.startDate}"/>
                                             </div>
                                         </div><label class="form-label">End Date</label>
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">
                                                 <input type="date" class="form-control" placeholder="endDate"
-                                                       name="endDate" required ="" value="${requestScope.item.endDate}"/>
+                                                       name="endDate" id="endDate" required ="" value="${requestScope.item.endDate}"/>
                                             </div>
                                         </div>
-                                            <label class="form-label">Type</label>
+                                        <label class="form-label">Type</label>
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">
                                                 <select name="type">
                                                     <option <c:if test="${requestScope.item.type eq 'fulltime'}">selected</c:if> value="fulltime">Full time</option>
                                                     <option <c:if test="${requestScope.item.type eq 'parttime'}">selected</c:if> value="parttime">Part time</option>
-                                                </select>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <label class="form-label">Description</label>
+                                            <div class="card h-auto">
+                                                <div class="card-body pt-3">
+                                                    <textarea id="description" style="margin-top: 10px"
+                                                              class="form-control" name="description" required ="">${requestScope.item.description}</textarea>
                                             </div>
                                         </div>
-                                        <label class="form-label">Description</label>
-                                        <div class="card h-auto">
-                                            <div class="card-body pt-3">
-                                                <textarea id="description" style="margin-top: 10px"
-                                                          class="form-control" name="description" required ="">${requestScope.item.description}</textarea>
-                                            </div>
-                                        </div>
-                                            
+
                                         <label class="form-label">Display</label>
                                         <div class="card h-auto">
                                             <div class="card-body pt-3">
@@ -350,7 +351,7 @@
 
         <script src="./assets/JS/js/custom.min.js"></script>
         <script>
-            
+
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -372,6 +373,36 @@
                 var imageUrl = "images/no-img-avatar.png";
                 $(".avatar-preview, #imagePreview").removeAttr("style");
                 $("#imagePreview").css("background-image", "url(" + imageUrl + ")");
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const today = new Date();
+                const minDateString = today.toISOString().split('T')[0];
+                document.getElementById('startDate').setAttribute('min', minDateString);
+
+                document.getElementById('startDate').addEventListener('change', function () {
+                    const startDate = new Date(this.value);
+                    const minEndDate = new Date(startDate);
+                    minEndDate.setDate(startDate.getDate() + 1);
+                    const minEndDateString = minEndDate.toISOString().split('T')[0];
+                    document.getElementById('endDate').setAttribute('min', minEndDateString);
+                });
+            });
+
+            document.getElementById('dateForm').addEventListener('submit', function (event) {
+                const startDate = new Date(document.getElementById('startDate').value);
+                const endDate = new Date(document.getElementById('endDate').value);
+
+                if (endDate <= startDate) {
+                    event.preventDefault();
+                    alert('The end date must be after the start date.');
+                }
+
+                if (addresses.length === 0) {
+                    event.preventDefault();
+                    alert('Please select at least one address.');
+                }
             });
         </script>
     </body>

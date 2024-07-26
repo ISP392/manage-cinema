@@ -18,6 +18,7 @@ public class Orders {
     private String allPrice;
     List<OrderFoodItem> orderFood;
     private TicketInfo ticketInfo;
+    private int staffID;
 
     public Orders() {
     }
@@ -29,6 +30,19 @@ public class Orders {
         this.quantity = quantity;
         this.allPrice = allPrice;
     }
+
+    public Orders(int orderID, Users userID, Movies movieID, int quantity, String allPrice, List<OrderFoodItem> orderFood, TicketInfo ticketInfo, int staffID) {
+        this.orderID = orderID;
+        this.userID = userID;
+        this.movieID = movieID;
+        this.quantity = quantity;
+        this.allPrice = allPrice;
+        this.orderFood = orderFood;
+        this.ticketInfo = ticketInfo;
+        this.staffID = staffID;
+    }
+    
+    
 
     public int getOrderID() {
         return orderID;
@@ -84,6 +98,14 @@ public class Orders {
 
     public void setTicketInfo(TicketInfo ticketInfo) {
         this.ticketInfo = ticketInfo;
+    }
+
+    public int getStaffID() {
+        return staffID;
+    }
+
+    public void setStaffID(int staffID) {
+        this.staffID = staffID;
     }
     
     
