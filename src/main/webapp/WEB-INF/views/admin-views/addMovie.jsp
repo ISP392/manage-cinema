@@ -198,10 +198,6 @@
                         <input type="text" class="form-control" placeholder="Title" name="movieTitle" required />
                       </div>
                       <div class="mb-3">
-                        <label class="form-label">Slug</label>
-                        <input type="text" class="form-control" placeholder="Slug" name="slug" required />
-                      </div>
-                      <div class="mb-3">
                         <label class="form-label">Trailer URL</label>
                         <input type="text" class="form-control" placeholder="Trailer URL" name="trailerUrl" />
                       </div>
