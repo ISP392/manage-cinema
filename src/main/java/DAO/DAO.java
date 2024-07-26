@@ -239,8 +239,8 @@ public class DAO extends DBContext {
     }
 
     public void insertAddVoucher(String voucherName, String voucherdescription, float discountAmount, Date startDate,
-            Date endDate, int quantity) {
-        String sql = "INSERT INTO Voucher (voucherName, voucherdescription, discountAmount, startDate, endDate, quantity) VALUES (?, ?, ?, ?, ?, ?)";
+            Date endDate, int quantity, String code) {
+        String sql = "INSERT INTO Voucher (voucherName, voucherdescription, discountAmount, startDate, endDate, quantity, code) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, voucherName);
@@ -249,6 +249,7 @@ public class DAO extends DBContext {
             ps.setDate(4, startDate);
             ps.setDate(5, endDate);
             ps.setInt(6, quantity);
+            ps.setString(7, code);
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
