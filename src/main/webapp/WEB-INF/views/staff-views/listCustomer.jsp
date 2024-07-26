@@ -143,20 +143,20 @@
         </div>
     </div>
     <script>
-        function submitAsGuest() {
-            var form = document.createElement("form");
-            form.method = "post";
-            form.action = "createOrder";
+    function submitAsGuest() {
+        var form = document.createElement("form");
+        form.method = "post";
+        form.action = "createOrder";
 
-            var userIDInput = document.createElement("input");
-            userIDInput.type = "hidden";
-            userIDInput.name = "userID";
-            userIDInput.value = "0";
+        var userIDInput = document.createElement("input");
+        userIDInput.type = "hidden";
+        userIDInput.name = "userID";
+        userIDInput.value = "null";
 
-            form.appendChild(userIDInput);
-            document.body.appendChild(form);
-            form.submit();
-        }
-    </script>
+        form.appendChild(userIDInput);
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
 </body>
 </html>

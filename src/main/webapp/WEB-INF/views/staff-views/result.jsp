@@ -145,36 +145,54 @@
                                 <p><strong>Tổng giá:</strong> <fmt:formatNumber value="${order.allPrice}" type="currency" currencySymbol="VNĐ" groupingUsed="true"/></p>
                                 <p><strong>Số lượng vé:</strong> ${order.quantity}</p>
 
-                                <c:forEach var="ticketInfos" items="${ticketInfos}">
+                                <c:forEach var="ticketInfo" items="${ticketInfos}">
                                     <div class="ticket-card">
-                                        <p><strong>Mã vé:</strong> ${ticketInfos.ticketID}</p>
-                                        <p><strong>Tên phim:</strong> ${ticketInfos.title}</p>
-                                        <p><strong>Suất chiếu:</strong> <fmt:formatDate value="${ticketInfos.startTime}" pattern="HH:mm dd/MM/yyyy"/> - <fmt:formatDate value="${ticketInfos.endTime}" pattern="HH:mm dd/MM/yyyy"/></p>
-                                        <p><strong>Rạp:</strong> ${ticketInfos.nameCinema}</p>
-                                        <p><strong>Phòng:</strong> ${ticketInfos.theaterNumber}</p>
-                                        <p><strong>Số ghế:</strong> ${ticketInfos.seatNumber}</p>
-                                        <p><strong>Giá vé:</strong> <fmt:formatNumber value="${ticketInfos.priceTicket}" type="currency" currencySymbol="VNĐ" groupingUsed="true"/></p>
+                                        <p><strong>Mã vé:</strong> ${ticketInfo.ticketID}</p>
+                                        <p><strong>Tên phim:</strong> ${ticketInfo.title}</p>
+                                        <p><strong>Suất chiếu:</strong> <fmt:formatDate value="${ticketInfo.startTime}" pattern="HH:mm dd/MM/yyyy"/> - <fmt:formatDate value="${ticketInfo.endTime}" pattern="HH:mm dd/MM/yyyy"/></p>
+                                        <p><strong>Rạp:</strong> ${ticketInfo.nameCinema}</p>
+                                        <p><strong>Phòng:</strong> ${ticketInfo.theaterNumber}</p>
+                                        <p><strong>Số ghế:</strong> ${ticketInfo.seatNumber}</p>
+                                        <p><strong>Giá vé:</strong> <fmt:formatNumber value="${ticketInfo.priceTicket}" type="currency" currencySymbol="VNĐ" groupingUsed="true"/></p>
                                     </div>
                                 </c:forEach>
                             </div>
                             <div class="ticket-info-section">
                                 <p><strong>Tình trạng:</strong>
                                     <c:choose>
-                                        <c:when test="${order.ticketInfo.isChecked}">
+                                        <c:when test="${order.ticketInfo.isChecked == 1}">
                                             <span class="used">Đã sử dụng</span>
                                         </c:when>
-                                        <c:otherwise>
+                                        <c:when test="${order.ticketInfo.isChecked == 0}">
                                             <span class="not-used">Chưa sử dụng</span>
+                                        </c:when>
+                                    </c:choose>
+                                </p>
+                                <p><strong>Khách hàng:</strong> 
+                                    <c:choose>
+                                        <c:when test="${order.userID != null}">
+                                            ${order.userID.displayName}
+                                        </c:when>
+                                        <c:otherwise>
+                                            Khách vãng lai
                                         </c:otherwise>
                                     </c:choose>
                                 </p>
-                                <p><strong>Khách hàng:</strong> ${order.userID.displayName}</p> 
-                                <p><strong>Mã khách hàng:</strong> ${order.userID.userID}</p>                           
-                                <c:forEach var="foodItems" items="${foodItems}">
+                                <p><strong>Mã khách hàng:</strong> 
+                                    <c:choose>
+                                        <c:when test="${order.userID != null}">
+                                            ${order.userID.userID}
+                                        </c:when>
+                                        <c:otherwise>
+                                            Không có
+                                        </c:otherwise>
+                                    </c:choose>
+                                </p>                           
+                                <c:forEach var="foodItem" items="${foodItems}">
                                     <div class="ticket-card">
-                                        <p><strong>Combo bỏng nước:</strong> ${foodItems.foodName}</p>
-                                        <p><strong>Số lượng:</strong> ${foodItems.quantity}</p>
-                                        <p><strong>Giá:</strong> <fmt:formatNumber value="${foodItems.price}" type="currency" currencySymbol="VNĐ" groupingUsed="true"/></p>
+                                        <p><strong>Combo bỏng nước:</strong> ${foodItem.foodName}</p>
+                                        <p><strong>Số lượng:</strong> ${foodItem.quantity}</p>
+                                        <p><strong>Giá:</strong> <fmt:formatNumber value="${foodItem.price}" type="currency" currencySymbol="VNĐ" groupingUsed="true"/></p>
                                     </div>
                                 </c:forEach>
                             </div>
@@ -185,7 +203,10 @@
                     </c:otherwise>
                 </c:choose>
                 <a class="back-btn" href="checkTicket">Quay lại</a>
-                <a class="back-btn" href="homeStaff">In ra</a>
+                <form action="printTicket" method="post" style="display:inline;">
+                    <input type="hidden" name="orderID" value="${order.orderID}">
+                    <button type="submit" class="back-btn">In ra</button>
+                </form>
             </div>
         </div>
     </body>
